@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antoine Berthaud — Product Manager</title>
+<meta name="description" content="CV de Antoine Berthaud, Product Manager — User First, Data Informed, Iterative.">
+
+<!-- ton vrai domaine — déjà configuré ci-dessous, rien à faire ici -->
+<link rel="canonical" href="https://cv.antoine.berthaud.me/">
+
+<!-- Données structurées (schema.org/Person) — aide Google à comprendre que
+     cette page EST la page de référence d'Antoine Berthaud (utile quand un
+     recruteur tape ton nom dans un moteur de recherche). N'affecte en rien
+     le rendu visuel du site, c'est invisible pour les visiteurs humains. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Antoine Berthaud",
+  "jobTitle": "Senior Growth Product Manager",
+  "url": "https://cv.antoine.berthaud.me/",
+  "image": "https://cv.antoine.berthaud.me/assets/photo/antoine.jpg",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "AB Tasty"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Nantes",
+    "addressCountry": "FR"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/antoine-berthaud-pm/"
+  ]
+}
+</script>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<!-- Open Graph / Twitter Card — aperçu quand le lien est partagé (LinkedIn, Slack, X...).
+     Domaine déjà renseigné (cv.antoine.berthaud.me). Ces balises sont lues par
+     les robots des réseaux sociaux, qui n'exécutent pas le JS : elles restent
+     donc toujours en français, même si le site bascule en anglais pour un visiteur. -->
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Antoine Berthaud — Product Manager">
+<meta property="og:description" content="Product Manager — User First, Data Informed, Iterative. Plus de 10 ans d'expérience (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://cv.antoine.berthaud.me/">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Antoine Berthaud — Product Manager">
+<meta name="twitter:description" content="Product Manager — User First, Data Informed, Iterative.">
+<meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+
+<!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
+     pas de données personnelles, gratuit indéfiniment pour un usage perso.
+     [À COMPLÉTER] crée un compte gratuit sur https://www.goatcounter.com
+     puis remplace TON-CODE ci-dessous par le code de ton site
+     (visible dans Settings → Site settings, ex: "antoineberthaud"). -->
+<script data-goatcounter="https://TON-CODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <noscript>
+    <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
+      <p>Ce site a besoin de JavaScript pour s'afficher correctement.</p>
+      <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
+    </div>
+  </noscript>
+
+  <div class="blob b1" aria-hidden="true"></div>
+  <div class="blob b2" aria-hidden="true"></div>
+  <div class="blob b3" aria-hidden="true"></div>
+
+  <!-- ============================= NAV ============================= -->
+  <header class="top">
+    <div class="navrow wrap">
+      <a href="#profil" class="mark">Antoine<span>.</span></a>
+      <nav>
+        <ul>
+          <li><a href="#profil" data-i18n="nav.profile">Profil</a></li>
+          <li><a href="#competences" data-i18n="nav.skills">Compétences</a></li>
+          <li><a href="#experiences" data-i18n="nav.experience">Expériences</a></li>
+          <li><a href="#formation" data-i18n="nav.formation">Formation</a></li>
+          <li><a href="#fit-checker" data-i18n="nav.fit">Fit-Checker</a><span class="ai-badge" data-i18n="fit.badge">IA</span></li>
+          <li class="nav-side-projects"><a href="#projects" data-i18n="nav.projects">Side projects</a></li>
+          <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
+        </ul>
+      </nav>
+      <div class="navactions">
+        <button id="langToggle" class="btn" type="button">EN</button>
+        <button id="focusToggle" class="btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="nav.focusToggle" title="Focus lecture">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+            <line x1="8" y1="9" x2="16" y2="9"/>
+            <line x1="8" y1="13" x2="16" y2="13"/>
+            <line x1="8" y1="17" x2="12" y2="17"/>
+          </svg>
+        </button>
+        <button id="printBtn" class="btn icon-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"/>
+            <path d="M7 10l5 5 5-5"/>
+            <path d="M4 19h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================= HERO / PROFIL ============================= -->
+    <section id="profil" class="hero wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow" id="heroEyebrow">Product Manager · Growth</div>
+          <h1 id="heroName">Antoine Berthaud</h1>
+          <div class="role" id="heroRole"></div>
+          <div class="pills" id="heroPills"></div>
+          <p class="pitch" id="heroPitch"></p>
+          <div class="hero-stats" id="heroStats"></div>
+          <div class="herobtns">
+            <a href="#experiences" class="btn solid" data-i18n="hero.ctaExperience">Voir les expériences</a>
+            <a href="#contact" class="btn" data-i18n="hero.ctaContact">Me contacter</a>
+          </div>
+        </div>
+        <div class="photo-ring">
+          <div class="photo-box" id="heroPhoto"><strong>AB</strong><span>Photo</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= TEASER FIT-CHECKER ============================= -->
+    <div class="fit-teaser wrap">
+      <a href="#fit-checker" class="fit-teaser-inner">
+        <span class="ai-badge ai-badge-lg">✨ <span data-i18n="fit.badge">IA</span></span>
+        <span class="fit-teaser-text" data-i18n="fitTeaser.text">Recruteur·se ? Vérifiez en 10 secondes si mon profil correspond à votre poste.</span>
+        <span class="fit-teaser-cta" data-i18n="fitTeaser.cta">Essayer le Fit-Checker →</span>
+      </a>
+    </div>
+
+    <!-- ============================= 3 PILIERS ============================= -->
+    <section class="pillars wrap">
+      <div class="sectitle">
+        <svg class="loop" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M17 4v3h-3M7 20v-3h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h2 data-i18n="pillars.sectionTitle">Ce qui me définit</h2>
+      </div>
+      <div class="pillar-grid" id="pillarGrid"></div>
+    </section>
+
+    <!-- ============================= COMPÉTENCES / FILTRES ============================= -->
+    <section id="competences" class="skills-section wrap">
+      <div class="sectitle">
+        <h2 data-i18n="skills.sectionTitle">Compétences &amp; outils</h2>
+      </div>
+      <p class="skills-hint">
+        <span data-i18n="skills.hint">Clique sur une ou plusieurs compétences pour filtrer les expériences correspondantes ci-dessous.</span>
+        <button id="clearFilters" class="link-btn" type="button" hidden data-i18n="skills.clearFilters">Réinitialiser les filtres ✕</button>
+      </p>
+      <div class="skills-groups" id="skillsGroups"></div>
+    </section>
+
+    <!-- ============================= EXPÉRIENCES ============================= -->
+    <section id="experiences" class="experiences-section wrap">
+      <div class="sectitle">
+        <h2 data-i18n="experiences.sectionTitle">Expériences</h2>
+      </div>
+      <p class="filter-status" id="filterStatus" hidden></p>
+      <div id="experiencesList" class="experiences-list"></div>
+    </section>
+
+    <!-- ============================= FORMATION / LANGUES / CERTIFICATIONS ============================= -->
+    <section id="formation" class="formation-section wrap">
+      <div class="sectitle">
+        <h2 data-i18n="formation.sectionTitle">Formation, langues &amp; certifications</h2>
+      </div>
+      <div class="formation-grid">
+        <div class="formation-col">
+          <h3 class="formation-subtitle" data-i18n="formation.education">Éducation</h3>
+          <ul class="formation-list" id="educationList"></ul>
+          <h3 class="formation-subtitle" data-i18n="formation.trainings">Formations continues</h3>
+          <ul class="formation-list" id="trainingsList"></ul>
+        </div>
+        <div class="formation-col formation-side">
+          <div class="formation-card">
+            <h3 class="formation-subtitle" data-i18n="formation.languages">Langues</h3>
+            <ul class="lang-list" id="languagesList"></ul>
+          </div>
+          <div class="formation-card">
+            <h3 class="formation-subtitle" data-i18n="formation.certifications">Certifications</h3>
+            <ul class="formation-list" id="certificationsList"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= RECOMMANDATION (citation vedette) ============================= -->
+    <section id="testimonial" class="testimonial-section wrap">
+      <div class="testimonial-card">
+        <span class="eyebrow testimonial-eyebrow" data-i18n="testimonial.eyebrow">Recommandation LinkedIn</span>
+        <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+        <p class="testimonial-quote" id="testimonialQuote"></p>
+        <div class="testimonial-attribution">
+          <div class="testimonial-avatar" id="testimonialAvatar"></div>
+          <div>
+            <div class="testimonial-name" id="testimonialName"></div>
+            <div class="testimonial-role" id="testimonialRole"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= GEMINI FIT-CHECKER ============================= -->
+    <section id="fit-checker" class="fit-section">
+      <div class="wrap">
+        <div class="sectitle">
+          <h2 data-i18n="fit.sectionTitle">Ce poste te correspond ? Vérifions ça.</h2>
+          <span class="ai-badge ai-badge-lg">✨ <span data-i18n="fit.badge">IA</span></span>
+        </div>
+        <p class="fit-intro" data-i18n="fit.intro">
+          Recruteur·se : collez l'offre d'emploi ci-dessous. Une IA (Gemini) compare mon profil à votre besoin
+          et vous donne un score de compatibilité argumenté, en quelques secondes.
+        </p>
+        <div class="fit-box">
+          <textarea id="jobPosting" rows="8" data-i18n-placeholder="fit.placeholder" placeholder="Colle ici le texte de l'offre d'emploi (intitulé, missions, compétences recherchées...)"></textarea>
+          <div class="fit-actions">
+            <button id="analyzeBtn" class="btn solid" type="button" data-i18n="fit.analyzeBtn">Analyser le fit</button>
+            <span id="fitError" class="fit-error" hidden></span>
+          </div>
+          <p id="fitLoadingStatus" class="fit-loading-status" hidden></p>
+        </div>
+        <div id="fitResult" class="fit-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- ============================= SIDE PROJECTS ============================= -->
+    <section id="projects" class="projects-section wrap">
+      <div class="sectitle">
+        <h2 data-i18n="projects.sectionTitle">Side projects</h2>
+      </div>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </section>
+  </main>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer id="contact" class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <div class="mark">Antoine<span>.</span></div>
+        <p id="footerTagline">Product Manager — Nantes, France</p>
+      </div>
+      <div class="footer-links" id="footerLinks"></div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/gemini.js"></script>
+</body>
+</html>

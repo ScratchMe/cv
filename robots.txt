@@ -1,0 +1,6 @@
+# Tout est public et destiné à être trouvé par les moteurs de recherche.
+User-agent: *
+Allow: /
+
+# cv.antoine.berthaud.me
+Sitemap: https://cv.antoine.berthaud.me/sitemap.xml
