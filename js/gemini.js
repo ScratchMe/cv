@@ -50,10 +50,21 @@ Expériences :
 ${expTxt}`;
   }
 
-  // Fait défiler un petit texte qui change toutes les ~1,3s pendant l'attente
-  // (le Fit-Checker peut prendre 2-3s, surtout si un repli de modèle a lieu
-  // côté serveur) — évite l'impression que rien ne se passe.
-  const LOADING_MESSAGE_KEYS = ["fit.loading1", "fit.loading2", "fit.loading3", "fit.loading4"];
+  // Fait défiler un petit texte qui change toutes les ~2,2s pendant l'attente
+  // (le Fit-Checker peut prendre plusieurs dizaines de secondes, surtout si
+  // un repli de modèle a lieu côté serveur) — évite l'impression que rien ne
+  // se passe. 8 phrases à ~2,2s = ~17,6s par cycle, pour limiter les
+  // répétitions visibles sur les analyses longues.
+  const LOADING_MESSAGE_KEYS = [
+    "fit.loading1",
+    "fit.loading2",
+    "fit.loading3",
+    "fit.loading4",
+    "fit.loading5",
+    "fit.loading6",
+    "fit.loading7",
+    "fit.loading8",
+  ];
   let loadingInterval = null;
 
   function startLoadingMessages() {
@@ -70,7 +81,7 @@ ${expTxt}`;
         statusEl.textContent = t(LOADING_MESSAGE_KEYS[i]);
         statusEl.style.opacity = 1;
       }, 220);
-    }, 1300);
+    }, 2200);
   }
 
   function stopLoadingMessages() {
