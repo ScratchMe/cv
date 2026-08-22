@@ -76,7 +76,7 @@ nav a.is-active{color:var(--violet);}
 /* ============================================================================
    HERO
    ============================================================================ */
-.hero{padding:56px 0 76px;}
+.hero{padding-top:56px;padding-bottom:76px;}
 .hero-grid{display:grid;grid-template-columns:1fr 230px;gap:48px;align-items:center;}
 .eyebrow{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--violet);background:var(--violet-soft);display:inline-block;padding:6px 14px;border-radius:100px;margin-bottom:18px;}
 h1{font-size:48px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-height:1.05;}
@@ -130,7 +130,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 /* ============================================================================
    PILLARS
    ============================================================================ */
-.pillars{padding:0 0 90px;}
+.pillars{padding-bottom:90px;}
 .pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
 .pillar{background:var(--surface);border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);border-top:5px solid var(--violet);}
 .pillar[data-id="data-informed"]{border-top-color:var(--mint);}
@@ -148,7 +148,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 /* ============================================================================
    SKILLS / FILTERS
    ============================================================================ */
-.skills-section{padding:0 0 70px;}
+.skills-section{padding-bottom:70px;}
 .skills-hint{color:var(--ink-soft);font-size:14px;margin-bottom:22px;}
 .skills-groups{display:flex;flex-direction:column;gap:16px;}
 .skills-group{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
@@ -161,7 +161,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 /* ============================================================================
    EXPERIENCES
    ============================================================================ */
-.experiences-section{padding:0 0 90px;}
+.experiences-section{padding-bottom:90px;}
 .filter-status{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;}
 .experiences-list{display:flex;flex-direction:column;gap:20px;}
 .company-block{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 30px 8px;transition:opacity .2s ease;}
@@ -194,7 +194,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 /* ============================================================================
    FORMATION / LANGUES / CERTIFICATIONS
    ============================================================================ */
-.formation-section{padding:0 0 90px;}
+.formation-section{padding-bottom:90px;}
 .formation-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:start;}
 .formation-subtitle{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:12px;font-family:'Space Grotesk',sans-serif;}
 .formation-col .formation-subtitle:not(:first-child){margin-top:22px;}
@@ -213,7 +213,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 /* ============================================================================
    RECOMMANDATION — citation vedette
    ============================================================================ */
-.testimonial-section{padding:60px 0 80px;}
+.testimonial-section{padding-top:60px;padding-bottom:80px;}
 .testimonial-card{
   background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);
   padding:52px 60px;max-width:820px;margin:0 auto;text-align:center;
@@ -295,7 +295,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
 /* ============================================================================
    SIDE PROJECTS
    ============================================================================ */
-.projects-section{padding:0 0 90px;}
+.projects-section{padding-bottom:90px;}
 .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
 .project-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;border-top:5px solid var(--coral);}
 .project-card h3{font-size:17px;font-weight:700;margin-bottom:8px;}
