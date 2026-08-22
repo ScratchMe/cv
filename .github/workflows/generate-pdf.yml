@@ -1,7 +1,11 @@
 name: Générer les PDF du CV
 
-# Se déclenche uniquement quand le contenu/style du CV change (pas sur le
-# README ou d'autres fichiers sans rapport). [À COMPLÉTER] si ta branche
+# Se déclenche quand le contenu/style du CV change (pas sur le README ou
+# d'autres fichiers sans rapport), ET une fois par mois indépendamment de
+# tout changement de code : les durées d'expérience affichées sur le CV
+# (calculées depuis js/data.js jusqu'à "aujourd'hui") avancent avec le
+# calendrier, donc les PDF doivent être régénérés régulièrement pour rester
+# à jour même quand rien d'autre n'a changé. [À COMPLÉTER] si ta branche
 # principale s'appelle "master" plutôt que "main", change-le ci-dessous.
 "on":
   push:
@@ -13,10 +17,13 @@ name: Générer les PDF du CV
       - "assets/photo/**"
       - "scripts/generate-pdf.js"
       - "package.json"
+  schedule:
+    - cron: "0 4 1 * *" # le 1er de chaque mois à 4h UTC, pour rafraîchir les durées affichées
   workflow_dispatch: {} # permet aussi de le relancer manuellement depuis l'onglet Actions
 
 permissions:
   contents: write # nécessaire pour que le workflow puisse recommitter les PDF générés
+  issues: write # nécessaire pour ouvrir une issue si la génération échoue (surveillance)
 
 jobs:
   generate-pdf:
@@ -50,3 +57,43 @@ jobs:
             git commit -m "chore: régénère les PDF du CV [skip ci]"
             git push
           fi
+
+      # Surveillance : si une étape précédente a échoué, on ouvre (ou on
+      # réutilise) une issue plutôt que de laisser l'échec passer inaperçu
+      # dans l'onglet Actions. Évite les doublons si l'échec se répète.
+      - name: Signaler l'échec via une issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "⚠️ Échec de la génération des PDF du CV";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              `Le workflow **Générer les PDF du CV** a échoué (déclenché par \`${context.eventName}\`).`,
+              "",
+              `Voir les logs : ${runUrl}`,
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "pdf-generation-failure",
+            });
+
+            if (existing.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: `Nouvel échec : ${runUrl}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["pdf-generation-failure"],
+              });
+            }
