@@ -211,7 +211,7 @@ const EXPERIENCES = [
           fr: "4 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "4 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["plg", "roadmapping", "stakeholder", "cross-functional-leadership", "jira", "metabase", "mixpanel", "segment", "chatgpt", "okr", "user-research"],
+        skills: ["plg", "discovery", "roadmapping", "stakeholder", "cross-functional-leadership", "user-stories", "jira", "metabase", "mixpanel", "segment", "chatgpt", "okr", "user-research"],
       },
       {
         title: "Product Manager",
