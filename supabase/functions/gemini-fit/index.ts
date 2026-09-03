@@ -59,7 +59,7 @@ try {
   if (url && token) {
     ratelimit = new Ratelimit({
       redis: new Redis({ url, token }),
-      limiter: Ratelimit.slidingWindow(5, "60 s"), // 5 analyses / minute / IP
+      limiter: Ratelimit.slidingWindow(3, "60 s"), // 3 analyses / minute / IP
       analytics: true,
       prefix: "cv-gemini-fit",
     });
