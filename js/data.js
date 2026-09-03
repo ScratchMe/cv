@@ -14,7 +14,7 @@
 const CONFIG = {
   // Passe à false pour masquer complètement la section "Side Projects"
   // (et son lien dans le menu) sans avoir à supprimer le contenu.
-  showSideProjects: false,
+  showSideProjects: true,
 
   // URL de ta fonction Supabase Edge Function (voir README.md, partie Gemini).
   supabaseFunctionUrl: "https://tpreesulucfsyalaipcj.supabase.co/functions/v1/gemini-fit",
@@ -563,15 +563,80 @@ const CERTIFICATIONS = [
 
 // ---------------------------------------------------------------------------
 // 5. SIDE PROJECTS — masquable via CONFIG.showSideProjects ci-dessus.
+//    Chaque entrée peut pointer vers un lien externe (`link`) et/ou une
+//    page de détail interne (`detailSlug`, à renseigner dans
+//    PROJECT_DETAILS ci-dessous). Les deux sont optionnels indépendamment.
 // ---------------------------------------------------------------------------
 const SIDE_PROJECTS = [
   {
-    title: { fr: "[À COMPLÉTER] Nom du projet", en: "[TO COMPLETE] Project name" },
+    title: "Tour de Growth",
     description: {
-      fr: "[À COMPLÉTER] Ton export LinkedIn ne mentionne pas de side project — dis-moi ce que tu veux mettre ici, ou passe CONFIG.showSideProjects à false pour masquer la section.",
-      en: "[TO COMPLETE] Your LinkedIn export doesn't mention any side project — tell me what to put here, or set CONFIG.showSideProjects to false to hide the section.",
+      fr: "Un outil public de growth check-up (framework AARRR), conçu et lancé pour servir de miroir rapide. En mots clairs plutôt qu'en jargon, on voit où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
+      en: "A free growth check-up tool (AARRR framework), designed and launched to provide a quick assessment. In plain language rather than jargon, it shows where a growth strategy is already on the right track and where it isn’t yet.",
     },
-    link: "",
-    skills: [],
+    link: "https://tourdegrowth.com",
+    detailSlug: "tour-de-growth",
+    skills: ["plg", "user-research"],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// 5bis. PROJECT_DETAILS — contenu des pages de détail ("étude de cas") des
+//    side projects, affichées via project-detail.html?slug=<clé>. Structure
+//    pensée pour être dupliquée telle quelle à chaque nouveau projet :
+//    ajoute une nouvelle clé ici, référence-la via `detailSlug` ci-dessus,
+//    c'est tout — aucune autre modification de code nécessaire.
+//
+//    `metrics`: laisse le tableau vide ([]) tant qu'il n'y a pas assez de
+//    recul pour des chiffres significatifs — `metricsFallback` s'affiche
+//    automatiquement à la place. Remplis `metrics` dès que tu as de vrais
+//    chiffres à montrer (visites, taux de partage, coefficient viral...).
+// ---------------------------------------------------------------------------
+const PROJECT_DETAILS = {
+  "tour-de-growth": {
+    title: "Tour de Growth",
+    tagline: {
+      fr: "Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.",
+      en: "A quick mirror to see where your growth strategy really stands — explained in plain words, not jargon.",
+    },
+    liveUrl: "https://tourdegrowth.com",
+
+    problem: {
+      fr: "Beaucoup de gens qui pilotent un produit savent qu'ils devraient \"faire de la croissance\", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle \"growth\" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ? Tour de Growth part de cette question toute simple : un miroir rapide, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
+      en: "A lot of people running a product know they're supposed to \"do growth\", without quite being able to say where they actually stand. Is the real gap acquisition, or is it retention? Does what we call \"growth\" here look anything like what other companies do, or have we just been making up our own definition as we go? Tour de Growth starts from that simple question: a quick mirror, in plain words instead of jargon, to see where a growth strategy already holds up and where it doesn't yet.",
+    },
+
+    whatItIs: {
+      fr: "Quinze questions, réparties sur cinq zones classiques de la croissance : comment les gens vous trouvent, comment ils comprennent ce que vous apportez, s'ils reviennent, s'ils vous recommandent, comment vous gagnez de l'argent. Trois minutes, un score par zone, et surtout une explication de ce que ça veut dire concrètement — pas juste un chiffre jeté là. Un mode plus poussé permet ensuite de préciser son contexte et d'obtenir des pistes plus concrètes à explorer.",
+      en: "Fifteen questions, spread across five classic areas of growth: how people find you, how they get what you actually offer, whether they come back, whether they recommend you, how you make money. Three minutes, a score per area, and above all an explanation of what it actually means — not just a number thrown at you. A deeper mode then lets you add context and get more concrete directions to explore.",
+    },
+
+    teachingMoment: {
+      title: { fr: "Un exemple qu'on préfère montrer qu'expliquer : la boucle de croissance", en: "An example better shown than explained: the growth loop" },
+      body: {
+        fr: "La plupart des produits pensent leur croissance comme un entonnoir : on fait de la pub, des gens arrivent, certains restent, fin de l'histoire. Une boucle de croissance (growth loop) fonctionne autrement — l'usage du produit crée lui-même de nouveaux utilisateurs, sans qu'il faille remettre de l'argent ou de l'énergie à chaque tour. Un exemple concret vaut mieux qu'une définition : sur Tour de Growth, chaque personne qui partage son score amène potentiellement de nouvelles personnes, qui font le test à leur tour, qui repartagent. Si ce mécanisme fonctionne vraiment, ça se mesure — c'est ce qu'on appelle le coefficient viral, le nombre moyen de nouvelles visites qu'apporte chaque partage. En dessous de 1, la boucle s'essouffle toute seule. Au-dessus, elle s'auto-alimente. C'est exactement le genre de chose que Tour de Growth essaie de vous aider à repérer sur votre propre produit.",
+        en: "Most products think about growth as a funnel: run some ads, people show up, some of them stick around, end of story. A growth loop works differently — using the product itself creates new users, without needing fresh money or effort every round. A concrete example beats a definition: on Tour de Growth, everyone who shares their score potentially brings in new people, who take the test themselves, who share it again. If that mechanism actually works, it's measurable — that's what a viral coefficient is: the average number of new visits each share brings in. Below 1, the loop runs out of steam on its own. Above 1, it feeds itself. That's exactly the kind of thing Tour de Growth is trying to help you spot in your own product too.",
+      },
+    },
+
+    process: {
+      fr: "Construit en grande partie avec l'aide de Claude Code et Claude Design — pour cadrer le produit, pour les maquettes, pour la partie technique. Ça m'a semblé la façon la plus honnête de vérifier, en pratique et pas seulement sur un CV, si je sais vraiment structurer un problème growth de bout en bout : poser la bonne question, choisir ce qui compte, et rester honnête sur ce qu'un score rapide peut dire et ce qu'il ne peut pas dire.",
+      en: "Most of it has been built with Claude Code and Claude Design's help — for the product framing, the mockups, and the engineering. It felt like the most honest way to test, in practice and not just on a CV, whether I can actually structure a growth problem end to end: ask the right question, decide what matters, and stay honest about what a quick score can and can't tell you.",
+    },
+
+    metrics: [], // [À COMPLÉTER] ajoute { label: {fr,en}, value: "..." } dès qu'il y a des chiffres significatifs
+    metricsFallback: {
+      fr: "Encore tôt après le lancement — les premiers chiffres d'usage (visites, taux de partage, coefficient viral) seront ajoutés ici dès qu'il y aura assez de recul pour les rendre significatifs.",
+      en: "Still early days since launch — the first usage numbers (visits, share rate, viral coefficient) will be added here once there's enough data for them to be meaningful.",
+    },
+
+    techStack: {
+      frontend: ["Next.js 16", "TypeScript", "React 19", "Vercel", "CSS Modules", { fr: "i18n maison", en: "Custom i18n" }],
+      backend: ["Firebase", "Firestore", "Gemini API", { fr: "Route Handlers Next.js", en: "Next.js Route Handlers" }],
+      analytics: ["GoatCounter", { fr: "Dashboard interne", en: "Internal dashboard" }],
+      testing: ["Vitest", "Playwright"],
+      seo: [{ fr: "SEO natif Next.js", en: "Native Next.js SEO" }, "JSON-LD", "next/og"],
+      ops: ["GitHub", { fr: "Déploiement continu Vercel", en: "Vercel CI/CD" }, "Google Search Console"],
+    },
+  },
+};

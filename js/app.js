@@ -346,7 +346,10 @@
       <div class="project-card">
         <h3>${tc(p.title)}</h3>
         <p>${tc(p.description)}</p>
-        ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener">${t("projects.viewLink")}</a>` : ""}
+        <div class="project-links">
+          ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener">${t("projects.viewLink")}</a>` : ""}
+          ${p.detailSlug ? `<a href="project-detail.html?slug=${p.detailSlug}&lang=${window.i18n.lang}">${t("projects.viewCaseStudy")}</a>` : ""}
+        </div>
         <div class="project-skills">${p.skills.map((s) => `<span>${skillLabel(s)}</span>`).join("")}</div>
       </div>`
     ).join("");

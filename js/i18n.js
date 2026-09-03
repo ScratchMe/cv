@@ -104,6 +104,22 @@
 
     "projects.sectionTitle": { fr: "Side projects", en: "Side projects" },
     "projects.viewLink": { fr: "Voir le projet →", en: "View project →" },
+    "projects.viewCaseStudy": { fr: "Voir l'étude de cas →", en: "View case study →" },
+    "projectDetail.backToCv": { fr: "← Retour au CV", en: "← Back to CV" },
+    "projectDetail.viewLive": { fr: "Essayer l'outil →", en: "Try the tool →" },
+    "projectDetail.theProblem": { fr: "Le problème", en: "The problem" },
+    "projectDetail.whatItIs": { fr: "Ce que c'est", en: "What it is" },
+    "projectDetail.mechanisms": { fr: "Mécanismes de croissance mis en place", en: "Growth mechanisms implemented" },
+    "projectDetail.process": { fr: "Démarche produit", en: "Product process" },
+    "projectDetail.metrics": { fr: "Chiffres d'usage", en: "Usage numbers" },
+    "projectDetail.techStack": { fr: "Stack technique", en: "Tech stack" },
+    "projectDetail.stack.frontend": { fr: "Frontend", en: "Frontend" },
+    "projectDetail.stack.backend": { fr: "Backend / données", en: "Backend / data" },
+    "projectDetail.stack.analytics": { fr: "Analytics / tracking", en: "Analytics / tracking" },
+    "projectDetail.stack.testing": { fr: "Tests / qualité", en: "Testing / quality" },
+    "projectDetail.stack.seo": { fr: "SEO", en: "SEO" },
+    "projectDetail.stack.ops": { fr: "Ops", en: "Ops" },
+    "projectDetail.notFound": { fr: "Projet introuvable.", en: "Project not found." },
   };
 
   const MONTHS = {
