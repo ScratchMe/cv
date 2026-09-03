@@ -124,6 +124,18 @@
     "projectDetail.stack.seo": { fr: "SEO", en: "SEO" },
     "projectDetail.stack.ops": { fr: "Ops", en: "Ops" },
     "projectDetail.notFound": { fr: "Projet introuvable.", en: "Project not found." },
+
+    "results.eyebrow": { fr: "Chiffres clés", en: "Key numbers" },
+    "results.title": { fr: "Le détail derrière les chiffres", en: "The story behind the numbers" },
+    "results.intro": {
+      fr: "Un chiffre seul ne dit jamais tout. Voici, pour chacun des chiffres affichés en haut du CV, le contexte, le problème identifié, ce que j'ai concrètement fait, et ce que j'en retiens.",
+      en: "A number alone never tells the full story. For each figure shown at the top of the CV, here's the context, the problem identified, what I actually did, and what I took away from it.",
+    },
+    "results.context": { fr: "Contexte", en: "Context" },
+    "results.challenge": { fr: "Défi", en: "Challenge" },
+    "results.action": { fr: "Action", en: "Action" },
+    "results.result": { fr: "Résultat", en: "Result" },
+    "results.lesson": { fr: "Leçon", en: "Lesson" },
   };
 
   const MONTHS = {

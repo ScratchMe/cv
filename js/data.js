@@ -54,11 +54,131 @@ const PROFILE = {
 // aperçu de l'impact avant même de lire les expériences. Laisse le tableau
 // vide ([]) pour le masquer entièrement. 3-4 chiffres maximum recommandés,
 // au-delà ça devient indigeste et perd son effet "scan rapide".
+// `resultId` (optionnel) relie un chiffre à son étude de cas détaillée dans
+// RESULT_DETAILS ci-dessous (page results.html) — le chiffre devient alors
+// cliquable. Un chiffre sans `resultId` reste un simple texte, non cliquable.
 const HERO_STATS = [
-  { value: "+15%", label: { fr: "Taux d'activation (AB Tasty)", en: "Activation rate (AB Tasty)" } },
-  { value: "-50%", label: { fr: "Temps de saisie (Everysens)", en: "Entry time (Everysens)" } },
-  { value: "+100%", label: { fr: "Récupération billet, plateforme santé Covid (SNCF Connect)", en: "Ticket retrieval, Covid health-check platform (SNCF Connect)" } },
+  { value: "+15%", label: { fr: "Taux d'activation (AB Tasty)", en: "Activation rate (AB Tasty)" }, resultId: "ab-tasty-activation" },
+  { value: "-50%", label: { fr: "Temps de saisie (Everysens)", en: "Entry time (Everysens)" }, resultId: "everysens-entry-time" },
+  { value: "+100%", label: { fr: "Récupération billet, plateforme santé Covid (SNCF Connect)", en: "Ticket retrieval, Covid health-check platform (SNCF Connect)" }, resultId: "sncf-ticket-retrieval" },
 ];
+
+// ---------------------------------------------------------------------------
+// 1bis. RESULT_DETAILS — le détail (format STAR) derrière chaque chiffre du
+//    hero, affiché sur results.html. Un chiffre du hero devient cliquable dès
+//    qu'il porte un `resultId` correspondant à une clé ci-dessous.
+//
+//    `result` (optionnel) : un chiffre d'impact SUPPLÉMENTAIRE à celui déjà
+//    affiché dans le hero — à ne renseigner que s'il y en a vraiment un
+//    (sinon laisser le champ absent, la section ne s'affiche simplement pas).
+// ---------------------------------------------------------------------------
+// Champs `*Points` (optionnels) : liste à puces rendue après les paragraphes
+// du champ correspondant (ex: `actionPoints` après `action`) — à ne
+// renseigner que quand le contenu s'y prête vraiment (points parallèles),
+// jamais pour forcer un découpage artificiel.
+const RESULT_DETAILS = {
+  "ab-tasty-activation": {
+    company: "AB Tasty",
+    companyLogo: "assets/logos/ab-tasty.png",
+    role: "Product Manager",
+    period: "2023 – 2025",
+    value: "+15%",
+    label: { fr: "Taux d'activation", en: "Activation rate" },
+    context: {
+      fr: "AB Tasty, plateforme SaaS d'**Experience Optimization** (A/B Testing, Personnalisation). PM responsable de la « Product eXperience », au sein d'une équipe de 3 développeurs, 1 tech lead, 1 QA et 1 Product Designer.",
+      en: "AB Tasty, an **Experience Optimization** SaaS platform (A/B Testing, Personalization). PM in charge of \"Product eXperience\", within a team of 3 developers, 1 tech lead, 1 QA and 1 Product Designer.",
+    },
+    challenge: {
+      fr: "Un churn à **15%** et une sur-sollicitation du support CSM, alors que le produit n'offrait aucun accompagnement à l'onboarding. Mon hypothèse : un problème d'activation plutôt que de fit produit — confirmée en comparant nos chiffres au benchmark **Userpilot**, nettement en dessous.\n\nPlutôt que d'attaquer tout le sujet du churn (ICP à revoir, accessibilité des outils...), j'ai choisi de me concentrer sur ce trou en tout début de funnel, là où le gain potentiel était le plus important.",
+      en: "A **15%** churn rate and CSM support overloaded with requests, while the product offered no in-app onboarding help. My hypothesis: an activation problem rather than a product-fit one — confirmed by comparing our numbers to the **Userpilot** benchmark, where we were clearly below par.\n\nRather than tackling churn as a whole (ICP to revisit, tool accessibility...), I chose to focus on this gap right at the start of the funnel, where the potential gain was highest.",
+    },
+    action: {
+      fr: "J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.\n\nPlutôt qu'un simple correctif, j'ai conçu un **moteur de qualification à l'inscription** (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :",
+      en: "I ran interviews with freshly onboarded users: fear of getting started despite CSM support, and a setup that took too long, came up again and again. Digging further, I noticed our users covered very different profiles (developers, marketers, analysts, product people), with different skills and expectations.\n\nRather than a quick fix, I designed a **qualification engine at sign-up** (role, A/B testing level, technical skills, main goal), framed as a service to the user rather than a plain form to maximize response rates — serving a double purpose:",
+    },
+    actionPoints: [
+      { fr: "Adapter l'onboarding à chaque profil utilisateur.", en: "Tailor onboarding to each user profile." },
+      { fr: "Alimenter la segmentation utilisateur pour d'autres besoins produit.", en: "Feed user segmentation for other product needs." },
+    ],
+    result: {
+      fr: "En plus des +15% d'activation déjà affichés : **-20% de Time-to-Value** (délai avant qu'un utilisateur tire une première valeur concrète du produit).",
+      en: "On top of the +15% activation already shown above: **-20% Time-to-Value** (the delay before a user gets first real value from the product).",
+    },
+    lesson: {
+      fr: "Le moteur de qualification était une évidence a posteriori. Ce que je ferais plus tôt la prochaine fois : **cartographier dès le départ les cohortes/segmentations disponibles** (et celles qui manquent) — plus ce découpage arrive tôt, plus l'amélioration continue du produit devient facile ensuite.",
+      en: "The qualification engine was an obvious move in hindsight. What I'd do earlier next time: **map out available cohorts/segmentations from day one** (and spot the gaps) — the sooner that breakdown exists, the easier continuous product improvement becomes afterward.",
+    },
+  },
+
+  "everysens-entry-time": {
+    company: "Everysens",
+    companyLogo: "assets/logos/everysens.png",
+    role: "Product Manager",
+    period: "2022 – 2023",
+    value: "-50%",
+    label: { fr: "Temps de saisie", en: "Entry time" },
+    context: {
+      fr: "Everysens, SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail. PM responsable de la **factory « Exécution »** (saisie des transports, validation des lettres de voiture, suivi temps réel), au sein d'une équipe de 4 développeurs et 1 QA, rejointe plus tard par 1 Product Designer.",
+      en: "Everysens, a SaaS platform for managing and tracking rail freight transport, aimed at shifting freight from road to rail. PM in charge of the **\"Execution\" factory** (transport entry, waybill validation, real-time tracking), within a team of 4 developers and 1 QA, later joined by 1 Product Designer.",
+    },
+    challenge: {
+      fr: "Le module « Exécution », historique et vieillissant, ne dialoguait pas avec le nouveau module « Planification », qui contenait pourtant déjà une partie des informations nécessaires (trajet, wagons, marchandises).\n\nCôté saisie, il fallait renseigner le détail complet d'un train (numéro, marchandise, poids, scellés de chaque wagon) pour établir les lettres de voiture et assurer le suivi — un calvaire dès **30 wagons**, sur une UI clairement pas à la hauteur :",
+      en: "The legacy, aging \"Execution\" module didn't talk to the newer \"Planning\" module either, even though it already held part of the information needed (route, wagons, goods).\n\nOn the entry side, filling in the full detail of a train (number, goods, weight, seals for every wagon) to produce waybills and enable tracking was a nightmare from **30 wagons** up, on a UI clearly not up to the task:",
+    },
+    challengePoints: [
+      { fr: "Seulement 6 wagons affichés à la fois.", en: "Only 6 wagons shown at a time." },
+      { fr: "Aucune navigation rapide entre les champs.", en: "No quick navigation between fields." },
+      { fr: "Pas d'import de tableur.", en: "No spreadsheet import." },
+    ],
+    action: {
+      fr: "J'ai construit et porté auprès de la direction un **plan de migration** du module Exécution vers une nouvelle architecture, livré en approche incrémentale avec un premier MVP en moins de 2 mois. Cette nouvelle architecture m'a permis de faire dialoguer le module avec « Planification » pour **pré-remplir automatiquement le formulaire** à partir d'informations déjà saisies ailleurs (trajet, nombre de wagons, marchandises).\n\nEn parallèle, j'ai mené moi-même la recherche utilisateur et le maquettage UI/UX (Hotjar, Heap) — avant l'arrivée d'une Product Designer — pour repenser un formulaire cette fois pensé pour des trains de 30 wagons et plus.",
+      en: "I built and pitched a **migration plan** for the Execution module toward a new architecture to leadership, delivered incrementally with a first MVP shipped in under 2 months. This new architecture let the module talk to \"Planning\" to **auto-fill the form** from information already entered elsewhere (route, wagon count, goods).\n\nIn parallel, I personally led user research and UI/UX design (Hotjar, Heap) — before a Product Designer joined — to redesign a form this time built for trains of 30+ wagons.",
+    },
+    result: {
+      fr: "En plus des -50% de temps de saisie déjà affichés : **+20% de satisfaction utilisateur** mesurée après la refonte.",
+      en: "On top of the -50% entry time already shown above: **+20% user satisfaction** measured after the overhaul.",
+    },
+    lesson: {
+      fr: "Un plan de migration bien ficelé rassure autant qu'il structure. L'approche incrémentale a permis de **migrer les clients fonction par fonction** selon ce qui était déjà prêt — un suivi à la volée aurait été bien plus difficile à tenir, et bien moins rassurant pour la direction.",
+      en: "A well-structured migration plan reassures as much as it organizes. The incremental approach let us **migrate clients feature by feature**, based on what was already ready — tracking that on the fly would have been far harder to keep up with, and far less reassuring for leadership.",
+    },
+  },
+
+  "sncf-ticket-retrieval": {
+    company: "SNCF Connect & Tech",
+    companyLogo: "assets/logos/sncf-connect-tech.png",
+    role: "Product Manager",
+    period: "2021 – 2022",
+    value: "+100%",
+    label: { fr: "Récupération billet", en: "Ticket retrieval" },
+    context: {
+      fr: "SNCF Connect & Tech, plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée) — jusqu'à **40 000 visiteurs par jour** en pleine crise Covid-19, pour s'auto-contrôler vis-à-vis de son pass sanitaire et de son billet. PM au sein d'une équipe de 4 développeurs et 1 Engineering Manager, méthode Kanban, sur une plateforme initialement développée en externe.",
+      en: "SNCF Connect & Tech, the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned) — up to **40,000 visitors a day** in the middle of the Covid-19 crisis, letting travelers self-check their health pass and ticket. PM within a team of 4 developers and 1 Engineering Manager, Kanban methodology, on a platform initially built externally.",
+    },
+    challenge: {
+      fr: "Sur cette plateforme, je partais avec deux contraintes fortes :",
+      en: "On this platform, I was working with two hard constraints:",
+    },
+    challengePoints: [
+      {
+        fr: "Aucune donnée produit disponible — la plateforme ayant été développée à l'extérieur, on n'avait que le nombre de visiteurs et le taux de validation du pass sanitaire.",
+        en: "No product data available at all — the platform had been built externally, so all we had were visitor counts and the health-pass validation rate.",
+      },
+      {
+        fr: "Les interviews utilisateurs classiques étaient à exclure : en gare, en pleine épidémie, elles auraient créé un risque d'attroupement évitable.",
+        en: "Classic user interviews were off the table: in a station, in the middle of an epidemic, they'd have created an avoidable crowding risk.",
+      },
+    ],
+    action: {
+      fr: "J'ai mis en place une **extraction quotidienne automatique des tweets** mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.\n\nÇa a confirmé un point noir que je soupçonnais déjà : l'outil imposait de **scanner le QR code du billet**, alors qu'une grande partie des utilisateurs avaient leur billet uniquement sur mobile — donc rien à scanner. J'ai ajouté une **deuxième méthode de récupération**, par nom et numéro de dossier, en alternative au QR code.",
+      en: "I set up a **daily automated extraction of tweets** mentioning the project, Covid, and SNCF, to get a user signal without physical contact.\n\nIt confirmed a pain point I already suspected: the tool required **scanning the ticket's QR code**, while a large share of users only had their ticket on mobile — nothing to scan. I added a **second retrieval method**, by name and booking reference, as an alternative to the QR code.",
+    },
+    lesson: {
+      fr: "Regarder toute la chaîne, pas seulement son périmètre produit : seuls **10% des voyageurs** arrivaient jusqu'à l'outil, un frein bien plus grand que ce qu'on pouvait gagner côté produit. L'acquisition était ici hors de notre contrôle (contraintes légales entre transporteur et distributeur) — mais ça reste un rappel que ce sont les premières étapes d'un funnel qui pèsent le plus sur le résultat global.",
+      en: "Look at the whole chain, not just your own product scope: only **10% of travelers** ever made it to the tool, a far bigger bottleneck than anything achievable on the product side. Acquisition was outside our control here (legal constraints between carrier and distributor) — but it's a reminder that the earliest steps of a funnel weigh the most on its overall outcome.",
+    },
+  },
+};
 
 // Les 3 piliers qui définissent ton approche produit.
 // Les titres (User First / Data Informed / Iterative) restent en anglais
@@ -602,26 +722,37 @@ const PROJECT_DETAILS = {
     liveUrl: "https://tourdegrowth.com",
 
     problem: {
-      fr: "Beaucoup de gens qui pilotent un produit savent qu'ils devraient \"faire de la croissance\", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle \"growth\" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ? Tour de Growth part de cette question toute simple : un miroir rapide, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
-      en: "A lot of people running a product know they're supposed to \"do growth\", without quite being able to say where they actually stand. Is the real gap acquisition, or is it retention? Does what we call \"growth\" here look anything like what other companies do, or have we just been making up our own definition as we go? Tour de Growth starts from that simple question: a quick mirror, in plain words instead of jargon, to see where a growth strategy already holds up and where it doesn't yet.",
+      fr: "Beaucoup de gens qui pilotent un produit savent qu'ils devraient \"faire de la croissance\", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle \"growth\" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ?\n\nTour de Growth part de cette question toute simple : un **miroir rapide**, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
+      en: "A lot of people running a product know they're supposed to \"do growth\", without quite being able to say where they actually stand. Is the real gap acquisition, or is it retention? Does what we call \"growth\" here look anything like what other companies do, or have we just been making up our own definition as we go?\n\nTour de Growth starts from that simple question: a **quick mirror**, in plain words instead of jargon, to see where a growth strategy already holds up and where it doesn't yet.",
     },
 
     whatItIs: {
-      fr: "Quinze questions, réparties sur cinq zones classiques de la croissance : comment les gens vous trouvent, comment ils comprennent ce que vous apportez, s'ils reviennent, s'ils vous recommandent, comment vous gagnez de l'argent. Trois minutes, un score par zone, et surtout une explication de ce que ça veut dire concrètement — pas juste un chiffre jeté là. Un mode plus poussé permet ensuite de préciser son contexte et d'obtenir des pistes plus concrètes à explorer.",
-      en: "Fifteen questions, spread across five classic areas of growth: how people find you, how they get what you actually offer, whether they come back, whether they recommend you, how you make money. Three minutes, a score per area, and above all an explanation of what it actually means — not just a number thrown at you. A deeper mode then lets you add context and get more concrete directions to explore.",
+      fr: "**Quinze questions**, réparties sur cinq zones classiques de la croissance :",
+      en: "**Fifteen questions**, spread across five classic areas of growth:",
+    },
+    whatItIsPoints: [
+      { fr: "Comment les gens vous trouvent.", en: "How people find you." },
+      { fr: "Comment ils comprennent ce que vous apportez.", en: "How they get what you actually offer." },
+      { fr: "S'ils reviennent.", en: "Whether they come back." },
+      { fr: "S'ils vous recommandent.", en: "Whether they recommend you." },
+      { fr: "Comment vous gagnez de l'argent.", en: "How you make money." },
+    ],
+    whatItIsClosing: {
+      fr: "Trois minutes, un score par zone, et surtout une explication de ce que ça veut dire concrètement — pas juste un chiffre jeté là. Un mode plus poussé permet ensuite de préciser son contexte et d'obtenir des pistes plus concrètes à explorer.",
+      en: "Three minutes, a score per area, and above all an explanation of what it actually means — not just a number thrown at you. A deeper mode then lets you add context and get more concrete directions to explore.",
     },
 
     teachingMoment: {
       title: { fr: "Un exemple qu'on préfère montrer qu'expliquer : la boucle de croissance", en: "An example better shown than explained: the growth loop" },
       body: {
-        fr: "La plupart des produits pensent leur croissance comme un entonnoir : on fait de la pub, des gens arrivent, certains restent, fin de l'histoire. Une boucle de croissance (growth loop) fonctionne autrement — l'usage du produit crée lui-même de nouveaux utilisateurs, sans qu'il faille remettre de l'argent ou de l'énergie à chaque tour. Un exemple concret vaut mieux qu'une définition : sur Tour de Growth, chaque personne qui partage son score amène potentiellement de nouvelles personnes, qui font le test à leur tour, qui repartagent. Si ce mécanisme fonctionne vraiment, ça se mesure — c'est ce qu'on appelle le coefficient viral, le nombre moyen de nouvelles visites qu'apporte chaque partage. En dessous de 1, la boucle s'essouffle toute seule. Au-dessus, elle s'auto-alimente. C'est exactement le genre de chose que Tour de Growth essaie de vous aider à repérer sur votre propre produit.",
-        en: "Most products think about growth as a funnel: run some ads, people show up, some of them stick around, end of story. A growth loop works differently — using the product itself creates new users, without needing fresh money or effort every round. A concrete example beats a definition: on Tour de Growth, everyone who shares their score potentially brings in new people, who take the test themselves, who share it again. If that mechanism actually works, it's measurable — that's what a viral coefficient is: the average number of new visits each share brings in. Below 1, the loop runs out of steam on its own. Above 1, it feeds itself. That's exactly the kind of thing Tour de Growth is trying to help you spot in your own product too.",
+        fr: "La plupart des produits pensent leur croissance comme un entonnoir : on fait de la pub, des gens arrivent, certains restent, fin de l'histoire. Une **boucle de croissance** (growth loop) fonctionne autrement — l'usage du produit crée lui-même de nouveaux utilisateurs, sans qu'il faille remettre de l'argent ou de l'énergie à chaque tour.\n\nUn exemple concret vaut mieux qu'une définition : sur Tour de Growth, chaque personne qui partage son score amène potentiellement de nouvelles personnes, qui font le test à leur tour, qui repartagent. Si ce mécanisme fonctionne vraiment, ça se mesure — c'est ce qu'on appelle le **coefficient viral**, le nombre moyen de nouvelles visites qu'apporte chaque partage. En dessous de 1, la boucle s'essouffle toute seule ; au-dessus, elle s'auto-alimente. C'est exactement le genre de chose que Tour de Growth essaie de vous aider à repérer sur votre propre produit.",
+        en: "Most products think about growth as a funnel: run some ads, people show up, some of them stick around, end of story. A **growth loop** works differently — using the product itself creates new users, without needing fresh money or effort every round.\n\nA concrete example beats a definition: on Tour de Growth, everyone who shares their score potentially brings in new people, who take the test themselves, who share it again. If that mechanism actually works, it's measurable — that's what a **viral coefficient** is: the average number of new visits each share brings in. Below 1, the loop runs out of steam on its own; above 1, it feeds itself. That's exactly the kind of thing Tour de Growth is trying to help you spot in your own product too.",
       },
     },
 
     process: {
-      fr: "Construit en grande partie avec l'aide de Claude Code et Claude Design — pour cadrer le produit, pour les maquettes, pour la partie technique. Ça m'a semblé la façon la plus honnête de vérifier, en pratique et pas seulement sur un CV, si je sais vraiment structurer un problème growth de bout en bout : poser la bonne question, choisir ce qui compte, et rester honnête sur ce qu'un score rapide peut dire et ce qu'il ne peut pas dire.",
-      en: "Most of it has been built with Claude Code and Claude Design's help — for the product framing, the mockups, and the engineering. It felt like the most honest way to test, in practice and not just on a CV, whether I can actually structure a growth problem end to end: ask the right question, decide what matters, and stay honest about what a quick score can and can't tell you.",
+      fr: "Construit en grande partie avec l'aide de **Claude Code et Claude Design** — pour cadrer le produit, pour les maquettes, pour la partie technique. Ça m'a semblé la façon la plus honnête de vérifier, en pratique et pas seulement sur un CV, si je sais vraiment structurer un problème growth de bout en bout : poser la bonne question, choisir ce qui compte, et rester honnête sur ce qu'un score rapide peut dire et ce qu'il ne peut pas dire.",
+      en: "Most of it has been built with **Claude Code and Claude Design's** help — for the product framing, the mockups, and the engineering. It felt like the most honest way to test, in practice and not just on a CV, whether I can actually structure a growth problem end to end: ask the right question, decide what matters, and stay honest about what a quick score can and can't tell you.",
     },
 
     metrics: [], // [À COMPLÉTER] ajoute { label: {fr,en}, value: "..." } dès qu'il y a des chiffres significatifs
