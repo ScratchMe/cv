@@ -274,7 +274,37 @@ Ce qui est déjà en place :
 2. Inscris le site sur [Google Search Console](https://search.google.com/search-console) (gratuit) : ajoute ta propriété `cv.antoine.berthaud.me`, soumets `sitemap.xml`. Ça accélère l'indexation de plusieurs semaines à quelques jours.
 3. **Le plus efficace, souvent oublié** : ajoute le lien du site dans la section "Featured" (En vedette) de ton profil LinkedIn, et éventuellement dans ton titre ou ton "About". Les recruteurs Growth te trouveront très probablement via LinkedIn avant Google — ce petit ajout coûte zéro effort technique et a plus d'impact direct que tout le reste de cette section.
 
-## Ce qu'il te reste à faire
+## 11. Side projects — carte + page de détail ("étude de cas")
+
+Chaque side project affiché (`CONFIG.showSideProjects = true`) peut avoir,
+en plus de sa carte sur la page d'accueil, une **page de détail dédiée**
+façon mini-étude de cas — problème identifié, mécanismes de croissance mis
+en place, démarche produit, chiffres d'usage. Le tout pensé comme un
+gabarit réutilisable : ajouter un nouveau side project avec sa page de
+détail ne demande de toucher qu'à `data.js`, jamais à `project-detail.html`
+ni à `project-detail.js`.
+
+**Pour ajouter un nouveau side project avec sa page de détail :**
+
+1. Ajoute une entrée dans `SIDE_PROJECTS` (titre, description, `link` vers
+   le projet en ligne) comme d'habitude.
+2. Ajoute une clé correspondante dans `PROJECT_DETAILS` (juste après
+   `SIDE_PROJECTS` dans `data.js`) : `problem`, `whatItIs`, `mechanisms`
+   (liste), `process`, `metrics` (laisse `[]` tant que tu n'as pas de
+   vrais chiffres significatifs — un texte de repli s'affiche
+   automatiquement à la place via `metricsFallback`), `techStack`.
+3. Relie les deux en renseignant `detailSlug` sur l'entrée `SIDE_PROJECTS`
+   avec la même clé que dans `PROJECT_DETAILS`.
+4. C'est tout — `project-detail.html?slug=ta-clé` fonctionne
+   immédiatement, dans les deux langues, avec le lien retour vers le CV
+   qui préserve la langue courante.
+
+**Pourquoi une page séparée plutôt qu'une section de plus sur la page
+d'accueil :** ça permet de documenter un side project en profondeur (la
+démarche produit, pas juste le résultat) sans alourdir la page d'accueil,
+qui reste un CV scannable rapidement. Le lien "Voir l'étude de cas" sur la
+carte est optionnel — une entrée `SIDE_PROJECTS` sans `detailSlug` n'a
+tout simplement pas ce second lien.
 
 - [ ] Ajouter les logos d'entreprise (`assets/logos/`)
 - [ ] Créer la clé Gemini + déployer la fonction Supabase (identifiants déjà renseignés côté site)
@@ -284,5 +314,7 @@ Ce qui est déjà en place :
 - [ ] Inscrire le site sur Google Search Console et soumettre le sitemap
 - [ ] Ajouter le lien du CV dans la section "Featured" de ton profil LinkedIn
 - [ ] Vérifier les permissions du workflow GitHub Actions (Settings → Actions → General → "Read and write permissions")
-- [ ] Repasser `CONFIG.showSideProjects` à `true` et remplir `SIDE_PROJECTS` quand ton projet sera prêt à être montré
+- [ ] ~~Repasser `CONFIG.showSideProjects` à `true`~~ — fait, Tour de Growth est en place
+- [ ] Remplir `metrics` dans `PROJECT_DETAILS` (Tour de Growth) dès qu'il y a de vrais chiffres d'usage (visites, taux de partage, coefficient viral) — le texte de repli actuel est temporaire, pas un oubli
+- [ ] Quand le projet climat sera prêt à être montré : lui ajouter aussi sa carte + page de détail en suivant le même pattern (section 11)
 - [ ] Déployer sur GitHub Pages (ou autre) — les PDF se maintiendront à jour tout seuls ensuite
