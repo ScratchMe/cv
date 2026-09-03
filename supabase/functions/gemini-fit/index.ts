@@ -98,6 +98,12 @@ function extractJson(text: string) {
   return JSON.parse(cleaned);
 }
 
+// Erreur volontairement non-retriable (ex: 400 mauvaise requête) — voir plus
+// bas. Un type dédié permet au `catch` de la distinguer d'une vraie erreur
+// réseau (fetch qui échoue) et de la relancer immédiatement au lieu de
+// continuer la boucle sur le modèle suivant.
+class NonRetriableError extends Error {}
+
 // Essaie chaque modèle de GEMINI_MODEL_CANDIDATES dans l'ordre. Ne passe au
 // suivant que pour des erreurs qui justifient de réessayer avec un autre
 // modèle (surcharge, indisponibilité temporaire, modèle introuvable/déprécié) :
@@ -136,8 +142,9 @@ async function callGeminiWithFallback(prompt: string): Promise<{ data: any; mode
       // Erreur non-retriable (ex: 400 mauvaise requête) : inutile d'essayer
       // un autre modèle, le problème vient de la requête elle-même.
       const errText = await res.text();
-      throw new Error(`Erreur API Gemini (${res.status}) : ${errText}`);
+      throw new NonRetriableError(`Erreur API Gemini (${res.status}) : ${errText}`);
     } catch (err) {
+      if (err instanceof NonRetriableError) throw err;
       lastError = `${model} → ${err.message}`;
       continue;
     }
