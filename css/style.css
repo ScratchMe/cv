@@ -472,8 +472,15 @@ body.focus-mode .pill{background:#F1F1EF;}
    pour ne pas dupliquer le padding/bordure déjà définis plus haut. */
 .hero-stat{display:block;text-decoration:none;transition:transform .15s ease, opacity .15s ease;}
 .hero-stat.is-linked{cursor:pointer;}
-.hero-stat.is-linked:hover{transform:translateY(-2px);}
+.hero-stat.is-linked:hover{transform:translateY(-3px);}
 .hero-stat.is-linked:hover .hero-stat-value{opacity:.85;}
+.hero-stat.is-linked .hero-stat-label{transition:color .15s ease;}
+.hero-stat.is-linked:hover .hero-stat-label{color:var(--violet);text-decoration:underline;text-underline-offset:3px;}
+.hero-stat.is-linked .hero-stat-label::after{
+  content:"→";display:inline-block;margin-left:4px;opacity:0;transform:translateX(-3px);
+  transition:opacity .15s ease, transform .15s ease;
+}
+.hero-stat.is-linked:hover .hero-stat-label::after{opacity:1;transform:translateX(0);}
 
 /* ============================================================================
    IMPRESSION / PDF — on garde la lisibilité, on coupe le superflu
