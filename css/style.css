@@ -377,7 +377,17 @@ body.focus-mode .pill{background:#F1F1EF;}
 .project-detail-section{margin-bottom:40px;}
 .project-detail-section h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;margin-bottom:14px;}
 .project-detail-section p{font-size:15px;color:var(--ink-soft);line-height:1.7;}
+.project-detail-section p:not(:last-child){margin-bottom:12px;}
 .project-detail-section p strong{color:var(--ink);font-weight:700;}
+
+/* Liste à puces réutilisée par project-detail.js ET results.js pour les
+   paragraphes qui gagnent à être découpés en points parallèles plutôt
+   qu'en prose continue. */
+.detail-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:12px 0;}
+.detail-list li{font-size:15px;color:var(--ink-soft);line-height:1.7;padding-left:18px;position:relative;}
+.detail-list li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--violet);}
+.detail-list li strong{color:var(--ink);font-weight:700;}
+.detail-list:last-child{margin-bottom:0;}
 
 .project-teaching-moment{
   background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);
@@ -416,6 +426,54 @@ body.focus-mode .pill{background:#F1F1EF;}
   .project-stack-group{flex-direction:column;align-items:flex-start;gap:8px;}
   .project-stack-group h3{width:auto;}
 }
+
+/* ============================================================================
+   PAGE RÉSULTATS (results.html) — détail (format STAR) derrière les
+   chiffres du hero. Réutilise volontairement .project-detail-eyebrow /
+   .project-detail-tagline (ci-dessus) pour l'intro : même traitement
+   visuel que la page de détail des side projects, pas de raison de
+   dupliquer les règles.
+   ============================================================================ */
+.results-page{max-width:760px;padding:48px 24px 80px;}
+.results-hero{margin-bottom:40px;}
+.results-list{display:flex;flex-direction:column;gap:28px;}
+
+.result-block{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:36px 40px;border-top:5px solid var(--violet);scroll-margin-top:104px;}
+.result-block:nth-of-type(2){border-top-color:var(--mint);}
+.result-block:nth-of-type(3){border-top-color:var(--coral);}
+
+.result-badge{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.result-logo{width:72px;height:72px;border-radius:16px;object-fit:cover;flex-shrink:0;background:var(--violet-soft);}
+.result-company{font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;}
+.result-role{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+
+.result-value{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:44px;line-height:1.1;
+  background:linear-gradient(120deg,var(--violet),var(--coral));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.result-label{font-size:14px;color:var(--ink-soft);margin-bottom:26px;}
+
+.result-star{margin-bottom:20px;}
+.result-star:last-child{margin-bottom:0;}
+.result-star h3{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);font-weight:700;font-family:'Space Grotesk',sans-serif;margin-bottom:8px;}
+.result-star p{font-size:15px;color:var(--ink-soft);line-height:1.7;}
+.result-star p:not(:last-child){margin-bottom:12px;}
+.result-star p strong{color:var(--ink);font-weight:700;}
+
+@media(max-width:640px){
+  .results-page{padding:32px 20px 60px;}
+  .result-block{padding:26px 24px;}
+  .result-value{font-size:36px;}
+}
+
+/* Chiffres du hero cliquables (quand ils ont un resultId vers results.html) —
+   même classe .hero-stat pour le <div> non cliquable et le <a> cliquable,
+   pour ne pas dupliquer le padding/bordure déjà définis plus haut. */
+.hero-stat{display:block;text-decoration:none;transition:transform .15s ease, opacity .15s ease;}
+.hero-stat.is-linked{cursor:pointer;}
+.hero-stat.is-linked:hover{transform:translateY(-2px);}
+.hero-stat.is-linked:hover .hero-stat-value{opacity:.85;}
 
 /* ============================================================================
    IMPRESSION / PDF — on garde la lisibilité, on coupe le superflu

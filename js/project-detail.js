@@ -15,8 +15,25 @@
   function escapeHtml(str) {
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
+  function boldify(str) {
+    return escapeHtml(str).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  }
   function richText(field) {
-    return escapeHtml(tc(field)).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    return boldify(tc(field));
+  }
+  // Comme richText(), mais découpe le texte sur les doubles sauts de ligne
+  // ("\n\n" dans data.js) pour rendre plusieurs <p> — aère les blocs de texte
+  // denses sans avoir à les répartir sur plusieurs champs séparés.
+  function richParagraphs(field) {
+    return tc(field)
+      .split(/\n\n+/)
+      .map((p) => `<p>${boldify(p)}</p>`)
+      .join("");
+  }
+  // Liste à puces à partir d'un tableau de champs traduisibles (même format
+  // que tc() accepte : {fr,en} ou chaîne simple).
+  function richList(items) {
+    return `<ul class="detail-list">${items.map((item) => `<li>${richText(item)}</li>`).join("")}</ul>`;
   }
 
   function initLang() {
@@ -73,22 +90,24 @@
 
       <section class="project-detail-section">
         <h2>${t("projectDetail.theProblem")}</h2>
-        <p>${richText(project.problem)}</p>
+        ${richParagraphs(project.problem)}
       </section>
 
       <section class="project-detail-section">
         <h2>${t("projectDetail.whatItIs")}</h2>
-        <p>${richText(project.whatItIs)}</p>
+        ${richParagraphs(project.whatItIs)}
+        ${project.whatItIsPoints ? richList(project.whatItIsPoints) : ""}
+        ${project.whatItIsClosing ? richParagraphs(project.whatItIsClosing) : ""}
       </section>
 
       <section class="project-detail-section project-teaching-moment">
         <h2>${tc(project.teachingMoment.title)}</h2>
-        <p>${richText(project.teachingMoment.body)}</p>
+        ${richParagraphs(project.teachingMoment.body)}
       </section>
 
       <section class="project-detail-section">
         <h2>${t("projectDetail.process")}</h2>
-        <p>${richText(project.process)}</p>
+        ${richParagraphs(project.process)}
       </section>
 
       <section class="project-detail-section">

@@ -77,13 +77,14 @@
     if (!HERO_STATS || HERO_STATS.length === 0) {
       if (statsEl) statsEl.remove();
     } else if (statsEl) {
-      statsEl.innerHTML = HERO_STATS.map(
-        (s) => `
-        <div class="hero-stat">
+      statsEl.innerHTML = HERO_STATS.map((s) => {
+        const inner = `
           <div class="hero-stat-value">${s.value}</div>
-          <div class="hero-stat-label">${tc(s.label)}</div>
-        </div>`
-      ).join("");
+          <div class="hero-stat-label">${tc(s.label)}</div>`;
+        return s.resultId
+          ? `<a class="hero-stat is-linked" href="results.html?lang=${window.i18n.lang}#${s.resultId}">${inner}</a>`
+          : `<div class="hero-stat">${inner}</div>`;
+      }).join("");
     }
 
     const pillsEl = document.getElementById("heroPills");
