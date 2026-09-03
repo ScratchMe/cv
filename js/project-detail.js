@@ -106,8 +106,12 @@
     document.getElementById("pageDescription").setAttribute("content", tc(project.tagline));
   }
 
-  function init() {
-    initLang();
+  // Rendu (ré-appelé à chaque changement de langue) — ne touche jamais à la
+  // langue elle-même, seulement au DOM. `initLang()` ne doit tourner qu'une
+  // fois au chargement : sinon, comme elle relit `?lang=` dans l'URL (qui ne
+  // change pas quand on clique sur le bouton), le clic sur langToggle serait
+  // aussitôt annulé par le prochain appel à `render()`.
+  function render() {
     const slug = new URLSearchParams(window.location.search).get("slug");
     const root = document.getElementById("projectDetailRoot");
     const project = slug && typeof PROJECT_DETAILS !== "undefined" ? PROJECT_DETAILS[slug] : null;
@@ -122,11 +126,16 @@
     document.getElementById("backToCvLink").href = `index.html?lang=${window.i18n.lang}`;
     document.getElementById("logoLink").href = `index.html?lang=${window.i18n.lang}`;
     document.getElementById("footerCvLink").href = `index.html?lang=${window.i18n.lang}`;
+    document.getElementById("langToggle").textContent = window.i18n.lang === "fr" ? "EN" : "FR";
+  }
+
+  function init() {
+    initLang();
     document.getElementById("langToggle").addEventListener("click", () => {
       window.i18n.setLang(window.i18n.lang === "fr" ? "en" : "fr");
-      init();
+      render();
     });
-    document.getElementById("langToggle").textContent = window.i18n.lang === "fr" ? "EN" : "FR";
+    render();
   }
 
   document.addEventListener("DOMContentLoaded", init);
