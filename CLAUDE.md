@@ -17,6 +17,12 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
 - `js/data.js` : **seul fichier à éditer pour le contenu.** PROFILE,
   EXPERIENCES, SKILLS, HERO_STATS, RESULT_DETAILS, TESTIMONIALS,
   SIDE_PROJECTS, PROJECT_DETAILS, EDUCATION, LANGUAGES, CERTIFICATIONS.
+  `PROFILE.seo` porte le `<title>` et la meta description de l'accueil par
+  langue. **Exception à la règle "un seul fichier"** : `PROFILE.pitch.fr` et
+  `PROFILE.seo` (FR) sont recopiés en dur dans `index.html` (`#heroPitch`,
+  `<title>`, description, `og:`/`twitter:`) pour les robots qui n'exécutent
+  pas JavaScript — toute modification de l'un se reporte dans l'autre
+  (`app.js` avertit en console si le pitch diverge, rien de plus).
 - `js/app.js` : rendu, filtres de compétences, scroll-spy, durées
   dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`).
 - `js/gemini.js` : logique du Fit-Checker (appelle une fonction Supabase,
@@ -94,6 +100,24 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   format STAR) reste **absent** tant qu'il n'y a pas un vrai chiffre
   d'impact *en plus* de celui déjà affiché dans le hero — ne pas le
   remplir juste pour compléter le format.
+- **Français par défaut, anglais sur `?lang=en`, pas de détection de la
+  langue du navigateur** (sept. 2026, décision SEO) : Googlebot rend la page
+  avec un navigateur en anglais et indexait la version anglaise à l'URL
+  canonique. `/` = FR (canonical `/`), `/?lang=en` = EN (canonical
+  `/?lang=en`, posé par `app.js`), hreflang fr/en/x-default statiques dans
+  le `<head>` et dans `sitemap.xml`. Le bouton FR/EN retire le paramètre en
+  FR. Même règle sur `project-detail.js` et `results.js`. Ne pas remettre de
+  détection navigateur "pour les recruteurs anglophones" : on leur partage
+  le lien `?lang=en`.
+- **Objectif SEO réaliste** : premier sur le nom et ses variantes, longue
+  traîne localisée ("senior growth product manager Nantes"), lisible par les
+  moteurs IA. Pas de course à "product manager Nantes" (page de résultats
+  tenue par les job boards). Ce qui pèse le plus est hors code : liens
+  depuis `antoine.berthaud.me` et `tourdegrowth.com`, LinkedIn, demandes
+  d'indexation dans Search Console (propriété existante, accessible via le
+  MCP SEO Gets). Mettre à jour `lastmod` dans `sitemap.xml` quand une page
+  change. Les PDF portent des métadonnées (titre, auteur, langue) posées par
+  `scripts/generate-pdf.js` via `pdf-lib`.
 - **Site considéré fonctionnellement complet** (sept. 2026) : bilingue,
   PDF, Fit-Checker IA, hero cliquable + études de cas STAR, side project
   avec étude de cas, CI de génération/surveillance des PDF. Ne pas
@@ -158,6 +182,18 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
     continuait sur le modèle suivant au lieu de s'arrêter. Utiliser un
     type d'erreur dédié (`class NonRetriableError extends Error`) que le
     `catch` reconnaît via `instanceof` et relance immédiatement.
+12. **Googlebot navigue en anglais (`navigator.language` = en-US)** : une
+    détection de la langue du navigateur "fr sinon en" lui faisait rendre et
+    indexer la version anglaise à l'URL canonique, avec une meta description
+    restée en français (vérifié en rendu Playwright avec `locale: "en-US"`).
+    Sur un site rendu en JS, la langue par défaut doit être décidée par l'URL,
+    jamais par le navigateur.
+13. **Un `<link rel="canonical">` statique sur une page gabarit pilotée par
+    `?slug=`** (`project-detail.html`) pointait la page nue "Projet
+    introuvable" comme version de référence de l'étude de cas — l'`id`
+    `canonicalLink` existait mais n'était jamais mis à jour. Toute page dont
+    l'URL porte un paramètre significatif doit poser son canonical en JS
+    avec ce paramètre, et la variante sans paramètre doit être en `noindex`.
 
 ## Méthode de travail établie
 

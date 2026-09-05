@@ -65,13 +65,28 @@
   // --------------------------------------------------------------------
   const activeFilters = new Set();
 
+  // Copie statique du pitch FR telle qu'écrite dans index.html (#heroPitch),
+  // capturée au premier rendu pour vérifier qu'elle ne dérive pas de data.js.
+  let staticPitchHtml = null;
+
   // --------------------------------------------------------------------
   // 1. HERO
   // --------------------------------------------------------------------
   function renderHero() {
     document.getElementById("heroName").textContent = `${PROFILE.firstName} ${PROFILE.lastName}`;
     document.getElementById("heroRole").textContent = tc(PROFILE.role);
-    document.getElementById("heroPitch").innerHTML = richText(PROFILE.pitch);
+
+    // Le pitch FR est aussi écrit en dur dans index.html, pour les robots qui
+    // n'exécutent pas JavaScript (moteurs IA, aperçus...). Au premier rendu on
+    // garde cette copie statique, et on prévient dans la console si elle
+    // diverge de PROFILE.pitch.fr — invisible pour le visiteur, c'est juste un
+    // garde-fou pour ne pas laisser les deux textes dériver.
+    const pitchEl = document.getElementById("heroPitch");
+    if (staticPitchHtml === null) staticPitchHtml = pitchEl.innerHTML.trim();
+    pitchEl.innerHTML = richText(PROFILE.pitch);
+    if (window.i18n.lang === "fr" && staticPitchHtml && staticPitchHtml !== pitchEl.innerHTML) {
+      console.warn("[cv] Le pitch statique de index.html (#heroPitch) diffère de PROFILE.pitch.fr (js/data.js) — pense à le resynchroniser.");
+    }
 
     const statsEl = document.getElementById("heroStats");
     if (!HERO_STATS || HERO_STATS.length === 0) {
@@ -102,7 +117,7 @@
 
     const photoEl = document.getElementById("heroPhoto");
     if (PROFILE.photo) {
-      photoEl.innerHTML = `<img src="${PROFILE.photo}" alt="Photo de ${PROFILE.firstName} ${PROFILE.lastName}">`;
+      photoEl.innerHTML = `<img src="${PROFILE.photo}" alt="${t("hero.photoAlt")}">`;
     } else {
       const initials = (PROFILE.firstName[0] || "") + (PROFILE.lastName[0] || "");
       photoEl.innerHTML = `<strong>${initials}</strong><span>Photo</span>`;
@@ -361,7 +376,21 @@
   // --------------------------------------------------------------------
   function applyStaticTranslations() {
     document.documentElement.lang = window.i18n.lang;
-    document.title = `${PROFILE.firstName} ${PROFILE.lastName} — ${tc(PROFILE.role)}`;
+
+    // <title> et <meta name="description"> par langue (PROFILE.seo dans
+    // data.js) : c'est ce que Google affiche dans ses résultats.
+    document.title = tc(PROFILE.seo.title);
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute("content", tc(PROFILE.seo.description));
+
+    // Canonical par langue : l'URL nue pour le français (langue par défaut),
+    // ?lang=en pour l'anglais — chaque version se déclare elle-même, en
+    // cohérence avec les balises hreflang statiques du <head>.
+    const canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (canonicalEl) {
+      const base = canonicalEl.href.split("?")[0];
+      canonicalEl.href = window.i18n.lang === "en" ? `${base}?lang=en` : base;
+    }
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       el.textContent = t(el.dataset.i18n);
     });
@@ -482,24 +511,26 @@
   }
 
   // --------------------------------------------------------------------
-  // 9. LANGUE — ?lang=fr/en dans l'URL (priorité), sinon langue du
-  //    navigateur en repli (tout ce qui n'est pas français bascule en
-  //    anglais, plus utile pour un profil basé en France qui vise aussi
-  //    l'international), sinon français par défaut.
+  // 9. LANGUE — ?lang=en dans l'URL affiche l'anglais ; tout le reste (pas
+  //    de paramètre, ?lang=fr, valeur inconnue) affiche le français.
+  //    Volontairement PAS de détection de la langue du navigateur : Googlebot
+  //    rend la page avec un navigateur en anglais (en-US), et indexait donc
+  //    la version anglaise à l'URL canonique — à contre-sens d'un CV qui vise
+  //    des requêtes françaises ("product manager Nantes"). L'URL décide :
+  //    un recruteur anglophone reçoit un lien avec ?lang=en.
   // --------------------------------------------------------------------
   function initLangFromUrl() {
     const urlLang = new URLSearchParams(window.location.search).get("lang");
-    if (urlLang === "en" || urlLang === "fr") {
-      window.i18n.setLang(urlLang);
-      return;
-    }
-    const browserLang = (navigator.language || navigator.userLanguage || "fr").toLowerCase();
-    window.i18n.setLang(browserLang.startsWith("fr") ? "fr" : "en");
+    window.i18n.setLang(urlLang === "en" ? "en" : "fr");
   }
 
+  // Reflète la langue courante dans l'URL : ?lang=en pour l'anglais, et
+  // l'URL nue (sans paramètre) pour le français, langue par défaut — c'est
+  // aussi l'URL canonique déclarée pour la version française.
   function syncUrlLang() {
     const url = new URL(window.location.href);
-    url.searchParams.set("lang", window.i18n.lang);
+    if (window.i18n.lang === "en") url.searchParams.set("lang", "en");
+    else url.searchParams.delete("lang");
     window.history.replaceState(null, "", url);
   }
 

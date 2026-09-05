@@ -25,11 +25,31 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
+const { PDFDocument } = require("pdf-lib");
 
 const ROOT = path.join(__dirname, "..");
 const PORT = 4173;
 const OUT_DIR = path.join(ROOT, "assets");
 const BASE_NAME = "cv-antoine-berthaud"; // [À COMPLÉTER] change ici si tu renommes le CV
+
+// Métadonnées écrites dans chaque PDF (titre, auteur, sujet, mots-clés,
+// langue). Chromium n'en écrit aucune ; or les PDF sont indexables par Google
+// et c'est ce titre qui apparaît dans les résultats de recherche et dans
+// l'onglet du lecteur PDF. Garder cohérent avec PROFILE.seo (js/data.js).
+const PDF_META = {
+  fr: {
+    title: "CV Antoine Berthaud — Senior Product Manager à Nantes (Growth, SaaS)",
+    subject: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
+    keywords: ["Antoine Berthaud", "CV", "Product Manager", "Product Owner", "Growth", "SaaS", "Nantes"],
+    language: "fr-FR",
+  },
+  en: {
+    title: "Antoine Berthaud — Resume, Senior Growth Product Manager, Nantes (France)",
+    subject: "Antoine Berthaud's CV, Senior Product Manager in Nantes, France: 10+ years in B2B SaaS product (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
+    keywords: ["Antoine Berthaud", "resume", "CV", "Product Manager", "Product Owner", "Growth", "SaaS", "Nantes", "France"],
+    language: "en-US",
+  },
+};
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -66,6 +86,20 @@ function startServer() {
   });
 }
 
+async function stampMetadata(pdfPath, lang) {
+  const meta = PDF_META[lang];
+  // updateMetadata:false — on garde les dates écrites par Chromium, on ne
+  // touche qu'aux champs descriptifs.
+  const doc = await PDFDocument.load(fs.readFileSync(pdfPath), { updateMetadata: false });
+  doc.setTitle(meta.title);
+  doc.setAuthor("Antoine Berthaud");
+  doc.setSubject(meta.subject);
+  doc.setKeywords(meta.keywords);
+  doc.setLanguage(meta.language);
+  doc.setCreator("cv.antoine.berthaud.me");
+  fs.writeFileSync(pdfPath, await doc.save());
+}
+
 async function generateFor(browser, { lang, format, outPath }) {
   const page = await browser.newPage();
   await page.goto(`http://127.0.0.1:${PORT}/index.html?lang=${lang}`, { waitUntil: "networkidle" });
@@ -80,6 +114,7 @@ async function generateFor(browser, { lang, format, outPath }) {
     margin: { top: "14mm", bottom: "14mm", left: "12mm", right: "12mm" },
   });
   await page.close();
+  await stampMetadata(outPath, lang);
   console.log(`✓ ${path.relative(ROOT, outPath)}`);
 }
 

@@ -6,6 +6,7 @@
     "generate-pdf": "node scripts/generate-pdf.js"
   },
   "devDependencies": {
+    "pdf-lib": "^1.17.1",
     "playwright": "^1.56.0"
   }
 }

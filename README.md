@@ -5,7 +5,7 @@ Site CV statique en HTML/CSS/JS vanilla. Aucun build nécessaire pour le site lu
 ## Arborescence
 
 ```
-index.html               → structure de la page (tu n'as normalement pas besoin d'y toucher)
+index.html               → structure de la page + copies statiques du pitch FR et des balises SEO (voir section 10)
 css/style.css             → tous les styles (tokens de couleur en haut du fichier)
 js/i18n.js                  → dictionnaire des textes fixes de l'interface (FR/EN) + logique de bascule de langue
 js/data.js                 → ⭐ LE FICHIER À ÉDITER : ton contenu (profil, expériences, compétences, side projects)
@@ -52,13 +52,13 @@ Ouvre **`js/data.js`** : tout ce qui est marqué `[À REMPLACER]` ou `EXEMPLE` d
   - `methodology` *(optionnel)* — méthodo utilisée (ex: `"Scrum, OKR"`). Omets le champ si tu ne veux rien afficher.
   - `team` *(optionnel)* — taille/composition de l'équipe (ex: `{ fr: "4 développeurs, 1 QA", en: "4 developers, 1 QA" }`). Idem, omets si non pertinent.
 - **Compétences/outils** : la liste maîtresse est dans `SKILLS`. Chaque rôle et chaque side project référence des compétences par leur `id`. Ajoute/retire librement des entrées.
-- **Side projects** : mets `CONFIG.showSideProjects = false` en haut de `data.js` pour masquer entièrement la section (et le lien de menu) sans supprimer le contenu. **Actuellement désactivé** (ton projet est encore en cours) — repasse-le à `true` et remplis `SIDE_PROJECTS` quand tu seras prêt.
+- **Side projects** : mets `CONFIG.showSideProjects = false` en haut de `data.js` pour masquer entièrement la section (et le lien de menu) sans supprimer le contenu. **Actuellement activé**, avec Tour de Growth et sa page de détail (section 11).
 
 **Note sur le filtre compétences** : par défaut, sélectionner plusieurs compétences affiche les expériences qui correspondent à *au moins une* d'entre elles (logique "OU"), ce qui est généralement plus utile pour parcourir un CV. Si tu préfères une logique "ET" (afficher seulement les expériences qui ont *toutes* les compétences cochées), dis-le-moi et je modifie `applyFilters()` dans `app.js`.
 
-**Lien direct vers une langue** : ajoute `?lang=fr` ou `?lang=en` à l'URL du site pour l'ouvrir directement dans la langue voulue (pratique pour partager un lien à un recruteur anglophone). Le bouton FR/EN met aussi l'URL à jour quand on clique dessus, donc l'URL affichée dans le navigateur reflète toujours la langue courante et reste copiable telle quelle.
+**Français par défaut, anglais sur `?lang=en`** : l'URL nue (`https://cv.antoine.berthaud.me/`) affiche toujours le français ; ajoute `?lang=en` pour ouvrir directement la version anglaise — c'est ce lien qu'il faut partager à un recruteur anglophone. Le bouton FR/EN met aussi l'URL à jour quand on clique dessus (`?lang=en` en anglais, URL nue en français), donc l'URL affichée reste copiable telle quelle.
 
-**Détection automatique** : si l'URL ne précise pas `?lang=`, le site détecte la langue du navigateur du visiteur (`navigator.language`) — français pour un navigateur configuré en français, anglais pour tout le reste. Un recruteur anglophone qui tombe sur le lien brut verra donc directement la version anglaise, sans action de ta part.
+**Pas de détection de la langue du navigateur**, et c'est volontaire : Googlebot rend la page avec un navigateur en anglais, et indexait donc la version anglaise à l'URL canonique — à contre-sens d'un CV qui vise des requêtes françaises (voir section 10). Un anglophone qui tombe sur le lien brut voit le français, avec le bouton EN bien visible dans le menu.
 
 **Menu qui suit le scroll** : le lien correspondant à la section visible à l'écran est automatiquement surligné dans le menu (soulignement animé), que ce soit en scrollant ou en cliquant sur un lien du menu. C'est géré tout seul, rien à configurer.
 
@@ -258,21 +258,30 @@ Pas de cookies, pas de données personnelles collectées, pas de bannière de co
 
 Trois métriques clés (`HERO_STATS` dans `data.js`) affichées sous le pitch, pour donner un aperçu de l'impact avant même de lire les expériences. Modifie les valeurs/labels directement dans `data.js`, ou vide le tableau (`HERO_STATS = []`) pour le masquer entièrement — même logique que `SIDE_PROJECTS`/`TESTIMONIALS`.
 
-## 10. SEO — être trouvé quand quelqu'un tape ton nom
+## 10. SEO — être trouvé sur ton nom, et sur « product manager Nantes »
 
-Pour un CV perso, le SEO "concurrentiel" (ranker sur des requêtes génériques comme "growth product manager") n'a quasiment aucune chance face à LinkedIn ou Indeed — ce n'est pas l'objectif. Ce qui est réaliste et utile : que **ton site remonte bien quand un recruteur tape ton nom** dans un moteur de recherche, avant ou après un premier contact.
+Soyons lucides sur l'objectif : sur une requête générique comme « product manager Nantes », la page de résultats appartient aux job boards (Indeed, HelloWork, Glassdoor…), et les recruteurs qui cherchent des candidats le font dans LinkedIn Recruiter, pas dans Google. Ce qui est atteignable, et ce que le site est équipé pour faire :
 
-Ce qui est déjà en place :
-- **`robots.txt`** et **`sitemap.xml`** à la racine, pointant vers `cv.antoine.berthaud.me`.
-- **Balise canonical** et **balises Open Graph** dans `index.html`, domaine déjà renseigné.
-- **Données structurées `schema.org/Person`** (JSON-LD, invisible pour les visiteurs) : indique explicitement à Google qui tu es, ton poste, ton employeur, et relie la page à ton profil LinkedIn. C'est ce genre de balisage qui aide à obtenir un encart enrichi dans les résultats de recherche.
-- **Repli `<noscript>`** : si un navigateur bloque JavaScript (rare, mais ça arrive sur certains postes d'entreprise verrouillés), le visiteur voit un message clair avec un lien direct vers le PDF plutôt qu'une page blanche.
-- **Fichier `CNAME`** à la racine pour le domaine personnalisé (voir section 4 pour la configuration DNS complète).
+1. sortir **premier sur ton nom** et ses variantes (« Antoine Berthaud product manager ») ;
+2. capter la **longue traîne** localisée (« senior growth product manager Nantes », « product manager PLG SaaS Nantes ») ;
+3. être **lu par les moteurs IA** (ChatGPT, Perplexity, Claude…), qui citent volontiers les sites perso mais n'exécutent souvent pas le JavaScript.
 
-**À faire une fois déployé :**
-1. Suis la configuration DNS + GitHub Pages détaillée en section 4.
-2. Inscris le site sur [Google Search Console](https://search.google.com/search-console) (gratuit) : ajoute ta propriété `cv.antoine.berthaud.me`, soumets `sitemap.xml`. Ça accélère l'indexation de plusieurs semaines à quelques jours.
-3. **Le plus efficace, souvent oublié** : ajoute le lien du site dans la section "Featured" (En vedette) de ton profil LinkedIn, et éventuellement dans ton titre ou ton "About". Les recruteurs Growth te trouveront très probablement via LinkedIn avant Google — ce petit ajout coûte zéro effort technique et a plus d'impact direct que tout le reste de cette section.
+Ce qui est en place dans le code :
+- **Français par défaut, anglais sur `?lang=en`**, sans détection de la langue du navigateur (voir section 0) : Googlebot navigue en anglais et indexait la version anglaise à l'URL canonique. Balises `hreflang` fr/en dans le `<head>` et dans le sitemap ; le canonical suit la langue affichée (`/` en FR, `/?lang=en` en EN).
+- **`<title>`, `<meta description>`, Open Graph et eyebrow du hero** qui citent Nantes, le métier et le secteur — textes dans `PROFILE.seo` (`js/data.js`), recopiés en dur dans le `<head>` de `index.html` pour les robots sans JavaScript. **Si tu modifies `PROFILE.seo`, reporte le changement dans `index.html`** (title, description, `og:`/`twitter:`).
+- **Copie statique du pitch FR** dans `index.html` (`#heroPitch`), pour la même raison. `app.js` prévient dans la console du navigateur si cette copie diverge de `PROFILE.pitch.fr`.
+- **Données structurées `ProfilePage` → `Person`** (JSON-LD dans `index.html`) : métier, lieu (Nantes), formation, sujets maîtrisés, et `sameAs` vers LinkedIn, le portfolio photo et Tour de Growth, pour que Google relie le tout à la même personne.
+- **`sitemap.xml`** avec toutes les pages indexables (accueil FR et EN, Résultats, étude de cas) et une date `lastmod` **à mettre à jour quand une page change** ; `robots.txt` ; `CNAME`.
+- **Pages secondaires** : `results.html` et `project-detail.html?slug=…` ont leur propre `<title>`/description par langue. L'étude de cas déclare son propre canonical (avec le `?slug=`) et la page gabarit sans slug (« Projet introuvable ») est en `noindex`.
+- **PDF** avec titre, auteur, sujet, mots-clés et langue dans leurs métadonnées (écrites par `scripts/generate-pdf.js` via `pdf-lib`) — les PDF sont indexables eux aussi, autant qu'ils se présentent bien.
+- Repli `<noscript>` avec lien direct vers les PDF.
+
+Ce qui reste hors code, et qui pèse plus lourd que tout le reste :
+1. **Des liens depuis tes propres sites** — la seule source de backlinks qui ne dépend de personne :
+   - portfolio photo `antoine.berthaud.me` (Adobe Portfolio) : un lien « CV » dans le menu ou sur la page Contact, et idéalement une phrase « Product Manager à Nantes » quelque part dans le texte ;
+   - `tourdegrowth.com` : un pied de page du type « Un side project d'Antoine Berthaud, Product Manager à Nantes » avec le lien vers le CV.
+2. **LinkedIn** : l'URL du CV dans le champ « Site web », dans « En vedette » et dans « Infos ». Vérifier aussi qu'il n'existe qu'un seul profil à ton nom chez AB Tasty — un ancien profil en doublon dilue la recherche sur ton nom et envoie les recruteurs au mauvais endroit.
+3. **Google Search Console** (propriété déjà créée) : après chaque mise en ligne importante, demander l'indexation des URLs via « Inspection de l'URL » plutôt que d'attendre le prochain crawl.
 
 ## 11. Side projects — carte + page de détail ("étude de cas")
 
@@ -309,10 +318,11 @@ tout simplement pas ce second lien.
 - [ ] Ajouter les logos d'entreprise (`assets/logos/`)
 - [ ] Créer la clé Gemini + déployer la fonction Supabase (identifiants déjà renseignés côté site)
 - [ ] Configurer Upstash si tu veux le rate limiting (optionnel)
-- [ ] Créer un compte GoatCounter gratuit et remplacer `TON-CODE` dans `index.html`
+- [ ] ~~Créer un compte GoatCounter gratuit et remplacer `TON-CODE` dans `index.html`~~ — fait (site `antoineberthaud`)
 - [ ] Configurer le CNAME chez ton registrar DNS (voir section 4) + activer le domaine personnalisé dans Settings → Pages
-- [ ] Inscrire le site sur Google Search Console et soumettre le sitemap
-- [ ] Ajouter le lien du CV dans la section "Featured" de ton profil LinkedIn
+- [ ] ~~Inscrire le site sur Google Search Console et soumettre le sitemap~~ — fait ; demander l'indexation des URLs après chaque mise en ligne importante (section 10)
+- [ ] Ajouter le lien du CV sur LinkedIn (« Site web », « En vedette », « Infos ») et supprimer l'éventuel ancien profil en doublon
+- [ ] Ajouter un lien vers le CV depuis `antoine.berthaud.me` (Adobe Portfolio) et depuis `tourdegrowth.com` (section 10)
 - [ ] Vérifier les permissions du workflow GitHub Actions (Settings → Actions → General → "Read and write permissions")
 - [ ] ~~Repasser `CONFIG.showSideProjects` à `true`~~ — fait, Tour de Growth est en place
 - [ ] Remplir `metrics` dans `PROJECT_DETAILS` (Tour de Growth) dès qu'il y a de vrais chiffres d'usage (visites, taux de partage, coefficient viral) — le texte de repli actuel est temporaire, pas un oubli

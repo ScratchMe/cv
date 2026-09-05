@@ -39,9 +39,29 @@ const PROFILE = {
   location: "Nantes, France",
   yearsExperience: "10+", // repris de ton résumé LinkedIn ("plus de 10 ans d'expérience")
   photo: "assets/photo/antoine.jpg", // recadrée en carré, légers ajustements de contraste/netteté
+  // ⚠️ Le pitch FR est aussi recopié en dur dans index.html (#heroPitch) pour
+  // les robots qui n'exécutent pas JavaScript (moteurs IA, aperçus...). Si tu
+  // le modifies ici, reporte la modification là-bas : app.js signale l'écart
+  // dans la console du navigateur, mais ne le corrige pas tout seul.
   pitch: {
-    fr: "Product Manager avec plus de **10 ans d'expérience** en environnements SaaS et grands comptes (AB Tasty, Everysens, SNCF Connect & Tech). Je pilote la découverte, la priorisation et la livraison de fonctionnalités à impact mesurable, en m'appuyant autant sur les entretiens utilisateurs que sur la donnée — **SQL, Metabase, Mixpanel** — pour transformer des intuitions en décisions validées et scalables.",
-    en: "Product Manager with **10+ years of experience** across SaaS and enterprise environments (AB Tasty, Everysens, SNCF Connect & Tech). I drive discovery, prioritization, and delivery of features with measurable impact, relying as much on user interviews as on data — **SQL, Metabase, Mixpanel** — to turn intuitions into validated, scalable decisions.",
+    fr: "Product Manager avec plus de **10 ans d'expérience** en environnements SaaS et grands comptes (AB Tasty, Everysens, SNCF Connect & Tech). Je pilote la découverte, la priorisation et la livraison de fonctionnalités à impact mesurable, en m'appuyant autant sur les entretiens utilisateurs que sur la donnée — **SQL, Metabase, Mixpanel** — pour transformer des intuitions en décisions validées et scalables. Dans plusieurs équipes, j'ai aussi tenu le rôle de **Product Owner** au quotidien : backlog, user stories, sprints.",
+    en: "Product Manager with **10+ years of experience** across SaaS and enterprise environments (AB Tasty, Everysens, SNCF Connect & Tech). I drive discovery, prioritization, and delivery of features with measurable impact, relying as much on user interviews as on data — **SQL, Metabase, Mixpanel** — to turn intuitions into validated, scalable decisions. In several teams I've also held the day-to-day **Product Owner** role: backlog, user stories, sprints.",
+  },
+  // Balises <title> et <meta name="description"> de la page d'accueil, par
+  // langue. C'est ce que Google affiche dans ses résultats : le lieu (Nantes)
+  // et le métier y figurent explicitement pour les requêtes du type
+  // "product manager Nantes". La version FR est aussi recopiée en dur dans
+  // le <head> de index.html (pour les robots sans JavaScript) : garder les
+  // deux synchronisées.
+  seo: {
+    title: {
+      fr: "Antoine Berthaud — Senior Product Manager à Nantes · Growth & SaaS",
+      en: "Antoine Berthaud — Senior Growth Product Manager · Nantes, France",
+    },
+    description: {
+      fr: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
+      en: "Antoine Berthaud's CV, Senior Product Manager in Nantes, France: 10+ years in B2B SaaS product (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
+    },
   },
   contact: {
     email: "antoine.berthaud@gmail.com",
@@ -253,6 +273,7 @@ const SKILLS = [
   { id: "user-research", label: "User Research", category: "Produit" },
   { id: "roadmapping", label: "Roadmapping", category: "Produit" },
   { id: "user-stories", label: "User Stories & Backlog", category: "Produit" },
+  { id: "product-ownership", label: "Product Ownership", category: "Produit" },
   { id: "plg", label: "Product-Led Growth", category: "Produit" },
   { id: "stakeholder", label: "Stakeholder Management", category: "Produit" },
   { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "Produit" },
@@ -462,7 +483,7 @@ const EXPERIENCES = [
           fr: "3 développeurs, 1 Scrum Master, 1 Delivery Manager",
           en: "3 developers, 1 Scrum Master, 1 Delivery Manager",
         },
-        skills: ["okr", "roadmapping", "user-stories", "agile", "discovery", "stakeholder", "jira", "miro", "akeneo"],
+        skills: ["okr", "roadmapping", "user-stories", "product-ownership", "agile", "discovery", "stakeholder", "jira", "miro", "akeneo"],
       },
       {
         title: { fr: "Responsable de cercle", en: "Community Lead (rotating role)" },
@@ -506,7 +527,7 @@ const EXPERIENCES = [
           fr: "15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
           en: "15 developers, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
         },
-        skills: ["roadmapping", "story-mapping", "user-stories", "agile", "bdd", "jira", "miro", "postman"],
+        skills: ["roadmapping", "story-mapping", "user-stories", "product-ownership", "agile", "bdd", "jira", "miro", "postman"],
       },
       {
         title: { fr: "Product Manager Junior", en: "Junior Product Manager" },
@@ -531,7 +552,7 @@ const EXPERIENCES = [
           fr: "5 développeurs, 1 Scrum Master",
           en: "5 developers, 1 Scrum Master",
         },
-        skills: ["user-stories", "stakeholder", "jira", "miro"],
+        skills: ["user-stories", "product-ownership", "stakeholder", "jira", "miro"],
       },
       {
         title: "QA",

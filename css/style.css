@@ -337,6 +337,12 @@ body.focus-mode .ai-badge{background:var(--ink);}
   h1{font-size:34px;}
   .navrow{flex-wrap:wrap;}
 }
+/* Le badge "Product Manager · Growth · Nantes" du hero passait sur deux lignes
+   à 375px de large. Seuil à 480px et non 800px : la largeur A4 du PDF (~794px)
+   tombe dans le breakpoint 800px et le rendu print doit rester intact. */
+@media(max-width:480px){
+  .eyebrow{font-size:12px;letter-spacing:.03em;padding:6px 12px;}
+}
 
 /* ============================================================================
    FOCUS LECTURE MODE — vision allégée : on coupe la déco, on resserre la palette

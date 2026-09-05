@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ton vrai domaine — déjà configuré ci-dessous -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- Une entrée par page indexable. La page d'accueil existe en deux langues
+     (français à l'URL nue, anglais sur ?lang=en), déclarées l'une à l'autre
+     via les <xhtml:link hreflang>. Pense à mettre à jour <lastmod> de la page
+     concernée quand son contenu change : c'est ce qui incite Google à
+     revenir la crawler. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://cv.antoine.berthaud.me/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-09-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/"/>
+  </url>
+  <url>
+    <loc>https://cv.antoine.berthaud.me/?lang=en</loc>
+    <lastmod>2026-09-05</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/"/>
+  </url>
+  <url>
+    <loc>https://cv.antoine.berthaud.me/results.html</loc>
+    <lastmod>2026-09-05</lastmod>
+  </url>
+  <url>
+    <loc>https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth</loc>
+    <lastmod>2026-09-05</lastmod>
   </url>
 </urlset>
