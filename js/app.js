@@ -134,6 +134,9 @@
     if (PROFILE.contact.linkedin) {
       footerLinks.innerHTML += `<a href="${PROFILE.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a>`;
     }
+    if (PROFILE.contact.photos) {
+      footerLinks.innerHTML += `<a href="${PROFILE.contact.photos}" target="_blank" rel="noopener">${t("footer.photos")}</a>`;
+    }
     document.getElementById("footerTagline").textContent = `${tc(PROFILE.role)} — ${PROFILE.contact.location}`;
   }
 

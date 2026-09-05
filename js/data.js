@@ -65,6 +65,9 @@ const PROFILE = {
   contact: {
     email: "antoine.berthaud@gmail.com",
     linkedin: "https://www.linkedin.com/in/antoine-berthaud-pm/",
+    // Galerie photos (portfolio perso) : lien affiché dans le pied de page,
+    // à côté de l'e-mail et de LinkedIn. Vide = pas de lien.
+    photos: "https://antoine.berthaud.me/",
     location: "Nantes, France",
   },
 };

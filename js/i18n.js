@@ -35,6 +35,8 @@
 
     "testimonial.eyebrow": { fr: "Recommandation LinkedIn", en: "LinkedIn recommendation" },
 
+    "footer.photos": { fr: "Photos", en: "Photos" },
+
     "skills.sectionTitle": { fr: "Compétences & outils", en: "Skills & tools" },
     "skills.hint": {
       fr: "Clique sur une ou plusieurs compétences pour filtrer les expériences correspondantes ci-dessous.",
