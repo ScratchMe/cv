@@ -3,36 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antoine Berthaud — Product Manager</title>
-<meta name="description" content="CV de Antoine Berthaud, Product Manager — User First, Data Informed, Iterative.">
+<!-- <title> et description : copie statique de PROFILE.seo (js/data.js), version
+     française. app.js les remplace à l'exécution selon la langue affichée ;
+     cette copie est ce que lisent les robots sans JavaScript. Si tu modifies
+     PROFILE.seo, reporte le changement ici (et dans les balises og:/twitter:
+     plus bas). -->
+<title>Antoine Berthaud — Senior Product Manager à Nantes · Growth &amp; SaaS</title>
+<meta name="description" content="CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.">
 
-<!-- ton vrai domaine — déjà configuré ci-dessous, rien à faire ici -->
+<!-- URL canonique + versions linguistiques. Le français est la langue par
+     défaut, servie à l'URL nue ; l'anglais vit sur ?lang=en. app.js ajuste le
+     canonical selon la langue affichée (/ en FR, /?lang=en en EN), les
+     hreflang restent fixes. -->
 <link rel="canonical" href="https://cv.antoine.berthaud.me/">
+<link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/">
+<link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/">
 
-<!-- Données structurées (schema.org/Person) — aide Google à comprendre que
-     cette page EST la page de référence d'Antoine Berthaud (utile quand un
-     recruteur tape ton nom dans un moteur de recherche). N'affecte en rien
-     le rendu visuel du site, c'est invisible pour les visiteurs humains. -->
+<!-- Données structurées (schema.org) — invisibles pour les visiteurs, lues par
+     les moteurs de recherche. Type ProfilePage (format que Google reconnaît
+     explicitement pour une page « profil » d'une personne) dont l'entité
+     principale est la Person : qui, quel métier, où (Nantes), formation,
+     sujets maîtrisés, et les autres pages qui parlent de la même personne
+     (LinkedIn, portfolio photo, Tour de Growth) pour que Google relie le tout. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Antoine Berthaud",
-  "jobTitle": "Senior Growth Product Manager",
+  "@type": "ProfilePage",
   "url": "https://cv.antoine.berthaud.me/",
-  "image": "https://cv.antoine.berthaud.me/assets/photo/antoine.jpg",
-  "worksFor": {
-    "@type": "Organization",
-    "name": "AB Tasty"
-  },
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Nantes",
-    "addressCountry": "FR"
-  },
-  "sameAs": [
-    "https://www.linkedin.com/in/antoine-berthaud-pm/"
-  ]
+  "name": "CV d'Antoine Berthaud — Senior Product Manager à Nantes",
+  "inLanguage": "fr",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "https://cv.antoine.berthaud.me/#person",
+    "name": "Antoine Berthaud",
+    "givenName": "Antoine",
+    "familyName": "Berthaud",
+    "jobTitle": "Senior Growth Product Manager",
+    "description": "Product Manager depuis plus de 10 ans, basé à Nantes. SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF Connect & Tech) : growth, Product-Led Growth, discovery, décisions appuyées sur la donnée.",
+    "url": "https://cv.antoine.berthaud.me/",
+    "image": "https://cv.antoine.berthaud.me/assets/photo/antoine.jpg",
+    "email": "mailto:antoine.berthaud@gmail.com",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "AB Tasty",
+      "url": "https://www.abtasty.com/"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Nantes",
+      "addressRegion": "Pays de la Loire",
+      "addressCountry": "FR"
+    },
+    "hasOccupation": {
+      "@type": "Occupation",
+      "name": "Product Manager",
+      "occupationLocation": { "@type": "City", "name": "Nantes" },
+      "skills": "Product Management, Product Ownership, Growth, Product-Led Growth, Discovery, User Research, Roadmapping, OKR, Agile / Scrum, SQL, Metabase, Mixpanel"
+    },
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Polytech Nantes",
+      "url": "https://polytech.univ-nantes.fr/"
+    },
+    "knowsAbout": [
+      "Product Management",
+      "Product Ownership",
+      "Product-Led Growth",
+      "Growth",
+      "SaaS B2B",
+      "A/B testing",
+      "Experience Optimization",
+      "Product Discovery",
+      "User Research",
+      "SQL",
+      "Metabase",
+      "Mixpanel",
+      "Agile / Scrum",
+      "OKR"
+    ],
+    "knowsLanguage": [
+      { "@type": "Language", "name": "Français", "alternateName": "fr" },
+      { "@type": "Language", "name": "English", "alternateName": "en" }
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/antoine-berthaud-pm/",
+      "https://antoine.berthaud.me/",
+      "https://tourdegrowth.com/"
+    ]
+  }
 }
 </script>
 
@@ -46,8 +105,10 @@
      les robots des réseaux sociaux, qui n'exécutent pas le JS : elles restent
      donc toujours en français, même si le site bascule en anglais pour un visiteur. -->
 <meta property="og:type" content="profile">
-<meta property="og:title" content="Antoine Berthaud — Product Manager">
-<meta property="og:description" content="Product Manager — User First, Data Informed, Iterative. Plus de 10 ans d'expérience (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta property="profile:first_name" content="Antoine">
+<meta property="profile:last_name" content="Berthaud">
+<meta property="og:title" content="Antoine Berthaud — Senior Product Manager à Nantes · Growth &amp; SaaS">
+<meta property="og:description" content="CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.">
 <meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -56,17 +117,16 @@
 <meta property="og:locale:alternate" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Antoine Berthaud — Product Manager">
-<meta name="twitter:description" content="Product Manager — User First, Data Informed, Iterative.">
+<meta name="twitter:title" content="Antoine Berthaud — Senior Product Manager à Nantes · Growth &amp; SaaS">
+<meta name="twitter:description" content="CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.">
 <meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
-     pas de données personnelles, gratuit indéfiniment pour un usage perso.
-     [À COMPLÉTER] crée un compte gratuit sur https://www.goatcounter.com
-     puis remplace TON-CODE ci-dessous par le code de ton site
-     (visible dans Settings → Site settings, ex: "antoineberthaud"). -->
+     pas de données personnelles. Compte configuré (site "antoineberthaud"),
+     tableau de bord : https://antoineberthaud.goatcounter.com -->
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -124,11 +184,15 @@
     <section id="profil" class="hero wrap">
       <div class="hero-grid">
         <div>
-          <div class="eyebrow" id="heroEyebrow">Product Manager · Growth</div>
+          <div class="eyebrow" id="heroEyebrow">Product Manager · Growth · Nantes</div>
           <h1 id="heroName">Antoine Berthaud</h1>
-          <div class="role" id="heroRole"></div>
+          <div class="role" id="heroRole">Senior Growth Product Manager — AB Tasty</div>
           <div class="pills" id="heroPills"></div>
-          <p class="pitch" id="heroPitch"></p>
+          <!-- Copie statique du pitch FR (PROFILE.pitch.fr dans js/data.js), lue par
+               les robots qui n'exécutent pas JavaScript. app.js la remplace au
+               chargement et signale dans la console si les deux textes divergent :
+               si tu changes le pitch dans data.js, reporte-le ici. -->
+          <p class="pitch" id="heroPitch">Product Manager avec plus de <strong>10 ans d'expérience</strong> en environnements SaaS et grands comptes (AB Tasty, Everysens, SNCF Connect &amp; Tech). Je pilote la découverte, la priorisation et la livraison de fonctionnalités à impact mesurable, en m'appuyant autant sur les entretiens utilisateurs que sur la donnée — <strong>SQL, Metabase, Mixpanel</strong> — pour transformer des intuitions en décisions validées et scalables. Dans plusieurs équipes, j'ai aussi tenu le rôle de <strong>Product Owner</strong> au quotidien : backlog, user stories, sprints.</p>
           <div class="hero-stats" id="heroStats"></div>
           <div class="herobtns">
             <a href="#experiences" class="btn solid" data-i18n="hero.ctaExperience">Voir les expériences</a>

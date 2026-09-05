@@ -36,17 +36,35 @@
     return `<ul class="detail-list">${items.map((item) => `<li>${richText(item)}</li>`).join("")}</ul>`;
   }
 
+  // Même règle que sur la page d'accueil (voir app.js) : ?lang=en affiche
+  // l'anglais, tout le reste affiche le français. Pas de détection de la
+  // langue du navigateur — Googlebot navigue en anglais et indexerait sinon
+  // la version anglaise à l'URL canonique.
   function initLang() {
     const urlLang = new URLSearchParams(window.location.search).get("lang");
-    if (urlLang === "en" || urlLang === "fr") {
-      window.i18n.setLang(urlLang);
-      return;
+    window.i18n.setLang(urlLang === "en" ? "en" : "fr");
+  }
+
+  // Sans slug valide, la page affiche "Projet introuvable" : on demande aux
+  // moteurs de ne pas l'indexer. Avant ça, project-detail.html nu était
+  // indexable ET servait de canonical à l'étude de cas (le <link canonical>
+  // statique n'était jamais complété avec le ?slug=), ce qui revenait à dire
+  // à Google que l'étude de cas était une copie d'une page vide.
+  function setNoIndex(on) {
+    let meta = document.querySelector('meta[name="robots"]');
+    if (on && !meta) {
+      meta = document.createElement("meta");
+      meta.name = "robots";
+      meta.content = "noindex";
+      document.head.appendChild(meta);
+    } else if (!on && meta) {
+      meta.remove();
     }
-    const browserLang = (navigator.language || navigator.userLanguage || "fr").toLowerCase();
-    window.i18n.setLang(browserLang.startsWith("fr") ? "fr" : "en");
   }
 
   function renderNotFound(root) {
+    setNoIndex(true);
+    document.getElementById("pageTitle").textContent = `${t("projectDetail.notFound")} — Antoine Berthaud`;
     root.innerHTML = `
       <div class="project-detail-notfound">
         <p>${t("projectDetail.notFound")}</p>
@@ -54,7 +72,8 @@
       </div>`;
   }
 
-  function renderProject(root, project) {
+  function renderProject(root, project, slug) {
+    setNoIndex(false);
     const metricsHtml =
       project.metrics && project.metrics.length > 0
         ? `<div class="project-metrics-grid">${project.metrics
@@ -121,8 +140,13 @@
       </section>
     `;
 
-    document.getElementById("pageTitle").textContent = `${project.title} — Antoine Berthaud`;
+    document.getElementById("pageTitle").textContent = `${project.title} — ${t("projectDetail.metaTitleSuffix")}`;
     document.getElementById("pageDescription").setAttribute("content", tc(project.tagline));
+    // Canonical = l'URL de CETTE étude de cas (avec son ?slug=), pas la page
+    // gabarit nue. La langue n'y figure pas : le français est la version de
+    // référence, ?lang=en n'est qu'une variante d'affichage.
+    const canonical = document.getElementById("canonicalLink");
+    if (canonical) canonical.href = `${canonical.href.split("?")[0]}?slug=${encodeURIComponent(slug)}`;
   }
 
   // Rendu (ré-appelé à chaque changement de langue) — ne touche jamais à la
@@ -138,7 +162,7 @@
     if (!project) {
       renderNotFound(root);
     } else {
-      renderProject(root, project);
+      renderProject(root, project, slug);
     }
 
     document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");

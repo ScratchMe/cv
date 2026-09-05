@@ -30,6 +30,7 @@
     "hero.ctaContact": { fr: "Me contacter", en: "Contact me" },
     "hero.pillYears": { fr: "ans en Product", en: "years in Product" },
     "hero.pillAge": { fr: "ans", en: "y/o" },
+    "hero.photoAlt": { fr: "Portrait d'Antoine Berthaud, Product Manager à Nantes", en: "Portrait of Antoine Berthaud, Product Manager in Nantes, France" },
 
     "pillars.sectionTitle": { fr: "Ce qui me définit", en: "What defines me" },
 
@@ -124,8 +125,16 @@
     "projectDetail.stack.seo": { fr: "SEO", en: "SEO" },
     "projectDetail.stack.ops": { fr: "Ops", en: "Ops" },
     "projectDetail.notFound": { fr: "Projet introuvable.", en: "Project not found." },
+    // Suffixe du <title> d'une page d'étude de cas : "Tour de Growth — étude de cas · Antoine Berthaud, Product Manager"
+    "projectDetail.metaTitleSuffix": { fr: "étude de cas · Antoine Berthaud, Product Manager", en: "case study · Antoine Berthaud, Product Manager" },
 
-    "results.eyebrow": { fr: "Chiffres clés", en: "Key numbers" },
+    "results.eyebrow": { fr: "Études de cas · Product Manager", en: "Case studies · Product Manager" },
+    // <title> et <meta name="description"> de results.html, par langue.
+    "results.metaTitle": { fr: "Études de cas Product Manager — Antoine Berthaud, Nantes", en: "Product Manager case studies — Antoine Berthaud, Nantes" },
+    "results.metaDescription": {
+      fr: "Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).",
+      en: "The story behind the key numbers of Antoine Berthaud's CV, Product Manager in Nantes, France: context, challenge, action, result, lesson (AB Tasty, Everysens, SNCF Connect & Tech).",
+    },
     "results.title": { fr: "Le détail derrière les chiffres", en: "The story behind the numbers" },
     "results.intro": {
       fr: "Un chiffre seul ne dit jamais tout. Voici, pour chacun des chiffres affichés en haut du CV, le contexte, le problème identifié, ce que j'ai concrètement fait, et ce que j'en retiens.",

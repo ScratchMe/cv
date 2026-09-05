@@ -36,14 +36,13 @@
     return `<ul class="detail-list">${items.map((item) => `<li>${richText(item)}</li>`).join("")}</ul>`;
   }
 
+  // Même règle que sur la page d'accueil (voir app.js) : ?lang=en affiche
+  // l'anglais, tout le reste affiche le français. Pas de détection de la
+  // langue du navigateur — Googlebot navigue en anglais et indexerait sinon
+  // la version anglaise à l'URL canonique.
   function initLang() {
     const urlLang = new URLSearchParams(window.location.search).get("lang");
-    if (urlLang === "en" || urlLang === "fr") {
-      window.i18n.setLang(urlLang);
-      return;
-    }
-    const browserLang = (navigator.language || navigator.userLanguage || "fr").toLowerCase();
-    window.i18n.setLang(browserLang.startsWith("fr") ? "fr" : "en");
+    window.i18n.setLang(urlLang === "en" ? "en" : "fr");
   }
 
   // Un chiffre du hero pointe vers RESULT_DETAILS[id] via `resultId` — on
@@ -113,6 +112,8 @@
       <div class="results-list">${ids.map(renderBlock).join("")}</div>
     `;
 
+    document.getElementById("pageTitle").textContent = t("results.metaTitle");
+    document.getElementById("pageDescription").setAttribute("content", t("results.metaDescription"));
     document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");
     document.getElementById("backToCvLink").href = `index.html?lang=${window.i18n.lang}`;
     document.getElementById("logoLink").href = `index.html?lang=${window.i18n.lang}`;
