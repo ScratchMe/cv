@@ -35,7 +35,6 @@ const PROFILE = {
     fr: "Senior Growth Product Manager — AB Tasty",
     en: "Senior Growth Product Manager at AB Tasty",
   },
-  age: "37",
   location: "Nantes, France",
   yearsExperience: "10+", // repris de ton résumé LinkedIn ("plus de 10 ans d'expérience")
   photo: "assets/photo/antoine.jpg", // recadrée en carré, légers ajustements de contraste/netteté

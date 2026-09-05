@@ -39,7 +39,7 @@
       return `${c.company} (${c.location}) :\n${roles}`;
     }).join("\n\n");
 
-    return `Profil : ${PROFILE.firstName} ${PROFILE.lastName}, ${PROFILE.age} ans, ${tc(PROFILE.role)}, ${PROFILE.location}, ${PROFILE.yearsExperience} ans d'expérience en Product Management.
+    return `Profil : ${PROFILE.firstName} ${PROFILE.lastName}, ${tc(PROFILE.role)}, ${PROFILE.location}, ${PROFILE.yearsExperience} ans d'expérience en Product Management.
 
 Pitch : ${tc(PROFILE.pitch)}
 
