@@ -29,7 +29,6 @@
     "hero.ctaExperience": { fr: "Voir les expériences", en: "View my experience" },
     "hero.ctaContact": { fr: "Me contacter", en: "Contact me" },
     "hero.pillYears": { fr: "ans en Product", en: "years in Product" },
-    "hero.pillAge": { fr: "ans", en: "y/o" },
     "hero.photoAlt": { fr: "Portrait d'Antoine Berthaud, Product Manager à Nantes", en: "Portrait of Antoine Berthaud, Product Manager in Nantes, France" },
 
     "pillars.sectionTitle": { fr: "Ce qui me définit", en: "What defines me" },

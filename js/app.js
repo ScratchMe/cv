@@ -104,8 +104,10 @@
 
     const pillsEl = document.getElementById("heroPills");
     pillsEl.innerHTML = "";
+    // Pas d'âge dans les pastilles (ni ailleurs) : inutile pour juger un
+    // profil, et c'est un critère de discrimination à l'embauche — autant ne
+    // pas le mettre sous les yeux d'un recruteur.
     [
-      `🎂 ${PROFILE.age} ${t("hero.pillAge")}`,
       `📍 ${PROFILE.location}`,
       `🚀 ${PROFILE.yearsExperience} ${t("hero.pillYears")}`,
     ].forEach((text) => {
