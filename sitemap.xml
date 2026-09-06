@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Une entrée par page indexable. La page d'accueil existe en deux langues
      (français à l'URL nue, anglais sur ?lang=en), déclarées l'une à l'autre
-     via les <xhtml:link hreflang>. Pense à mettre à jour <lastmod> de la page
-     concernée quand son contenu change : c'est ce qui incite Google à
-     revenir la crawler. -->
+     via les <xhtml:link hreflang>. Les <lastmod> sont mis à jour par
+     .github/workflows/generate-pdf.yml à chaque fois qu'il régénère une page
+     pré-rendue ou un PDF (c'est ce qui incite Google à revenir crawler) —
+     ne pas les modifier à la main. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
@@ -29,9 +30,7 @@
     <lastmod>2026-09-06</lastmod>
   </url>
   <!-- Les deux PDF du CV (décision d'Antoine, 06/09/2026) : déjà liés depuis les
-       trois pages, déclarés ici pour que Google les compte. Leur <lastmod> est
-       mis à jour automatiquement par .github/workflows/generate-pdf.yml à
-       chaque régénération — ne pas le modifier à la main. -->
+       trois pages, déclarés ici pour que Google les compte. -->
   <url>
     <loc>https://cv.antoine.berthaud.me/assets/cv-antoine-berthaud-fr.pdf</loc>
     <lastmod>2026-09-06</lastmod>
