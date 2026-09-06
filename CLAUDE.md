@@ -155,7 +155,8 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   depuis `antoine.berthaud.me` et `tourdegrowth.com`, LinkedIn, demandes
   d'indexation dans Search Console (propriété existante, accessible via le
   MCP SEO Gets). Mettre à jour `lastmod` dans `sitemap.xml` quand une page
-  change. Les PDF portent des métadonnées (titre, auteur, langue) posées par
+  change (les deux PDF y sont aussi, leur `lastmod` est posé par
+  `generate-pdf.yml` à chaque régénération, jamais à la main). Les PDF portent des métadonnées (titre, auteur, langue) posées par
   `scripts/generate-pdf.js` via `pdf-lib`.
 - **Site considéré fonctionnellement complet** (sept. 2026) : bilingue,
   PDF, Fit-Checker IA, hero cliquable + études de cas STAR, side project
