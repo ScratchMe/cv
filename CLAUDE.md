@@ -164,6 +164,16 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   complet, où les cartes sont un cran plus denses que le reste pour que
   les deux rangées tiennent en page 1 sous le hero (PDF complets toujours
   à 5 pages, courts à 2 — le court n'affiche pas les cartes).
+- **Puces des rôles au format RAC** (Result, Action, Contexte ; sept. 2026,
+  principe nommé par Antoine) : chaque puce ouvre sur ce qui a été obtenu
+  (chiffre ou livrable, en gras), puis l'action ; la ligne de contexte de
+  chaque rôle commence par « Mission : ». Appliqué aux rôles 2020-2026
+  (AB Tasty ×2, Everysens, SNCF 2021-2022), les rôles plus anciens gardent
+  leurs puces courtes. Jamais de chiffre inventé pour compléter le
+  format : quand un rôle n'en a pas (boutiques en ligne SNCF), la puce
+  ouvre sur le livrable. Une puce qui ne faisait que donner le résultat
+  d'une autre fusionne avec elle (Everysens) ; ce qui est déjà dit dans un
+  autre bloc n'est pas répété (la veille PM est dans le bloc communauté).
 - **Page plus courte sur téléphone** (sept. 2026, validé par Antoine) : les
   rôles terminés au plus tard à `CONFIG.collapseRolesEndingBefore`
   (`"2016-08"` : QA et ESN) sont repliés derrière « Voir mes débuts

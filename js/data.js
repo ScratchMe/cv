@@ -383,21 +383,21 @@ const EXPERIENCES = [
         start: "2025-05",
         end: null,
         context: {
-          fr: "Product Manager senior au sein du pilier Growth d'AB Tasty, plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.",
-          en: "Senior Product Manager within AB Tasty's Growth pillar, on the Experience Optimization SaaS platform (A/B Testing, Personalization). International team, English as the working language.",
+          fr: "Mission : ouvrir la plateforme au self-serve en complément de la vente grands comptes, au sein du pilier Growth d'AB Tasty (SaaS d'Experience Optimization : A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.",
+          en: "Mission: open the platform to self-serve alongside enterprise sales, within AB Tasty's Growth pillar (Experience Optimization SaaS: A/B Testing, Personalization). International team, English as the working language.",
         },
         achievements: [
           {
-            fr: "Pilotage de la transition d'un modèle 100 % Sales-Led vers un **modèle hybride** : cadrage, business case et roadmap avec la direction, les grands comptes restant suivis par les sales, les autres s'inscrivant et payant en autonomie.",
-            en: "Led the shift from a 100% Sales-Led model to a **hybrid model**: framing, business case and roadmap with leadership, with large accounts kept with Sales and everyone else signing up and paying on their own.",
+            fr: "**Tunnel self-serve livré en production derrière un feature flag**, prêt au lancement : inscription publique, freemium limité, facturation Hyperline cadrée de bout en bout (paiement, abonnements, accès aux fonctionnalités selon l'offre). Lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
+            en: "**Self-serve funnel shipped to production behind a feature flag**, ready to launch: public sign-up, limited freemium, Hyperline billing scoped end to end (payments, subscriptions, feature access by plan). Launch put on hold after AB Tasty's merger with VWO.",
           },
           {
-            fr: "Conception et construction de bout en bout du **tunnel self-serve** : inscription publique, freemium limité, et intégration de la plateforme de facturation Hyperline, que j'ai cadrée (paiement, abonnements, accès aux fonctionnalités selon l'offre). **Livré en production derrière un feature flag**, prêt au lancement ; lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
-            en: "Designed and built the **self-serve funnel** end to end: public sign-up, limited freemium, and the integration of the Hyperline billing platform, which I scoped (payments, subscriptions, feature access by plan). **Shipped to production behind a feature flag**, ready to launch; launch put on hold after AB Tasty's merger with VWO.",
+            fr: "**Business case et roadmap du modèle hybride portés devant la direction** : passage d'un modèle 100 % Sales-Led à un modèle où les grands comptes restent suivis par les sales et les autres s'inscrivent et paient en autonomie.",
+            en: "**Business case and roadmap for the hybrid model carried to leadership**: moving from a 100% Sales-Led model to one where large accounts stay with Sales and everyone else signs up and pays on their own.",
           },
           {
-            fr: "Animation de 2 autres Product Managers sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
-            en: "Led 2 other Product Managers on the self-serve workstream: splitting the plan, scoping trade-offs, overall consistency.",
+            fr: "**2 Product Managers animés** sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
+            en: "**Led 2 Product Managers** on the workstream: splitting the plan, scoping trade-offs, overall consistency.",
           },
         ],
         methodology: "Scrum",
@@ -412,25 +412,25 @@ const EXPERIENCES = [
         start: "2023-09",
         end: "2025-05",
         context: {
-          fr: "PM responsable de la « Product eXperience » sur la plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation).",
-          en: "PM responsible for \"Product eXperience\" on the Experience Optimization SaaS platform (A/B Testing, Personalization).",
+          fr: "Mission : la « Product eXperience » de la plateforme d'Experience Optimization (A/B Testing, Personnalisation) : onboarding, activation, rétention.",
+          en: "Mission: the \"Product eXperience\" of the Experience Optimization platform (A/B Testing, Personalization): onboarding, activation, retention.",
         },
         achievements: [
           {
-            fr: "Déploiement de l'authentification 2FA obligatoire sur **100% de la base utilisateur**, avec un impact support quasi nul et aucune perte d'activité.",
-            en: "Rolled out mandatory 2FA authentication across **100% of the user base**, with near-zero support impact and no activity loss.",
+            fr: "**+15 % de taux d'activation, -20 % de Time-to-Value** : refonte de l'onboarding avec un moteur de qualification utilisateur et un nouveau parcours d'activation.",
+            en: "**+15% activation rate, -20% Time-to-Value**: reworked onboarding with a user qualification engine and a new activation journey.",
           },
           {
-            fr: "Redéfinition de la vision produit autour de la rétention et de l'engagement (« Make our users fall in love with our product, repeatedly »).",
-            en: "Redefined the product vision around retention and engagement (\"Make our users fall in love with our product, repeatedly\").",
+            fr: "**2FA obligatoire déployée sur 100 % de la base utilisateur** par vagues successives, calées sur la capacité des Customer Success Managers à accompagner leurs clients : aucune perte d'activité, impact support quasi nul.",
+            en: "**Mandatory 2FA rolled out to 100% of the user base** in successive waves, paced so Customer Success Managers could support their clients: no activity loss, near-zero support impact.",
           },
           {
-            fr: "Mise en place d'une infrastructure de données automatisant le suivi des **KPIs clés (churn, rétention, activation, TTV)**.",
-            en: "Built a product data infrastructure automating tracking of **key KPIs (churn, retention, activation, TTV)**.",
+            fr: "**Churn, rétention, activation et Time-to-Value suivis automatiquement** : mise en place de l'infrastructure de données produit (SQL, Metabase, Mixpanel).",
+            en: "**Churn, retention, activation and Time-to-Value tracked automatically**: built the product data infrastructure (SQL, Metabase, Mixpanel).",
           },
           {
-            fr: "Refonte de l'onboarding via un moteur de qualification utilisateur et un nouveau parcours d'activation : **-20% de Time-to-Value, +15% de taux d'activation**.",
-            en: "Reworked onboarding through a user qualification engine and a new activation journey: **-20% Time-to-Value, +15% activation rate**.",
+            fr: "**Vision produit recentrée sur la rétention et l'engagement** : « Make our users fall in love with our product, repeatedly ».",
+            en: "**Product vision refocused on retention and engagement**: \"Make our users fall in love with our product, repeatedly\".",
           },
         ],
         methodology: "Scrum",
@@ -452,25 +452,21 @@ const EXPERIENCES = [
         start: "2022-04",
         end: "2023-09",
         context: {
-          fr: "Responsable du module « Exécution » (lettres de voiture, trains de 30 wagons et plus) au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, pour favoriser le report modal des camions vers le rail et décarboner le transport. Anglais au quotidien avec l'équipe.",
-          en: "Owned the \"Execution\" module (waybills, trains of 30+ wagons) within a SaaS platform for rail freight transport management and tracking, aimed at shifting freight from road to rail to decarbonize transport. English as the working language.",
+          fr: "Mission : le module « Exécution » (lettres de voiture, trains de 30 wagons et plus) d'un SaaS de gestion et de suivi du fret ferroviaire, au service du report modal de la route vers le rail. Anglais au quotidien avec l'équipe.",
+          en: "Mission: the \"Execution\" module (waybills, trains of 30+ wagons) of a SaaS platform for managing and tracking rail freight, serving the modal shift from road to rail. English as the working language with the team.",
         },
         achievements: [
           {
-            fr: "Pilotage de la roadmap du module de saisie des transports, validation des lettres de voiture et suivi en temps réel, avec un focus sur l'adoption utilisateur et la fiabilité des données.",
-            en: "Drove the roadmap for the transport entry module, waybill validation, and real-time tracking, with a strong focus on user adoption and transport data reliability.",
+            fr: "**-50 % de temps de saisie, +20 % de satisfaction utilisateur** : refonte technique et fonctionnelle du module de saisie, obtenue auprès de la direction et menée en incrémental, **MVP livré en moins de 2 mois**.",
+            en: "**-50% entry time, +20% user satisfaction**: technical and functional rework of the entry module, secured with leadership and delivered incrementally, **MVP shipped in under 2 months**.",
           },
           {
-            fr: "Stakeholder management auprès de la direction pour lancer une refonte technique et fonctionnelle en approche incrémentale (**MVP livré en moins de 2 mois**).",
-            en: "Won leadership buy-in for a technical and functional overhaul, delivered incrementally (**MVP delivered in under 2 months**).",
+            fr: "**Adoption utilisateur et fiabilité des données comme priorités de la roadmap** du module : saisie des transports, validation des lettres de voiture, suivi en temps réel.",
+            en: "**User adoption and data reliability as the module roadmap's priorities**: transport entry, waybill validation, real-time tracking.",
           },
           {
-            fr: "Résultat de la refonte : **-50% de temps de saisie, +20% de satisfaction utilisateur**.",
-            en: "Result of the overhaul: **-50% entry time, +20% user satisfaction**.",
-          },
-          {
-            fr: "Recherche utilisateur et maquettage UI/UX réalisés en autonomie (Hotjar, Heap) avant l'arrivée d'une Product Designer.",
-            en: "Conducted user research and UI/UX design independently (Hotjar, Heap) before a Product Designer joined the team.",
+            fr: "**Recherche utilisateur et maquettes UI/UX menées en autonomie** (Hotjar, Heap) avant l'arrivée d'une Product Designer.",
+            en: "**User research and UI/UX mockups done on my own** (Hotjar, Heap) before a Product Designer joined the team.",
           },
         ],
         methodology: "Scrum",
@@ -489,17 +485,17 @@ const EXPERIENCES = [
         start: "2021-10",
         end: "2022-04",
         context: {
-          fr: "PM sur la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à **40 000 visiteurs par jour** : les voyageurs y vérifiaient eux-mêmes leur pass sanitaire et leur billet dans le contexte Covid-19. Poste mené en parallèle de celui sur les boutiques en ligne.",
-          en: "PM on the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), up to **40,000 visitors a day**: travelers self-checked their health pass and train ticket in the context of Covid-19. Held in parallel with the online-stores role.",
+          fr: "Mission : la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à **40 000 visiteurs par jour**, où les voyageurs vérifiaient eux-mêmes leur pass sanitaire et leur billet pendant le Covid-19. En parallèle du poste sur les boutiques en ligne.",
+          en: "Mission: the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), up to **40,000 visitors a day**, where travelers self-checked their health pass and train ticket during Covid-19. In parallel with the online-stores role.",
         },
         achievements: [
           {
-            fr: "Redéveloppement d'une plateforme initialement développée en externe, avec un objectif business de fluidifier l'embarquement en gare.",
-            en: "Redeveloped a platform initially built externally, with a business goal of smoothing station boarding.",
+            fr: "**+100 % sur le taux de conversion** de la première étape de récupération du billet : parcours retravaillé à partir des retours des voyageurs collectés sur Twitter (extraction quotidienne via Zapier).",
+            en: "**+100% conversion rate** on the first step of ticket retrieval: journey reworked from traveler feedback collected on Twitter (daily extraction via Zapier).",
           },
           {
-            fr: "Récupération d'insights utilisateurs (Twitter, Zapier) et amélioration du parcours utilisateur : **+100% sur le taux de conversion** de la première étape de récupération du billet.",
-            en: "Gathered user insights (Twitter, Zapier) and improved the user journey: **+100% conversion rate** on the first step of ticket retrieval.",
+            fr: "**Plateforme redéveloppée en interne** après une première version externalisée, pour fluidifier l'embarquement en gare.",
+            en: "**Platform rebuilt in-house** after a first outsourced version, to smooth station boarding.",
           },
         ],
         methodology: "Kanban",
@@ -514,21 +510,21 @@ const EXPERIENCES = [
         start: "2020-09",
         end: "2022-04",
         context: {
-          fr: "PM sur l'outil de génération de boutiques en ligne pour la vente de titres de transport, avec deux clients : Transilien (boutique.transilien.com) et TER (boutiques de commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.",
-          en: "PM on the online store generation tool for transport ticket sales, serving two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering stores). From October 2021 to April 2022, in parallel with the Prêt à Voyager role.",
+          fr: "Mission : l'outil de génération de boutiques en ligne de titres de transport, pour deux clients : Transilien (boutique.transilien.com) et TER (commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.",
+          en: "Mission: the online store generator for transport tickets, for two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering). From October 2021 to April 2022, in parallel with the Prêt à Voyager role.",
         },
         achievements: [
           {
-            fr: "Définition d'une mission et d'une vision produit communes aux stakeholders et au service marketing.",
-            en: "Defined a shared product mission and vision for stakeholders and the marketing team.",
+            fr: "**Une mission et une vision produit communes** aux stakeholders et au service marketing, formalisées et partagées.",
+            en: "**A shared product mission and vision** for stakeholders and the marketing team, formalized and communicated.",
           },
           {
-            fr: "Stratégie 2021 appuyée par des OKR, roadmap de delivery, priorisation du backlog et rédaction des User Stories.",
-            en: "Set the 2021 strategy backed by OKRs, defined the delivery roadmap, prioritized the backlog and wrote User Stories.",
+            fr: "**Stratégie 2021 tenue par des OKR** : roadmap de delivery, priorisation du backlog, User Stories.",
+            en: "**2021 strategy held by OKRs**: delivery roadmap, backlog prioritization, User Stories.",
           },
           {
-            fr: "Relance du discovery (sondages utilisateurs, exploitation de la data disponible) et lead de la veille agilité/product management au sein de la communauté de pratiques.",
-            en: "Relaunched discovery (user surveys, mining available data) and led agility/product management watch within the community of practice.",
+            fr: "**Discovery relancé** : sondages utilisateurs, exploitation de la data disponible.",
+            en: "**Discovery relaunched**: user surveys, mining the available data.",
           },
         ],
         methodology: "Scrum",
