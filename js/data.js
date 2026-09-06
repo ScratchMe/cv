@@ -309,52 +309,55 @@ const PILLARS = [
 //    Les labels (SQL, Metabase, Agile...) restent identiques en FR/EN — ce
 //    sont déjà des termes anglais utilisés tels quels en français. Seule la
 //    catégorie est traduite (via UI_STRINGS "skills.cat.*" dans i18n.js) :
-//    garde les valeurs de `category` exactement comme ci-dessous (Produit,
-//    Méthode, Data, Outils), elles servent de clé de traduction.
+//    garde les valeurs de `category` exactement comme ci-dessous (growth,
+//    discovery, leadership, delivery, tools), elles servent de clé de
+//    traduction — sans la clé, la page afficherait la valeur brute.
+//    L'ordre des groupes est l'ordre d'apparition ici (sept. 2026, second
+//    retour d'expert) : growth et stratégie d'abord, delivery et outils en
+//    dernier — rien n'est supprimé, les mots-clés servent aux outils de tri.
+//    Les API et intégrations restent listées : 4 offres nantaises sur 10 les
+//    citent, et un PM qui construit des tunnels et des paiements doit pouvoir
+//    les montrer.
 // ---------------------------------------------------------------------------
 const SKILLS = [
-  { id: "discovery", label: "Discovery", category: "Produit" },
-  { id: "user-research", label: "User Research", category: "Produit" },
-  { id: "roadmapping", label: "Roadmapping", category: "Produit" },
-  { id: "user-stories", label: "User Stories & Backlog", category: "Produit" },
-  { id: "product-ownership", label: "Product Ownership", category: "Produit" },
-  { id: "plg", label: "Product-Led Growth", category: "Produit" },
-  { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "Produit" },
-  { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "Produit" },
-  { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "Produit" },
-  { id: "stakeholder", label: "Stakeholder Management", category: "Produit" },
-  { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "Produit" },
-  { id: "mentoring", label: "Mentoring & Coaching", category: "Produit" },
-  { id: "project-management", label: { fr: "Gestion de projet", en: "Project Management" }, category: "Produit" },
-  { id: "functional-analysis", label: { fr: "Analyse fonctionnelle", en: "Functional Analysis" }, category: "Produit" },
-  { id: "agile", label: "Agile / Scrum", category: "Méthode" },
-  { id: "okr", label: "OKR", category: "Méthode" },
-  { id: "story-mapping", label: "Story Mapping", category: "Méthode" },
-  { id: "bdd", label: "BDD", category: "Méthode" },
-  { id: "feature-flagging", label: "Feature Flagging / Progressive Rollout", category: "Méthode" },
-  { id: "sql", label: "SQL", category: "Data" },
-  { id: "metabase", label: "Metabase", category: "Data" },
-  { id: "mixpanel", label: "Mixpanel", category: "Data" },
-  { id: "segment", label: "Segment", category: "Data" },
-  { id: "looker-studio", label: "Looker Studio", category: "Data" },
-  { id: "matomo", label: "Matomo", category: "Data" },
-  { id: "hotjar", label: "Hotjar", category: "Data" },
-  { id: "heap", label: "Heap", category: "Data" },
-  { id: "zapier", label: "Zapier", category: "Outils" },
-  { id: "jira", label: "Jira", category: "Outils" },
-  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "Outils" },
-  { id: "flagship", label: "Flagship", category: "Outils" },
-  { id: "productboard", label: "ProductBoard", category: "Outils" },
-  { id: "figma", label: "Figma", category: "Outils" },
-  { id: "miro", label: "Miro", category: "Outils" },
-  { id: "akeneo", label: "Akeneo", category: "Outils" },
-  // Catégorie « Technique » : ce qu'un PM qui construit des tunnels, des
-  // paiements et des intégrations doit pouvoir montrer (4 offres nantaises
-  // sur 10 citent les API). La clé de traduction skills.cat.Technique est
-  // dans i18n.js — sans elle, la page afficherait la clé brute.
-  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "Technique" },
-  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "Technique" },
-  { id: "postman", label: "Postman", category: "Technique" },
+  { id: "plg", label: "Product-Led Growth", category: "growth" },
+  { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "growth" },
+  { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "growth" },
+  { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "growth" },
+  { id: "okr", label: "OKR", category: "growth" },
+  { id: "roadmapping", label: "Roadmapping", category: "growth" },
+  { id: "discovery", label: "Discovery", category: "discovery" },
+  { id: "user-research", label: "User Research", category: "discovery" },
+  { id: "sql", label: "SQL", category: "discovery" },
+  { id: "metabase", label: "Metabase", category: "discovery" },
+  { id: "mixpanel", label: "Mixpanel", category: "discovery" },
+  { id: "segment", label: "Segment", category: "discovery" },
+  { id: "looker-studio", label: "Looker Studio", category: "discovery" },
+  { id: "matomo", label: "Matomo", category: "discovery" },
+  { id: "hotjar", label: "Hotjar", category: "discovery" },
+  { id: "heap", label: "Heap", category: "discovery" },
+  { id: "stakeholder", label: "Stakeholder Management", category: "leadership" },
+  { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "leadership" },
+  { id: "mentoring", label: "Mentoring & Coaching", category: "leadership" },
+  { id: "agile", label: "Agile / Scrum", category: "delivery" },
+  { id: "user-stories", label: "User Stories & Backlog", category: "delivery" },
+  { id: "story-mapping", label: "Story Mapping", category: "delivery" },
+  { id: "bdd", label: "BDD", category: "delivery" },
+  { id: "feature-flagging", label: "Feature Flagging / Progressive Rollout", category: "delivery" },
+  { id: "product-ownership", label: "Product Ownership", category: "delivery" },
+  { id: "project-management", label: { fr: "Gestion de projet", en: "Project Management" }, category: "delivery" },
+  { id: "functional-analysis", label: { fr: "Analyse fonctionnelle", en: "Functional Analysis" }, category: "delivery" },
+  { id: "jira", label: "Jira", category: "tools" },
+  { id: "productboard", label: "ProductBoard", category: "tools" },
+  { id: "figma", label: "Figma", category: "tools" },
+  { id: "miro", label: "Miro", category: "tools" },
+  { id: "zapier", label: "Zapier", category: "tools" },
+  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "tools" },
+  { id: "flagship", label: "Flagship", category: "tools" },
+  { id: "akeneo", label: "Akeneo", category: "tools" },
+  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "tools" },
+  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "tools" },
+  { id: "postman", label: "Postman", category: "tools" },
 ];
 
 // ---------------------------------------------------------------------------
