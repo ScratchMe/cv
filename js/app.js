@@ -165,6 +165,12 @@
       footerLinks.innerHTML += `<a href="${PROFILE.contact.photos}" target="_blank" rel="noopener" data-goatcounter-click="link-photos">${t("footer.photos")}</a>`;
     }
     document.getElementById("footerTagline").textContent = `${tc(PROFILE.role)} — ${PROFILE.contact.location}`;
+    const availability = document.getElementById("footerAvailability");
+    if (availability) {
+      const text = tc(PROFILE.contact.availability || "");
+      availability.textContent = text;
+      availability.hidden = !text;
+    }
 
     // Ligne de contact du PDF (page 1) : e-mail · LinkedIn · site, en toutes
     // lettres et cliquables. Masquée à l'écran (voir .print-contact).

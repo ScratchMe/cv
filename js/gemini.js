@@ -291,8 +291,21 @@ Autre réalisation : ${fitCheckerTxt}`;
           ? `<div class="fit-question"><b data-i18n="fit.interviewQuestion">${t("fit.interviewQuestion")}</b> ${esc(question)}</div>`
           : ""
       }
+      <div class="fit-next">
+        <span class="fit-next-lead" data-i18n="fit.nextLead">${t("fit.nextLead")}</span>
+        <a class="btn solid" href="mailto:${PROFILE.contact.email}?subject=${encodeURIComponent(t("fit.mailSubject"))}" data-goatcounter-click="contact-email" data-i18n="fit.nextEmail">${t("fit.nextEmail")}</a>
+        ${
+          PROFILE.contact.linkedin
+            ? `<a class="btn" href="${PROFILE.contact.linkedin}" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin" data-i18n="fit.nextLinkedin">${t("fit.nextLinkedin")}</a>`
+            : ""
+        }
+      </div>
     `;
     resultEl.hidden = false;
+    // Le moment le plus chaud du parcours : e-mail (avec objet) et LinkedIn
+    // juste sous le score, pas de bouton PDF dupliqué. Pas d'offre collée
+    // dans l'objet du mail. Clics comptés (README §8).
+    if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();
     announce(t("fit.resultReady").replace("{score}", String(score)));
   }
 

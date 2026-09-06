@@ -123,6 +123,18 @@
     });
   }
 
+  // Fin de page : la lecture des études de cas ne doit pas se terminer sur
+  // le pied de page sans porte de sortie — contact, Fit-Checker, retour au CV.
+  function pageCtaHtml() {
+    const sfx = window.i18n.langSuffix();
+    return `
+      <div class="page-cta">
+        <a class="btn solid" href="mailto:${PROFILE.contact.email}" data-goatcounter-click="contact-email">${t("pageCta.contact")}</a>
+        <a class="btn" href="./${sfx}#fit-checker">${t("pageCta.fit")}</a>
+        <a class="btn" href="./${sfx}">${t("projectDetail.backToCv")}</a>
+      </div>`;
+  }
+
   function render() {
     const root = document.getElementById("resultsRoot");
     const ids = orderedResultIds();
@@ -135,6 +147,7 @@
         <p class="project-detail-tagline">${t("results.intro")}</p>
       </div>
       <div class="results-list">${ids.map(renderBlock).join("")}</div>
+      ${pageCtaHtml()}
     `;
 
     document.getElementById("pageTitle").textContent = t("results.metaTitle");
@@ -151,6 +164,8 @@
     const langBtn = document.getElementById("langToggle");
     langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
     langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
+    // Clics comptés (data-goatcounter-click) sur les liens recréés par ce rendu.
+    if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();
 
     // Ré-applique le scroll vers l'ancre : le contenu est rendu après coup en
     // JS, donc le scroll natif du navigateur vers #resultId (s'il a eu lieu

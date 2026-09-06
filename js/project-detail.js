@@ -142,6 +142,11 @@
         <h2>${t("projectDetail.techStack")}</h2>
         <div class="project-stack-groups">${techStackHtml}</div>
       </section>
+      <div class="page-cta">
+        <a class="btn solid" href="mailto:${PROFILE.contact.email}" data-goatcounter-click="contact-email">${t("pageCta.contact")}</a>
+        <a class="btn" href="./${window.i18n.langSuffix()}#fit-checker">${t("pageCta.fit")}</a>
+        <a class="btn" href="./${window.i18n.langSuffix()}">${t("projectDetail.backToCv")}</a>
+      </div>
     `;
 
     const pageTitle = `${project.title} — ${t("projectDetail.metaTitleSuffix")}`;
