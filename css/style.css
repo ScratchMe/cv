@@ -54,10 +54,10 @@ section[id]{scroll-margin-top:88px;}
    NAV
    ============================================================================ */
 header.top{position:sticky;top:0;z-index:20;background:rgba(245,242,251,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-.navrow{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;gap:20px;}
+.navrow{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;gap:16px;}
 .mark{font-weight:700;font-size:17px;text-decoration:none;}
 .mark span{color:var(--violet);}
-nav ul{list-style:none;display:flex;gap:24px;flex-wrap:wrap;position:relative;}
+nav ul{list-style:none;display:flex;gap:18px;flex-wrap:wrap;position:relative;}
 nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s ease;}
 nav a:hover{color:var(--violet);}
 nav a.is-active{color:var(--violet);}
@@ -79,6 +79,13 @@ nav a.is-active{color:var(--violet);}
 .btn.icon-btn svg{width:18px;height:18px;}
 .btn.label-btn{width:auto;height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:7px;border-radius:100px;flex-shrink:0;} /* icône + mot : le seul bouton violet du header n'est plus une flèche anonyme */
 .btn.label-btn svg{width:18px;height:18px;}
+/* Les deux PDF en une pastille : « PDF » (complet) puis « court », accolés.
+   Deux boutons séparés ajoutaient 130 px au header et faisaient passer le menu
+   sur deux lignes à 1 280 px. */
+.pdf-group{display:inline-flex;align-items:center;flex-shrink:0;}
+.pdf-group .label-btn:first-child{border-top-right-radius:0;border-bottom-right-radius:0;}
+.pdf-group .pdf-short{border-top-left-radius:0;border-bottom-left-radius:0;padding:0 13px;margin-left:-1.5px;}
+.pdf-group .pdf-short:hover{transform:translateY(-1px);}
 .btn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
 .link-btn{background:none;border:none;color:var(--violet);font-weight:600;font-size:13px;cursor:pointer;text-decoration:underline;margin-left:8px;}
 
