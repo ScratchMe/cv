@@ -70,7 +70,7 @@ jobs:
               "",
               "À vérifier, dans l'ordre :",
               "1. Le projet Supabase est-il en pause ? https://supabase.com/dashboard/project/tpreesulucfsyalaipcj (bouton **Restore**).",
-              "2. La clé Gemini a-t-elle encore du quota ? https://aistudio.google.com/apikey",
+              "2. Le solde prépayé Gemini est-il à zéro ? https://aistudio.google.com/billing — recharger 5 $ (compte en prépayé : à zéro, toutes les clés s'arrêtent). Plafond mensuel dépassé ? Page « Spend ».",
               "3. Les logs de la fonction : https://supabase.com/dashboard/project/tpreesulucfsyalaipcj/functions/gemini-fit/logs",
               "",
               `Logs du workflow : ${runUrl}`,
