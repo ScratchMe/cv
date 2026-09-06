@@ -254,8 +254,9 @@ body.focus-mode .testimonial-avatar{background:var(--ink);}
 .fit-box{background:var(--surface);border-radius:var(--radius);box-shadow:0 24px 60px rgba(20,10,50,.35);padding:26px;}
 .fit-box textarea{width:100%;border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:14px;font-family:inherit;font-size:14.5px;resize:vertical;color:var(--ink);}
 .fit-box textarea:focus{outline:none;border-color:var(--violet);}
-.fit-actions{display:flex;align-items:center;gap:14px;margin-top:16px;}
-.fit-error{color:var(--coral);font-size:13.5px;font-weight:600;}
+.fit-actions{display:flex;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap;}
+.fit-actions .btn{flex-shrink:0;white-space:nowrap;} /* le bouton reste sur une ligne, l'erreur passe dessous */
+.fit-error{color:var(--coral);font-size:13.5px;font-weight:600;flex:1 1 100%;overflow-wrap:anywhere;} /* pas de display ici (piège n°1) */
 .fit-loading-status{margin-top:10px;font-size:13.5px;color:var(--ink-soft);transition:opacity .25s ease;display:flex;align-items:center;gap:8px;}
 .fit-loading-status[hidden]{display:none;}
 .fit-loading-status::before{
@@ -264,7 +265,7 @@ body.focus-mode .testimonial-avatar{background:var(--ink);}
   animation:fit-spin .7s linear infinite;
 }
 @keyframes fit-spin{to{transform:rotate(360deg);}}
-.fit-result{margin-top:22px;background:var(--surface);border-radius:var(--radius);box-shadow:0 24px 60px rgba(20,10,50,.3);padding:30px;}
+.fit-result{margin-top:22px;background:var(--surface);border-radius:var(--radius);box-shadow:0 24px 60px rgba(20,10,50,.3);padding:30px;scroll-margin-top:96px;} /* scroll-margin : la règle globale ne vise que section[id] (piège n°9), sinon le score se cache sous le header */
 .fit-score-row{display:flex;align-items:center;gap:20px;margin-bottom:20px;}
 .fit-score{width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;color:#fff;background:conic-gradient(var(--violet) calc(var(--pct,0) * 1%), var(--line) 0);position:relative;flex-shrink:0;}
 .fit-score::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--surface);}
@@ -333,6 +334,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
   .photo-ring{order:-1;width:150px;height:150px;}
   .pillar-grid{grid-template-columns:1fr;}
   .fit-columns{grid-template-columns:1fr;}
+  .fit-box textarea{font-size:16px;} /* sous 16px, Safari iOS zoome le champ au focus ; sans risque print, #fit-checker est masqué */
   nav{display:none;}
   h1{font-size:34px;}
   .navrow{flex-wrap:wrap;}

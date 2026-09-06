@@ -85,10 +85,29 @@
       fr: "Le Fit-Checker n'est pas encore configuré (voir README.md, section Gemini/Supabase).",
       en: "The Fit Checker isn't configured yet (see README.md, Gemini/Supabase section).",
     },
-    "fit.errFailed": { fr: "L'analyse a échoué : ", en: "Analysis failed: " },
     "fit.errRateLimited": {
       fr: "Trop de tentatives depuis cet appareil. Réessayez dans une minute.",
       en: "Too many attempts from this device. Try again in a minute.",
+    },
+    // Panne, réseau coupé, réponse illisible : un seul message, suivi de
+    // l'adresse e-mail en lien (ajoutée en JS). Jamais de détail technique.
+    "fit.errUnavailable": {
+      fr: "Le Fit-Checker est momentanément indisponible. Écrivez-moi directement : ",
+      en: "The Fit Checker is temporarily unavailable. Reach me directly: ",
+    },
+    "fit.errTimeout": {
+      fr: "L'analyse prend trop de temps. Réessayez dans un instant.",
+      en: "The analysis is taking too long. Try again in a moment.",
+    },
+    "fit.errEmpty": {
+      fr: "L'analyse n'a rien donné d'exploitable. Réessayez, ou collez une offre plus complète.",
+      en: "The analysis returned nothing usable. Try again, or paste a fuller job posting.",
+    },
+    // Ligne envoyée à l'IA dans le contexte du CV : le Fit-Checker est
+    // lui-même une réalisation à faire valoir quand une offre demande de l'IA.
+    "fit.selfDescription": {
+      fr: "le Fit-Checker de ce site, fonctionnalité IA conçue et déployée par Antoine (fonction serveur Supabase + API Gemini, repli automatique entre plusieurs modèles, limitation de débit, aucune clé exposée côté navigateur).",
+      en: "this site's Fit Checker, an AI feature Antoine designed and shipped himself (Supabase edge function + Gemini API, automatic fallback across several models, rate limiting, no key exposed to the browser).",
     },
     "fit.loading1": { fr: "Lecture de l'offre d'emploi...", en: "Reading the job posting..." },
     "fit.loading2": { fr: "Comparaison avec mon profil...", en: "Comparing with my profile..." },

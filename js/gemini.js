@@ -16,10 +16,22 @@
 
   const { t, tc } = window.i18n;
 
+  // Échappe tout texte venant de l'extérieur (réponse de l'IA) avant de
+  // l'injecter en HTML : sans ça, une réponse contenant du HTML s'exécuterait
+  // dans la page. Copie locale volontaire (voir CLAUDE.md sur les helpers
+  // dupliqués) pour ne pas élargir window.__cvData à une question de sécurité.
+  const esc = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const cleanList = (arr) => (Array.isArray(arr) ? arr.filter((x) => typeof x === "string" && x.trim()) : []);
+
   // Construit un résumé texte du CV à partir de js/data.js, envoyé à Gemini
   // comme contexte, dans la langue actuellement affichée sur le site.
+  // Les constantes de data.js (PROFILE, EXPERIENCES, EDUCATION...) sont
+  // lues directement : ce sont des `const` de portée globale, chargées avant
+  // ce fichier. window.__cvData ne sert que pour skillLabel/formatDuration,
+  // qui vivent dans app.js. Tout champ traduisible passe par tc() (piège n°4
+  // de CLAUDE.md : un {fr, en} brut s'affiche identique dans les 2 langues).
   function buildCvContext() {
-    const { PROFILE, PILLARS, EXPERIENCES, skillLabel, formatDuration } = window.__cvData;
+    const { skillLabel, formatDuration } = window.__cvData;
 
     const pillarsTxt = PILLARS.map(
       (p) => `- ${p.title} : ${tc(p.subtitle)} (${p.points.map(tc).join(" ")})`
@@ -39,6 +51,27 @@
       return `${c.company} (${c.location}) :\n${roles}`;
     }).join("\n\n");
 
+    // Formation, langues, certifications, side projects : sans ces blocs,
+    // l'IA fabriquait des points de vigilance faux (« niveau d'anglais à
+    // valider », « aucun side project ») sur des critères souvent éliminatoires.
+    const educationTxt = EDUCATION.map((e) => `- ${tc(e.title)}, ${e.institution} (${tc(e.period)})`).join("\n");
+    const trainingsTxt = TRAININGS.map((tr) => `- ${tc(tr.title)} — ${tr.institution} (${tc(tr.period)})`).join("\n");
+    const languagesTxt = LANGUAGES.map((l) => `- ${tc(l.label)} : ${tc(l.level)}`).join("\n");
+    const certificationsTxt = CERTIFICATIONS.map((c) => `- ${tc(c.title)}${c.note ? ` : ${tc(c.note)}` : ""}`).join("\n");
+
+    let sideProjectsTxt = "";
+    if (CONFIG.showSideProjects && SIDE_PROJECTS.length) {
+      sideProjectsTxt = SIDE_PROJECTS.map((p) => {
+        const detail = p.detailSlug && typeof PROJECT_DETAILS !== "undefined" ? PROJECT_DETAILS[p.detailSlug] : null;
+        const stack = detail && detail.techStack ? Object.values(detail.techStack).flat().map(tc).join(", ") : "";
+        return `- ${tc(p.title)}${p.link ? ` (${p.link})` : ""} : ${tc(p.description)}${detail && detail.process ? ` ${tc(detail.process)}` : ""}${stack ? ` — Stack : ${stack}` : ""} — Compétences : ${p.skills.map(skillLabel).join(", ")}`;
+      }).join("\n");
+    }
+
+    // Le Fit-Checker lui-même est une fonctionnalité IA conçue et déployée
+    // par Antoine : l'IA doit le savoir quand une offre demande de l'IA.
+    const fitCheckerTxt = t("fit.selfDescription");
+
     return `Profil : ${PROFILE.firstName} ${PROFILE.lastName}, ${tc(PROFILE.role)}, ${PROFILE.location}, ${PROFILE.yearsExperience} ans d'expérience en Product Management.
 
 Pitch : ${tc(PROFILE.pitch)}
@@ -47,7 +80,21 @@ Principes clés :
 ${pillarsTxt}
 
 Expériences :
-${expTxt}`;
+${expTxt}
+
+Formation :
+${educationTxt}
+
+Formations continues :
+${trainingsTxt}
+
+Langues :
+${languagesTxt}
+
+Certifications :
+${certificationsTxt}
+${sideProjectsTxt ? `\nSide projects :\n${sideProjectsTxt}\n` : ""}
+Autre réalisation : ${fitCheckerTxt}`;
   }
 
   // Fait défiler un petit texte qui change toutes les ~2,2s pendant l'attente
@@ -126,11 +173,32 @@ ${expTxt}`;
           jobPosting,
           lang: window.i18n.lang, // "fr" ou "en" — la fonction Supabase demandera à Gemini de répondre dans cette langue
         }),
+        // Délai maximal : 90 s et pas moins, le repli multi-modèles côté
+        // serveur peut enchaîner plusieurs tentatives de plusieurs secondes.
+        signal: AbortSignal.timeout(90000),
       });
 
       if (res.status === 429) throw new Error(t("fit.errRateLimited"), { cause: "rate-limited" });
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`);
+      if (!res.ok) {
+        // Le détail (message serveur, code HTTP) va en console, jamais à
+        // l'écran : un recruteur n'a rien à faire d'un « 503 » ou d'un
+        // message technique en français au milieu de la version anglaise.
+        let detail = "";
+        try {
+          detail = (await res.json()).error || "";
+        } catch (_e) {
+          // corps non JSON : rien à lire
+        }
+        console.error("Fit-Checker : réponse serveur", res.status, detail);
+        throw new Error(`HTTP ${res.status}`, { cause: "unavailable" });
+      }
       const data = await res.json();
+      if (!hasUsableResult(data)) throw new Error("Réponse vide", { cause: "empty" });
+
+      // On coupe le message de chargement AVANT de rendre et de scroller :
+      // sinon la mise en page bouge de ~32 px après le calcul du scroll et le
+      // score se retrouve caché sous le header sticky.
+      stopLoadingMessages();
       renderResult(data);
 
       // Le résultat apparaît sous le bouton : sur un écran pas trop grand
@@ -146,8 +214,24 @@ ${expTxt}`;
         window.goatcounter.count({ path: "fit-checker-used", title: "Fit-Checker used", event: true });
       }
     } catch (err) {
+      console.error("Fit-Checker :", err);
       errorEl.hidden = false;
-      errorEl.textContent = err.cause === "rate-limited" ? err.message : t("fit.errFailed") + err.message;
+      if (err.cause === "rate-limited") {
+        errorEl.textContent = err.message;
+      } else if (err.cause === "empty") {
+        errorEl.textContent = t("fit.errEmpty");
+      } else if (err.name === "TimeoutError") {
+        errorEl.textContent = t("fit.errTimeout");
+      } else {
+        // Réseau coupé, serveur en panne, réponse illisible : un seul
+        // message, bilingue, avec une porte de sortie (l'e-mail) — jamais
+        // err.message, qui vient du navigateur ou du serveur.
+        errorEl.textContent = t("fit.errUnavailable");
+        const a = document.createElement("a");
+        a.href = `mailto:${PROFILE.contact.email}`;
+        a.textContent = PROFILE.contact.email;
+        errorEl.appendChild(a);
+      }
     } finally {
       stopLoadingMessages();
       btn.disabled = false;
@@ -159,28 +243,37 @@ ${expTxt}`;
   // data-i18n : ils se retraduisent automatiquement si la langue change
   // après coup (voir applyStaticTranslations() dans app.js). Le contenu
   // renvoyé par Gemini, lui, reste dans la langue demandée au moment de l'appel.
+  // Vrai si la réponse contient au moins un score exploitable : sans ça, une
+  // réponse vide ({}) s'affichait comme un score 0/100 avec des colonnes
+  // vides, ce qui ressemblait à un verdict.
+  function hasUsableResult(data) {
+    return !!data && typeof data === "object" && Number.isFinite(Number(data.score));
+  }
+
   function renderResult(data) {
     const resultEl = document.getElementById("fitResult");
-    const score = Math.max(0, Math.min(100, Number(data.score) || 0));
+    const score = Math.round(Math.max(0, Math.min(100, Number(data.score))));
+    const explanation = typeof data.explanation === "string" ? data.explanation : "";
+    const question = typeof data.interviewQuestion === "string" ? data.interviewQuestion : "";
 
     resultEl.innerHTML = `
       <div class="fit-score-row">
         <div class="fit-score" style="--pct:${score}"><span>${score}</span></div>
-        <p class="fit-explanation">${data.explanation || ""}</p>
+        <p class="fit-explanation">${esc(explanation)}</p>
       </div>
       <div class="fit-columns">
         <div>
           <h4 data-i18n="fit.strengths">${t("fit.strengths")}</h4>
-          <ul>${(data.strengths || []).map((s) => `<li>${s}</li>`).join("")}</ul>
+          <ul>${cleanList(data.strengths).map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
         </div>
         <div class="gaps">
           <h4 data-i18n="fit.gaps">${t("fit.gaps")}</h4>
-          <ul>${(data.gaps || []).map((g) => `<li>${g}</li>`).join("")}</ul>
+          <ul>${cleanList(data.gaps).map((g) => `<li>${esc(g)}</li>`).join("")}</ul>
         </div>
       </div>
       ${
-        data.interviewQuestion
-          ? `<div class="fit-question"><b data-i18n="fit.interviewQuestion">${t("fit.interviewQuestion")}</b> ${data.interviewQuestion}</div>`
+        question
+          ? `<div class="fit-question"><b data-i18n="fit.interviewQuestion">${t("fit.interviewQuestion")}</b> ${esc(question)}</div>`
           : ""
       }
     `;
