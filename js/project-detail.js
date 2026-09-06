@@ -68,7 +68,7 @@
     root.innerHTML = `
       <div class="project-detail-notfound">
         <p>${t("projectDetail.notFound")}</p>
-        <a href="index.html" class="btn solid">${t("projectDetail.backToCv")}</a>
+        <a href="./${window.i18n.langSuffix()}" class="btn solid">${t("projectDetail.backToCv")}</a>
       </div>`;
   }
 
@@ -166,21 +166,24 @@
     }
 
     document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");
-    document.getElementById("backToCvLink").href = `index.html?lang=${window.i18n.lang}`;
-    document.getElementById("logoLink").href = `index.html?lang=${window.i18n.lang}`;
-    document.getElementById("footerCvLink").href = `index.html?lang=${window.i18n.lang}`;
+    document.getElementById("backToCvLink").href = `./${window.i18n.langSuffix()}`;
+    document.getElementById("logoLink").href = `./${window.i18n.langSuffix()}`;
+    document.getElementById("footerCvLink").href = `./${window.i18n.langSuffix()}`;
     const footerResults = document.getElementById("footerResultsLink");
     if (footerResults) {
       footerResults.textContent = t("footer.caseStudies");
-      footerResults.href = `results.html?lang=${window.i18n.lang}`;
+      footerResults.href = `results.html${window.i18n.langSuffix()}`;
     }
-    document.getElementById("langToggle").textContent = window.i18n.lang === "fr" ? "EN" : "FR";
+    const langBtn = document.getElementById("langToggle");
+    langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
+    langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
   }
 
   function init() {
     initLang();
     document.getElementById("langToggle").addEventListener("click", () => {
       window.i18n.setLang(window.i18n.lang === "fr" ? "en" : "fr");
+      window.i18n.syncUrl();
       render();
     });
     render();

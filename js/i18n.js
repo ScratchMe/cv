@@ -191,15 +191,38 @@
     return field;
   }
 
+  // Suffixe à ajouter aux liens internes : le français est la langue par
+  // défaut, servie à l'URL nue (c'est l'URL canonique), donc on n'écrit
+  // ?lang=fr nulle part ; l'anglais porte ?lang=en. `sep` vaut "?" ou "&"
+  // selon que l'URL a déjà un paramètre.
+  function langSuffix(sep = "?") {
+    return currentLang === "en" ? `${sep}lang=en` : "";
+  }
+
+  // Reflète la langue courante dans l'URL de la page (sans recharger) :
+  // ?lang=en en anglais, URL nue en français. Utilisé par le bouton FR/EN
+  // des trois pages, pour qu'une URL copiée partage la bonne langue.
+  function syncUrl() {
+    const url = new URL(window.location.href);
+    if (currentLang === "en") url.searchParams.set("lang", "en");
+    else url.searchParams.delete("lang");
+    window.history.replaceState(null, "", url);
+  }
+
   window.i18n = {
     get lang() {
       return currentLang;
     },
     setLang(lang) {
       currentLang = lang === "en" ? "en" : "fr";
+      // Seul point d'entrée des trois pages : la langue du document suit
+      // (lecteurs d'écran, moteurs), au chargement comme à la bascule.
+      document.documentElement.lang = currentLang;
     },
     t,
     tc,
+    langSuffix,
+    syncUrl,
     months: () => MONTHS[currentLang],
   };
 })();

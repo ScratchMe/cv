@@ -97,7 +97,7 @@
           <div class="hero-stat-value">${s.value}</div>
           <div class="hero-stat-label">${tc(s.label)}</div>`;
         return s.resultId
-          ? `<a class="hero-stat is-linked" href="results.html?lang=${window.i18n.lang}#${s.resultId}">${inner}</a>`
+          ? `<a class="hero-stat is-linked" href="results.html${window.i18n.langSuffix()}#${s.resultId}">${inner}</a>`
           : `<div class="hero-stat">${inner}</div>`;
       }).join("");
 
@@ -110,7 +110,7 @@
       if (linkedCount > 0) {
         statsEl.insertAdjacentHTML(
           "afterend",
-          `<a class="hero-stats-link" id="heroStatsLink" href="results.html?lang=${window.i18n.lang}">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
+          `<a class="hero-stats-link" id="heroStatsLink" href="results.html${window.i18n.langSuffix()}">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
         );
       }
     }
@@ -143,7 +143,7 @@
     // Footer
     const footerLinks = document.getElementById("footerLinks");
     footerLinks.innerHTML = "";
-    footerLinks.innerHTML += `<a href="results.html?lang=${window.i18n.lang}">${t("footer.caseStudies")}</a>`;
+    footerLinks.innerHTML += `<a href="results.html${window.i18n.langSuffix()}">${t("footer.caseStudies")}</a>`;
     if (PROFILE.contact.email) {
       footerLinks.innerHTML += `<a href="mailto:${PROFILE.contact.email}">${PROFILE.contact.email}</a>`;
     }
@@ -396,7 +396,7 @@
         <p>${tc(p.description)}</p>
         <div class="project-links">
           ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener">${t("projects.viewLink")}</a>` : ""}
-          ${p.detailSlug ? `<a href="project-detail.html?slug=${p.detailSlug}&lang=${window.i18n.lang}">${t("projects.viewCaseStudy")}</a>` : ""}
+          ${p.detailSlug ? `<a href="project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}">${t("projects.viewCaseStudy")}</a>` : ""}
         </div>
         <div class="project-skills">${p.skills.map((s) => `<span>${skillLabel(s)}</span>`).join("")}</div>
       </div>`
@@ -556,15 +556,6 @@
     window.i18n.setLang(urlLang === "en" ? "en" : "fr");
   }
 
-  // Reflète la langue courante dans l'URL : ?lang=en pour l'anglais, et
-  // l'URL nue (sans paramètre) pour le français, langue par défaut — c'est
-  // aussi l'URL canonique déclarée pour la version française.
-  function syncUrlLang() {
-    const url = new URL(window.location.href);
-    if (window.i18n.lang === "en") url.searchParams.set("lang", "en");
-    else url.searchParams.delete("lang");
-    window.history.replaceState(null, "", url);
-  }
 
   // --------------------------------------------------------------------
   // 10. RENDU COMPLET (appelé au chargement + à chaque changement de langue)
@@ -618,7 +609,7 @@
 
     document.getElementById("langToggle").addEventListener("click", () => {
       window.i18n.setLang(window.i18n.lang === "fr" ? "en" : "fr");
-      syncUrlLang();
+      window.i18n.syncUrl();
       renderAll();
     });
 

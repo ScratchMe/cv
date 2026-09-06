@@ -115,15 +115,17 @@
     document.getElementById("pageTitle").textContent = t("results.metaTitle");
     document.getElementById("pageDescription").setAttribute("content", t("results.metaDescription"));
     document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");
-    document.getElementById("backToCvLink").href = `index.html?lang=${window.i18n.lang}`;
-    document.getElementById("logoLink").href = `index.html?lang=${window.i18n.lang}`;
-    document.getElementById("footerCvLink").href = `index.html?lang=${window.i18n.lang}`;
+    document.getElementById("backToCvLink").href = `./${window.i18n.langSuffix()}`;
+    document.getElementById("logoLink").href = `./${window.i18n.langSuffix()}`;
+    document.getElementById("footerCvLink").href = `./${window.i18n.langSuffix()}`;
     const footerResults = document.getElementById("footerResultsLink");
     if (footerResults) {
       footerResults.textContent = t("footer.caseStudies");
-      footerResults.href = `results.html?lang=${window.i18n.lang}`;
+      footerResults.href = `results.html${window.i18n.langSuffix()}`;
     }
-    document.getElementById("langToggle").textContent = window.i18n.lang === "fr" ? "EN" : "FR";
+    const langBtn = document.getElementById("langToggle");
+    langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
+    langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
 
     // Ré-applique le scroll vers l'ancre : le contenu est rendu après coup en
     // JS, donc le scroll natif du navigateur vers #resultId (s'il a eu lieu
@@ -138,6 +140,7 @@
     initLang();
     document.getElementById("langToggle").addEventListener("click", () => {
       window.i18n.setLang(window.i18n.lang === "fr" ? "en" : "fr");
+      window.i18n.syncUrl();
       render();
     });
     render();
