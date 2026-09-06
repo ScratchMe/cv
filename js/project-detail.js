@@ -169,6 +169,11 @@
     document.getElementById("backToCvLink").href = `index.html?lang=${window.i18n.lang}`;
     document.getElementById("logoLink").href = `index.html?lang=${window.i18n.lang}`;
     document.getElementById("footerCvLink").href = `index.html?lang=${window.i18n.lang}`;
+    const footerResults = document.getElementById("footerResultsLink");
+    if (footerResults) {
+      footerResults.textContent = t("footer.caseStudies");
+      footerResults.href = `results.html?lang=${window.i18n.lang}`;
+    }
     document.getElementById("langToggle").textContent = window.i18n.lang === "fr" ? "EN" : "FR";
   }
 

@@ -100,6 +100,19 @@
           ? `<a class="hero-stat is-linked" href="results.html?lang=${window.i18n.lang}#${s.resultId}">${inner}</a>`
           : `<div class="hero-stat">${inner}</div>`;
       }).join("");
+
+      // Lien texte vers la page Résultats sous les chiffres : sur téléphone,
+      // rien ne disait que les chiffres étaient cliquables, et results.html
+      // n'était liée nulle part ailleurs.
+      const linkedCount = HERO_STATS.filter((s) => s.resultId && RESULT_DETAILS[s.resultId]).length;
+      const existing = document.getElementById("heroStatsLink");
+      if (existing) existing.remove();
+      if (linkedCount > 0) {
+        statsEl.insertAdjacentHTML(
+          "afterend",
+          `<a class="hero-stats-link" id="heroStatsLink" href="results.html?lang=${window.i18n.lang}">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
+        );
+      }
     }
 
     const pillsEl = document.getElementById("heroPills");
@@ -130,6 +143,7 @@
     // Footer
     const footerLinks = document.getElementById("footerLinks");
     footerLinks.innerHTML = "";
+    footerLinks.innerHTML += `<a href="results.html?lang=${window.i18n.lang}">${t("footer.caseStudies")}</a>`;
     if (PROFILE.contact.email) {
       footerLinks.innerHTML += `<a href="mailto:${PROFILE.contact.email}">${PROFILE.contact.email}</a>`;
     }

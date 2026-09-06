@@ -37,6 +37,7 @@ img{max-width:100%;display:block;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;position:relative;}
 section{position:relative;z-index:2;}
 section[id]{scroll-margin-top:88px;}
+#fit-checker{scroll-margin-top:116px;} /* +28px : la section arrive translatée (.fit-reveal-pending) au moment du calcul du scroll */
 
 /* decorative background blobs */
 .blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:.28;z-index:0;pointer-events:none;}
@@ -71,6 +72,8 @@ nav a.is-active{color:var(--violet);}
 .btn.solid{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 6px 16px rgba(108,60,233,.28);}
 .btn.icon-btn{width:38px;height:38px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 .btn.icon-btn svg{width:18px;height:18px;}
+.btn.label-btn{width:auto;height:38px;padding:0 16px;display:inline-flex;align-items:center;gap:7px;border-radius:100px;flex-shrink:0;} /* icône + mot : le seul bouton violet du header n'est plus une flèche anonyme */
+.btn.label-btn svg{width:18px;height:18px;}
 .btn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
 .link-btn{background:none;border:none;color:var(--violet);font-weight:600;font-size:13px;cursor:pointer;text-decoration:underline;margin-left:8px;}
 
@@ -316,9 +319,13 @@ body.focus-mode .ai-badge{background:var(--ink);}
 .site-footer .mark span{color:var(--coral);}
 .footer-grid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
 .footer-grid p{color:#B6ADC9;font-size:13.5px;margin-top:4px;}
-.footer-links{display:flex;gap:18px;}
+.footer-links{display:flex;gap:8px 18px;flex-wrap:wrap;} /* wrap : avec cinq liens, la rangée débordait de 38 px à 390 px */
+.footer-links a{white-space:nowrap;}
 .footer-links a{color:#fff;text-decoration:none;font-size:13.5px;font-weight:500;}
 .footer-links a:hover{color:var(--coral);}
+.footer-pdf{flex-basis:100%;margin-top:6px;font-size:13px;color:#B6ADC9;}
+.footer-pdf a{color:#fff;text-decoration:none;font-weight:500;}
+.footer-pdf a:hover{color:var(--coral);}
 
 /* ============================================================================
    RESPONSIVE
@@ -338,15 +345,29 @@ body.focus-mode .ai-badge{background:var(--ink);}
   .pillar-grid{grid-template-columns:1fr;}
   .fit-columns{grid-template-columns:1fr;}
   .fit-box textarea{font-size:16px;} /* sous 16px, Safari iOS zoome le champ au focus ; sans risque print, #fit-checker est masqué */
-  nav{display:none;}
+  /* Menu visible sur téléphone (variante A validée par Antoine) : la rangée
+     de liens passe sous le logo et reste collante avec le header (~143 px,
+     19 % d'un écran de 740 px). Avant, le menu disparaissait sans
+     remplacement : 20 écrans de défilement sans raccourci. */
+  nav{display:block;flex-basis:100%;order:3;}
+  nav ul{gap:8px 14px;}
+  nav li{white-space:nowrap;}
+  nav a{font-size:13px;}
+  section[id]{scroll-margin-top:150px;} /* header + menu sur deux lignes (~135 px) */
+  #fit-checker{scroll-margin-top:178px;} /* +28px : la section arrive translatée (.fit-reveal-pending) au moment du calcul du scroll */
   h1{font-size:34px;}
-  .navrow{flex-wrap:wrap;}
+  .navrow{flex-wrap:wrap;gap:8px 20px;padding:14px 22px;}
 }
 /* Le badge "Product Manager · Growth · Nantes" du hero passait sur deux lignes
    à 375px de large. Seuil à 480px et non 800px : la largeur A4 du PDF (~794px)
    tombe dans le breakpoint 800px et le rendu print doit rester intact. */
 @media(max-width:480px){
   .eyebrow{font-size:12px;letter-spacing:.03em;padding:6px 12px;}
+  /* Les trois chiffres en colonne : à 360-414 px, deux chiffres côte à côte
+     laissaient le troisième seul dessous avec des libellés sur 3 lignes. */
+  .hero-stats{flex-direction:column;gap:14px;}
+  .hero-stat{padding-left:0;border-left:none;}
+  .hero-stat-label{max-width:none;}
 }
 /* Hero plus compact sur téléphone : ramène le premier chiffre du hero vers le
    pli. padding-top seul (jamais le raccourci padding, piège n°8). Seuil 640
@@ -504,6 +525,17 @@ body.focus-mode .pill{background:#F1F1EF;}
   transition:opacity .15s ease, transform .15s ease;
 }
 .hero-stat.is-linked:hover .hero-stat-label::after{opacity:1;transform:translateX(0);}
+/* Au repos, un chiffre cliquable se reconnaît déjà : libellé violet et flèche
+   discrète (5.48:1 sur le fond du hero). Le survol garde son effet, et le
+   clavier (focus-visible) obtient le même retour que la souris. */
+.hero-stat.is-linked .hero-stat-label{color:var(--violet);}
+.hero-stat.is-linked .hero-stat-label::after{opacity:.6;transform:translateX(0);}
+.hero-stat.is-linked:focus-visible{outline:none;transform:translateY(-3px);}
+.hero-stat.is-linked:focus-visible .hero-stat-label{text-decoration:underline;text-underline-offset:3px;}
+.hero-stat.is-linked:focus-visible .hero-stat-label::after{opacity:1;}
+.hero-stat.is-linked:focus-visible::before{opacity:.09;transform:translate(-50%,-50%) scale(1);}
+.hero-stats-link{display:inline-block;margin:-14px 0 28px;font-size:13.5px;font-weight:600;color:var(--violet);text-decoration:none;}
+.hero-stats-link:hover{text-decoration:underline;text-underline-offset:3px;}
 
 /* Rond flou derrière le chiffre + label, même technique que les blobs
    décoratifs du fond de page (filter:blur) — un vrai flou diffus plutôt
@@ -566,6 +598,8 @@ body.focus-mode .pill{background:#F1F1EF;}
   .hero-stat-value{font-size:20px;}
   .hero-stat-label{font-size:10.5px;max-width:none;}
   .hero-stat.is-linked .hero-stat-label::after{display:none;} /* la flèche de survol n'a rien à faire sur papier */
+  .hero-stat.is-linked .hero-stat-label{color:var(--ink-soft);}
+  .hero-stats-link{display:none;}
 
   /* Les ombres portées ne rendent pas bien sur un support figé ; on les
      retire mais on garde les à-plats de couleur (bordures colorées des

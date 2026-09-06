@@ -36,6 +36,8 @@
     "testimonial.eyebrow": { fr: "Recommandation LinkedIn", en: "LinkedIn recommendation" },
 
     "footer.photos": { fr: "Photos", en: "Photos" },
+    "footer.caseStudies": { fr: "Études de cas", en: "Case studies" },
+    "hero.seeCaseStudies": { fr: "Voir les {n} études de cas →", en: "See the {n} case studies →" },
 
     "skills.sectionTitle": { fr: "Compétences & outils", en: "Skills & tools" },
     "skills.hint": {
