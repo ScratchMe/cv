@@ -21,6 +21,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
+button,input,select,textarea{font-family:inherit;} /* sans ça, les chips de compétences sortent en Arial/Liberation Sans, à l'écran et dans le PDF */
 html{scroll-behavior:smooth;}
 body{
   background:var(--bg);
@@ -81,6 +82,7 @@ nav a.is-active{color:var(--violet);}
 .eyebrow{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--violet);background:var(--violet-soft);display:inline-block;padding:6px 14px;border-radius:100px;margin-bottom:18px;}
 h1{font-size:48px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-height:1.05;}
 .role{font-size:19px;color:var(--ink-soft);font-weight:500;margin-bottom:20px;}
+.print-contact{display:none;} /* ligne e-mail · LinkedIn · site : PDF seulement */
 .pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
 .pill{font-size:13px;font-weight:600;padding:7px 14px;border-radius:100px;background:var(--surface);border:1.5px solid var(--line);}
 .pitch{max-width:560px;color:var(--ink-soft);font-size:16px;margin-bottom:28px;}
@@ -169,7 +171,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .company-header{display:flex;align-items:center;gap:18px;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--line);}
 .company-logo{width:56px;height:56px;border-radius:14px;object-fit:cover;flex-shrink:0;background:var(--violet-soft);}
 .company-logo-fallback{width:56px;height:56px;border-radius:14px;flex-shrink:0;background:var(--violet-soft);color:var(--violet);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:17px;}
-.company-name{font-size:19px;font-weight:700;}
+.company-name{font-size:19px;font-weight:700;font-family:'Work Sans',sans-serif;} /* h3 sémantique, mais police du corps : rendu identique à l'ancien div */
 .company-meta{font-size:13px;color:var(--ink-soft);margin-top:2px;}
 .company-total{margin-left:auto;text-align:right;font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em;}
 .company-total strong{display:block;font-size:14px;color:var(--ink);text-transform:none;letter-spacing:0;font-family:'Space Grotesk',sans-serif;}
@@ -523,24 +525,36 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Rien de tout ça n'a de sens sur un document figé : nav interactive,
      Fit-Checker (nécessite une vraie IA en direct), bandeau teaser,
      indicateur de scroll, bouton de reset des filtres. */
-  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint .link-btn,.nav-indicator{display:none !important;}
+  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.quote-mark{display:none !important;}
+  /* .skills-hint : consigne « Clique sur… » sans objet sur papier.
+     .role-skills : les tags par rôle répètent la section Compétences (1,8 page
+     de tags dans l'ancien PDF) ; les mots-clés restent une fois pour l'ATS.
+     .site-footer : les coordonnées sont en page 1 (.print-contact). */
 
-  body{
-    color:#000;line-height:1.45;
-    background:
-      radial-gradient(ellipse 700px 450px at 95% 0%, rgba(108,60,233,.07), transparent 60%),
-      radial-gradient(ellipse 650px 450px at 0% 100%, rgba(255,107,87,.06), transparent 60%);
-  }
-  .hero,.pillars,.skills-section,.experiences-section,.projects-section{padding:16px 0;}
+  body{color:#000;line-height:1.4;background:#fff;} /* fond blanc : le dégradé faisait une tache sous le contact en dernière page */
+  .print-contact{display:block !important;font-size:11.5px;color:#333;margin:-8px 0 12px;}
+  .print-contact a{color:#333;}
+
+  /* padding-top / padding-bottom déclarés séparément (piège n°8 : le
+     raccourci padding écrase le padding horizontal de .wrap). */
+  .hero,.pillars,.skills-section,.experiences-section,.projects-section,.formation-section,.testimonial-section{padding-top:8px;padding-bottom:8px;}
 
   /* La largeur d'une page A4/Letter tombe pile dans le point de rupture
      "mobile" (≤800px) : on force donc ici les mises en page desktop
      (colonnes), sans quoi tout s'empile inutilement et le CV gonfle en
      nombre de pages. */
-  .hero-grid{grid-template-columns:1fr 190px;text-align:left;}
-  .photo-ring{order:0;width:160px;height:160px;}
-  .pillar-grid{grid-template-columns:repeat(3,1fr);}
-  h1{font-size:38px;}
+  .hero-grid{grid-template-columns:1fr 150px;text-align:left;}
+  .photo-ring{order:0;width:130px;height:130px;}
+  .pillar-grid{grid-template-columns:repeat(3,1fr);gap:12px;}
+  .formation-grid{grid-template-columns:1.6fr 1fr;}
+  h1{font-size:32px;margin-bottom:4px;}
+  .eyebrow{font-size:11px;padding:4px 10px;margin-bottom:10px;}
+  .role{font-size:15px;margin-bottom:10px;}
+  .pills{gap:6px;margin-bottom:12px;}
+  .pill{font-size:11px;padding:4px 10px;}
+  .pitch{font-size:13px;margin-bottom:14px;max-width:none;}
+  .sectitle h2{font-size:20px;}
+  .sectitle{break-after:avoid;} /* pas de titre de section orphelin en bas de page */
 
   /* Le scorecard (flex + wrap sur le site) est ici forcé en grille 3
      colonnes fixes : la colonne texte du hero est plus étroite en print,
@@ -549,8 +563,9 @@ body.focus-mode .pill{background:#F1F1EF;}
   .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
   .hero-stat{padding-left:12px;border-left:1.5px solid var(--line);}
   .hero-stat:first-child{padding-left:0;border-left:none;}
-  .hero-stat-value{font-size:21px;}
+  .hero-stat-value{font-size:20px;}
   .hero-stat-label{font-size:10.5px;max-width:none;}
+  .hero-stat.is-linked .hero-stat-label::after{display:none;} /* la flèche de survol n'a rien à faire sur papier */
 
   /* Les ombres portées ne rendent pas bien sur un support figé ; on les
      retire mais on garde les à-plats de couleur (bordures colorées des
@@ -564,22 +579,54 @@ body.focus-mode .pill{background:#F1F1EF;}
      deux rôles (sinon un bloc de 6 rôles comme SNCF force une page quasi
      vide à chaque fois qu'il ne rentre pas en entier) ; en revanche un
      rôle individuel ne se coupe jamais au milieu. */
-  .company-block{box-shadow:none;border:1px solid #E4E1EC;break-inside:auto;padding:22px 24px 6px;}
-  .role-block{break-inside:avoid;padding-bottom:16px;margin-bottom:16px;}
-  .company-header{break-after:avoid-page;margin-bottom:16px;padding-bottom:16px;}
-  .role-context{margin-bottom:8px;}
-  .role-achievements{margin-bottom:10px;gap:5px;}
-  .role-achievements-label{margin-bottom:5px;}
-  .role-meta{padding:6px 12px;margin-bottom:10px;}
-  .experiences-list{gap:14px;}
-  .pillar{padding:20px 18px;}
-  .sectitle{margin-bottom:16px;}
-  .hero-grid{gap:32px;}
-  .formation-card{padding:16px;}
-  .formation-list li{padding:11px 16px;}
-  .testimonial-card{padding:28px 32px;}
-  .quote-mark{font-size:56px;margin-bottom:-8px;}
-  .testimonial-quote{font-size:16px;margin-bottom:18px;}
+  .company-block{box-shadow:none;border:1px solid #E4E1EC;break-inside:auto;padding:14px 16px 2px;}
+  /* Un rôle peut se couper entre deux pages (sinon un rôle qui ne rentre
+     pas laisse un demi-page blanche), mais jamais entre son titre et sa
+     première ligne, ni au milieu d'une puce. */
+  .role-block{break-inside:auto;padding-bottom:10px;margin-bottom:10px;orphans:2;widows:2;}
+  .role-top{break-after:avoid;}
+  .role-context{break-after:avoid;}
+  .role-achievements-label{break-after:avoid;}
+  .role-achievements li,.role-meta{break-inside:avoid;}
+  .role-meta{break-before:avoid;} /* pas de ligne « Méthodologie · Équipe » orpheline en haut de page */
+  .role-context{break-inside:avoid;} /* un contexte de rôle ne se coupe pas au milieu d'une phrase */
+  .skills-group-label{break-after:avoid;} /* un libellé de catégorie ne reste pas seul en bas de page */
+  .company-header{break-inside:avoid;break-after:avoid-page;margin-bottom:10px;padding-bottom:10px;}
+  .company-logo,.company-logo-fallback{width:40px;height:40px;}
+  .company-name{font-size:16px;}
+  .role-title{font-size:14px;}
+  .role-dates{font-size:11.5px;}
+  .role-context{font-size:12.5px;margin-bottom:6px;}
+  .role-achievements{margin-bottom:6px;gap:3px;}
+  .role-achievements li{font-size:12.5px;line-height:1.4;}
+  .role-achievements-label{margin-bottom:4px;}
+  .role-meta{padding:4px 10px;margin-bottom:6px;gap:12px;}
+  .role-meta-item{font-size:11.5px;}
+  .experiences-list{gap:10px;}
+  .pillar{padding:14px 14px;}
+  .pillar h3{font-size:16px;}
+  .pillar .sub,.pillar li{font-size:12.5px;}
+  .pillar ul{gap:6px;}
+  .sectitle{margin-bottom:10px;}
+  .hero-grid{gap:24px;}
+  .skills-groups{gap:8px;}
+  .skills-chips{gap:6px;}
+  .chip{font-size:11.5px;padding:5px 11px;}
+  .formation-card{padding:12px;}
+  .formation-list li{padding:8px 12px;}
+  .formation-item-title{font-size:13px;}
+  .formation-item-meta{font-size:12px;}
+  .testimonial-card{padding:18px 22px;}
+  .testimonial-quote{font-size:14px;margin-bottom:12px;}
+  .project-card{padding:14px;}
+  .project-card p{font-size:13px;}
+  .projects-grid{grid-template-columns:1fr;} /* une seule carte : pleine largeur, deux fois moins haute */
+
+  /* Ordre de lecture pour les ATS : avec des puces en position absolue, les
+     extracteurs de texte rattachaient les réalisations d'un rôle au poste
+     suivant. Puce en flux normal, même rendu à l'œil. */
+  .role-achievements li,.pillar li{position:static;padding-left:0;margin-left:16px;text-indent:-16px;}
+  .role-achievements li::before,.pillar li::before{position:static;display:inline-block;margin-right:7px;vertical-align:middle;}
 
   .quote-mark{color:var(--violet-soft);}
   .site-footer{background:#fff;color:#000;border-top:1px solid #ddd;}

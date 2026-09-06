@@ -68,7 +68,7 @@
         <div class="result-badge">
           <img src="${r.companyLogo}" alt="${r.company}" class="result-logo">
           <div>
-            <div class="result-company">${r.company}</div>
+            <h2 class="result-company">${r.company}</h2>
             <div class="result-role">${r.role} · ${r.period}</div>
           </div>
         </div>
