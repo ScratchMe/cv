@@ -108,7 +108,13 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   le `<head>` et dans `sitemap.xml`. Le bouton FR/EN retire le paramètre en
   FR. Même règle sur `project-detail.js` et `results.js`. Ne pas remettre de
   détection navigateur "pour les recruteurs anglophones" : on leur partage
-  le lien `?lang=en`.
+  le lien `?lang=en`. Les liens internes n'écrivent jamais `?lang=fr`
+  (`window.i18n.langSuffix()`), et le bouton FR/EN synchronise l'URL sur
+  les trois pages (`window.i18n.syncUrl()`). **Seule la page d'accueil a une
+  version EN indexable** : sur `results.html` et `project-detail.html`,
+  `?lang=en` est un affichage — canonical = FR, pas de hreflang, pas d'URL
+  EN dans le sitemap. C'est voulu (deux pages EN minces sans demande de
+  recherche), pas un oubli.
 - **Objectif SEO réaliste** : premier sur le nom et ses variantes, longue
   traîne localisée ("senior growth product manager Nantes"), lisible par les
   moteurs IA. Pas de course à "product manager Nantes" (page de résultats
