@@ -221,12 +221,12 @@ const PILLARS = [
     },
     points: [
       {
-        fr: "Focus Discovery, Interviews & Tests Utilisateurs hebdomadaires.",
-        en: "Weekly focus on discovery, interviews & user testing.",
+        fr: "Discovery chaque semaine : entretiens et tests utilisateurs.",
+        en: "Discovery every week: interviews and user tests.",
       },
       {
-        fr: "Chaque priorité adossée à une preuve terrain, pas une supposition.",
-        en: "Every priority backed by field evidence, not assumption.",
+        fr: "Quand l'entretien est impossible, en gare en pleine épidémie, je vais chercher le signal ailleurs : extraction quotidienne des tweets.",
+        en: "When interviews are impossible, in a station in the middle of an epidemic, I go get the signal elsewhere: a daily extraction of tweets.",
       },
     ],
   },
@@ -239,12 +239,12 @@ const PILLARS = [
     },
     points: [
       {
-        fr: "Maîtrise de SQL, Metabase et Mixpanel pour piloter la performance réelle.",
-        en: "Fluent in SQL, Metabase and Mixpanel to track real performance.",
+        fr: "Je construis mes propres tableaux de bord : churn, rétention, activation, Time-to-Value.",
+        en: "I build my own dashboards: churn, retention, activation, Time-to-Value.",
       },
       {
-        fr: "Décisions arbitrées par la mesure, pas par la conviction seule.",
-        en: "Decisions settled by measurement, not conviction alone.",
+        fr: "Un benchmark externe avant d'investir : c'est lui qui a montré que notre activation décrochait.",
+        en: "An external benchmark before investing: that's what showed our activation was falling behind.",
       },
     ],
   },
@@ -257,12 +257,12 @@ const PILLARS = [
     },
     points: [
       {
-        fr: "Culture du 'Fail Fast' et cycles de livraison courts (Agile).",
-        en: "A 'Fail Fast' culture with short delivery cycles (Agile).",
+        fr: "Culture du « Fail Fast » et cycles de livraison courts.",
+        en: "A \"Fail Fast\" culture with short delivery cycles.",
       },
       {
-        fr: "Chaque itération resserre l'écart entre hypothèse et réalité.",
-        en: "Every iteration narrows the gap between hypothesis and reality.",
+        fr: "Livraison par étapes plutôt qu'un big bang, et déploiement progressif quand le risque est élevé.",
+        en: "Delivery in steps rather than a big bang, and progressive rollout when the risk is high.",
       },
     ],
   },
