@@ -47,6 +47,7 @@
     "skills.cat.Méthode": { fr: "Méthode", en: "Method" },
     "skills.cat.Data": { fr: "Data", en: "Data" },
     "skills.cat.Outils": { fr: "Outils", en: "Tools" },
+    "skills.cat.Technique": { fr: "Technique", en: "Technical" },
 
     "experiences.sectionTitle": { fr: "Expériences", en: "Experience" },
     "experiences.total": { fr: "Total", en: "Total" },
