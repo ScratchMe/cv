@@ -387,6 +387,7 @@
   }
 
   function applyFilters() {
+    requestAnimationFrame(updateExperienceRail);
     const statusEl = document.getElementById("filterStatus");
     const clearBtn = document.getElementById("clearFilters");
     const hasFilters = activeFilters.size > 0;
@@ -702,6 +703,7 @@
     const current = navLinksEls.find((a) => a.classList.contains("is-active"));
     moveIndicatorTo(current || navLinksEls[0]);
     bindAnalytics();
+    renderExperienceRail(); // libellé « Aujourd'hui » et positions (sans effet avant setupExperienceRail)
     // Sur ?lang=en, index.html masque la page pré-rendue en français jusqu'ici
     // (script inline du <head>) : le rendu anglais est en place, on affiche.
     document.documentElement.classList.remove("lang-pending");
@@ -772,6 +774,143 @@
     setupEarlyToggle();
     setupScrollSpy();
     setupFitReveal();
+    setupExperienceRail();
+  }
+
+  // --------------------------------------------------------------------
+  // 12. RAIL CHRONOLOGIQUE (desktop) — vue d'ensemble des expériences,
+  // fixée dans la marge gauche pendant la lecture de la section.
+  // Décision d'Antoine (sept. 2026), direction « échelle du temps » : la
+  // ligne est proportionnelle aux durées (RAIL_PX_PER_YEAR par an), un
+  // point suit la position de lecture, un clic amène à l'entreprise. Ne
+  // prend jamais de place au contenu : n'existe qu'au-dessus de 1 300 px
+  // de large (logos seuls) et 1 480 px (noms et années), jamais sur
+  // téléphone, dans le PDF ni pour les lecteurs d'écran (aria-hidden :
+  // c'est un doublon de navigation). Seuils et positions : voir .xp-rail
+  // dans style.css.
+  // --------------------------------------------------------------------
+  const RAIL_PX_PER_YEAR = 24;
+  let railEl = null;
+  let railCompanies = []; // { index, top, height } en px sur la ligne
+
+  function ymIndex(str) {
+    const d = parseYM(str);
+    return d.getFullYear() * 12 + d.getMonth();
+  }
+
+  function renderExperienceRail() {
+    if (!railEl) return;
+    const now = new Date();
+    const todayIdx = now.getFullYear() * 12 + now.getMonth();
+    const spans = EXPERIENCES.map((company, index) => {
+      const starts = company.roles.map((r) => ymIndex(r.start));
+      const ends = company.roles.map((r) => (r.end ? ymIndex(r.end) : todayIdx));
+      return { index, start: Math.min(...starts), end: Math.max(...ends) };
+    });
+    const latestEnd = Math.max(...spans.map((s) => s.end));
+    const earliestStart = Math.min(...spans.map((s) => s.start));
+    const px = RAIL_PX_PER_YEAR / 12;
+    railCompanies = spans.map((s) => ({ index: s.index, top: Math.round((latestEnd - s.end) * px), height: Math.round((s.end - s.start) * px), start: s.start, end: s.end }));
+    const trackHeight = Math.round((latestEnd - earliestStart) * px);
+    railEl.style.height = `${trackHeight}px`;
+
+    const entries = railCompanies.map((c) => {
+      const company = EXPERIENCES[c.index];
+      const logo = company.logo
+        ? `<img class="xp-rail-logo" src="${company.logo}" alt="" width="18" height="18" decoding="async">`
+        : `<span class="xp-rail-logo xp-rail-logo-text">${(company.logoLabel || company.company.slice(0, 2)).toUpperCase()}</span>`;
+      const startYear = Math.floor(c.start / 12);
+      const endLabel = c.end === todayIdx ? t("experiences.today") : String(Math.floor(c.end / 12));
+      return `<button type="button" tabindex="-1" class="xp-rail-entry" data-company="${c.index}" style="top:${c.top}px">${logo}<span class="xp-rail-text"><span class="xp-rail-name">${company.shortName || company.company}</span><span class="xp-rail-years">${startYear} – ${endLabel}</span></span></button>`;
+    });
+    railEl.innerHTML = `
+      <div class="xp-rail-track">
+        ${railCompanies.map((c) => `<span class="xp-rail-seg" data-company="${c.index}" style="top:${c.top}px;height:${c.height}px"></span>`).join("")}
+        <span class="xp-rail-dot" style="top:0"></span>
+      </div>
+      ${entries.join("")}`;
+    updateExperienceRail();
+  }
+
+  // Position de lecture = 40 % de la hauteur de l'écran. Le point descend
+  // le long du segment de l'entreprise lue (haut du bloc = rôle le plus
+  // récent = haut du segment). Blocs masqués (débuts repliés, filtre) : leur
+  // entrée passe en retrait et le point les ignore.
+  function updateExperienceRail() {
+    if (!railEl || !railCompanies.length) return;
+    const section = document.getElementById("experiences");
+    if (!section) return;
+    const vh = window.innerHeight;
+    const rect = section.getBoundingClientRect();
+    const readLine = vh * 0.4;
+    const visible = rect.top < vh * 0.6 && rect.bottom > vh * 0.4;
+    railEl.classList.toggle("is-visible", visible);
+    if (!visible) return;
+
+    const blocks = [...document.querySelectorAll("#experiencesList .company-block")];
+    const shown = blocks.map((b, i) => ({ b, i, r: b.getBoundingClientRect() })).filter(({ b }) => b.offsetParent !== null);
+    let current = null;
+    let frac = 0;
+    for (const { i, r } of shown) {
+      if (readLine >= r.top && readLine < r.bottom) {
+        current = i;
+        frac = (readLine - r.top) / r.height;
+        break;
+      }
+    }
+    if (current === null && shown.length) {
+      const first = shown[0];
+      const last = shown[shown.length - 1];
+      if (readLine < first.r.top) {
+        current = first.i;
+      } else if (readLine >= last.r.bottom) {
+        current = last.i;
+        frac = 1;
+      } else {
+        const next = shown.find(({ r }) => r.top > readLine);
+        if (next) current = next.i;
+      }
+    }
+    railEl.querySelectorAll(".xp-rail-seg, .xp-rail-entry").forEach((el) => el.classList.toggle("is-current", Number(el.dataset.company) === current));
+    railEl.querySelectorAll(".xp-rail-entry").forEach((el) => {
+      const b = blocks[Number(el.dataset.company)];
+      el.classList.toggle("is-collapsed", !b || b.offsetParent === null);
+    });
+    const c = railCompanies.find((x) => x.index === current);
+    const dot = railEl.querySelector(".xp-rail-dot");
+    if (c && dot) dot.style.top = `${Math.round(c.top + frac * c.height)}px`;
+  }
+
+  function setupExperienceRail() {
+    railEl = document.createElement("div");
+    railEl.className = "xp-rail";
+    railEl.setAttribute("aria-hidden", "true");
+    document.body.appendChild(railEl);
+    railEl.addEventListener("click", (e) => {
+      const entry = e.target.closest(".xp-rail-entry");
+      if (!entry) return;
+      const block = document.querySelectorAll("#experiencesList .company-block")[Number(entry.dataset.company)];
+      if (!block) return;
+      // Débuts repliés : on les déplie d'abord (même geste que le bouton).
+      if (block.offsetParent === null) {
+        const toggle = document.querySelector(".early-toggle");
+        if (toggle) toggle.click();
+      }
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      block.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+    });
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        updateExperienceRail();
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    renderExperienceRail();
   }
 
   // --------------------------------------------------------------------

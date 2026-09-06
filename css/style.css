@@ -185,7 +185,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .experiences-section{padding-bottom:90px;}
 .filter-status{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;}
 .experiences-list{display:flex;flex-direction:column;gap:20px;}
-.company-block{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 30px 8px;transition:opacity .2s ease;}
+.company-block{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 30px 8px;transition:opacity .2s ease;scroll-margin-top:96px;} /* scroll-margin : cible du rail chronologique, et la règle globale ne vise que section[id] (piège n°9) */
 .company-block.is-hidden{display:none;}
 .company-header{display:flex;align-items:center;gap:18px;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--line);}
 .company-logo{width:56px;height:56px;border-radius:14px;object-fit:cover;flex-shrink:0;background:var(--violet-soft);}
@@ -433,6 +433,36 @@ body.focus-mode .ai-badge{background:var(--ink);}
 }
 
 /* ============================================================================
+   RAIL CHRONOLOGIQUE (desktop) — construit par app.js (setupExperienceRail),
+   fixé dans la marge gauche de la colonne de 1 100 px pendant la lecture des
+   expériences. Trois paliers de largeur d'écran, pour ne jamais empiéter sur
+   les blocs (règle posée par Antoine) : < 1 300 px, pas de rail ; de 1 300 à
+   1 479 px, ligne + logos seuls (44 px) ; à partir de 1 480 px, noms et
+   années (165 px, 24 px avant le bord des blocs). Absent en print et sous
+   620 px de haut.
+   ============================================================================ */
+.xp-rail{position:fixed;top:50%;transform:translateY(-50%);z-index:10;display:none;width:44px;opacity:0;transition:opacity .25s ease;pointer-events:none;} /* largeur explicite : sans elle, les entrées en position absolue n'ont aucune largeur disponible et chaque mot passe à la ligne */
+.xp-rail.is-visible{opacity:1;pointer-events:auto;}
+.xp-rail-track{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px;background:var(--line);}
+.xp-rail-seg{position:absolute;left:0;width:3px;border-radius:2px;background:transparent;transition:background .25s ease;}
+.xp-rail-seg.is-current{background:rgba(108,60,233,.35);}
+.xp-rail-dot{position:absolute;left:-3.5px;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:var(--violet);box-shadow:0 0 0 4px var(--violet-soft);transition:top .15s ease-out;}
+.xp-rail-entry{position:absolute;left:16px;display:flex;align-items:center;gap:7px;background:none;border:0;padding:0;cursor:pointer;color:var(--ink-faint);font:inherit;text-align:left;transform:translateY(-2px);white-space:nowrap;}
+.xp-rail-entry:hover{color:var(--ink);}
+.xp-rail-entry.is-current{color:var(--ink);}
+.xp-rail-entry.is-collapsed{opacity:.45;}
+.xp-rail-logo{width:18px;height:18px;border-radius:5px;background:var(--violet-soft);object-fit:cover;flex-shrink:0;}
+.xp-rail-logo-text{display:inline-flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:7px;letter-spacing:.02em;color:var(--violet);}
+.xp-rail-text{display:none;flex-direction:column;gap:1px;line-height:1.15;white-space:normal;}
+.xp-rail-name{font-size:12px;font-weight:600;max-width:120px;}
+.xp-rail-years{font-size:10.5px;color:var(--ink-faint);opacity:.75;white-space:nowrap;}
+@media (min-width:1300px){.xp-rail{display:block;left:calc((100vw - 1100px) / 2 - 60px);}}
+@media (min-width:1480px){.xp-rail{left:calc((100vw - 1100px) / 2 - 177px);width:165px;}.xp-rail-text{display:flex;}}
+@media (max-height:620px){.xp-rail{display:none !important;}}
+body.focus-mode .xp-rail-dot{background:var(--ink);box-shadow:0 0 0 4px #F1F1EF;}
+body.focus-mode .xp-rail-seg.is-current{background:rgba(27,16,48,.25);}
+
+/* ============================================================================
    FOCUS LECTURE MODE — vision allégée : on coupe la déco, on resserre la palette
    ============================================================================ */
 body.focus-mode{background:#FDFDFC;}
@@ -610,6 +640,7 @@ body.focus-mode .pill{background:#F1F1EF;}
    transitions de survol coupées. */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
+  .xp-rail,.xp-rail-seg,.xp-rail-dot{transition:none;}
   .fit-section.fit-reveal-pending{opacity:1;transform:none;transition:none;}
   .fit-loading-status::before{animation:none;}
   .fit-loading-status{transition:none;}
@@ -620,7 +651,7 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Rien de tout ça n'a de sens sur un document figé : nav interactive,
      Fit-Checker (nécessite une vraie IA en direct), bandeau teaser,
      indicateur de scroll, bouton de reset des filtres. */
-  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.quote-mark,.early-toggle-wrap{display:none !important;}
+  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.quote-mark,.early-toggle-wrap,.xp-rail{display:none !important;}
   /* Le PDF montre toujours les débuts repliés sur le site (body.early-collapsed). */
   body.early-collapsed .role-early{display:block !important;}
   body.early-collapsed .company-early{display:block !important;}

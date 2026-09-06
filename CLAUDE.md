@@ -44,7 +44,21 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   en fait partie, comme README, scripts, supabase et .github. Ne jamais y
   écrire quelque chose qui n'aurait pas sa place en public.
 - `js/app.js` : rendu, filtres de compétences, scroll-spy, durées
-  dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`).
+  dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`), et le
+  **rail chronologique** (`setupExperienceRail`, sept. 2026) : sur
+  ordinateur, un rail fixe dans la marge gauche pendant la lecture des
+  expériences — ligne proportionnelle aux durées (24 px par an), logos,
+  noms (`shortName` dans `data.js` quand le nom complet ne tient pas),
+  années, point qui suit la position de lecture (40 % de la hauteur de
+  l'écran), clic = défilement vers l'entreprise (déplie les débuts si
+  besoin). Construit hors des zones pré-rendues (`aria-hidden`, doublon de
+  navigation), absent du PDF. Trois paliers de largeur pour ne jamais
+  empiéter sur les blocs (règle d'Antoine) : rien sous 1 300 px, logos
+  seuls de 1 300 à 1 479 px, noms et années à partir de 1 480 px ; caché
+  sous 620 px de haut. Seuils et largeurs dans `.xp-rail` (`style.css`) :
+  la largeur explicite du rail est nécessaire, sinon ses entrées en
+  position absolue n'ont aucune largeur disponible et chaque mot passe à
+  la ligne.
 - `js/gemini.js` : logique du Fit-Checker (appelle une fonction Supabase,
   jamais Gemini directement depuis le navigateur). Accessibilité : les
   messages tournants de `#fitLoadingStatus` sont décoratifs (`aria-hidden`),
@@ -147,6 +161,13 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   (`body.has-filters`). Le PDF montre toujours tout. 23 → 19 écrans à 375 px.
 - **Domaine** : `cv.antoine.berthaud.me`, déjà configuré partout
   (canonical, OG, JSON-LD `Person`, `robots.txt`, `sitemap.xml`, `CNAME`).
+- **Rail chronologique en direction « échelle du temps »** (sept. 2026,
+  choisi par Antoine parmi trois maquettes : rail à points, échelle du
+  temps, logos seuls) : ce qu'il voulait voir d'un coup d'œil, c'est
+  l'ensemble du parcours et où l'on se trouve ; la proportionnalité aux
+  durées fait lire les 7 ans de SNCF sans un mot. Contrainte posée par
+  lui : les noms ne doivent jamais empiéter sur les blocs d'expérience,
+  quitte à exiger un écran plus large — d'où les paliers 1 300 / 1 480 px.
 - **Chiffres du hero (`HERO_STATS`)** : un chiffre peut pointer vers une
   étude de cas détaillée (`resultId` → `RESULT_DETAILS`) sur `results.html`.
   Le champ `result` d'une entrée `RESULT_DETAILS` (section "Résultat" du
