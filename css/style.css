@@ -152,11 +152,17 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
    PILLARS
    ============================================================================ */
 .pillars{padding-bottom:90px;}
-.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
-.pillar{background:var(--surface);border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);border-top:5px solid var(--violet);}
+.pillar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;} /* quatre cartes depuis la carte Leadership (sept. 2026) */
+.pillar{background:var(--surface);border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow);border-top:5px solid var(--violet);}
 .pillar[data-id="data-informed"]{border-top-color:var(--mint);}
 .pillar[data-id="iterative"]{border-top-color:var(--coral);}
-.pillar h3{font-size:19px;font-weight:700;margin-bottom:6px;}
+/* Carte Leadership (sept. 2026) : pas de 4e couleur dans la palette, la barre
+   reprend le dégradé signature violet → corail des boutons et du titre du hero.
+   Bordure transparente + fond en deux couches (surface sur la boîte de padding,
+   dégradé sur la boîte de bordure) : border-image ignorerait le border-radius,
+   et un pseudo-élément serait clippé par overflow:hidden à la boîte de padding. */
+.pillar[data-id="leadership"]{border-top-color:transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(90deg,var(--violet),var(--coral)) border-box;}
+.pillar h3{font-size:18px;font-weight:700;margin-bottom:6px;}
 .pillar .sub{font-size:13.5px;color:var(--violet);font-weight:600;margin-bottom:16px;}
 .pillar[data-id="data-informed"] .sub{color:var(--mint-text);}
 .pillar[data-id="iterative"] .sub{color:var(--coral-text);}
@@ -369,6 +375,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
 /* Palier intermédiaire : resserre le menu avant de le masquer complètement,
    pour repousser le point où il passerait sur 2 lignes. */
 @media(max-width:1080px) and (min-width:801px){
+  .pillar-grid{grid-template-columns:repeat(2,1fr);} /* quatre cartes en 2 × 2 sur tablette */
   nav ul{gap:16px;}
   nav a{font-size:13px;}
   .navrow{padding:16px 20px;}
@@ -475,6 +482,7 @@ body.focus-mode .fit-box,
 body.focus-mode .fit-result,
 body.focus-mode .project-card{box-shadow:none;border:1px solid var(--line);}
 body.focus-mode .pillar{border-top:1px solid var(--line);}
+body.focus-mode .pillar[data-id="leadership"]{background:var(--surface);}
 body.focus-mode .project-card{border-top:1px solid var(--line);}
 body.focus-mode .chip.active,
 body.focus-mode .btn.solid{background:var(--ink);border-color:var(--ink);}
@@ -674,7 +682,7 @@ body.focus-mode .pill{background:#F1F1EF;}
      nombre de pages. */
   .hero-grid{grid-template-columns:1fr 150px;text-align:left;}
   .photo-ring{order:0;width:130px;height:130px;}
-  .pillar-grid{grid-template-columns:repeat(3,1fr);gap:12px;}
+  .pillar-grid{grid-template-columns:repeat(2,1fr);gap:12px;} /* 4 cartes en 2 × 2 : 4 colonnes seraient illisibles sur la largeur A4 */
   .formation-grid{grid-template-columns:1.6fr 1fr;}
   h1{font-size:32px;margin-bottom:4px;}
   .eyebrow{font-size:11px;padding:4px 10px;margin-bottom:10px;}
@@ -727,30 +735,35 @@ body.focus-mode .pill{background:#F1F1EF;}
   .company-name{font-size:16px;}
   .role-title{font-size:14px;}
   .role-dates{font-size:11.5px;}
-  .role-context{font-size:12.5px;margin-bottom:6px;}
+  .role-context{font-size:12.5px;line-height:1.4;margin-bottom:6px;}
   .role-achievements{margin-bottom:6px;gap:3px;}
-  .role-achievements li{font-size:12.5px;line-height:1.4;}
+  .role-achievements li{font-size:12.5px;line-height:1.35;}
   .role-achievements-label{margin-bottom:4px;}
   .role-meta{padding:4px 10px;margin-bottom:6px;gap:12px;}
   .role-meta-item{font-size:11.5px;}
   .experiences-list{gap:10px;}
-  .pillar{padding:14px 14px;}
-  .pillar h3{font-size:16px;}
-  .pillar .sub,.pillar li{font-size:12.5px;}
-  .pillar ul{gap:6px;}
+  /* Quatre cartes en 2 × 2 depuis la carte Leadership : la 2e rangée doit tenir
+     sous le hero en page 1 (sinon elle bascule en page 2 et laisse un trou),
+     d'où une densité un cran au-dessus du reste du PDF. */
+  .pillar{padding:12px 12px;}
+  .pillar h3{font-size:16px;margin-bottom:4px;}
+  .pillar .sub{margin-bottom:10px;}
+  .pillar .sub,.pillar li{font-size:12px;line-height:1.4;}
+  .pillar ul{gap:5px;}
   .sectitle{margin-bottom:10px;}
   .hero-grid{gap:24px;}
-  .skills-groups{gap:8px;}
-  .skills-chips{gap:6px;}
-  .chip{font-size:11.5px;padding:5px 11px;}
-  .formation-card{padding:12px;}
-  .formation-list li{padding:8px 12px;}
+  .skills-groups{gap:6px;}
+  .skills-chips{gap:5px;}
+  .chip{font-size:11px;padding:4px 10px;}
+  .formation-card{padding:10px 12px;}
+  .formation-list li{padding:6px 12px;}
   .formation-item-title{font-size:13px;}
   .formation-item-meta{font-size:12px;}
-  .testimonial-card{padding:18px 22px;}
-  .testimonial-quote{font-size:14px;margin-bottom:12px;}
+  .testimonial-card{padding:14px 20px;}
+  .testimonial-eyebrow{margin-bottom:10px;}
+  .testimonial-quote{font-size:13.5px;margin-bottom:10px;}
   .project-card{padding:14px;}
-  .project-card p{font-size:13px;}
+  .project-card p{font-size:13px;margin-bottom:10px;}
   .projects-grid{grid-template-columns:1fr;} /* une seule carte : pleine largeur, deux fois moins haute */
 
   /* Ordre de lecture pour les ATS : avec des puces en position absolue, les

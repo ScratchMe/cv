@@ -203,7 +203,7 @@
     grid.innerHTML = PILLARS.map(
       (p) => `
       <article class="pillar" data-id="${p.id}">
-        <h3>${p.title}</h3>
+        <h3>${tc(p.title)}</h3>
         <div class="sub">${tc(p.subtitle)}</div>
         <ul>${p.points.map((pt) => `<li>${tc(pt)}</li>`).join("")}</ul>
       </article>`
