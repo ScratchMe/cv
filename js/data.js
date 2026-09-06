@@ -452,25 +452,21 @@ const EXPERIENCES = [
         start: "2022-04",
         end: "2023-09",
         context: {
-          fr: "Responsable du module « Exécution » (lettres de voiture, trains de 30 wagons et plus) au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, pour favoriser le report modal des camions vers le rail et décarboner le transport. Anglais au quotidien avec l'équipe.",
-          en: "Owned the \"Execution\" module (waybills, trains of 30+ wagons) within a SaaS platform for rail freight transport management and tracking, aimed at shifting freight from road to rail to decarbonize transport. English as the working language.",
+          fr: "Mission : le module « Exécution » (lettres de voiture, trains de 30 wagons et plus) d'un SaaS de gestion et de suivi du fret ferroviaire, au service du report modal de la route vers le rail. Anglais au quotidien avec l'équipe.",
+          en: "Mission: the \"Execution\" module (waybills, trains of 30+ wagons) of a SaaS platform for managing and tracking rail freight, serving the modal shift from road to rail. English as the working language with the team.",
         },
         achievements: [
           {
-            fr: "Pilotage de la roadmap du module de saisie des transports, validation des lettres de voiture et suivi en temps réel, avec un focus sur l'adoption utilisateur et la fiabilité des données.",
-            en: "Drove the roadmap for the transport entry module, waybill validation, and real-time tracking, with a strong focus on user adoption and transport data reliability.",
+            fr: "**-50 % de temps de saisie, +20 % de satisfaction utilisateur** : refonte technique et fonctionnelle du module de saisie, obtenue auprès de la direction et menée en incrémental, **MVP livré en moins de 2 mois**.",
+            en: "**-50% entry time, +20% user satisfaction**: technical and functional rework of the entry module, secured with leadership and delivered incrementally, **MVP shipped in under 2 months**.",
           },
           {
-            fr: "Stakeholder management auprès de la direction pour lancer une refonte technique et fonctionnelle en approche incrémentale (**MVP livré en moins de 2 mois**).",
-            en: "Won leadership buy-in for a technical and functional overhaul, delivered incrementally (**MVP delivered in under 2 months**).",
+            fr: "**Adoption utilisateur et fiabilité des données comme priorités de la roadmap** du module : saisie des transports, validation des lettres de voiture, suivi en temps réel.",
+            en: "**User adoption and data reliability as the module roadmap's priorities**: transport entry, waybill validation, real-time tracking.",
           },
           {
-            fr: "Résultat de la refonte : **-50% de temps de saisie, +20% de satisfaction utilisateur**.",
-            en: "Result of the overhaul: **-50% entry time, +20% user satisfaction**.",
-          },
-          {
-            fr: "Recherche utilisateur et maquettage UI/UX réalisés en autonomie (Hotjar, Heap) avant l'arrivée d'une Product Designer.",
-            en: "Conducted user research and UI/UX design independently (Hotjar, Heap) before a Product Designer joined the team.",
+            fr: "**Recherche utilisateur et maquettes UI/UX menées en autonomie** (Hotjar, Heap) avant l'arrivée d'une Product Designer.",
+            en: "**User research and UI/UX mockups done on my own** (Hotjar, Heap) before a Product Designer joined the team.",
           },
         ],
         methodology: "Scrum",
