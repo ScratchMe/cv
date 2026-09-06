@@ -66,6 +66,16 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   (1er, 4h UTC) indépendamment de tout push, pour rafraîchir les durées
   d'expérience affichées (calculées jusqu'à "aujourd'hui") — et ouvre une
   issue GitHub (label `pdf-generation-failure`) s'il échoue.
+- `.github/workflows/surveiller-fit-checker.yml` : sonde quotidienne de
+  bout en bout de la fonction Supabase (vrai POST, OK si 200 avec `score`
+  ou 429, second essai à 60 s, issue `fit-checker-down` sinon). Le projet
+  Supabase est en **plan Free** : mis en pause après 7 jours sans requête
+  API — et les appels à la fonction ne comptent pas, seules les lectures
+  de la base comptent, d'où `keepalive.yml` + la table `public.keepalive`
+  (`supabase/migrations/`) et un moniteur externe (README §12). GitHub
+  désactive les crons d'un dépôt public après 60 jours sans commit
+  (réactivation : « Enable workflow », ou un commit qui modifie la ligne
+  `cron`).
 - `supabase/functions/gemini-fit/index.ts` : fonction serveur du
   Fit-Checker — **ne jamais confondre avec `js/gemini.js`** (l'un tourne
   dans le navigateur, l'autre sur Supabase/Deno). Le code déployé sur
