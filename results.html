@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <title>, description et balises og:/twitter: : copie statique (FR) de
-     results.metaTitle / results.metaDescription (js/i18n.js). results.js les
+<!-- <title>, description et titres/descriptions og:/twitter: : version française
+     de results.metaTitle / results.metaDescription (js/i18n.js), posée ici par
+     scripts/generate-static.js (CI) — ne pas éditer à la main. results.js les
      remplace selon la langue affichée ; cette copie est ce que lisent les
-     robots sans JavaScript et les aperçus de partage (LinkedIn, Slack…). Si
-     tu modifies ces textes dans i18n.js, reporte-les ici. -->
+     robots sans JavaScript et les aperçus de partage (LinkedIn, Slack…). -->
 <title id="pageTitle">Études de cas Product Manager — Antoine Berthaud, Nantes</title>
-<meta name="description" id="pageDescription" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta name="description" id="pageDescription" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect &amp; Tech).">
 
 <!-- Canonical unique : le français est la version de référence, ?lang=en
      n'est qu'une variante d'affichage (pas de hreflang ici, voir CLAUDE.md). -->
@@ -17,7 +17,7 @@
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="Études de cas Product Manager — Antoine Berthaud, Nantes">
-<meta property="og:description" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta property="og:description" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect &amp; Tech).">
 <meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,7 +28,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Études de cas Product Manager — Antoine Berthaud, Nantes">
-<meta name="twitter:description" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta name="twitter:description" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect &amp; Tech).">
 <meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Favicon -->
@@ -55,12 +55,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // Sur ?lang=en, la page pré-rendue en français reste invisible jusqu'au
+  // premier rendu JavaScript en anglais (qui retire la classe) — au plus 1,5 s
+  // si le JS échoue, pour ne jamais laisser une page blanche.
+  if (/[?&]lang=en(?:&|$)/.test(location.search)) {
+    document.documentElement.classList.add("lang-pending");
+    setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 1500);
+  }
+</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
-      <p>Ce site a besoin de JavaScript pour s'afficher correctement.</p>
+      <p>Sans JavaScript, cette page s'affiche en français, sans la version anglaise.</p>
       <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
          <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
       <p><a href="./">← Retour au CV</a></p>
@@ -76,36 +85,129 @@
     </div>
   </header>
 
-  <main class="wrap results-page" id="resultsRoot">
-    <!-- Copie statique (FR) de l'en-tête et des trois chiffres que js/results.js
-         rend : c'est ce que lisent les robots qui n'exécutent pas JavaScript
-         (GPTBot, ClaudeBot, PerplexityBot…). results.js remplace tout ce bloc
-         au chargement et avertit en console si un texte diverge d'i18n.js ou
-         de RESULT_DETAILS (data.js). Une ancre #resultId fonctionne aussi ici,
-         avant le rendu JS. -->
-    <div class="results-hero">
-      <p class="project-detail-eyebrow">Études de cas · Product Manager</p>
-      <h1>Le détail derrière les chiffres</h1>
-      <p class="project-detail-tagline">Un chiffre seul ne dit jamais tout. Voici, pour chacun des chiffres affichés en haut du CV, le contexte, le problème identifié, ce que j'ai concrètement fait, et ce que j'en retiens.</p>
-    </div>
-    <div class="results-list">
+  <!-- static:resultsRoot -->
+<main class="wrap results-page" id="resultsRoot">
+      <div class="results-hero">
+        <p class="project-detail-eyebrow">Études de cas · Product Manager</p>
+        <h1>Le détail derrière les chiffres</h1>
+        <p class="project-detail-tagline">Un chiffre seul ne dit jamais tout. Voici, pour chacun des chiffres affichés en haut du CV, le contexte, le problème identifié, ce que j'ai concrètement fait, et ce que j'en retiens.</p>
+      </div>
+      <div class="results-list">
       <article class="result-block" id="ab-tasty-activation">
-        <h2 class="result-company">AB Tasty</h2>
+        <div class="result-badge">
+          <img src="assets/logos/ab-tasty.webp" alt="AB Tasty" class="result-logo">
+          <div>
+            <h2 class="result-company">AB Tasty</h2>
+            <div class="result-role">Product Manager · 2023 – 2025</div>
+          </div>
+        </div>
         <div class="result-value">+15%</div>
         <div class="result-label">Taux d'activation</div>
+
+        <section class="result-star">
+          <h3>Contexte</h3>
+          <p>AB Tasty, plateforme SaaS d'<strong>Experience Optimization</strong> (A/B Testing, Personnalisation). PM responsable de la « Product eXperience », au sein d'une équipe de 3 développeurs, 1 tech lead, 1 QA et 1 Product Designer.</p>
+        </section>
+
+        <section class="result-star">
+          <h3>Défi</h3>
+          <p>Un churn à <strong>15%</strong> et une sur-sollicitation du support CSM, alors que le produit n'offrait aucun accompagnement à l'onboarding. Mon hypothèse : un problème d'activation plutôt que de fit produit — confirmée en comparant nos chiffres au benchmark <strong>Userpilot</strong>, nettement en dessous.</p><p>Plutôt que d'attaquer tout le sujet du churn (ICP à revoir, accessibilité des outils...), j'ai choisi de me concentrer sur ce trou en tout début de funnel, là où le gain potentiel était le plus important.</p>
+          
+        </section>
+
+        <section class="result-star">
+          <h3>Action</h3>
+          <p>J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.</p><p>Plutôt qu'un simple correctif, j'ai conçu un <strong>moteur de qualification à l'inscription</strong> (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :</p>
+          <ul class="detail-list"><li>Adapter l'onboarding à chaque profil utilisateur.</li><li>Alimenter la segmentation utilisateur pour d'autres besoins produit.</li></ul>
+        </section>
+        
+      <section class="result-star">
+        <h3>Résultat</h3>
+        <p>En plus des +15% d'activation déjà affichés : <strong>-20% de Time-to-Value</strong> (délai avant qu'un utilisateur tire une première valeur concrète du produit).</p>
+      </section>
+        <section class="result-star">
+          <h3>Leçon</h3>
+          <p>Le moteur de qualification était une évidence a posteriori. Ce que je ferais plus tôt la prochaine fois : <strong>cartographier dès le départ les cohortes/segmentations disponibles</strong> (et celles qui manquent) — plus ce découpage arrive tôt, plus l'amélioration continue du produit devient facile ensuite.</p>
+        </section>
       </article>
       <article class="result-block" id="everysens-entry-time">
-        <h2 class="result-company">Everysens</h2>
+        <div class="result-badge">
+          <img src="assets/logos/everysens.webp" alt="Everysens" class="result-logo">
+          <div>
+            <h2 class="result-company">Everysens</h2>
+            <div class="result-role">Product Manager · 2022 – 2023</div>
+          </div>
+        </div>
         <div class="result-value">-50%</div>
         <div class="result-label">Temps de saisie</div>
+
+        <section class="result-star">
+          <h3>Contexte</h3>
+          <p>Everysens, SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail et de décarboner le transport. PM responsable du <strong>module « Exécution »</strong> (saisie des transports, validation des lettres de voiture, suivi temps réel), au sein d'une équipe de 4 développeurs et 1 QA, rejointe plus tard par 1 Product Designer.</p>
+        </section>
+
+        <section class="result-star">
+          <h3>Défi</h3>
+          <p>Le module « Exécution », historique et vieillissant, ne dialoguait pas avec le nouveau module « Planification », qui contenait pourtant déjà une partie des informations nécessaires (trajet, wagons, marchandises).</p><p>Côté saisie, il fallait renseigner le détail complet d'un train (numéro, marchandise, poids, scellés de chaque wagon) pour établir les lettres de voiture et assurer le suivi — un calvaire dès <strong>30 wagons</strong>, sur une UI clairement pas à la hauteur :</p>
+          <ul class="detail-list"><li>Seulement 6 wagons affichés à la fois.</li><li>Aucune navigation rapide entre les champs.</li><li>Pas d'import de tableur.</li></ul>
+        </section>
+
+        <section class="result-star">
+          <h3>Action</h3>
+          <p>J'ai construit et porté auprès de la direction un <strong>plan de migration</strong> du module Exécution vers une nouvelle architecture, livré en approche incrémentale avec un premier MVP en moins de 2 mois. Cette nouvelle architecture m'a permis de faire dialoguer le module avec « Planification » pour <strong>pré-remplir automatiquement le formulaire</strong> à partir d'informations déjà saisies ailleurs (trajet, nombre de wagons, marchandises).</p><p>En parallèle, j'ai mené moi-même la recherche utilisateur et le maquettage UI/UX (Hotjar, Heap) — avant l'arrivée d'une Product Designer — pour repenser un formulaire cette fois pensé pour des trains de 30 wagons et plus.</p>
+          
+        </section>
+        
+      <section class="result-star">
+        <h3>Résultat</h3>
+        <p>En plus des -50% de temps de saisie déjà affichés : <strong>+20% de satisfaction utilisateur</strong> mesurée après la refonte.</p>
+      </section>
+        <section class="result-star">
+          <h3>Leçon</h3>
+          <p>Un plan de migration bien ficelé rassure autant qu'il structure. L'approche incrémentale a permis de <strong>migrer les clients fonction par fonction</strong> selon ce qui était déjà prêt — un suivi à la volée aurait été bien plus difficile à tenir, et bien moins rassurant pour la direction.</p>
+        </section>
       </article>
       <article class="result-block" id="sncf-ticket-retrieval">
-        <h2 class="result-company">SNCF Connect &amp; Tech</h2>
+        <div class="result-badge">
+          <img src="assets/logos/sncf-connect-tech.webp" alt="SNCF Connect &amp; Tech" class="result-logo">
+          <div>
+            <h2 class="result-company">SNCF Connect &amp; Tech</h2>
+            <div class="result-role">Product Manager · 2021 – 2022</div>
+          </div>
+        </div>
         <div class="result-value">+100%</div>
         <div class="result-label">Taux de conversion, récupération du billet</div>
-      </article>
-    </div>
-  </main>
+
+        <section class="result-star">
+          <h3>Contexte</h3>
+          <p>SNCF Connect &amp; Tech, plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée) — jusqu'à <strong>40 000 visiteurs par jour</strong> en pleine crise Covid-19, pour s'auto-contrôler vis-à-vis de son pass sanitaire et de son billet. PM au sein d'une équipe de 4 développeurs et 1 Engineering Manager, méthode Kanban, sur une plateforme initialement développée en externe.</p>
+        </section>
+
+        <section class="result-star">
+          <h3>Défi</h3>
+          <p>Sur cette plateforme, je partais avec deux contraintes fortes :</p>
+          <ul class="detail-list"><li>Aucune donnée produit disponible — la plateforme ayant été développée à l'extérieur, on n'avait que le nombre de visiteurs et le taux de validation du pass sanitaire.</li><li>Les interviews utilisateurs classiques étaient à exclure : en gare, en pleine épidémie, elles auraient créé un risque d'attroupement évitable.</li></ul>
+        </section>
+
+        <section class="result-star">
+          <h3>Action</h3>
+          <p>J'ai mis en place une <strong>extraction quotidienne automatique des tweets</strong> mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.</p><p>Ça a confirmé un point noir que je soupçonnais déjà : l'outil imposait de <strong>scanner le QR code du billet</strong>, alors qu'une grande partie des utilisateurs avaient leur billet uniquement sur mobile — donc rien à scanner. J'ai ajouté une <strong>deuxième méthode de récupération</strong>, par nom et numéro de dossier, en alternative au QR code.</p><p>Le taux de conversion de cette première étape a doublé.</p>
+          
+        </section>
+        
+        <section class="result-star">
+          <h3>Leçon</h3>
+          <p>Regarder toute la chaîne, pas seulement son périmètre produit : seuls <strong>10% des voyageurs</strong> arrivaient jusqu'à l'outil, un frein bien plus grand que ce qu'on pouvait gagner côté produit. L'acquisition était ici hors de notre contrôle (contraintes légales entre transporteur et distributeur) — mais ça reste un rappel que ce sont les premières étapes d'un funnel qui pèsent le plus sur le résultat global.</p>
+        </section>
+      </article></div>
+      
+      <div class="page-cta">
+        <a class="btn solid" href="mailto:antoine.berthaud@gmail.com?subject=%C3%80%20propos%20d'un%20poste" data-goatcounter-click="contact-email">Me contacter</a>
+        <a class="btn" href="./#fit-checker">Tester votre poste avec le Fit-Checker →</a>
+        <a class="btn" href="./">← Retour au CV</a>
+      </div>
+    </main>
+<!-- /static:resultsRoot -->
 
   <footer class="site-footer">
     <div class="wrap footer-grid">

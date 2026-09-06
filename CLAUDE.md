@@ -18,19 +18,27 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   EXPERIENCES, SKILLS, HERO_STATS, RESULT_DETAILS, TESTIMONIALS,
   SIDE_PROJECTS, PROJECT_DETAILS, EDUCATION, LANGUAGES, CERTIFICATIONS.
   `PROFILE.seo` porte le `<title>` et la meta description de l'accueil par
-  langue. **Exception à la règle "un seul fichier"** : `PROFILE.pitch.fr` et
-  `PROFILE.seo` (FR) sont recopiés en dur dans `index.html` (`#heroPitch`,
-  `<title>`, description, `og:`/`twitter:`) pour les robots qui n'exécutent
-  pas JavaScript — toute modification de l'un se reporte dans l'autre
-  (`app.js` avertit en console si le pitch diverge, rien de plus). Même
-  principe pour la photo du hero (`<img>` dans `#heroPhoto`) et les liens du
-  pied de page (`#footerLinks`, copie de `PROFILE.contact`) dans
-  `index.html`, et pour `results.html` : `<title>`, description, `og:`
-  (copies de `results.metaTitle`/`metaDescription` d'`i18n.js`) et, dans
-  `<main>`, l'en-tête + les trois chiffres (copies d'`i18n.js` et de
-  `RESULT_DETAILS`) — `results.js` avertit en console s'ils divergent.
-  `project-detail.html` reste générique (page gabarit) : `project-detail.js`
-  pose titre, description, canonical et `og:` du projet affiché.
+  langue.
+- **Pages pré-rendues** (sept. 2026) : les trois HTML portent la version
+  française rendue, entre des marqueurs `<!-- static:ID -->` …
+  `<!-- /static:ID -->` (une vingtaine de zones sur `index.html`, tout le
+  `<main>` sur `results.html` et `project-detail.html`) plus `<title>`,
+  description et titres/descriptions `og:`/`twitter:` de chaque page — c'est
+  ce que lisent les robots sans JavaScript (moteurs IA, aperçus, outils de
+  tri de candidatures ; 258 → ~1 800 mots sur l'accueil). **Tout ce qui est
+  entre deux marqueurs est GÉNÉRÉ par `scripts/generate-static.js` (CI,
+  même workflow que les PDF) : ne jamais l'éditer à la main**, ni y voir une
+  « copie à resynchroniser » — modifier `data.js`/`i18n.js`, la CI régénère
+  et recommit. Les JS re-rendent par-dessus au chargement (idempotent : même
+  HTML en FR, EN sur `?lang=en`), et avertissent en console si le rendu
+  diverge du pré-rendu, ce qui signale une page pas encore régénérée. Sur
+  `?lang=en`, un script inline du `<head>` pose `html.lang-pending` (body
+  invisible) jusqu'au premier rendu anglais, avec un délai de sécurité de
+  1,5 s. Seuls restent en dur, hors zones : la photo du hero (`#heroPhoto`),
+  les textes `data-i18n` (menu, titres de section) et le `<noscript>`.
+  `project-detail.html` (page gabarit `?slug=`) est pré-rendue avec le seul
+  side project ; le script refuse de tourner si `PROJECT_DETAILS` en compte
+  plus d'un — il faudra alors une page par projet.
 - **Tout fichier du dépôt qui n'est pas dans la liste `exclude` de `_config.yml`
   est servi tel quel sur cv.antoine.berthaud.me** (GitHub Pages) : ce fichier
   en fait partie, comme README, scripts, supabase et .github. Ne jamais y
@@ -64,12 +72,16 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   rend un tableau de champs traduisibles en `<ul class="detail-list"><li>`.
   À utiliser quand un texte a un vrai découpage naturel (ex: plusieurs
   points parallèles) — jamais pour forcer un découpage artificiel.
-- `scripts/generate-pdf.js` : génère les PDF FR/EN via Playwright à partir
-  du site lui-même (pas un simple `window.print()`). Le workflow
-  `.github/workflows/generate-pdf.yml` tourne aussi une fois par mois
-  (1er, 4h UTC) indépendamment de tout push, pour rafraîchir les durées
-  d'expérience affichées (calculées jusqu'à "aujourd'hui") — et ouvre une
-  issue GitHub (label `pdf-generation-failure`) s'il échoue.
+- `scripts/generate-static.js` (pré-rendu, voir ci-dessus ; `--check` pour
+  savoir si les pages sont à jour sans écrire) et `scripts/generate-pdf.js`
+  (PDF FR/EN via Playwright à partir du site lui-même, pas un simple
+  `window.print()`), avec `scripts/lib/site-server.js` en commun. Le
+  workflow `.github/workflows/generate-pdf.yml` enchaîne les deux et
+  recommit pages + PDF (+ `lastmod` du sitemap) ; il tourne aussi une fois
+  par mois (1er, 4h UTC) indépendamment de tout push, pour rafraîchir les
+  durées d'expérience affichées (calculées jusqu'à "aujourd'hui") — et
+  ouvre une issue GitHub (label `pdf-generation-failure`) s'il échoue.
+  `pr-checks.yml` rejoue les deux sur chaque PR sans commit.
 - `.github/workflows/surveiller-fit-checker.yml` : sonde quotidienne de
   bout en bout de la fonction Supabase (vrai POST, OK si 200 avec `score`
   ou 429, second essai à 60 s, issue `fit-checker-down` sinon). Le projet
@@ -158,9 +170,9 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   tenue par les job boards). Ce qui pèse le plus est hors code : liens
   depuis `antoine.berthaud.me` et `tourdegrowth.com`, LinkedIn, demandes
   d'indexation dans Search Console (propriété existante, accessible via le
-  MCP SEO Gets). Mettre à jour `lastmod` dans `sitemap.xml` quand une page
-  change (les deux PDF y sont aussi, leur `lastmod` est posé par
-  `generate-pdf.yml` à chaque régénération, jamais à la main). Les PDF portent des métadonnées (titre, auteur, langue) posées par
+  MCP SEO Gets). Le `lastmod` des pages et des deux PDF dans `sitemap.xml`
+  est posé par `generate-pdf.yml` à chaque régénération, jamais à la main.
+  Les PDF portent des métadonnées (titre, auteur, langue) posées par
   `scripts/generate-pdf.js` via `pdf-lib`.
 - **Site considéré fonctionnellement complet** (sept. 2026) : bilingue,
   PDF, Fit-Checker IA, hero cliquable + études de cas STAR, side project
@@ -254,9 +266,9 @@ flou `filter:blur()`, avant d'arriver au bon rendu).
 
 **Git** : une branche par changement (`claude/...`), commit, push, PR,
 merge (squash) une fois les vérifications faites — jamais de commit
-direct sur `main`. Si un changement touche `css/js/index.html`, le
-workflow `generate-pdf.yml` se déclenche automatiquement : vérifier qu'il
-passe avant de considérer la tâche terminée. **Si Antoine demande
+direct sur `main`. Si un changement touche `css/js/html/scripts`, le
+workflow `generate-pdf.yml` se déclenche automatiquement (pré-rendu + PDF,
+recommit) : vérifier qu'il passe avant de considérer la tâche terminée. **Si Antoine demande
 explicitement de ne rien committer avant validation visuelle commune**
 (cas des features nouvelles/designs pas encore vus), respecter ça même si
 le stop-hook signale des changements non commités entre-temps — ce n'est

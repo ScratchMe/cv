@@ -1,10 +1,11 @@
 name: Vérifier la PR
 
 # Rejoue sur chaque pull request les étapes de generate-pdf.yml SANS commit :
-# syntaxe des JS, rendu complet du site dans Chromium, génération des deux
-# PDF avec leurs garde-fous (erreur JS, page sans expérience, polices
-# absentes, liens locaux, PDF trop court). Rien n'empêchait jusqu'ici de
-# merger une page cassée.
+# syntaxe des JS, pré-rendu des trois pages avec ses garde-fous (erreur JS,
+# zone vide, marqueur manquant, page trop courte, mots attendus absents),
+# génération des deux PDF avec les leurs (erreur JS, page sans expérience,
+# polices absentes, liens locaux, PDF trop court). Rien n'empêchait jusqu'ici
+# de merger une page cassée.
 #
 # Tourne sur TOUTES les PR, sans filtre de chemins : un check exigé par un
 # ruleset qui ne se déclenche pas (PR sur le README seul) laisse la PR
@@ -46,6 +47,9 @@ jobs:
 
       - name: Vérifier la syntaxe des fichiers JS
         run: node --check js/data.js && node --check js/app.js && node --check js/i18n.js && node --check js/gemini.js && node --check js/project-detail.js && node --check js/results.js
+
+      - name: Pré-rendre les pages (sans les committer)
+        run: npm run generate-static
 
       - name: Générer les PDF FR et EN (sans les committer)
         run: npm run generate-pdf

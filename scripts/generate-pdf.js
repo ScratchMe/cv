@@ -21,13 +21,12 @@
  * besoin de le lancer toi-même, sauf pour prévisualiser un changement en local.
  */
 
-const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 const { PDFDocument, PDFName } = require("pdf-lib");
+const { ROOT, startServer } = require("./lib/site-server");
 
-const ROOT = path.join(__dirname, "..");
 const PORT = 4173;
 const OUT_DIR = path.join(ROOT, "assets");
 const BASE_NAME = "cv-antoine-berthaud"; // nom des fichiers PDF générés
@@ -54,42 +53,6 @@ const PDF_META = {
     language: "en-US",
   },
 };
-
-const MIME = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css",
-  ".js": "application/javascript",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".webp": "image/webp", // logos d'entreprise : sans ce type, Chromium ignore l'image et le PDF sort sans logos
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".ico": "image/x-icon",
-};
-
-function startServer() {
-  return new Promise((resolve) => {
-    const server = http.createServer((req, res) => {
-      const urlPath = decodeURIComponent(req.url.split("?")[0]);
-      const filePath = path.join(ROOT, urlPath === "/" ? "/index.html" : urlPath);
-      if (!filePath.startsWith(ROOT)) {
-        res.writeHead(403);
-        res.end();
-        return;
-      }
-      fs.readFile(filePath, (err, data) => {
-        if (err) {
-          res.writeHead(404);
-          res.end("Not found");
-          return;
-        }
-        res.writeHead(200, { "Content-Type": MIME[path.extname(filePath)] || "application/octet-stream" });
-        res.end(data);
-      });
-    });
-    server.listen(PORT, "127.0.0.1", () => resolve(server));
-  });
-}
 
 async function stampMetadata(pdfPath, lang) {
   const meta = PDF_META[lang];
@@ -200,7 +163,7 @@ async function generateFor(browser, { lang, format, outPath }) {
 (async () => {
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const server = await startServer();
+  const server = await startServer(PORT);
   const browser = await chromium.launch();
 
   try {

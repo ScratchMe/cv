@@ -5,19 +5,21 @@ Site CV statique en HTML/CSS/JS vanilla. Aucun build nécessaire pour le site lu
 ## Arborescence
 
 ```
-index.html               → structure de la page + copies statiques du pitch FR et des balises SEO (voir section 10)
+index.html               → structure de la page ; les zones entre marqueurs static: sont pré-rendues par la CI (voir section 5)
 css/style.css             → tous les styles (tokens de couleur en haut du fichier)
 js/i18n.js                  → dictionnaire des textes fixes de l'interface (FR/EN) + logique de bascule de langue
 js/data.js                 → ⭐ LE FICHIER À ÉDITER : ton contenu (profil, expériences, compétences, side projects)
 js/app.js                  → génère le HTML à partir de data.js, gère les filtres, durées, focus mode, impression, langue
 js/gemini.js                → logique du Fit-Checker (appelle la fonction Supabase, jamais Gemini directement)
-results.html + js/results.js → page « Résultats » : les études de cas (format STAR) derrière les chiffres du hero
-project-detail.html + js/project-detail.js → page gabarit des études de cas de side projects (?slug=)
+results.html + js/results.js → page « Résultats » : les études de cas (format STAR) derrière les chiffres du hero (zone pré-rendue aussi)
+project-detail.html + js/project-detail.js → page gabarit des études de cas de side projects (?slug=), pré-rendue avec le seul side project
 supabase/functions/gemini-fit/index.ts  → code de la fonction serveur à déployer sur Supabase
+scripts/generate-static.js   → pré-rend les trois pages en français dans leurs zones static: (voir section 5)
 scripts/generate-pdf.js      → génère les PDF FR/EN à partir du site (voir section 5)
-package.json + package-lock.json → dépendances de generate-pdf.js, versions figées (voir section 5)
+scripts/lib/site-server.js   → mini-serveur local partagé par les deux scripts
+package.json + package-lock.json → dépendances des scripts, versions figées (voir section 5)
 CLAUDE.md                    → contexte et décisions pour Claude Code (exclu du site publié)
-.github/workflows/generate-pdf.yml → régénère les PDF automatiquement à chaque changement (GitHub Actions)
+.github/workflows/generate-pdf.yml → régénère les pages pré-rendues et les PDF à chaque changement, et une fois par mois (GitHub Actions)
 assets/cv-antoine-berthaud-fr.pdf, -en.pdf → PDF générés (ne pas éditer à la main, ils sont régénérés à chaque fois)
 assets/photo/               → dépose ta photo ici
 assets/logos/               → dépose les logos des entreprises ici (WebP ou PNG 224×224, fond transparent de préférence)
@@ -25,7 +27,7 @@ robots.txt / sitemap.xml     → référencement (voir section 10)
 CNAME                        → domaine personnalisé pour GitHub Pages (cv.antoine.berthaud.me)
 _config.yml                  → exclut du site publié les fichiers de travail (README, CLAUDE.md, scripts…)
 404.html                     → page « introuvable » servie par GitHub Pages, sans JavaScript
-.github/workflows/pr-checks.yml → rejoue la génération des PDF sur chaque PR, sans commit (garde-fou avant merge)
+.github/workflows/pr-checks.yml → rejoue le pré-rendu et la génération des PDF sur chaque PR, sans commit (garde-fou avant merge)
 .github/workflows/keepalive.yml + surveiller-fit-checker.yml → continuité du Fit-Checker (voir section 12)
 supabase/migrations/         → la table keepalive lue chaque jour pour garder le projet Supabase actif
 ```
@@ -196,7 +198,17 @@ Selon l'interface de ton registrar, le champ "Nom/Host" peut attendre soit juste
 
 **Alternative** si tu changes d'avis sur GitHub Pages : **Netlify** ou **Cloudflare Pages** gèrent aussi les domaines personnalisés, souvent avec une configuration DNS plus simple (Cloudflare en particulier, si ton domaine y est déjà géré).
 
-## 5. PDF téléchargeable et Focus Lecture
+## 5. Pages pré-rendues, PDF téléchargeable et Focus Lecture
+
+### Pages pré-rendues (ce que lisent les robots sans JavaScript)
+
+Le contenu vit dans `js/data.js` et c'est le JavaScript qui construit la page. Google exécute ce JavaScript, mais les robots des moteurs de réponse IA (ChatGPT, Perplexity, Claude…), les aperçus de lien et une partie des outils de tri de candidatures ne le font pas : sans pré-rendu, ils voyaient 258 mots sur 1 622 (le pitch, trois chiffres, le pied de page).
+
+`scripts/generate-static.js` ouvre les trois pages dans Chromium, en français, laisse le JavaScript les rendre, puis recopie le HTML rendu dans les fichiers sources entre des marqueurs `<!-- static:ID -->` … `<!-- /static:ID -->` (une vingtaine de zones sur `index.html` : pastilles, pitch, chiffres, piliers, compétences, expériences, formation, témoignage, side projects, pied de page ; tout le `<main>` sur `results.html` et `project-detail.html` ; plus `<title>`, description et balises `og:`/`twitter:` de chaque page). **Tout ce qui est entre deux marqueurs est généré : ne l'édite jamais à la main**, la prochaine génération l'écraserait. Tu modifies `data.js` (ou `i18n.js`), tu push, la CI régénère et recommit les pages — exactement comme les PDF, dans le même workflow. Au chargement, `app.js` re-rend par-dessus (même HTML en français, version anglaise sur `?lang=en`, où la page reste invisible le temps du rendu anglais pour éviter un flash de français). Les filtres de compétences, le Fit-Checker et la bascule de langue exigent toujours JavaScript.
+
+Garde-fous du script : erreur JavaScript, zone vide, marqueur manquant, page trop courte, mots attendus absents (Everysens, Polytech, le nom du témoignage…), et refus de tourner si `PROJECT_DETAILS` a plus d'une entrée (la page gabarit ne peut porter qu'un seul pré-rendu ; à ce moment-là il faudra décider d'une page par projet). `node scripts/generate-static.js --check` dit si les fichiers sont à jour sans rien écrire.
+
+### PDF téléchargeable
 
 Le bouton **"Télécharger PDF"** ne fait plus un simple `Ctrl/Cmd+P` navigateur (rendu peu maîtrisé, dépendant des réglages de chacun). Il télécharge un **vrai PDF pré-généré**, produit par Chromium piloté en script (Playwright) directement à partir du site : mêmes couleurs, mêmes polices, mise en page adaptée au format papier (A4 pour le français, Letter pour l'anglais). Si le PDF n'existe pas encore (avant la première génération), le bouton retombe automatiquement sur l'impression navigateur classique — rien ne peut casser.
 
@@ -204,7 +216,7 @@ Le bouton **"Télécharger PDF"** ne fait plus un simple `Ctrl/Cmd+P` navigateur
 
 1. `scripts/generate-pdf.js` lance un mini-serveur local, ouvre le site dans Chromium, et exporte deux fichiers : `assets/cv-antoine-berthaud-fr.pdf` et `-en.pdf`.
 2. Le CSS `@media print` (dans `style.css`) définit un rendu pensé spécifiquement pour le papier : les couleurs de marque sont conservées (bordures des piliers, dégradés d'avatar), les ombres portées sont retirées (elles ne rendent pas bien sur un support figé), et les sections interactives (navigation, Fit-Checker, bandeau teaser) sont masquées.
-3. `.github/workflows/generate-pdf.yml` relance cette génération automatiquement à chaque `git push` sur `main` qui touche le contenu ou le style, **et une fois par mois** (le 1er à 4h UTC) pour rafraîchir les durées d'expérience calculées jusqu'à « aujourd'hui », puis recommit les PDF à jour — **tu n'as normalement jamais besoin de lancer ce script toi-même**. S'il échoue, il ouvre une issue GitHub (label `pdf-generation-failure`). Le même script tourne sur chaque PR via `pr-checks.yml`, sans commit, avec des garde-fous (erreur JS, page vide, polices absentes, lien local, PDF trop court). Le problème "CV à jour" est réglé une fois pour toutes : tu édites `data.js`, tu push, les PDF suivent.
+3. `.github/workflows/generate-pdf.yml` relance le pré-rendu puis cette génération automatiquement à chaque `git push` sur `main` qui touche le contenu ou le style, **et une fois par mois** (le 1er à 4h UTC) pour rafraîchir les durées d'expérience calculées jusqu'à « aujourd'hui », puis recommit les pages et les PDF à jour (avec leur `lastmod` dans `sitemap.xml`) — **tu n'as normalement jamais besoin de lancer ces scripts toi-même**. S'il échoue, il ouvre une issue GitHub (label `pdf-generation-failure`). Les mêmes scripts tournent sur chaque PR via `pr-checks.yml`, sans commit, avec leurs garde-fous (erreur JS, page vide, polices absentes, lien local, PDF trop court). Le problème "CV à jour" est réglé une fois pour toutes : tu édites `data.js`, tu push, les pages et les PDF suivent.
 
 ### Régénérer en local (pour prévisualiser un changement avant de push)
 
@@ -212,22 +224,22 @@ Le bouton **"Télécharger PDF"** ne fait plus un simple `Ctrl/Cmd+P` navigateur
 ```bash
 npm install
 npx playwright install --with-deps chromium
-npm run generate-pdf
+npm run generate          # pré-rendu puis PDF ; ou generate-static / generate-pdf séparément
 ```
 
 **Windows (PowerShell) :**
 ```powershell
 npm install
 npx playwright install chromium
-npm run generate-pdf
+npm run generate
 ```
 (`--with-deps` installe des paquets système Linux et n'a pas d'équivalent nécessaire sous Windows — Playwright embarque tout ce qu'il faut pour Chromium.)
 
-Les fichiers sont écrits dans `assets/`. Ouvre-les pour vérifier avant de commiter, comme pour n'importe quel changement visuel.
+Les PDF sont écrits dans `assets/`, les pages pré-rendues dans les trois fichiers HTML. Ouvre-les pour vérifier avant de commiter, comme pour n'importe quel changement visuel.
 
 ### Point d'attention pour le déploiement automatique
 
-Le workflow a besoin d'écrire sur ton dépôt (pour committer les PDF régénérés) : la permission `contents: write` est déjà configurée dans le fichier, mais vérifie que **Settings → Actions → General → Workflow permissions** de ton repo autorise bien "Read and write permissions" (c'est le réglage par défaut sur les nouveaux dépôts, mais certains comptes/organisations le restreignent). Si ta branche principale s'appelle `master` plutôt que `main`, ajuste la ligne `branches: [main]` dans `.github/workflows/generate-pdf.yml`.
+Le workflow a besoin d'écrire sur ton dépôt (pour committer les pages et les PDF régénérés) : la permission `contents: write` est déjà configurée dans le fichier, mais vérifie que **Settings → Actions → General → Workflow permissions** de ton repo autorise bien "Read and write permissions" (c'est le réglage par défaut sur les nouveaux dépôts, mais certains comptes/organisations le restreignent). Si ta branche principale s'appelle `master` plutôt que `main`, ajuste la ligne `branches: [main]` dans `.github/workflows/generate-pdf.yml`.
 
 ### Focus Lecture
 
@@ -289,17 +301,16 @@ Soyons lucides sur l'objectif : sur une requête générique comme « product ma
 
 1. sortir **premier sur ton nom** et ses variantes (« Antoine Berthaud product manager ») ;
 2. capter la **longue traîne** localisée (« senior growth product manager Nantes », « product manager PLG SaaS Nantes ») ;
-3. être **lu par les moteurs IA** (ChatGPT, Perplexity, Claude…), qui citent volontiers les sites perso mais n'exécutent souvent pas le JavaScript.
+3. être **lu par les moteurs IA** (ChatGPT, Perplexity, Claude…), qui citent volontiers les sites perso mais n'exécutent souvent pas le JavaScript — d'où les pages pré-rendues (section 5).
 
 Ce qui est en place dans le code :
 - **Français par défaut, anglais sur `?lang=en`**, sans détection de la langue du navigateur (voir section 0) : Googlebot navigue en anglais et indexait la version anglaise à l'URL canonique. Balises `hreflang` fr/en dans le `<head>` et dans le sitemap ; le canonical suit la langue affichée (`/` en FR, `/?lang=en` en EN).
-- **`<title>`, `<meta description>`, Open Graph et eyebrow du hero** qui citent Nantes, le métier et le secteur — textes dans `PROFILE.seo` (`js/data.js`), recopiés en dur dans le `<head>` de `index.html` pour les robots sans JavaScript. **Si tu modifies `PROFILE.seo`, reporte le changement dans `index.html`** (title, description, `og:`/`twitter:`).
-- **Copie statique du pitch FR** dans `index.html` (`#heroPitch`), pour la même raison. `app.js` prévient dans la console du navigateur si cette copie diverge de `PROFILE.pitch.fr`.
+- **`<title>`, `<meta description>`, Open Graph et eyebrow du hero** qui citent Nantes, le métier et le secteur — textes dans `PROFILE.seo` (`js/data.js`), posés dans le `<head>` de `index.html` par le pré-rendu (section 5), comme tout le contenu de la page. `app.js` prévient dans la console du navigateur si le pitch pré-rendu diverge de `PROFILE.pitch.fr` (page pas encore régénérée).
 - **Données structurées `ProfilePage` → `Person`** (JSON-LD dans `index.html`) : métier, lieu (Nantes), formation, sujets maîtrisés, et `sameAs` vers LinkedIn, le portfolio photo et Tour de Growth, pour que Google relie le tout à la même personne.
 - **`sitemap.xml`** avec toutes les pages indexables (accueil FR et EN, Résultats, étude de cas) et une date `lastmod` **à mettre à jour quand une page change** ; les deux PDF y figurent aussi (décision du 06/09/2026 : ils sont déjà liés depuis les pages, autant que Google les compte), avec un `lastmod` mis à jour automatiquement par `generate-pdf.yml` à chaque régénération ; `robots.txt` ; `CNAME`.
 - **Pages secondaires** : `results.html` et `project-detail.html?slug=…` ont leur propre `<title>`/description par langue. L'étude de cas déclare son propre canonical (avec le `?slug=`) et la page gabarit sans slug (« Projet introuvable ») est en `noindex`.
 - **PDF** avec titre, auteur, sujet, mots-clés et langue dans leurs métadonnées (écrites par `scripts/generate-pdf.js` via `pdf-lib`) — les PDF sont indexables eux aussi, autant qu'ils se présentent bien.
-- Repli `<noscript>` avec lien direct vers les PDF.
+- Repli `<noscript>` qui dit ce qui manque sans JavaScript (filtres, Fit-Checker, anglais) et lie les PDF.
 
 Ce qui reste hors code, et qui pèse plus lourd que tout le reste :
 1. **Des liens depuis tes propres sites** — la seule source de backlinks qui ne dépend de personne :

@@ -97,14 +97,10 @@ h1{font-size:48px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-h
 .pitch strong,.role-context strong,.role-achievements strong{color:var(--ink);font-weight:700;}
 
 .hero-stats{display:flex;gap:28px;margin-bottom:28px;flex-wrap:wrap;}
-/* Avant le rendu JS, #heroPills et #heroStats sont vides : on leur réserve la
-   hauteur mesurée qu'ils auront une fois remplis, sinon tout le hero saute
-   au chargement (CLS). Valeurs relevées par palier de largeur. */
-.pills:empty{min-height:84px;}
-.hero-stats:empty{min-height:90px;}
-@media(max-width:864px) and (min-width:801px){.pills:empty{min-height:104px;}.hero-stats:empty{min-height:189px;}}
-@media(max-width:480px){.pills:empty{min-height:104px;}.hero-stats:empty{min-height:183px;}}
-@media(max-width:400px){.pills:empty{min-height:151px;}.hero-stats:empty{min-height:203px;}}
+/* Sur ?lang=en, le <head> pose html.lang-pending le temps que le JavaScript
+   remplace la page pré-rendue en français par le rendu anglais (retirée
+   après le premier rendu, ou au bout de 1,5 s si le JS échoue). */
+html.lang-pending body{visibility:hidden;}
 .hero-stat{padding-left:20px;border-left:2px solid var(--line);}
 .hero-stat:first-child{padding-left:0;border-left:none;}
 .hero-stat-value{

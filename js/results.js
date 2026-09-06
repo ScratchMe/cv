@@ -99,9 +99,10 @@
       </article>`;
   }
 
-  // Les textes écrits en dur dans results.html (en-tête + trois chiffres) sont
-  // ce que lisent les robots sans JavaScript : au premier rendu en français,
-  // on signale en console ceux qui ne correspondent plus à i18n.js / data.js.
+  // results.html porte la page pré-rendue en français (zone static:resultsRoot,
+  // générée en CI par scripts/generate-static.js) : au premier rendu en
+  // français, on signale en console ce qui ne correspond plus à i18n.js /
+  // data.js — une page pas encore régénérée après un changement.
   let staticChecked = false;
   function checkStaticCopy(root) {
     if (staticChecked || window.i18n.lang !== "fr") return;
@@ -152,6 +153,17 @@
 
     document.getElementById("pageTitle").textContent = t("results.metaTitle");
     document.getElementById("pageDescription").setAttribute("content", t("results.metaDescription"));
+    // Aperçus de partage alignés sur la page (valeurs FR pré-rendues dans
+    // results.html par scripts/generate-static.js).
+    [
+      ['meta[property="og:title"]', t("results.metaTitle")],
+      ['meta[name="twitter:title"]', t("results.metaTitle")],
+      ['meta[property="og:description"]', t("results.metaDescription")],
+      ['meta[name="twitter:description"]', t("results.metaDescription")],
+    ].forEach(([sel, content]) => {
+      const el = document.querySelector(sel);
+      if (el) el.setAttribute("content", content);
+    });
     document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");
     document.getElementById("backToCvLink").href = `./${window.i18n.langSuffix()}`;
     document.getElementById("logoLink").href = `./${window.i18n.langSuffix()}`;
@@ -167,6 +179,9 @@
     const langBtn = document.getElementById("langToggle");
     langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
     langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
+    // Sur ?lang=en, results.html masque la page pré-rendue en français jusqu'ici
+    // (script inline du <head>) : le rendu anglais est en place, on affiche.
+    document.documentElement.classList.remove("lang-pending");
     // Clics comptés (data-goatcounter-click) sur les liens recréés par ce rendu.
     if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();
 
