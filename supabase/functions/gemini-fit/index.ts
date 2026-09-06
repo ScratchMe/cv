@@ -92,6 +92,21 @@ ${cvContext}
 ${jobPosting}`;
 }
 
+// Forme attendue de la réponse (format OpenAPI simplifié de l'API Gemini).
+// À garder alignée avec le schéma décrit dans buildPrompt() et avec ce que
+// js/gemini.js affiche.
+const RESPONSE_SCHEMA = {
+  type: "OBJECT",
+  properties: {
+    score: { type: "INTEGER" },
+    explanation: { type: "STRING" },
+    strengths: { type: "ARRAY", items: { type: "STRING" } },
+    gaps: { type: "ARRAY", items: { type: "STRING" } },
+    interviewQuestion: { type: "STRING" },
+  },
+  required: ["score", "explanation", "strengths", "gaps", "interviewQuestion"],
+};
+
 function extractJson(text: string) {
   // Gemini répond parfois avec des ```json ... ``` malgré la consigne : on nettoie.
   const cleaned = text.replace(/```json|```/g, "").trim();
@@ -122,7 +137,16 @@ async function callGeminiWithFallback(prompt: string): Promise<{ data: any; mode
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.3, responseMimeType: "application/json" },
+            generationConfig: {
+              temperature: 0.3,
+              responseMimeType: "application/json",
+              // Schéma imposé à Gemini : la forme de la réponse est garantie
+              // structurellement, plus seulement par la consigne du prompt
+              // (on a vu des listes renvoyées en chaîne). Le front vérifie
+              // encore le contenu avant affichage, mais ne devrait plus
+              // jamais recevoir une forme inattendue.
+              responseSchema: RESPONSE_SCHEMA,
+            },
           }),
         }
       );
@@ -190,7 +214,20 @@ Deno.serve(async (req: Request) => {
     const prompt = buildPrompt(cvContext, jobPosting, lang === "en" ? "en" : "fr");
 
     const { data: geminiData } = await callGeminiWithFallback(prompt);
-    const rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    const rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawText) {
+      // Réponse sans texte (filtre de sécurité, sortie tronquée...) : on
+      // renvoie une vraie erreur plutôt qu'un "{}" que le site affichait
+      // comme un score 0/100. Le détail va dans les logs de la fonction.
+      console.error(
+        "gemini-fit: réponse Gemini vide",
+        JSON.stringify({
+          finishReason: geminiData.candidates?.[0]?.finishReason,
+          promptFeedback: geminiData.promptFeedback,
+        })
+      );
+      throw new Error("Réponse Gemini vide");
+    }
     const parsed = extractJson(rawText);
 
     return new Response(JSON.stringify(parsed), {
