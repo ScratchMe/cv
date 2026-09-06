@@ -485,17 +485,17 @@ const EXPERIENCES = [
         start: "2021-10",
         end: "2022-04",
         context: {
-          fr: "PM sur la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à **40 000 visiteurs par jour** : les voyageurs y vérifiaient eux-mêmes leur pass sanitaire et leur billet dans le contexte Covid-19. Poste mené en parallèle de celui sur les boutiques en ligne.",
-          en: "PM on the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), up to **40,000 visitors a day**: travelers self-checked their health pass and train ticket in the context of Covid-19. Held in parallel with the online-stores role.",
+          fr: "Mission : la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à **40 000 visiteurs par jour**, où les voyageurs vérifiaient eux-mêmes leur pass sanitaire et leur billet pendant le Covid-19. En parallèle du poste sur les boutiques en ligne.",
+          en: "Mission: the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), up to **40,000 visitors a day**, where travelers self-checked their health pass and train ticket during Covid-19. In parallel with the online-stores role.",
         },
         achievements: [
           {
-            fr: "Redéveloppement d'une plateforme initialement développée en externe, avec un objectif business de fluidifier l'embarquement en gare.",
-            en: "Redeveloped a platform initially built externally, with a business goal of smoothing station boarding.",
+            fr: "**+100 % sur le taux de conversion** de la première étape de récupération du billet : parcours retravaillé à partir des retours des voyageurs collectés sur Twitter (extraction quotidienne via Zapier).",
+            en: "**+100% conversion rate** on the first step of ticket retrieval: journey reworked from traveler feedback collected on Twitter (daily extraction via Zapier).",
           },
           {
-            fr: "Récupération d'insights utilisateurs (Twitter, Zapier) et amélioration du parcours utilisateur : **+100% sur le taux de conversion** de la première étape de récupération du billet.",
-            en: "Gathered user insights (Twitter, Zapier) and improved the user journey: **+100% conversion rate** on the first step of ticket retrieval.",
+            fr: "**Plateforme redéveloppée en interne** après une première version externalisée, pour fluidifier l'embarquement en gare.",
+            en: "**Platform rebuilt in-house** after a first outsourced version, to smooth station boarding.",
           },
         ],
         methodology: "Kanban",
@@ -510,21 +510,21 @@ const EXPERIENCES = [
         start: "2020-09",
         end: "2022-04",
         context: {
-          fr: "PM sur l'outil de génération de boutiques en ligne pour la vente de titres de transport, avec deux clients : Transilien (boutique.transilien.com) et TER (boutiques de commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.",
-          en: "PM on the online store generation tool for transport ticket sales, serving two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering stores). From October 2021 to April 2022, in parallel with the Prêt à Voyager role.",
+          fr: "Mission : l'outil de génération de boutiques en ligne de titres de transport, pour deux clients : Transilien (boutique.transilien.com) et TER (commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.",
+          en: "Mission: the online store generator for transport tickets, for two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering). From October 2021 to April 2022, in parallel with the Prêt à Voyager role.",
         },
         achievements: [
           {
-            fr: "Définition d'une mission et d'une vision produit communes aux stakeholders et au service marketing.",
-            en: "Defined a shared product mission and vision for stakeholders and the marketing team.",
+            fr: "**Une mission et une vision produit communes** aux stakeholders et au service marketing, formalisées et partagées.",
+            en: "**A shared product mission and vision** for stakeholders and the marketing team, formalized and communicated.",
           },
           {
-            fr: "Stratégie 2021 appuyée par des OKR, roadmap de delivery, priorisation du backlog et rédaction des User Stories.",
-            en: "Set the 2021 strategy backed by OKRs, defined the delivery roadmap, prioritized the backlog and wrote User Stories.",
+            fr: "**Stratégie 2021 tenue par des OKR** : roadmap de delivery, priorisation du backlog, User Stories.",
+            en: "**2021 strategy held by OKRs**: delivery roadmap, backlog prioritization, User Stories.",
           },
           {
-            fr: "Relance du discovery (sondages utilisateurs, exploitation de la data disponible) et lead de la veille agilité/product management au sein de la communauté de pratiques.",
-            en: "Relaunched discovery (user surveys, mining available data) and led agility/product management watch within the community of practice.",
+            fr: "**Discovery relancé** : sondages utilisateurs, exploitation de la data disponible.",
+            en: "**Discovery relaunched**: user surveys, mining the available data.",
           },
         ],
         methodology: "Scrum",

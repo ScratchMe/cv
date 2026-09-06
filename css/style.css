@@ -659,12 +659,13 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Rien de tout ça n'a de sens sur un document figé : nav interactive,
      Fit-Checker (nécessite une vraie IA en direct), bandeau teaser,
      indicateur de scroll, bouton de reset des filtres. */
-  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.quote-mark,.early-toggle-wrap,.xp-rail{display:none !important;}
+  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.project-skills,.quote-mark,.early-toggle-wrap,.xp-rail{display:none !important;}
   /* Le PDF montre toujours les débuts repliés sur le site (body.early-collapsed). */
   body.early-collapsed .role-early{display:block !important;}
   body.early-collapsed .company-early{display:block !important;}
   /* .skills-hint : consigne « Clique sur… » sans objet sur papier.
-     .role-skills : les tags par rôle répètent la section Compétences (1,8 page
+     .role-skills et .project-skills : les tags par rôle et du side project
+     répètent la section Compétences (1,8 page
      de tags dans l'ancien PDF) ; les mots-clés restent une fois pour l'ATS.
      .site-footer : les coordonnées sont en page 1 (.print-contact). */
 
@@ -723,8 +724,11 @@ body.focus-mode .pill{background:#F1F1EF;}
      pas laisse un demi-page blanche), mais jamais entre son titre et sa
      première ligne, ni au milieu d'une puce. */
   .role-block{break-inside:auto;padding-bottom:10px;margin-bottom:10px;orphans:2;widows:2;}
-  .role-top{break-after:avoid;}
-  .role-context{break-after:avoid;}
+  .role-top{break-after:avoid;break-inside:avoid;} /* titre et dates ensemble (vu : titre ESN en bas de page, dates en haut de la suivante) */
+  /* Pas de break-after:avoid sur .role-context : titre + ligne de mission
+     peuvent finir une page et les puces ouvrir la suivante. L'enchaîner
+     forçait titre + mission + libellé + première puce à se déplacer d'un
+     bloc et laissait des trous de 120 pt (vu avec les puces RAC, 6 pages). */
   .role-achievements-label{break-after:avoid;}
   .role-achievements li,.role-meta{break-inside:avoid;}
   .role-meta{break-before:avoid;} /* pas de ligne « Méthodologie · Équipe » orpheline en haut de page */
