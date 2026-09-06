@@ -16,6 +16,12 @@ const CONFIG = {
   // (et son lien dans le menu) sans avoir à supprimer le contenu.
   showSideProjects: true,
 
+  // Les rôles terminés à cette date ou avant (format "AAAA-MM") sont repliés
+  // derrière un bouton « Voir mes débuts (2011 – 2016) » sur le site — le
+  // PDF, lui, montre toujours tout. Un filtre de compétence les déplie
+  // automatiquement. Mets null pour tout afficher.
+  collapseRolesEndingBefore: "2016-08",
+
   // URL de ta fonction Supabase Edge Function (voir README.md, partie Gemini).
   supabaseFunctionUrl: "https://tpreesulucfsyalaipcj.supabase.co/functions/v1/gemini-fit",
 
