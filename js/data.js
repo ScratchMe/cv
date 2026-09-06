@@ -356,8 +356,8 @@ const EXPERIENCES = [
             en: "Led the shift from a 100% Sales-Led model to a **hybrid model**: framing, business case and roadmap with leadership, with large accounts kept with Sales and everyone else signing up and paying on their own.",
           },
           {
-            fr: "Conception et construction de bout en bout du **tunnel self-serve** : inscription publique, freemium limité, et intégration d'une plateforme de facturation que j'ai cadrée (paiement, abonnements, accès aux fonctionnalités selon l'offre). **Livré en production derrière un feature flag**, prêt au lancement ; lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
-            en: "Designed and built the **self-serve funnel** end to end: public sign-up, limited freemium, and the integration of a billing platform I scoped (payments, subscriptions, feature access by plan). **Shipped to production behind a feature flag**, ready to launch; launch put on hold after AB Tasty's merger with VWO.",
+            fr: "Conception et construction de bout en bout du **tunnel self-serve** : inscription publique, freemium limité, et intégration de la plateforme de facturation Hyperline, que j'ai cadrée (paiement, abonnements, accès aux fonctionnalités selon l'offre). **Livré en production derrière un feature flag**, prêt au lancement ; lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
+            en: "Designed and built the **self-serve funnel** end to end: public sign-up, limited freemium, and the integration of the Hyperline billing platform, which I scoped (payments, subscriptions, feature access by plan). **Shipped to production behind a feature flag**, ready to launch; launch put on hold after AB Tasty's merger with VWO.",
           },
           {
             fr: "Animation de 2 autres Product Managers sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
