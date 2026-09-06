@@ -133,9 +133,13 @@
     "fit.nextEmail": { fr: "M'écrire", en: "Email me" },
     "fit.nextLinkedin": { fr: "Me contacter sur LinkedIn", en: "Reach me on LinkedIn" },
     "fit.mailSubject": { fr: "À propos d'un poste (via le Fit-Checker)", en: "About a role (via the Fit-Checker)" },
+    // Vrai depuis le 06/09/2026 : clé Gemini sur un compte de facturation
+    // (« Paid Services » des conditions Gemini API : prompts et réponses non
+    // utilisés pour améliorer les modèles). Si la clé repassait en gratuit,
+    // retirer la phrase sur Google. Copie statique dans index.html.
     "fit.privacy": {
-      fr: "Le texte que vous collez part vers l'API Google Gemini pour l'analyse. Ce site ne l'enregistre pas.",
-      en: "The text you paste is sent to the Google Gemini API for analysis. This site does not store it.",
+      fr: "Le texte que vous collez part vers l'API Google Gemini pour l'analyse. Google ne l'utilise pas pour améliorer ses modèles, et ce site ne l'enregistre pas.",
+      en: "The text you paste is sent to the Google Gemini API for analysis. Google does not use it to improve its models, and this site does not store it.",
     },
     // Rangée d'appels à l'action en fin de page Résultats / étude de cas.
     "pageCta.contact": { fr: "Me contacter", en: "Contact me" },
