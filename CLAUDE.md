@@ -93,6 +93,13 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   place avec sa page de détail. Le champ `metrics` de `PROJECT_DETAILS`
   reste vide (`[]`, avec `metricsFallback` affiché à la place) tant qu'il
   n'y a pas de vrais chiffres d'usage significatifs.
+- **Page plus courte sur téléphone** (sept. 2026, validé par Antoine) : les
+  rôles terminés au plus tard à `CONFIG.collapseRolesEndingBefore`
+  (`"2016-08"` : QA et ESN) sont repliés derrière « Voir mes débuts
+  (2011 – 2016) → » (`body.early-collapsed`, bouton inséré après le dernier
+  rôle récent, disparaît une fois déplié) ; un filtre actif les déplie. Les
+  tags par rôle (`.role-skills`) sont masqués ≤ 800 px sauf filtre actif
+  (`body.has-filters`). Le PDF montre toujours tout. 23 → 19 écrans à 375 px.
 - **Domaine** : `cv.antoine.berthaud.me`, déjà configuré partout
   (canonical, OG, JSON-LD `Person`, `robots.txt`, `sitemap.xml`, `CNAME`).
 - **Chiffres du hero (`HERO_STATS`)** : un chiffre peut pointer vers une
