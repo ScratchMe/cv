@@ -51,5 +51,18 @@ jobs:
       - name: Pré-rendre les pages (sans les committer)
         run: npm run generate-static
 
+      # Informatif, jamais bloquant : si le pré-rendu de la CI diffère des
+      # pages committées, le diff est dans le journal. Attendu vide quand la
+      # PR a régénéré ses pages ; sinon, c'est ce que le workflow de main
+      # recommittera après le merge (durées mises à jour, par exemple).
+      - name: Écart entre les pages committées et le pré-rendu de la CI
+        run: |
+          if git diff --quiet -- index.html results.html project-detail.html; then
+            echo "Pages pré-rendues à jour : aucun écart."
+          else
+            git --no-pager diff --stat -- index.html results.html project-detail.html
+            git --no-pager diff -- index.html results.html project-detail.html | head -120
+          fi
+
       - name: Générer les PDF FR et EN (sans les committer)
         run: npm run generate-pdf

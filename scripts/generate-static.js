@@ -146,6 +146,11 @@ async function renderPage(browser, page, slug) {
   const tab = await browser.newPage();
   const errors = [];
   tab.on("pageerror", (err) => errors.push(err.message));
+  // Rien d'externe pendant le rendu : le HTML généré doit être le même sur
+  // n'importe quelle machine, avec ou sans réseau. Concrètement, count.js
+  // (GoatCounter) marque les liens qu'il a reliés (data-goatcounter-bound) et
+  // ce marqueur entrait dans les pages générées en CI, pas en local.
+  await tab.route("**/*", (route) => (route.request().url().startsWith(`http://127.0.0.1:${PORT}/`) ? route.continue() : route.abort()));
   const url = typeof page.url === "function" ? page.url(slug) : page.url;
   // "load" suffit : le rendu se fait dans DOMContentLoaded, qui précède load.
   await tab.goto(`http://127.0.0.1:${PORT}${url}`, { waitUntil: "load" });
@@ -165,6 +170,9 @@ async function renderPage(browser, page, slug) {
   });
 
   const zones = await tab.evaluate((zoneList) => {
+    // Ceinture et bretelles (voir tab.route ci-dessus) : aucun attribut posé
+    // par un script tiers ne doit finir dans les pages générées.
+    document.querySelectorAll("[data-goatcounter-bound]").forEach((el) => el.removeAttribute("data-goatcounter-bound"));
     return zoneList.map(([id, ...selectors]) => {
       const parts = selectors.map((sel) => document.querySelector(sel)).map((el) => (el ? el.outerHTML : null));
       return { id, first: parts[0], html: parts.filter(Boolean).join("\n") };
