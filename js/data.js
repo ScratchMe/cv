@@ -88,7 +88,7 @@ const PROFILE = {
 const HERO_STATS = [
   { value: "+15%", label: { fr: "Taux d'activation (AB Tasty)", en: "Activation rate (AB Tasty)" }, resultId: "ab-tasty-activation" },
   { value: "-50%", label: { fr: "Temps de saisie (Everysens)", en: "Entry time (Everysens)" }, resultId: "everysens-entry-time" },
-  { value: "+100%", label: { fr: "Récupération billet, plateforme santé Covid (SNCF Connect)", en: "Ticket retrieval, Covid health-check platform (SNCF Connect)" }, resultId: "sncf-ticket-retrieval" },
+  { value: "+100%", label: { fr: "Taux de conversion, récupération du billet (SNCF Connect)", en: "Conversion rate, ticket retrieval (SNCF Connect)" }, resultId: "sncf-ticket-retrieval" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -146,8 +146,8 @@ const RESULT_DETAILS = {
     value: "-50%",
     label: { fr: "Temps de saisie", en: "Entry time" },
     context: {
-      fr: "Everysens, SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail. PM responsable de la **factory « Exécution »** (saisie des transports, validation des lettres de voiture, suivi temps réel), au sein d'une équipe de 4 développeurs et 1 QA, rejointe plus tard par 1 Product Designer.",
-      en: "Everysens, a SaaS platform for managing and tracking rail freight transport, aimed at shifting freight from road to rail. PM in charge of the **\"Execution\" factory** (transport entry, waybill validation, real-time tracking), within a team of 4 developers and 1 QA, later joined by 1 Product Designer.",
+      fr: "Everysens, SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail. PM responsable du **module « Exécution »** (saisie des transports, validation des lettres de voiture, suivi temps réel), au sein d'une équipe de 4 développeurs et 1 QA, rejointe plus tard par 1 Product Designer.",
+      en: "Everysens, a SaaS platform for managing and tracking rail freight transport, aimed at shifting freight from road to rail. PM in charge of the **\"Execution\" module** (transport entry, waybill validation, real-time tracking), within a team of 4 developers and 1 QA, later joined by 1 Product Designer.",
     },
     challenge: {
       fr: "Le module « Exécution », historique et vieillissant, ne dialoguait pas avec le nouveau module « Planification », qui contenait pourtant déjà une partie des informations nécessaires (trajet, wagons, marchandises).\n\nCôté saisie, il fallait renseigner le détail complet d'un train (numéro, marchandise, poids, scellés de chaque wagon) pour établir les lettres de voiture et assurer le suivi — un calvaire dès **30 wagons**, sur une UI clairement pas à la hauteur :",
@@ -178,7 +178,7 @@ const RESULT_DETAILS = {
     role: "Product Manager",
     period: "2021 – 2022",
     value: "+100%",
-    label: { fr: "Récupération billet", en: "Ticket retrieval" },
+    label: { fr: "Taux de conversion, récupération du billet", en: "Conversion rate, ticket retrieval" },
     context: {
       fr: "SNCF Connect & Tech, plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée) — jusqu'à **40 000 visiteurs par jour** en pleine crise Covid-19, pour s'auto-contrôler vis-à-vis de son pass sanitaire et de son billet. PM au sein d'une équipe de 4 développeurs et 1 Engineering Manager, méthode Kanban, sur une plateforme initialement développée en externe.",
       en: "SNCF Connect & Tech, the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned) — up to **40,000 visitors a day** in the middle of the Covid-19 crisis, letting travelers self-check their health pass and ticket. PM within a team of 4 developers and 1 Engineering Manager, Kanban methodology, on a platform initially built externally.",
@@ -198,8 +198,8 @@ const RESULT_DETAILS = {
       },
     ],
     action: {
-      fr: "J'ai mis en place une **extraction quotidienne automatique des tweets** mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.\n\nÇa a confirmé un point noir que je soupçonnais déjà : l'outil imposait de **scanner le QR code du billet**, alors qu'une grande partie des utilisateurs avaient leur billet uniquement sur mobile — donc rien à scanner. J'ai ajouté une **deuxième méthode de récupération**, par nom et numéro de dossier, en alternative au QR code.",
-      en: "I set up a **daily automated extraction of tweets** mentioning the project, Covid, and SNCF, to get a user signal without physical contact.\n\nIt confirmed a pain point I already suspected: the tool required **scanning the ticket's QR code**, while a large share of users only had their ticket on mobile — nothing to scan. I added a **second retrieval method**, by name and booking reference, as an alternative to the QR code.",
+      fr: "J'ai mis en place une **extraction quotidienne automatique des tweets** mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.\n\nÇa a confirmé un point noir que je soupçonnais déjà : l'outil imposait de **scanner le QR code du billet**, alors qu'une grande partie des utilisateurs avaient leur billet uniquement sur mobile — donc rien à scanner. J'ai ajouté une **deuxième méthode de récupération**, par nom et numéro de dossier, en alternative au QR code.\n\nLe taux de conversion de cette première étape a doublé.",
+      en: "I set up a **daily automated extraction of tweets** mentioning the project, Covid, and SNCF, to get a user signal without physical contact.\n\nIt confirmed a pain point I already suspected: the tool required **scanning the ticket's QR code**, while a large share of users only had their ticket on mobile — nothing to scan. I added a **second retrieval method**, by name and booking reference, as an alternative to the QR code.\n\nThe conversion rate of that first step doubled.",
     },
     lesson: {
       fr: "Regarder toute la chaîne, pas seulement son périmètre produit : seuls **10% des voyageurs** arrivaient jusqu'à l'outil, un frein bien plus grand que ce qu'on pouvait gagner côté produit. L'acquisition était ici hors de notre contrôle (contraintes légales entre transporteur et distributeur) — mais ça reste un rappel que ce sont les premières étapes d'un funnel qui pèsent le plus sur le résultat global.",
@@ -416,8 +416,8 @@ const EXPERIENCES = [
         start: "2022-04",
         end: "2023-09",
         context: {
-          fr: "Responsable de la factory « Exécution » au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail. Anglais au quotidien avec l'équipe.",
-          en: "Owned the \"Execution\" factory within a SaaS platform for rail freight transport management and tracking, aimed at shifting freight from road to rail to decarbonize transport. English as the working language.",
+          fr: "Responsable du module « Exécution » (lettres de voiture, trains de 30 wagons et plus) au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, pour favoriser le report modal des camions vers le rail et décarboner le transport. Anglais au quotidien avec l'équipe.",
+          en: "Owned the \"Execution\" module (waybills, trains of 30+ wagons) within a SaaS platform for rail freight transport management and tracking, aimed at shifting freight from road to rail to decarbonize transport. English as the working language.",
         },
         achievements: [
           {
@@ -426,7 +426,7 @@ const EXPERIENCES = [
           },
           {
             fr: "Stakeholder management auprès de la direction pour lancer une refonte technique et fonctionnelle en approche incrémentale (**MVP livré en moins de 2 mois**).",
-            en: "Stakeholder management work to bring leadership on board with a technical and functional overhaul, delivered incrementally (**MVP delivered in under 2 months**).",
+            en: "Won leadership buy-in for a technical and functional overhaul, delivered incrementally (**MVP delivered in under 2 months**).",
           },
           {
             fr: "Résultat de la refonte : **-50% de temps de saisie, +20% de satisfaction utilisateur**.",
@@ -582,20 +582,21 @@ const EXPERIENCES = [
   // (SSII) entre 2011 et 2015, avant ta bascule vers le Product Management.
   // Regroupées en un seul bloc pour rester lisible sur un CV senior PM.
   {
-    company: "Parcours technique avant le Product (SSII)",
+    company: "Eurogiciel · Sigma Informatique · Virage Group",
     location: "Nantes, France",
     logo: "",
+    logoLabel: "ESN", // texte de la pastille quand il n'y a pas de logo (sinon : 2 premières lettres du nom)
     roles: [
       {
         title: {
-          fr: "Développeur & Analyste fonctionnel — missions SSII (Eurogiciel, Sigma Informatique, Virage Group)",
-          en: "Developer & Functional Analyst — IT consulting engagements (Eurogiciel, Sigma Informatique, Virage Group)",
+          fr: "Développeur Java, puis analyste fonctionnel (missions ESN)",
+          en: "Java developer, then functional analyst (IT consulting)",
         },
         start: "2011-02",
         end: "2015-01",
         context: {
-          fr: "Avant de rejoindre le Product Management : missions en SSII pour Eurogiciel, Sigma Informatique et Virage Group.",
-          en: "Before moving into Product Management: IT consulting engagements for Eurogiciel, Sigma Informatique and Virage Group.",
+          fr: "Quatre ans côté technique avant de basculer vers le Product Management.",
+          en: "Four years on the technical side before moving into Product Management.",
         },
         achievements: [
           {
@@ -638,7 +639,7 @@ const TESTIMONIALS = [
   {
     quote: {
       fr: "Antoine est un product manager humain, impliqué et exigeant, porté par beaucoup d'enthousiasme. Il sait structurer intelligemment les temps de partage de son équipe et aime valoriser les talents de chacun. Je ne peux que le recommander pour renforcer une équipe ambitieuse et collaborative.",
-      en: "Antoine is a human, engaged and demanding product manager, driven by real enthusiasm. He knows how to structure his team's collaboration time intelligently and loves bringing out the best in each person. I can only recommend him to strengthen an ambitious, collaborative team.",
+      en: "Antoine is a caring, committed and demanding product manager, driven by real enthusiasm. He knows how to structure his team's collaboration time intelligently and loves bringing out the best in each person. I can only recommend him to strengthen an ambitious, collaborative team.",
     },
     name: "Alix Paoli",
     role: { fr: "CX Designer chez Decathlon", en: "CX Designer at Decathlon" },
@@ -659,7 +660,7 @@ const EDUCATION = [
       fr: "Ingénieur Systèmes Informatiques, Logiciels et Réseaux",
       en: "Engineering Degree, Computer Systems, Software & Networks",
     },
-    institution: "Polytech'Nantes",
+    institution: "Polytech Nantes",
     period: "2006 – 2011",
   },
 ];
@@ -708,8 +709,8 @@ const SIDE_PROJECTS = [
   {
     title: "Tour de Growth",
     description: {
-      fr: "Un outil public de growth check-up (framework AARRR), conçu et lancé pour servir de miroir rapide. En mots clairs plutôt qu'en jargon, on voit où une stratégie growth tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.",
-      en: "A free growth check-up tool (AARRR framework), designed and launched to provide a quick assessment. In plain language rather than jargon, it shows where a growth strategy is already on the right track and where it isn’t yet. The in-depth mode runs on the Gemini API; the product was designed and built with Claude Code.",
+      fr: "Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.",
+      en: "A free growth check-up tool (AARRR framework), designed and launched to size up a growth strategy in three minutes. In plain language rather than jargon, it shows where it already holds up and where it doesn't yet. The in-depth mode runs on the Gemini API; the product was designed and built with Claude Code.",
     },
     link: "https://tourdegrowth.com",
     detailSlug: "tour-de-growth",
@@ -739,8 +740,8 @@ const PROJECT_DETAILS = {
     liveUrl: "https://tourdegrowth.com",
 
     problem: {
-      fr: "Beaucoup de gens qui pilotent un produit savent qu'ils devraient \"faire de la croissance\", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle \"growth\" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ?\n\nTour de Growth part de cette question toute simple : un **miroir rapide**, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
-      en: "A lot of people running a product know they're supposed to \"do growth\", without quite being able to say where they actually stand. Is the real gap acquisition, or is it retention? Does what we call \"growth\" here look anything like what other companies do, or have we just been making up our own definition as we go?\n\nTour de Growth starts from that simple question: a **quick mirror**, in plain words instead of jargon, to see where a growth strategy already holds up and where it doesn't yet.",
+      fr: "Beaucoup de gens qui pilotent un produit savent qu'ils devraient \"faire de la croissance\", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle \"growth\" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ?\n\nTour de Growth part de cette question toute simple : **quinze questions**, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
+      en: "A lot of people running a product know they're supposed to \"do growth\", without quite being able to say where they actually stand. Is the real gap acquisition, or is it retention? Does what we call \"growth\" here look anything like what other companies do, or have we just been making up our own definition as we go?\n\nTour de Growth starts from that simple question: **fifteen questions**, in plain words instead of jargon, to see where a growth strategy already holds up and where it doesn't yet.",
     },
 
     whatItIs: {
