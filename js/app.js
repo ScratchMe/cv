@@ -101,7 +101,7 @@
           <div class="hero-stat-value">${s.value}</div>
           <div class="hero-stat-label">${tc(s.label)}</div>`;
         return s.resultId
-          ? `<a class="hero-stat is-linked" href="results.html${window.i18n.langSuffix()}#${s.resultId}">${inner}</a>`
+          ? `<a class="hero-stat is-linked" href="results.html${window.i18n.langSuffix()}#${s.resultId}" data-goatcounter-click="hero-stat-${s.resultId}">${inner}</a>`
           : `<div class="hero-stat">${inner}</div>`;
       }).join("");
 
@@ -114,7 +114,7 @@
       if (linkedCount > 0) {
         statsEl.insertAdjacentHTML(
           "afterend",
-          `<a class="hero-stats-link" id="heroStatsLink" href="results.html${window.i18n.langSuffix()}">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
+          `<a class="hero-stats-link" id="heroStatsLink" href="results.html${window.i18n.langSuffix()}" data-goatcounter-click="hero-stats-link">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
         );
       }
     }
@@ -153,14 +153,16 @@
     const footerLinks = document.getElementById("footerLinks");
     footerLinks.innerHTML = "";
     footerLinks.innerHTML += `<a href="results.html${window.i18n.langSuffix()}">${t("footer.caseStudies")}</a>`;
+    // data-goatcounter-click : clics comptés comme événements GoatCounter
+    // (liés par bindAnalytics() après chaque rendu) — voir README §8.
     if (PROFILE.contact.email) {
-      footerLinks.innerHTML += `<a href="mailto:${PROFILE.contact.email}">${PROFILE.contact.email}</a>`;
+      footerLinks.innerHTML += `<a href="mailto:${PROFILE.contact.email}" data-goatcounter-click="contact-email">${PROFILE.contact.email}</a>`;
     }
     if (PROFILE.contact.linkedin) {
-      footerLinks.innerHTML += `<a href="${PROFILE.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a>`;
+      footerLinks.innerHTML += `<a href="${PROFILE.contact.linkedin}" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>`;
     }
     if (PROFILE.contact.photos) {
-      footerLinks.innerHTML += `<a href="${PROFILE.contact.photos}" target="_blank" rel="noopener">${t("footer.photos")}</a>`;
+      footerLinks.innerHTML += `<a href="${PROFILE.contact.photos}" target="_blank" rel="noopener" data-goatcounter-click="link-photos">${t("footer.photos")}</a>`;
     }
     document.getElementById("footerTagline").textContent = `${tc(PROFILE.role)} — ${PROFILE.contact.location}`;
 
@@ -475,7 +477,7 @@
         <h3>${tc(p.title)}</h3>
         <p>${tc(p.description)}</p>
         <div class="project-links">
-          ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener">${t("projects.viewLink")}</a>` : ""}
+          ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" data-goatcounter-click="project-${p.detailSlug || "link"}">${t("projects.viewLink")}</a>` : ""}
           ${p.detailSlug ? `<a href="project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}">${t("projects.viewCaseStudy")}</a>` : ""}
         </div>
         <div class="project-skills">${p.skills.map((s) => `<span>${skillLabel(s)}</span>`).join("")}</div>
@@ -662,6 +664,18 @@
     // on repositionne l'indicateur sur le lien actif après le re-rendu.
     const current = navLinksEls.find((a) => a.classList.contains("is-active"));
     moveIndicatorTo(current || navLinksEls[0]);
+    bindAnalytics();
+  }
+
+  // Relie les clics à compter (data-goatcounter-click) aux éléments qui
+  // viennent d'être rendus. count.js est chargé en async : s'il arrive
+  // après ce rendu, il fait lui-même ce bind au chargement ; s'il est déjà
+  // là, c'est cet appel qui le fait (il ignore les éléments déjà liés).
+  // Rappelé à chaque bascule de langue, parce que le rendu recrée les liens.
+  function bindAnalytics() {
+    if (window.goatcounter && typeof window.goatcounter.bind_events === "function") {
+      window.goatcounter.bind_events();
+    }
   }
 
   // --------------------------------------------------------------------

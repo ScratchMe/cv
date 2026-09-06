@@ -126,8 +126,20 @@
 <meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
-     pas de données personnelles. Compte configuré (site "antoineberthaud"),
-     tableau de bord : https://antoineberthaud.goatcounter.com -->
+     pas de données personnelles. Le chemin compté est figé ICI, avant le
+     chargement de count.js (async) : on ne garde que ?slug= et ?lang=en,
+     jamais ref/utm ni le fragment, pour que /?lang=en remonte toujours pareil
+     quelle que soit la vitesse du réseau. Compte configuré (site
+     "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
+     — voir README §8 (événements, exclure ses propres visites). -->
+<script>
+  window.goatcounter = { path: (function () {
+    var q = new URLSearchParams(location.search), keep = [];
+    if (q.get("slug")) keep.push("slug=" + encodeURIComponent(q.get("slug")));
+    if (q.get("lang") === "en") keep.push("lang=en");
+    return location.pathname + (keep.length ? "?" + keep.join("&") : "");
+  })() };
+</script>
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,7 +185,7 @@
             <line x1="8" y1="17" x2="12" y2="17"/>
           </svg>
         </button>
-        <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF">
+        <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF" data-goatcounter-click="pdf-download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"/>
             <path d="M7 10l5 5 5-5"/>
@@ -351,7 +363,7 @@
       </div>
       <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les deux PDF
            restent atteignables même sans JavaScript. -->
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf">CV as PDF (English)</a></p>
+      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a></p>
     </div>
   </footer>
 

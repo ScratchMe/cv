@@ -104,7 +104,7 @@
         <p class="project-detail-eyebrow">${t("nav.projects")}</p>
         <h1>${project.title}</h1>
         <p class="project-detail-tagline">${tc(project.tagline)}</p>
-        <a href="${project.liveUrl}" target="_blank" rel="noopener" class="btn solid">${t("projectDetail.viewLive")}</a>
+        <a href="${project.liveUrl}" target="_blank" rel="noopener" class="btn solid" data-goatcounter-click="project-${slug}">${t("projectDetail.viewLive")}</a>
       </div>
 
       <section class="project-detail-section">
@@ -195,6 +195,9 @@
     const langBtn = document.getElementById("langToggle");
     langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
     langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
+    // Clics comptés (data-goatcounter-click) sur les liens que ce rendu
+    // vient de recréer — même logique que bindAnalytics() dans app.js.
+    if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();
   }
 
   function init() {
