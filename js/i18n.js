@@ -137,7 +137,6 @@
     "projectDetail.viewLive": { fr: "Essayer l'outil →", en: "Try the tool →" },
     "projectDetail.theProblem": { fr: "Le problème", en: "The problem" },
     "projectDetail.whatItIs": { fr: "Ce que c'est", en: "What it is" },
-    "projectDetail.mechanisms": { fr: "Mécanismes de croissance mis en place", en: "Growth mechanisms implemented" },
     "projectDetail.process": { fr: "Démarche produit", en: "Product process" },
     "projectDetail.metrics": { fr: "Chiffres d'usage", en: "Usage numbers" },
     "projectDetail.techStack": { fr: "Stack technique", en: "Tech stack" },

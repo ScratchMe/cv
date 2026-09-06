@@ -68,6 +68,7 @@
   // Copie statique du pitch FR telle qu'écrite dans index.html (#heroPitch),
   // capturée au premier rendu pour vérifier qu'elle ne dérive pas de data.js.
   let staticPitchHtml = null;
+  let staticI18nChecked = false;
 
   // --------------------------------------------------------------------
   // 1. HERO
@@ -223,9 +224,14 @@
       });
     });
 
+  }
+
+  // Posé une seule fois (setupControls) : dans renderSkills(), il était
+  // ré-empilé à chaque bascule de langue.
+  function setupClearFilters() {
     document.getElementById("clearFilters").addEventListener("click", () => {
       activeFilters.clear();
-      container.querySelectorAll(".chip.active").forEach((c) => c.classList.remove("active"));
+      document.querySelectorAll("#skillsGroups .chip.active").forEach((c) => c.classList.remove("active"));
       applyFilters();
     });
   }
@@ -424,8 +430,15 @@
       canonicalEl.href = window.i18n.lang === "en" ? `${base}?lang=en` : base;
     }
     document.querySelectorAll("[data-i18n]").forEach((el) => {
+      // Les textes écrits en dur dans index.html sont ce que lisent les
+      // robots sans JavaScript : au premier rendu, on signale en console
+      // ceux qui ne correspondent plus à la version française d'i18n.js.
+      if (!staticI18nChecked && window.i18n.lang === "fr" && el.textContent.trim() !== t(el.dataset.i18n).trim()) {
+        console.warn(`[cv] Texte statique de index.html différent d'i18n.js pour « ${el.dataset.i18n} » : « ${el.textContent.trim().slice(0, 60)} » ≠ « ${t(el.dataset.i18n).slice(0, 60)} »`);
+      }
       el.textContent = t(el.dataset.i18n);
     });
+    staticI18nChecked = true;
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
       el.placeholder = t(el.dataset.i18nPlaceholder);
     });
@@ -613,6 +626,7 @@
       renderAll();
     });
 
+    setupClearFilters();
     setupScrollSpy();
     setupFitReveal();
   }

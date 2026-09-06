@@ -20,6 +20,9 @@ assets/photo/               → dépose ta photo ici
 assets/logos/               → dépose les logos des entreprises ici (PNG/SVG, fond transparent de préférence)
 robots.txt / sitemap.xml     → référencement (voir section 10)
 CNAME                        → domaine personnalisé pour GitHub Pages (cv.antoine.berthaud.me)
+_config.yml                  → exclut du site publié les fichiers de travail (README, CLAUDE.md, scripts…)
+404.html                     → page « introuvable » servie par GitHub Pages, sans JavaScript
+.github/workflows/pr-checks.yml → rejoue la génération des PDF sur chaque PR, sans commit (garde-fou avant merge)
 ```
 
 ## 0. Le site est bilingue FR/EN
@@ -104,9 +107,9 @@ supabase functions deploy gemini-fit --no-verify-jwt
 
 `--no-verify-jwt` rend la fonction appelable sans compte utilisateur, ce qui est nécessaire ici puisque n'importe quel recruteur doit pouvoir l'utiliser sans se connecter. Pour éviter les abus (quelqu'un qui spam ta fonction et consomme ton quota Gemini), tu peux activer le **rate limiting** dans Supabase (Project Settings → API → Rate Limits), ce qui est recommandé mais optionnel pour démarrer.
 
-Pense aussi à remplacer `ALLOWED_ORIGIN` dans `index.ts` par ton vrai domaine GitHub Pages une fois en ligne, plutôt que `"*"`.
+`ALLOWED_ORIGIN` dans `index.ts` vaut déjà `https://cv.antoine.berthaud.me` : seul le site peut appeler la fonction depuis un navigateur.
 
-Le modèle utilisé (`GEMINI_MODEL` en haut du fichier) a été vérifié au 20 août 2026. Google fait évoluer ses modèles assez vite : si tu obtiens une erreur 404 côté Gemini, va voir la liste à jour sur https://ai.google.dev/gemini-api/docs/models et ajuste cette constante.
+Les modèles utilisés sont listés dans `GEMINI_MODEL_CANDIDATES` en haut du fichier, essayés dans l'ordre (le dernier, `gemini-flash-latest`, est un alias maintenu par Google qui ne casse jamais). Si tu obtiens une erreur côté Gemini malgré tout, va voir la liste à jour sur https://ai.google.dev/gemini-api/docs/models et ajuste cette liste. Avant tout redéploiement depuis le repo, compare avec la version déployée (le dashboard Supabase ou l'outil MCP `get_edge_function`) : un réglage changé directement en prod serait écrasé.
 
 ### Étape D — Connecter le site à la fonction
 ✅ Déjà fait dans `js/data.js` avec les identifiants que tu m'as donnés :
@@ -117,7 +120,7 @@ supabaseAnonKey: "eyJhbGc...", // clé "anon public" — conçue par Supabase po
 Le bouton "Analyser le fit" reste désactivé (avec un message clair) tant que `supabaseFunctionUrl` est vide — donc rien ne casse si tu déploies le site avant d'avoir fini cette partie.
 
 ### Étape E — Rate limiting avec Upstash (optionnel mais recommandé)
-Une fois le lien public partagé à des recruteurs, n'importe qui peut aussi spammer ton endpoint et consommer ton quota Gemini. Le code est déjà prêt dans `index.ts` (basé sur [l'exemple officiel Supabase](https://supabase.com/docs/guides/functions/examples/rate-limiting)) : **5 analyses par minute et par adresse IP**. Il ne fait rien tant que tu n'as pas configuré Upstash — donc pas d'urgence à le faire avant de déployer.
+Une fois le lien public partagé à des recruteurs, n'importe qui peut aussi spammer ton endpoint et consommer ton quota Gemini. Le code est déjà prêt dans `index.ts` (basé sur [l'exemple officiel Supabase](https://supabase.com/docs/guides/functions/examples/rate-limiting)) : **3 analyses par minute et par adresse IP**. Il ne fait rien tant que tu n'as pas configuré Upstash — donc pas d'urgence à le faire avant de déployer.
 
 1. Crée un compte gratuit sur https://upstash.com, puis une base **Redis** (type "Global" pour minimiser la latence).
 2. Dans l'onglet **REST API** de ta base, copie `UPSTASH_REDIS_REST_URL` et `UPSTASH_REDIS_REST_TOKEN`.
@@ -128,7 +131,7 @@ Une fois le lien public partagé à des recruteurs, n'importe qui peut aussi spa
    ```
 4. Redéploie la fonction : `supabase functions deploy gemini-fit --no-verify-jwt`.
 
-Si un recruteur dépasse la limite, il voit un message clair ("Trop de tentatives, réessaie dans une minute") plutôt qu'une erreur brute. Pour changer le seuil (5/minute par défaut), ajuste `Ratelimit.slidingWindow(5, "60 s")` dans `index.ts`.
+Si un recruteur dépasse la limite, il voit un message clair ("Trop de tentatives, réessaie dans une minute") plutôt qu'une erreur brute. Pour changer le seuil (3/minute, identique dans le repo et en prod depuis le 3 septembre 2026), ajuste `Ratelimit.slidingWindow(3, "60 s")` dans `index.ts`.
 
 ## 3. Tester en local
 
@@ -194,7 +197,7 @@ Le bouton **"Télécharger PDF"** ne fait plus un simple `Ctrl/Cmd+P` navigateur
 
 1. `scripts/generate-pdf.js` lance un mini-serveur local, ouvre le site dans Chromium, et exporte deux fichiers : `assets/cv-antoine-berthaud-fr.pdf` et `-en.pdf`.
 2. Le CSS `@media print` (dans `style.css`) définit un rendu pensé spécifiquement pour le papier : les couleurs de marque sont conservées (bordures des piliers, dégradés d'avatar), les ombres portées sont retirées (elles ne rendent pas bien sur un support figé), et les sections interactives (navigation, Fit-Checker, bandeau teaser) sont masquées.
-3. `.github/workflows/generate-pdf.yml` relance cette génération automatiquement à chaque `git push` qui touche le contenu ou le style, et recommit les PDF à jour — **tu n'as normalement jamais besoin de lancer ce script toi-même**. Le problème "CV à jour" est réglé une fois pour toutes : tu édites `data.js`, tu push, les PDF suivent.
+3. `.github/workflows/generate-pdf.yml` relance cette génération automatiquement à chaque `git push` sur `main` qui touche le contenu ou le style, **et une fois par mois** (le 1er à 4h UTC) pour rafraîchir les durées d'expérience calculées jusqu'à « aujourd'hui », puis recommit les PDF à jour — **tu n'as normalement jamais besoin de lancer ce script toi-même**. S'il échoue, il ouvre une issue GitHub (label `pdf-generation-failure`). Le même script tourne sur chaque PR via `pr-checks.yml`, sans commit, avec des garde-fous (erreur JS, page vide, polices absentes, lien local, PDF trop court). Le problème "CV à jour" est réglé une fois pour toutes : tu édites `data.js`, tu push, les PDF suivent.
 
 ### Régénérer en local (pour prévisualiser un changement avant de push)
 
@@ -298,10 +301,13 @@ ni à `project-detail.js`.
 1. Ajoute une entrée dans `SIDE_PROJECTS` (titre, description, `link` vers
    le projet en ligne) comme d'habitude.
 2. Ajoute une clé correspondante dans `PROJECT_DETAILS` (juste après
-   `SIDE_PROJECTS` dans `data.js`) : `problem`, `whatItIs`, `mechanisms`
-   (liste), `process`, `metrics` (laisse `[]` tant que tu n'as pas de
-   vrais chiffres significatifs — un texte de repli s'affiche
-   automatiquement à la place via `metricsFallback`), `techStack`.
+   `SIDE_PROJECTS` dans `data.js`) : le plus simple est de **copier l'entrée
+   `tour-de-growth` et de remplacer les textes**. Champs : `title`,
+   `tagline`, `liveUrl`, `problem`, `whatItIs` (+ `whatItIsPoints` et
+   `whatItIsClosing` optionnels), `teachingMoment` (optionnel, `{title,
+   body}`), `process`, `metrics` (laisse `[]` tant que tu n'as pas de vrais
+   chiffres significatifs — `metricsFallback` s'affiche à la place),
+   `techStack`.
 3. Relie les deux en renseignant `detailSlug` sur l'entrée `SIDE_PROJECTS`
    avec la même clé que dans `PROJECT_DETAILS`.
 4. C'est tout — `project-detail.html?slug=ta-clé` fonctionne
@@ -315,16 +321,16 @@ qui reste un CV scannable rapidement. Le lien "Voir l'étude de cas" sur la
 carte est optionnel — une entrée `SIDE_PROJECTS` sans `detailSlug` n'a
 tout simplement pas ce second lien.
 
-- [ ] Ajouter les logos d'entreprise (`assets/logos/`)
-- [ ] Créer la clé Gemini + déployer la fonction Supabase (identifiants déjà renseignés côté site)
-- [ ] Configurer Upstash si tu veux le rate limiting (optionnel)
+- [ ] ~~Ajouter les logos d'entreprise (`assets/logos/`)~~ — fait
+- [ ] ~~Créer la clé Gemini + déployer la fonction Supabase~~ — fait (v13 déployée le 6 septembre 2026)
+- [ ] ~~Configurer Upstash si tu veux le rate limiting~~ — fait, 3/min actif en prod
 - [ ] ~~Créer un compte GoatCounter gratuit et remplacer `TON-CODE` dans `index.html`~~ — fait (site `antoineberthaud`)
-- [ ] Configurer le CNAME chez ton registrar DNS (voir section 4) + activer le domaine personnalisé dans Settings → Pages
+- [ ] ~~Configurer le CNAME chez ton registrar DNS + activer le domaine personnalisé~~ — fait, cv.antoine.berthaud.me en ligne
 - [ ] ~~Inscrire le site sur Google Search Console et soumettre le sitemap~~ — fait ; demander l'indexation des URLs après chaque mise en ligne importante (section 10)
 - [ ] Ajouter le lien du CV sur LinkedIn (« Site web », « En vedette », « Infos ») et supprimer l'éventuel ancien profil en doublon
 - [ ] Ajouter un lien vers le CV depuis `antoine.berthaud.me` (Adobe Portfolio) et depuis `tourdegrowth.com` (section 10)
-- [ ] Vérifier les permissions du workflow GitHub Actions (Settings → Actions → General → "Read and write permissions")
+- [ ] ~~Vérifier les permissions du workflow GitHub Actions~~ — fait, le workflow commite les PDF
 - [ ] ~~Repasser `CONFIG.showSideProjects` à `true`~~ — fait, Tour de Growth est en place
 - [ ] Remplir `metrics` dans `PROJECT_DETAILS` (Tour de Growth) dès qu'il y a de vrais chiffres d'usage (visites, taux de partage, coefficient viral) — le texte de repli actuel est temporaire, pas un oubli
 - [ ] Quand le projet climat sera prêt à être montré : lui ajouter aussi sa carte + page de détail en suivant le même pattern (section 11)
-- [ ] Déployer sur GitHub Pages (ou autre) — les PDF se maintiendront à jour tout seuls ensuite
+- [ ] ~~Déployer sur GitHub Pages~~ — fait

@@ -85,7 +85,7 @@
             </div>`
             )
             .join("")}</div>`
-        : `<p class="project-metrics-fallback">${tc(project.metricsFallback)}</p>`;
+        : `<p class="project-metrics-fallback">${tc(project.metricsFallback || "")}</p>`;
 
     const stackCategories = ["frontend", "backend", "analytics", "testing", "seo", "ops"];
     const techStackHtml = stackCategories
@@ -119,10 +119,14 @@
         ${project.whatItIsClosing ? richParagraphs(project.whatItIsClosing) : ""}
       </section>
 
-      <section class="project-detail-section project-teaching-moment">
+      ${
+        project.teachingMoment
+          ? `<section class="project-detail-section project-teaching-moment">
         <h2>${tc(project.teachingMoment.title)}</h2>
         ${richParagraphs(project.teachingMoment.body)}
-      </section>
+      </section>`
+          : ""
+      }
 
       <section class="project-detail-section">
         <h2>${t("projectDetail.process")}</h2>
