@@ -309,52 +309,55 @@ const PILLARS = [
 //    Les labels (SQL, Metabase, Agile...) restent identiques en FR/EN — ce
 //    sont déjà des termes anglais utilisés tels quels en français. Seule la
 //    catégorie est traduite (via UI_STRINGS "skills.cat.*" dans i18n.js) :
-//    garde les valeurs de `category` exactement comme ci-dessous (Produit,
-//    Méthode, Data, Outils), elles servent de clé de traduction.
+//    garde les valeurs de `category` exactement comme ci-dessous (growth,
+//    discovery, leadership, delivery, tools), elles servent de clé de
+//    traduction — sans la clé, la page afficherait la valeur brute.
+//    L'ordre des groupes est l'ordre d'apparition ici (sept. 2026, second
+//    retour d'expert) : growth et stratégie d'abord, delivery et outils en
+//    dernier — rien n'est supprimé, les mots-clés servent aux outils de tri.
+//    Les API et intégrations restent listées : 4 offres nantaises sur 10 les
+//    citent, et un PM qui construit des tunnels et des paiements doit pouvoir
+//    les montrer.
 // ---------------------------------------------------------------------------
 const SKILLS = [
-  { id: "discovery", label: "Discovery", category: "Produit" },
-  { id: "user-research", label: "User Research", category: "Produit" },
-  { id: "roadmapping", label: "Roadmapping", category: "Produit" },
-  { id: "user-stories", label: "User Stories & Backlog", category: "Produit" },
-  { id: "product-ownership", label: "Product Ownership", category: "Produit" },
-  { id: "plg", label: "Product-Led Growth", category: "Produit" },
-  { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "Produit" },
-  { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "Produit" },
-  { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "Produit" },
-  { id: "stakeholder", label: "Stakeholder Management", category: "Produit" },
-  { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "Produit" },
-  { id: "mentoring", label: "Mentoring & Coaching", category: "Produit" },
-  { id: "project-management", label: { fr: "Gestion de projet", en: "Project Management" }, category: "Produit" },
-  { id: "functional-analysis", label: { fr: "Analyse fonctionnelle", en: "Functional Analysis" }, category: "Produit" },
-  { id: "agile", label: "Agile / Scrum", category: "Méthode" },
-  { id: "okr", label: "OKR", category: "Méthode" },
-  { id: "story-mapping", label: "Story Mapping", category: "Méthode" },
-  { id: "bdd", label: "BDD", category: "Méthode" },
-  { id: "feature-flagging", label: "Feature Flagging / Progressive Rollout", category: "Méthode" },
-  { id: "sql", label: "SQL", category: "Data" },
-  { id: "metabase", label: "Metabase", category: "Data" },
-  { id: "mixpanel", label: "Mixpanel", category: "Data" },
-  { id: "segment", label: "Segment", category: "Data" },
-  { id: "looker-studio", label: "Looker Studio", category: "Data" },
-  { id: "matomo", label: "Matomo", category: "Data" },
-  { id: "hotjar", label: "Hotjar", category: "Data" },
-  { id: "heap", label: "Heap", category: "Data" },
-  { id: "zapier", label: "Zapier", category: "Outils" },
-  { id: "jira", label: "Jira", category: "Outils" },
-  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "Outils" },
-  { id: "flagship", label: "Flagship", category: "Outils" },
-  { id: "productboard", label: "ProductBoard", category: "Outils" },
-  { id: "figma", label: "Figma", category: "Outils" },
-  { id: "miro", label: "Miro", category: "Outils" },
-  { id: "akeneo", label: "Akeneo", category: "Outils" },
-  // Catégorie « Technique » : ce qu'un PM qui construit des tunnels, des
-  // paiements et des intégrations doit pouvoir montrer (4 offres nantaises
-  // sur 10 citent les API). La clé de traduction skills.cat.Technique est
-  // dans i18n.js — sans elle, la page afficherait la clé brute.
-  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "Technique" },
-  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "Technique" },
-  { id: "postman", label: "Postman", category: "Technique" },
+  { id: "plg", label: "Product-Led Growth", category: "growth" },
+  { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "growth" },
+  { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "growth" },
+  { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "growth" },
+  { id: "okr", label: "OKR", category: "growth" },
+  { id: "roadmapping", label: "Roadmapping", category: "growth" },
+  { id: "discovery", label: "Discovery", category: "discovery" },
+  { id: "user-research", label: "User Research", category: "discovery" },
+  { id: "sql", label: "SQL", category: "discovery" },
+  { id: "metabase", label: "Metabase", category: "discovery" },
+  { id: "mixpanel", label: "Mixpanel", category: "discovery" },
+  { id: "segment", label: "Segment", category: "discovery" },
+  { id: "looker-studio", label: "Looker Studio", category: "discovery" },
+  { id: "matomo", label: "Matomo", category: "discovery" },
+  { id: "hotjar", label: "Hotjar", category: "discovery" },
+  { id: "heap", label: "Heap", category: "discovery" },
+  { id: "stakeholder", label: "Stakeholder Management", category: "leadership" },
+  { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "leadership" },
+  { id: "mentoring", label: "Mentoring & Coaching", category: "leadership" },
+  { id: "agile", label: "Agile / Scrum", category: "delivery" },
+  { id: "user-stories", label: "User Stories & Backlog", category: "delivery" },
+  { id: "story-mapping", label: "Story Mapping", category: "delivery" },
+  { id: "bdd", label: "BDD", category: "delivery" },
+  { id: "feature-flagging", label: "Feature Flagging / Progressive Rollout", category: "delivery" },
+  { id: "product-ownership", label: "Product Ownership", category: "delivery" },
+  { id: "project-management", label: { fr: "Gestion de projet", en: "Project Management" }, category: "delivery" },
+  { id: "functional-analysis", label: { fr: "Analyse fonctionnelle", en: "Functional Analysis" }, category: "delivery" },
+  { id: "jira", label: "Jira", category: "tools" },
+  { id: "productboard", label: "ProductBoard", category: "tools" },
+  { id: "figma", label: "Figma", category: "tools" },
+  { id: "miro", label: "Miro", category: "tools" },
+  { id: "zapier", label: "Zapier", category: "tools" },
+  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "tools" },
+  { id: "flagship", label: "Flagship", category: "tools" },
+  { id: "akeneo", label: "Akeneo", category: "tools" },
+  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "tools" },
+  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "tools" },
+  { id: "postman", label: "Postman", category: "tools" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -558,21 +561,17 @@ const EXPERIENCES = [
         start: "2016-08",
         end: "2020-09",
         context: {
-          fr: "D'abord la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains, utilisés par les canaux de vente.",
-          en: "First the digitalization of B2B group-ticket sales (SNCF sales staff, travel agencies), then the distribution web services (APIs) behind regional (TER) and urban ticket sales, used by the sales channels.",
+          fr: "Mission : la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains utilisés par les canaux de vente.",
+          en: "Mission: digitizing B2B group-ticket sales (SNCF sales staff, travel agencies), then the web services (APIs) distributing regional (TER) and urban tickets to the sales channels.",
         },
+        // Condensé à une mission et une puce (sept. 2026, second retour
+        // d'expert, choix d'Antoine) : le bloc SNCF pesait plus que les rôles
+        // qui comptent (AB Tasty). Le delivery retiré est couvert par les
+        // compétences ; la ligne Équipe garde les 15 développeurs et 2 PM.
         achievements: [
           {
-            fr: "Ateliers d'étude du besoin et macro-chiffrage des demandes portées par les équipes métier, tenue de roadmap et Story Mapping.",
-            en: "Ran needs-gathering workshops and high-level sizing of requests from business teams, maintained the roadmap and Story Mapping.",
-          },
-          {
-            fr: "Rédaction des User Stories et scénarios BDD associés, animation des Sprint Planning.",
-            en: "Wrote User Stories and associated BDD scenarios, ran Sprint Plannings.",
-          },
-          {
-            fr: "Définition de la solution en coordination avec les projets partenaires, support fonctionnel à l'équipe de développement et validation des fonctionnalités livrées.",
-            en: "Defined the solution in coordination with partner projects, provided functional support to the development team and validated delivered features.",
+            fr: "**Du besoin métier à la livraison** : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.",
+            en: "**From business need to delivery**: workshops and high-level sizing with business teams, roadmap and Story Mapping, User Stories and BDD scenarios, acceptance of delivered features.",
           },
         ],
         methodology: "Scrum",
@@ -587,17 +586,13 @@ const EXPERIENCES = [
         start: "2015-01",
         end: "2016-08",
         context: {
-          fr: "Exécution et rédaction de campagnes de tests sur les applications web et mobiles de réservation de billets Thalys et sur un portail entreprises B2B.",
-          en: "Ran and wrote test campaigns for Thalys web and mobile ticket-booking applications and a B2B enterprise portal.",
+          fr: "Mission : les campagnes de tests des applications web et mobiles de réservation Thalys et d'un portail entreprises B2B.",
+          en: "Mission: test campaigns for the Thalys web and mobile booking apps and a B2B corporate portal.",
         },
         achievements: [
           {
-            fr: "Lead test sur la première phase du projet de digitalisation de la vente de billets groupes, côté grand public.",
-            en: "Led testing on the first phase of the group-ticket sales digitalization project, on the consumer side.",
-          },
-          {
-            fr: "Participation aux cérémonies agiles et appui fonctionnel sur certaines User Stories.",
-            en: "Took part in agile ceremonies and provided functional support on select User Stories.",
+            fr: "**Lead test de la première phase** de la digitalisation de la vente de billets groupes, côté grand public.",
+            en: "**Test lead on the first phase** of the group-ticket sales digitization, consumer side.",
           },
         ],
         methodology: "Scrum",

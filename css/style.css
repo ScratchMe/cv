@@ -179,7 +179,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .skills-hint{color:var(--ink-soft);font-size:14px;margin-bottom:22px;}
 .skills-groups{display:flex;flex-direction:column;gap:16px;}
 .skills-group{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
-.skills-group-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);min-width:90px;padding-top:9px;}
+.skills-group-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);flex:0 0 100%;} /* toujours au-dessus des chips : avec min-width seul, un groupe court (Leadership) restait seul en ligne à côté de son libellé */
 .skills-chips{display:flex;gap:10px;flex-wrap:wrap;}
 .chip{font-size:13.5px;font-weight:600;padding:8px 16px;border-radius:100px;background:var(--surface);border:1.5px solid var(--line);cursor:pointer;transition:all .15s ease;}
 .chip:hover{border-color:var(--violet);}
@@ -759,6 +759,11 @@ body.focus-mode .pill{background:#F1F1EF;}
   .skills-groups{gap:6px;}
   .skills-chips{gap:5px;}
   .chip{font-size:11px;padding:4px 10px;}
+  /* Libellé en colonne à gauche des chips (comme dans le court) : quatre
+     lignes de libellés en moins, la section tient en une demi-page. */
+  .skills-group{flex-wrap:nowrap;gap:10px;}
+  .skills-group-label{flex:0 0 108px;font-size:10.5px;padding-top:5px;line-height:1.25;}
+  .skills-chips{flex:1 1 auto;min-width:0;}
   .formation-card{padding:10px 12px;}
   .formation-list li{padding:6px 12px;}
   .formation-item-title{font-size:13px;}
@@ -824,7 +829,7 @@ body.focus-mode .pill{background:#F1F1EF;}
      mêmes mots-clés pour les outils de tri, sur un tiers de la hauteur. */
   body.cv-court .skills-groups{display:block;}
   body.cv-court .skills-group{display:flex;align-items:baseline;gap:10px;margin-bottom:3px;}
-  body.cv-court .skills-group-label{flex:0 0 76px;margin:0;}
+  body.cv-court .skills-group-label{flex:0 0 96px;margin:0;line-height:1.25;} /* « Growth & stratégie » sur deux lignes courtes plutôt que trois */
   body.cv-court .skills-chips{display:block;gap:0;}
   body.cv-court .chip{display:inline;padding:0;border:0;background:none;font-size:11.5px;line-height:1.5;color:#000;font-weight:500;}
   body.cv-court .chip:not(:last-child)::after{content:" · ";color:#9A93AB;font-weight:400;}

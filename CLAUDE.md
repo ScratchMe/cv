@@ -174,6 +174,20 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   ouvre sur le livrable. Une puce qui ne faisait que donner le résultat
   d'une autre fusionne avec elle (Everysens) ; ce qui est déjà dit dans un
   autre bloc n'est pas répété (la veille PM est dans le bloc communauté).
+- **Compétences en cinq groupes par ordre d'importance** (sept. 2026,
+  second retour d'expert) : Growth & stratégie, Discovery & data,
+  Leadership, Delivery, Outils & technique (clés `growth`, `discovery`,
+  `leadership`, `delivery`, `tools` dans `data.js`, libellés dans
+  `i18n.js`). Rien n'est supprimé, les mots-clés servent aux outils de tri.
+  Sur le site le libellé est toujours au-dessus des chips ; dans les PDF il
+  passe en colonne à gauche (108 px complet, 96 px court).
+- **Débuts SNCF condensés** (sept. 2026, choix d'Antoine sur le second
+  retour d'expert : « l'expérience SNCF est énorme alors que ce n'est pas
+  celle qui a le plus d'importance, AB Tasty reste la plus intéressante »)
+  : Product Manager Junior 2016-2020 et QA 2015-2016 tiennent en une
+  mission et une puce chacun, ligne Équipe conservée (15 développeurs,
+  2 PM). Revient sur l'item 18 de l'audit qui les avait étoffés ; le
+  bloc « Animateur de la communauté » garde ses trois puces (leadership).
 - **Page plus courte sur téléphone** (sept. 2026, validé par Antoine) : les
   rôles terminés au plus tard à `CONFIG.collapseRolesEndingBefore`
   (`"2016-08"` : QA et ESN) sont repliés derrière « Voir mes débuts
