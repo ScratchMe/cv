@@ -1,0 +1,48 @@
+name: Vérifier la PR
+
+# Rejoue sur chaque pull request les étapes de generate-pdf.yml SANS commit :
+# syntaxe des JS, rendu complet du site dans Chromium, génération des deux
+# PDF avec leurs garde-fous (erreur JS, page sans expérience, polices
+# absentes, liens locaux, PDF trop court). Rien n'empêchait jusqu'ici de
+# merger une page cassée. À exiger sur main dans Settings → Branches.
+"on":
+  pull_request:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "results.html"
+      - "project-detail.html"
+      - "css/**"
+      - "js/**"
+      - "assets/photo/**"
+      - "assets/logos/**"
+      - "scripts/generate-pdf.js"
+      - "package.json"
+      - ".github/workflows/pr-checks.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer les dépendances npm
+        run: npm install
+
+      - name: Installer Chromium (Playwright)
+        run: npx playwright install --with-deps chromium
+
+      - name: Vérifier la syntaxe des fichiers JS
+        run: node --check js/data.js && node --check js/app.js && node --check js/i18n.js && node --check js/gemini.js && node --check js/project-detail.js && node --check js/results.js
+
+      - name: Générer les PDF FR et EN (sans les committer)
+        run: npm run generate-pdf

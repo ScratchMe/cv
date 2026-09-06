@@ -5,8 +5,8 @@ name: Générer les PDF du CV
 # tout changement de code : les durées d'expérience affichées sur le CV
 # (calculées depuis js/data.js jusqu'à "aujourd'hui") avancent avec le
 # calendrier, donc les PDF doivent être régénérés régulièrement pour rester
-# à jour même quand rien d'autre n'a changé. [À COMPLÉTER] si ta branche
-# principale s'appelle "master" plutôt que "main", change-le ci-dessous.
+# à jour même quand rien d'autre n'a changé.
+# Les mêmes étapes tournent sur chaque PR, sans commit : voir pr-checks.yml.
 "on":
   push:
     branches: [main]
@@ -42,6 +42,11 @@ jobs:
 
       - name: Installer Chromium (Playwright)
         run: npx playwright install --with-deps chromium
+
+      # Sans pipe : un `| head` masquerait le code de sortie. Un data.js cassé
+      # est repéré ici, avant de produire un PDF vide.
+      - name: Vérifier la syntaxe des fichiers JS
+        run: node --check js/data.js && node --check js/app.js && node --check js/i18n.js && node --check js/gemini.js && node --check js/project-detail.js && node --check js/results.js
 
       - name: Générer les PDF FR et EN
         run: npm run generate-pdf
