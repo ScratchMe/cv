@@ -217,8 +217,7 @@ arrivée.
 
 **Contenu qu'Antoine fournit** (études de cas, témoignages, texte "à sa
 voix") : préparer un brouillon à partir de ce qui existe déjà dans
-`data.js` plutôt que de partir d'une page blanche — Antoine gère une
-dépression avec des soucis de concentration, il l'a explicitement
-mentionné. Poser une seule question ciblée à la fois plutôt qu'un
-formulaire à remplir d'un coup, et proposer un texte à corriger plutôt que
-de demander d'écrire depuis zéro.
+`data.js` plutôt que de partir d'une page blanche. Poser une seule question
+ciblée à la fois plutôt qu'un formulaire à remplir d'un coup, et proposer un
+texte à corriger plutôt que de demander d'écrire depuis zéro — c'est la
+méthode qui marche le mieux avec lui, ne pas la rouvrir.
