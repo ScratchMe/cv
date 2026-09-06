@@ -453,8 +453,8 @@ const EXPERIENCES = [
         start: "2021-10",
         end: "2022-04",
         context: {
-          fr: "PM sur la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), permettant aux voyageurs de s'auto-contrôler vis-à-vis de leur pass sanitaire et de leur billet dans le contexte Covid-19.",
-          en: "PM on the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), letting travelers self-check their health pass and train ticket in the context of Covid-19.",
+          fr: "PM sur la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à **40 000 visiteurs par jour** : les voyageurs y vérifiaient eux-mêmes leur pass sanitaire et leur billet dans le contexte Covid-19. Poste mené en parallèle de celui sur les boutiques en ligne.",
+          en: "PM on the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), up to **40,000 visitors a day**: travelers self-checked their health pass and train ticket in the context of Covid-19. Held in parallel with the online-stores role.",
         },
         achievements: [
           {
@@ -478,8 +478,8 @@ const EXPERIENCES = [
         start: "2020-09",
         end: "2022-04",
         context: {
-          fr: "PM sur l'outil de génération de boutique en ligne pour la vente de titres de transport, avec deux clients : Transilien (boutique.transilien.com) et TER (boutiques de commande de cartes billettique).",
-          en: "PM on the online store generation tool for transport ticket sales, serving two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering stores).",
+          fr: "PM sur l'outil de génération de boutiques en ligne pour la vente de titres de transport, avec deux clients : Transilien (boutique.transilien.com) et TER (boutiques de commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.",
+          en: "PM on the online store generation tool for transport ticket sales, serving two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering stores). From October 2021 to April 2022, in parallel with the Prêt à Voyager role.",
         },
         achievements: [
           {
@@ -503,73 +503,52 @@ const EXPERIENCES = [
         skills: ["okr", "roadmapping", "user-stories", "product-ownership", "agile", "discovery", "stakeholder", "jira", "miro", "akeneo"],
       },
       {
-        title: { fr: "Responsable de cercle", en: "Community Lead (rotating role)" },
+        // Rôle d'animation gardé en bloc à part (et pas en simple puce) :
+        // c'est le signal « sait animer et faire grandir des gens » qu'un
+        // recruteur cherche pour un profil de manager. Titre lisible de
+        // l'extérieur, sans le nom interne « cercle ».
+        title: { fr: "Animateur de la communauté Product Management (rôle tournant)", en: "Product Management Community Lead (rotating role)" },
         start: "2019-04",
         end: "2020-02",
         context: {
-          fr: "Rôle tournant d'animation de la communauté de pratiques dédiée à la gestion de produit agile chez Evoyageurs Technologies.",
-          en: "Rotating role leading the agile product management community of practice at Evoyageurs Technologies.",
+          fr: "Animation de la communauté de pratiques Product Management de l'entreprise, **plus de 100 personnes**, en parallèle du poste de Product Manager.",
+          en: "Led the company's Product Management community of practice, **100+ people**, alongside the Product Manager role.",
         },
         achievements: [
-          { fr: "Partage de veille sur les pratiques Product Management au sein d'une communauté d'échange dédiée de **plus de 100 personnes**.", en: "Shared Product Management practice insights within a dedicated peer community of **100+ people**." },
-          { fr: "Animation d'ateliers et d'exercices pour faire progresser la communauté.", en: "Ran workshops and exercises to help the community grow." },
+          { fr: "Partage de veille sur les pratiques Product Management et animation des temps d'échange.", en: "Shared Product Management practice insights and ran the community's sessions." },
+          { fr: "Ateliers et exercices pour faire progresser la communauté.", en: "Workshops and exercises to help the community grow." },
           { fr: "Mentorat de 2 à 3 personnes tout au long du mandat.", en: "Mentored 2 to 3 people throughout the term." },
         ],
         skills: ["agile", "mentoring"],
       },
       {
         title: { fr: "Product Manager Junior", en: "Junior Product Manager" },
-        start: "2017-11",
+        start: "2016-08",
         end: "2020-09",
         context: {
-          fr: "En charge des web services (API) de distribution des titres TER et urbains, utilisés par les canaux de vente.",
-          en: "Owned the distribution web services (APIs) behind regional (TER) and urban ticket sales, used by the sales channels.",
+          fr: "D'abord la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains, utilisés par les canaux de vente.",
+          en: "First the digitalization of B2B group-ticket sales (SNCF sales staff, travel agencies), then the distribution web services (APIs) behind regional (TER) and urban ticket sales, used by the sales channels.",
         },
         achievements: [
           {
-            fr: "Ateliers d'étude et macro-chiffrage des problématiques portées par la MOA, tenue de roadmap et Story Mapping.",
-            en: "Ran scoping workshops and rough estimation of issues raised by the business owner, maintained the roadmap and Story Mapping.",
+            fr: "Ateliers d'étude du besoin et macro-chiffrage des demandes portées par les équipes métier, tenue de roadmap et Story Mapping.",
+            en: "Ran needs-gathering workshops and rough estimation of requests from business teams, maintained the roadmap and Story Mapping.",
           },
           {
             fr: "Rédaction des User Stories et scénarios BDD associés, animation des Sprint Planning.",
             en: "Wrote User Stories and associated BDD scenarios, ran Sprint Plannings.",
           },
           {
-            fr: "Support fonctionnel à l'équipe de développement et validation des fonctionnalités livrées.",
-            en: "Provided functional support to the development team and validated delivered features.",
+            fr: "Définition de la solution en coordination avec les projets partenaires, support fonctionnel à l'équipe de développement et validation des fonctionnalités livrées.",
+            en: "Defined the solution in coordination with partner projects, provided functional support to the development team and validated delivered features.",
           },
         ],
         methodology: "Scrum",
         team: {
-          fr: "15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
-          en: "15 developers, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
+          fr: "Jusqu'à 15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
+          en: "Up to 15 developers, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
         },
-        skills: ["api", "roadmapping", "story-mapping", "user-stories", "product-ownership", "agile", "bdd", "jira", "miro", "postman"],
-      },
-      {
-        title: { fr: "Product Manager Junior", en: "Junior Product Manager" },
-        start: "2016-08",
-        end: "2017-11",
-        context: {
-          fr: "PM Junior sur le lot 2 du projet de digitalisation de la vente de billets groupes (MBG) à destination des vendeurs SNCF et des agences de voyage (B2B).",
-          en: "Junior PM on lot 2 of the group-ticket sales digitalization project (MBG) for SNCF sales staff and travel agencies (B2B).",
-        },
-        achievements: [
-          {
-            fr: "Ateliers d'étude du besoin avec le client, définition de la solution en synchronisation avec les projets partenaires (WDI, FERIA, Viva Groupes).",
-            en: "Ran needs-gathering workshops with the client, defined the solution in sync with partner projects (WDI, FERIA, Viva Groupes).",
-          },
-          {
-            fr: "Rédaction des User Stories et présentation de la solution à l'équipe de développement, suivi et support fonctionnel jusqu'à la réalisation.",
-            en: "Wrote User Stories and presented the solution to the development team, then provided follow-up and functional support through delivery.",
-          },
-        ],
-        methodology: "Scrum",
-        team: {
-          fr: "5 développeurs, 1 Scrum Master",
-          en: "5 developers, 1 Scrum Master",
-        },
-        skills: ["user-stories", "product-ownership", "stakeholder", "jira", "miro"],
+        skills: ["api", "roadmapping", "story-mapping", "user-stories", "product-ownership", "stakeholder", "agile", "bdd", "jira", "miro", "postman"],
       },
       {
         title: "QA",
@@ -581,8 +560,8 @@ const EXPERIENCES = [
         },
         achievements: [
           {
-            fr: "Lead test sur le lot 1 du projet de digitalisation de la vente de billets groupes (MBG) côté grand public (B2C).",
-            en: "Led testing on lot 1 of the group-ticket sales digitalization project (MBG) for consumers (B2C).",
+            fr: "Lead test sur la première phase du projet de digitalisation de la vente de billets groupes, côté grand public.",
+            en: "Led testing on the first phase of the group-ticket sales digitalization project, on the consumer side.",
           },
           {
             fr: "Participation aux cérémonies agiles et appui fonctionnel sur certaines User Stories.",
