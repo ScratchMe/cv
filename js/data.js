@@ -561,21 +561,17 @@ const EXPERIENCES = [
         start: "2016-08",
         end: "2020-09",
         context: {
-          fr: "D'abord la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains, utilisés par les canaux de vente.",
-          en: "First the digitalization of B2B group-ticket sales (SNCF sales staff, travel agencies), then the distribution web services (APIs) behind regional (TER) and urban ticket sales, used by the sales channels.",
+          fr: "Mission : la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains utilisés par les canaux de vente.",
+          en: "Mission: digitizing B2B group-ticket sales (SNCF sales staff, travel agencies), then the web services (APIs) distributing regional (TER) and urban tickets to the sales channels.",
         },
+        // Condensé à une mission et une puce (sept. 2026, second retour
+        // d'expert, choix d'Antoine) : le bloc SNCF pesait plus que les rôles
+        // qui comptent (AB Tasty). Le delivery retiré est couvert par les
+        // compétences ; la ligne Équipe garde les 15 développeurs et 2 PM.
         achievements: [
           {
-            fr: "Ateliers d'étude du besoin et macro-chiffrage des demandes portées par les équipes métier, tenue de roadmap et Story Mapping.",
-            en: "Ran needs-gathering workshops and high-level sizing of requests from business teams, maintained the roadmap and Story Mapping.",
-          },
-          {
-            fr: "Rédaction des User Stories et scénarios BDD associés, animation des Sprint Planning.",
-            en: "Wrote User Stories and associated BDD scenarios, ran Sprint Plannings.",
-          },
-          {
-            fr: "Définition de la solution en coordination avec les projets partenaires, support fonctionnel à l'équipe de développement et validation des fonctionnalités livrées.",
-            en: "Defined the solution in coordination with partner projects, provided functional support to the development team and validated delivered features.",
+            fr: "**Du besoin métier à la livraison** : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.",
+            en: "**From business need to delivery**: workshops and high-level sizing with business teams, roadmap and Story Mapping, User Stories and BDD scenarios, acceptance of delivered features.",
           },
         ],
         methodology: "Scrum",
@@ -590,17 +586,13 @@ const EXPERIENCES = [
         start: "2015-01",
         end: "2016-08",
         context: {
-          fr: "Exécution et rédaction de campagnes de tests sur les applications web et mobiles de réservation de billets Thalys et sur un portail entreprises B2B.",
-          en: "Ran and wrote test campaigns for Thalys web and mobile ticket-booking applications and a B2B enterprise portal.",
+          fr: "Mission : les campagnes de tests des applications web et mobiles de réservation Thalys et d'un portail entreprises B2B.",
+          en: "Mission: test campaigns for the Thalys web and mobile booking apps and a B2B corporate portal.",
         },
         achievements: [
           {
-            fr: "Lead test sur la première phase du projet de digitalisation de la vente de billets groupes, côté grand public.",
-            en: "Led testing on the first phase of the group-ticket sales digitalization project, on the consumer side.",
-          },
-          {
-            fr: "Participation aux cérémonies agiles et appui fonctionnel sur certaines User Stories.",
-            en: "Took part in agile ceremonies and provided functional support on select User Stories.",
+            fr: "**Lead test de la première phase** de la digitalisation de la vente de billets groupes, côté grand public.",
+            en: "**Test lead on the first phase** of the group-ticket sales digitization, consumer side.",
           },
         ],
         methodology: "Scrum",
