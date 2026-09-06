@@ -110,6 +110,8 @@
     [
       `📍 ${PROFILE.location}`,
       `🚀 ${PROFILE.yearsExperience} ${t("hero.pillYears")}`,
+      // Pastille « ce que je cherche » : seulement si le champ est renseigné.
+      ...(tc(PROFILE.lookingFor) ? [`🎯 ${tc(PROFILE.lookingFor)}`] : []),
     ].forEach((text) => {
       const span = document.createElement("span");
       span.className = "pill";
