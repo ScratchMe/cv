@@ -37,6 +37,12 @@ const PROFILE = {
   },
   location: "Nantes, France",
   yearsExperience: "10+", // repris de ton résumé LinkedIn ("plus de 10 ans d'expérience")
+  // Ce que tu cherches : affiché en pastille dans le hero (🎯) et transmis au
+  // Fit-Checker (ligne « Recherche »). Vide ("") = rien ne s'affiche.
+  lookingFor: {
+    fr: "Ouvert aux opportunités Senior / Lead PM · SaaS B2B · Nantes, hybride ou remote",
+    en: "Open to Senior / Lead PM roles · B2B SaaS · Nantes, hybrid or remote",
+  },
   photo: "assets/photo/antoine.jpg", // recadrée en carré, légers ajustements de contraste/netteté
   // ⚠️ Le pitch FR est aussi recopié en dur dans index.html (#heroPitch) pour
   // les robots qui n'exécutent pas JavaScript (moteurs IA, aperçus...). Si tu

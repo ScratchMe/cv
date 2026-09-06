@@ -72,7 +72,11 @@
     // par Antoine : l'IA doit le savoir quand une offre demande de l'IA.
     const fitCheckerTxt = t("fit.selfDescription");
 
-    return `Profil : ${PROFILE.firstName} ${PROFILE.lastName}, ${tc(PROFILE.role)}, ${PROFILE.location}, ${PROFILE.yearsExperience} ans d'expérience en Product Management.
+    // La ligne « Recherche » fait passer l'objection géographique ou de
+    // niveau de « à confirmer » à « à organiser » dans l'analyse.
+    const lookingForTxt = tc(PROFILE.lookingFor) ? `\nRecherche : ${tc(PROFILE.lookingFor)}` : "";
+
+    return `Profil : ${PROFILE.firstName} ${PROFILE.lastName}, ${tc(PROFILE.role)}, ${PROFILE.location}, ${PROFILE.yearsExperience} ans d'expérience en Product Management.${lookingForTxt}
 
 Pitch : ${tc(PROFILE.pitch)}
 
