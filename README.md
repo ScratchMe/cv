@@ -26,7 +26,7 @@ assets/logos/               → dépose les logos des entreprises ici (WebP ou P
 robots.txt / sitemap.xml     → référencement (voir section 10)
 CNAME                        → domaine personnalisé pour GitHub Pages (cv.antoine.berthaud.me)
 _config.yml                  → exclut du site publié les fichiers de travail (README, CLAUDE.md, scripts…)
-404.html                     → page « introuvable » servie par GitHub Pages, sans JavaScript
+404.html                     → page « introuvable » servie par GitHub Pages ; FR et EN dans le HTML, le bloc affiché suit la langue du navigateur (seule détection navigateur du site, voir CLAUDE.md)
 .github/workflows/pr-checks.yml → rejoue le pré-rendu et la génération des PDF sur chaque PR, sans commit (garde-fou avant merge)
 .github/workflows/keepalive.yml + surveiller-fit-checker.yml → continuité du Fit-Checker (voir section 12)
 supabase/migrations/         → la table keepalive lue chaque jour pour garder le projet Supabase actif
@@ -304,7 +304,7 @@ Soyons lucides sur l'objectif : sur une requête générique comme « product ma
 3. être **lu par les moteurs IA** (ChatGPT, Perplexity, Claude…), qui citent volontiers les sites perso mais n'exécutent souvent pas le JavaScript — d'où les pages pré-rendues (section 5).
 
 Ce qui est en place dans le code :
-- **Français par défaut, anglais sur `?lang=en`**, sans détection de la langue du navigateur (voir section 0) : Googlebot navigue en anglais et indexait la version anglaise à l'URL canonique. Balises `hreflang` fr/en dans le `<head>` et dans le sitemap ; le canonical suit la langue affichée (`/` en FR, `/?lang=en` en EN).
+- **Français par défaut, anglais sur `?lang=en`**, sans détection de la langue du navigateur (voir section 0) : Googlebot navigue en anglais et indexait la version anglaise à l'URL canonique. Balises `hreflang` fr/en dans le `<head>` et dans le sitemap ; le canonical suit la langue affichée (`/` en FR, `/?lang=en` en EN). Seule exception : `404.html`, qui n'est pas indexée et n'a aucun autre signal de langue, garde le bloc FR ou EN d'après la langue du navigateur (les deux restent dans le HTML sans JavaScript).
 - **`<title>`, `<meta description>`, Open Graph et eyebrow du hero** qui citent Nantes, le métier et le secteur — textes dans `PROFILE.seo` (`js/data.js`), posés dans le `<head>` de `index.html` par le pré-rendu (section 5), comme tout le contenu de la page. `app.js` prévient dans la console du navigateur si le pitch pré-rendu diverge de `PROFILE.pitch.fr` (page pas encore régénérée).
 - **Données structurées `ProfilePage` → `Person`** (JSON-LD dans `index.html`) : métier, lieu (Nantes), formation, sujets maîtrisés, et `sameAs` vers LinkedIn, le portfolio photo et Tour de Growth, pour que Google relie le tout à la même personne.
 - **`sitemap.xml`** avec toutes les pages indexables (accueil FR et EN, Résultats, étude de cas) et une date `lastmod` **à mettre à jour quand une page change** ; les deux PDF y figurent aussi (décision du 06/09/2026 : ils sont déjà liés depuis les pages, autant que Google les compte), avec un `lastmod` mis à jour automatiquement par `generate-pdf.yml` à chaque régénération ; `robots.txt` ; `CNAME`.
