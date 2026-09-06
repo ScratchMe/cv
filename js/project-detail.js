@@ -144,13 +144,27 @@
       </section>
     `;
 
-    document.getElementById("pageTitle").textContent = `${project.title} — ${t("projectDetail.metaTitleSuffix")}`;
+    const pageTitle = `${project.title} — ${t("projectDetail.metaTitleSuffix")}`;
+    document.getElementById("pageTitle").textContent = pageTitle;
     document.getElementById("pageDescription").setAttribute("content", tc(project.tagline));
     // Canonical = l'URL de CETTE étude de cas (avec son ?slug=), pas la page
     // gabarit nue. La langue n'y figure pas : le français est la version de
     // référence, ?lang=en n'est qu'une variante d'affichage.
     const canonical = document.getElementById("canonicalLink");
     if (canonical) canonical.href = `${canonical.href.split("?")[0]}?slug=${encodeURIComponent(slug)}`;
+    // Aperçus de partage : les balises og:/twitter: statiques sont génériques
+    // (page gabarit) ; on les aligne sur le projet affiché. Les robots des
+    // réseaux sociaux n'exécutent pas ce JS : ils voient la version générique.
+    setMeta('meta[property="og:title"]', pageTitle);
+    setMeta('meta[name="twitter:title"]', pageTitle);
+    setMeta('meta[property="og:description"]', tc(project.tagline));
+    setMeta('meta[name="twitter:description"]', tc(project.tagline));
+    if (canonical) setMeta('meta[property="og:url"]', canonical.href);
+  }
+
+  function setMeta(selector, content) {
+    const el = document.querySelector(selector);
+    if (el) el.setAttribute("content", content);
   }
 
   // Rendu (ré-appelé à chaque changement de langue) — ne touche jamais à la

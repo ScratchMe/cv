@@ -99,9 +99,34 @@
       </article>`;
   }
 
+  // Les textes écrits en dur dans results.html (en-tête + trois chiffres) sont
+  // ce que lisent les robots sans JavaScript : au premier rendu en français,
+  // on signale en console ceux qui ne correspondent plus à i18n.js / data.js.
+  let staticChecked = false;
+  function checkStaticCopy(root) {
+    if (staticChecked || window.i18n.lang !== "fr") return;
+    staticChecked = true;
+    const warn = (what, got, expected) =>
+      console.warn(`[cv] Texte statique de results.html différent pour « ${what} » : « ${got} » ≠ « ${expected} »`);
+    const txt = (sel, scope = root) => ((scope.querySelector(sel) || {}).textContent || "").trim();
+    if (txt("h1") !== t("results.title")) warn("results.title", txt("h1"), t("results.title"));
+    if (txt(".project-detail-tagline") !== t("results.intro")) warn("results.intro", txt(".project-detail-tagline"), t("results.intro"));
+    const staticIds = [...root.querySelectorAll(".result-block")].map((el) => el.id);
+    const ids = orderedResultIds();
+    if (staticIds.join(",") !== ids.join(",")) warn("liste des chiffres", staticIds.join(","), ids.join(","));
+    root.querySelectorAll(".result-block").forEach((el) => {
+      const r = RESULT_DETAILS[el.id];
+      if (!r) return;
+      if (txt(".result-company", el) !== r.company) warn(`${el.id} company`, txt(".result-company", el), r.company);
+      if (txt(".result-value", el) !== r.value) warn(`${el.id} value`, txt(".result-value", el), r.value);
+      if (txt(".result-label", el) !== tc(r.label)) warn(`${el.id} label`, txt(".result-label", el), tc(r.label));
+    });
+  }
+
   function render() {
     const root = document.getElementById("resultsRoot");
     const ids = orderedResultIds();
+    checkStaticCopy(root);
 
     root.innerHTML = `
       <div class="results-hero">

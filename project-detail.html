@@ -3,10 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Antoine Berthaud — Side project</title>
-<meta name="description" id="pageDescription" content="Étude de cas d'un side project — Antoine Berthaud, Product Manager.">
+<!-- Page gabarit pilotée par ?slug= : titre, description et balises og:/twitter:
+     restent génériques ici (jamais le contenu d'un projet précis — un nouveau
+     side project ne touche que data.js). js/project-detail.js les remplace par
+     ceux du projet affiché, y compris og:url avec le slug. -->
+<title id="pageTitle">Étude de cas — Antoine Berthaud, Product Manager à Nantes</title>
+<meta name="description" id="pageDescription" content="Étude de cas d'un side project d'Antoine Berthaud, Product Manager à Nantes : le problème, ce que c'est, la démarche produit et la stack technique.">
 
 <link rel="canonical" id="canonicalLink" href="https://cv.antoine.berthaud.me/project-detail.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Étude de cas — Antoine Berthaud, Product Manager à Nantes">
+<meta property="og:description" content="Étude de cas d'un side project d'Antoine Berthaud, Product Manager à Nantes : le problème, ce que c'est, la démarche produit et la stack technique.">
+<meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://cv.antoine.berthaud.me/project-detail.html">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="article:author" content="https://www.linkedin.com/in/antoine-berthaud-pm/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Étude de cas — Antoine Berthaud, Product Manager à Nantes">
+<meta name="twitter:description" content="Étude de cas d'un side project d'Antoine Berthaud, Product Manager à Nantes : le problème, ce que c'est, la démarche produit et la stack technique.">
+<meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -19,6 +39,14 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <noscript>
+    <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
+      <p>Ce site a besoin de JavaScript pour s'afficher correctement.</p>
+      <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
+      <p><a href="./">← Retour au CV</a></p>
+    </div>
+  </noscript>
   <header class="top">
     <div class="navrow wrap">
       <a href="index.html" class="mark" id="logoLink">Antoine<span>.</span></a>

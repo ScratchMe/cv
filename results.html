@@ -3,10 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Antoine Berthaud — Résultats</title>
-<meta name="description" id="pageDescription" content="Le détail derrière les chiffres clés du CV — contexte, défi, action, résultat, leçon.">
+<!-- <title>, description et balises og:/twitter: : copie statique (FR) de
+     results.metaTitle / results.metaDescription (js/i18n.js). results.js les
+     remplace selon la langue affichée ; cette copie est ce que lisent les
+     robots sans JavaScript et les aperçus de partage (LinkedIn, Slack…). Si
+     tu modifies ces textes dans i18n.js, reporte-les ici. -->
+<title id="pageTitle">Études de cas Product Manager — Antoine Berthaud, Nantes</title>
+<meta name="description" id="pageDescription" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).">
 
+<!-- Canonical unique : le français est la version de référence, ?lang=en
+     n'est qu'une variante d'affichage (pas de hreflang ici, voir CLAUDE.md). -->
 <link rel="canonical" href="https://cv.antoine.berthaud.me/results.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Études de cas Product Manager — Antoine Berthaud, Nantes">
+<meta property="og:description" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://cv.antoine.berthaud.me/results.html">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="article:author" content="https://www.linkedin.com/in/antoine-berthaud-pm/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Études de cas Product Manager — Antoine Berthaud, Nantes">
+<meta name="twitter:description" content="Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).">
+<meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -19,6 +42,14 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <noscript>
+    <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
+      <p>Ce site a besoin de JavaScript pour s'afficher correctement.</p>
+      <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
+      <p><a href="./">← Retour au CV</a></p>
+    </div>
+  </noscript>
   <header class="top">
     <div class="navrow wrap">
       <a href="index.html" class="mark" id="logoLink">Antoine<span>.</span></a>
@@ -30,7 +61,34 @@
   </header>
 
   <main class="wrap results-page" id="resultsRoot">
-    <!-- rendu par js/results.js -->
+    <!-- Copie statique (FR) de l'en-tête et des trois chiffres que js/results.js
+         rend : c'est ce que lisent les robots qui n'exécutent pas JavaScript
+         (GPTBot, ClaudeBot, PerplexityBot…). results.js remplace tout ce bloc
+         au chargement et avertit en console si un texte diverge d'i18n.js ou
+         de RESULT_DETAILS (data.js). Une ancre #resultId fonctionne aussi ici,
+         avant le rendu JS. -->
+    <div class="results-hero">
+      <p class="project-detail-eyebrow">Études de cas · Product Manager</p>
+      <h1>Le détail derrière les chiffres</h1>
+      <p class="project-detail-tagline">Un chiffre seul ne dit jamais tout. Voici, pour chacun des chiffres affichés en haut du CV, le contexte, le problème identifié, ce que j'ai concrètement fait, et ce que j'en retiens.</p>
+    </div>
+    <div class="results-list">
+      <article class="result-block" id="ab-tasty-activation">
+        <h2 class="result-company">AB Tasty</h2>
+        <div class="result-value">+15%</div>
+        <div class="result-label">Taux d'activation</div>
+      </article>
+      <article class="result-block" id="everysens-entry-time">
+        <h2 class="result-company">Everysens</h2>
+        <div class="result-value">-50%</div>
+        <div class="result-label">Temps de saisie</div>
+      </article>
+      <article class="result-block" id="sncf-ticket-retrieval">
+        <h2 class="result-company">SNCF Connect &amp; Tech</h2>
+        <div class="result-value">+100%</div>
+        <div class="result-label">Taux de conversion, récupération du billet</div>
+      </article>
+    </div>
   </main>
 
   <footer class="site-footer">
