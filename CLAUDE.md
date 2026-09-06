@@ -152,6 +152,18 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   place avec sa page de détail. Le champ `metrics` de `PROJECT_DETAILS`
   reste vide (`[]`, avec `metricsFallback` affiché à la place) tant qu'il
   n'y a pas de vrais chiffres d'usage significatifs.
+- **Quatre cartes « Ce qui me définit »** (sept. 2026, second retour
+  d'expert : le leadership n'était lisible que dans les puces des rôles) :
+  les trois pratiques (titres en français, bilingues via `tc()`) plus une
+  carte **Leadership** qui ne reprend que des faits déjà sur le site (deux
+  PM animés, communauté PM de 100 personnes, business case et roadmap
+  devant la direction, squads jusqu'à 15 développeurs). Pas de quatrième
+  couleur dans la palette : sa barre reprend le dégradé violet → corail
+  (bordure transparente + fond en deux couches dans `style.css`). Grille
+  4 colonnes au-delà de 1 080 px, 2 × 2 sur tablette et dans le PDF
+  complet, où les cartes sont un cran plus denses que le reste pour que
+  les deux rangées tiennent en page 1 sous le hero (PDF complets toujours
+  à 5 pages, courts à 2 — le court n'affiche pas les cartes).
 - **Page plus courte sur téléphone** (sept. 2026, validé par Antoine) : les
   rôles terminés au plus tard à `CONFIG.collapseRolesEndingBefore`
   (`"2016-08"` : QA et ESN) sont repliés derrière « Voir mes débuts

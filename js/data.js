@@ -225,7 +225,7 @@ const RESULT_DETAILS = {
 const PILLARS = [
   {
     id: "user-first",
-    title: "User First",
+    title: { fr: "Le problème d'abord", en: "Problem first" },
     subtitle: {
       fr: "Pas de feature sans un problème utilisateur quantifié.",
       en: "No feature without a quantified user problem.",
@@ -243,7 +243,7 @@ const PILLARS = [
   },
   {
     id: "data-informed",
-    title: "Data Informed",
+    title: { fr: "Les données tranchent", en: "Data decides" },
     subtitle: {
       fr: "Les intuitions lancent les tests, les données valident.",
       en: "Intuition starts the test, data validates it.",
@@ -261,7 +261,7 @@ const PILLARS = [
   },
   {
     id: "iterative",
-    title: "Iterative",
+    title: { fr: "Petit d'abord, grand ensuite", en: "Small first, then big" },
     subtitle: {
       fr: "L'apprentissage continu vers le Product-Market Fit.",
       en: "Continuous learning on the way to Product-Market Fit.",
@@ -274,6 +274,31 @@ const PILLARS = [
       {
         fr: "Livraison par étapes plutôt qu'un big bang, et déploiement progressif quand le risque est élevé.",
         en: "Delivery in steps rather than a big bang, and progressive rollout when the risk is high.",
+      },
+    ],
+  },
+  {
+    // Carte Leadership (sept. 2026, second retour d'expert) : ces faits
+    // existaient tous dans les puces des rôles, mais aucun n'était visible au
+    // niveau où un recruteur scanne. Uniquement des faits déjà sur le site.
+    id: "leadership",
+    title: { fr: "Leadership", en: "Leadership" },
+    subtitle: {
+      fr: "Des PM et des équipes à faire avancer, un cap tenu avec la direction.",
+      en: "PMs and teams to move forward, a course held with leadership.",
+    },
+    points: [
+      {
+        fr: "Deux PM animés sur le chantier self-serve d'AB Tasty : répartition du plan, arbitrages de périmètre.",
+        en: "Two PMs led on AB Tasty's self-serve workstream: splitting the plan, scoping trade-offs.",
+      },
+      {
+        fr: "Communauté de pratiques PM de plus de 100 personnes chez SNCF, mentorat de 2 à 3 personnes.",
+        en: "A Product Management community of 100+ people at SNCF, mentoring 2 to 3 people.",
+      },
+      {
+        fr: "Business case et roadmap portés auprès de la direction ; squads jusqu'à 15 développeurs.",
+        en: "Business case and roadmap carried to leadership; squads of up to 15 developers.",
       },
     ],
   },
