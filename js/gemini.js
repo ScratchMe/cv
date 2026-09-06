@@ -118,7 +118,16 @@ Autre réalisation : ${fitCheckerTxt}`;
   ];
   let loadingInterval = null;
 
+  // Une seule annonce pour les lecteurs d'écran (#fitAnnounce, role=status) :
+  // « Analyse en cours… » au départ, le score à l'arrivée. Les messages
+  // tournants de #fitLoadingStatus sont décoratifs (aria-hidden).
+  function announce(text) {
+    const el = document.getElementById("fitAnnounce");
+    if (el) el.textContent = text;
+  }
+
   function startLoadingMessages() {
+    announce(t("fit.analyzing"));
     const statusEl = document.getElementById("fitLoadingStatus");
     if (!statusEl) return;
     let i = 0;
@@ -208,7 +217,10 @@ Autre réalisation : ${fitCheckerTxt}`;
       // Le résultat apparaît sous le bouton : sur un écran pas trop grand
       // (ou si la fenêtre a scrollé pendant l'attente), il peut facilement
       // passer sous le pli sans qu'on s'en rende compte. On y amène l'œil.
-      resultEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultEl.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+      // Le focus suit le résultat (tabindex=-1 dans index.html) : clavier et
+      // lecteur d'écran arrivent sur le score au lieu de rester sur le bouton.
+      resultEl.focus({ preventScroll: true });
 
       // Analytics respectueux de la vie privée : compte les analyses
       // réussies (pas les visites, déjà comptées automatiquement par le
@@ -219,6 +231,7 @@ Autre réalisation : ${fitCheckerTxt}`;
       }
     } catch (err) {
       console.error("Fit-Checker :", err);
+      announce("");
       errorEl.hidden = false;
       if (err.cause === "rate-limited") {
         errorEl.textContent = err.message;
@@ -282,7 +295,10 @@ Autre réalisation : ${fitCheckerTxt}`;
       }
     `;
     resultEl.hidden = false;
+    announce(t("fit.resultReady").replace("{score}", String(score)));
   }
+
+  const reducedMotion = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("analyzeBtn");

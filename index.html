@@ -237,13 +237,13 @@
     <!-- ============================= COMPÉTENCES / FILTRES ============================= -->
     <section id="competences" class="skills-section wrap">
       <div class="sectitle">
-        <h2 data-i18n="skills.sectionTitle">Compétences &amp; outils</h2>
+        <h2 id="skillsTitle" data-i18n="skills.sectionTitle">Compétences &amp; outils</h2>
       </div>
       <p class="skills-hint">
         <span data-i18n="skills.hint">Clique sur une ou plusieurs compétences pour filtrer les expériences correspondantes ci-dessous.</span>
         <button id="clearFilters" class="link-btn" type="button" hidden data-i18n="skills.clearFilters">Réinitialiser les filtres ✕</button>
       </p>
-      <div class="skills-groups" id="skillsGroups"></div>
+      <div class="skills-groups" id="skillsGroups" role="group" aria-labelledby="skillsTitle"></div>
     </section>
 
     <!-- ============================= EXPÉRIENCES ============================= -->
@@ -251,7 +251,7 @@
       <div class="sectitle">
         <h2 data-i18n="experiences.sectionTitle">Expériences</h2>
       </div>
-      <p class="filter-status" id="filterStatus" hidden></p>
+      <p class="filter-status" id="filterStatus" role="status" aria-live="polite" hidden></p>
       <div id="experiencesList" class="experiences-list"></div>
     </section>
 
@@ -305,14 +305,19 @@
         </div>
         <p class="fit-intro" data-i18n="fit.intro">Collez votre offre d'emploi ci-dessous. Une IA (Gemini) compare mon profil à votre besoin et vous donne un score de compatibilité argumenté — points forts, points de vigilance, et une question d'entretien suggérée.</p>
         <div class="fit-box">
+          <label for="jobPosting" class="sr-only" data-i18n="fit.label">Texte de l'offre d'emploi</label>
           <textarea id="jobPosting" rows="8" data-i18n-placeholder="fit.placeholder" placeholder="Colle ici le texte de l'offre d'emploi (intitulé, missions, compétences recherchées...)"></textarea>
           <div class="fit-actions">
             <button id="analyzeBtn" class="btn solid" type="button" data-i18n="fit.analyzeBtn">Analyser le fit</button>
-            <span id="fitError" class="fit-error" hidden></span>
+            <span id="fitError" class="fit-error" role="alert" hidden></span>
           </div>
-          <p id="fitLoadingStatus" class="fit-loading-status" hidden></p>
+          <p id="fitLoadingStatus" class="fit-loading-status" aria-hidden="true" hidden></p>
+          <!-- Annonce unique pour les lecteurs d'écran : les messages tournants
+               ci-dessus sont décoratifs (aria-hidden), sinon ils seraient lus
+               toutes les deux secondes. -->
+          <p id="fitAnnounce" class="sr-only" role="status" aria-live="polite"></p>
         </div>
-        <div id="fitResult" class="fit-result" hidden></div>
+        <div id="fitResult" class="fit-result" role="region" tabindex="-1" data-i18n-aria="fit.resultLabel" hidden></div>
       </div>
     </section>
 

@@ -205,7 +205,7 @@
           ${items
             .map(
               (s) =>
-                `<button class="chip${activeFilters.has(s.id) ? " active" : ""}" type="button" data-skill="${s.id}">${tc(s.label)}</button>`
+                `<button class="chip${activeFilters.has(s.id) ? " active" : ""}" type="button" aria-pressed="${activeFilters.has(s.id)}" data-skill="${s.id}">${tc(s.label)}</button>`
             )
             .join("")}
         </div>
@@ -223,6 +223,7 @@
           activeFilters.add(id);
           chip.classList.add("active");
         }
+        chip.setAttribute("aria-pressed", String(activeFilters.has(id)));
         applyFilters();
       });
     });
@@ -234,7 +235,10 @@
   function setupClearFilters() {
     document.getElementById("clearFilters").addEventListener("click", () => {
       activeFilters.clear();
-      document.querySelectorAll("#skillsGroups .chip.active").forEach((c) => c.classList.remove("active"));
+      document.querySelectorAll("#skillsGroups .chip.active").forEach((c) => {
+        c.classList.remove("active");
+        c.setAttribute("aria-pressed", "false");
+      });
       applyFilters();
     });
   }

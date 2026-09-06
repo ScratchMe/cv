@@ -26,7 +26,12 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
 - `js/app.js` : rendu, filtres de compétences, scroll-spy, durées
   dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`).
 - `js/gemini.js` : logique du Fit-Checker (appelle une fonction Supabase,
-  jamais Gemini directement depuis le navigateur).
+  jamais Gemini directement depuis le navigateur). Accessibilité : les
+  messages tournants de `#fitLoadingStatus` sont décoratifs (`aria-hidden`),
+  une seule annonce passe par `#fitAnnounce` (`role=status`) au départ et à
+  l'arrivée, `#fitError` est un `role=alert`, et le focus est posé sur
+  `#fitResult` (`tabindex=-1`) après le rendu. Les filtres de compétences
+  portent `aria-pressed`, `#filterStatus` est un `role=status`.
 - `js/project-detail.js` + `project-detail.html` : gabarit réutilisable
   pour les pages de détail ("étude de cas") des side projects, piloté par
   `?slug=`. Ajouter un nouveau side project avec sa page de détail ne
