@@ -507,7 +507,7 @@ const EXPERIENCES = [
         // c'est le signal « sait animer et faire grandir des gens » qu'un
         // recruteur cherche pour un profil de manager. Titre lisible de
         // l'extérieur, sans le nom interne « cercle ».
-        title: { fr: "Animateur de la communauté Product Management (rôle tournant)", en: "Product Management Community Lead (rotating role)" },
+        title: { fr: "Animateur de la communauté Product Management", en: "Product Management Community Lead" },
         start: "2019-04",
         end: "2020-02",
         context: {
