@@ -181,12 +181,12 @@
           <li><a href="#fit-checker" data-i18n="nav.fit">Fit-Checker</a><span class="ai-badge" data-i18n="fit.badge">IA</span></li>
           <li class="nav-side-projects"><a href="#projects" data-i18n="nav.projects">Side projects</a></li>
           <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
-          <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
+          <li class="nav-indicator" id="navIndicator" aria-hidden="true"></li>
         </ul>
       </nav>
       <div class="navactions">
         <button id="langToggle" class="btn" type="button">EN</button>
-        <button id="focusToggle" class="btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="nav.focusToggle" title="Focus lecture">
+        <button id="focusToggle" class="btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="nav.focusToggle" aria-label="Focus lecture" title="Focus lecture">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <rect x="4" y="4" width="16" height="16" rx="2"/>
             <line x1="8" y1="9" x2="16" y2="9"/>
@@ -586,7 +586,7 @@
                sans stocker). Copie statique de fit.privacy (i18n.js). -->
           <p class="fit-privacy" data-i18n="fit.privacy">Le texte que vous collez part vers l'API Google Gemini pour l'analyse. Google ne l'utilise pas pour améliorer ses modèles, et ce site ne l'enregistre pas.</p>
         </div>
-        <div id="fitResult" class="fit-result" role="region" tabindex="-1" data-i18n-aria="fit.resultLabel" hidden></div>
+        <section id="fitResult" class="fit-result" tabindex="-1" data-i18n-aria="fit.resultLabel" hidden></section>
       </div>
     </section>
 
@@ -619,7 +619,7 @@
 <p id="footerTagline">Senior Growth Product Manager — AB Tasty — Nantes, France</p>
 <!-- /static:footerTagline -->
         <!-- static:footerAvailability -->
-<p id="footerAvailability" class="footer-availability" hidden=""></p>
+<p id="footerAvailability" class="footer-availability" hidden></p>
 <!-- /static:footerAvailability -->
       </div>
       <!-- static:footerLinks -->

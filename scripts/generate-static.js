@@ -174,7 +174,8 @@ async function renderPage(browser, page, slug) {
     // par un script tiers ne doit finir dans les pages générées.
     document.querySelectorAll("[data-goatcounter-bound]").forEach((el) => el.removeAttribute("data-goatcounter-bound"));
     return zoneList.map(([id, ...selectors]) => {
-      const parts = selectors.map((sel) => document.querySelector(sel)).map((el) => (el ? el.outerHTML : null));
+      // outerHTML sérialise les attributs booléens en hidden="" : on écrit hidden.
+      const parts = selectors.map((sel) => document.querySelector(sel)).map((el) => (el ? el.outerHTML.replace(/ hidden=""/g, " hidden") : null));
       return { id, first: parts[0], html: parts.filter(Boolean).join("\n") };
     });
   }, page.zones);
