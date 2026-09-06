@@ -1,0 +1,101 @@
+name: Surveiller le Fit-Checker
+
+# Sonde quotidienne de bout en bout : un vrai appel à la fonction Supabase
+# gemini-fit, comme le ferait un recruteur. Si le projet Supabase est en pause
+# (plan Free : mis en pause après 7 jours sans requête API), si la clé Gemini
+# est épuisée ou si un déploiement est cassé, une issue s'ouvre — sinon
+# personne ne le saurait avant le prochain recruteur. Coût : un appel Gemini
+# par jour.
+#
+# GitHub désactive les workflows planifiés d'un dépôt public après 60 jours
+# sans activité (commit) : réactivation par le bouton « Enable workflow »
+# dans l'onglet Actions, ou par un commit qui modifie la ligne cron.
+on:
+  schedule:
+    - cron: "43 6 * * *" # tous les jours à 6h43 UTC, loin de l'heure pile (moins de retard côté GitHub)
+  workflow_dispatch: {} # pour tester à la main depuis l'onglet Actions
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sonder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appeler la fonction gemini-fit
+        env:
+          FUNCTION_URL: https://tpreesulucfsyalaipcj.supabase.co/functions/v1/gemini-fit
+          # Clé « anon » publique du projet (la même que dans js/data.js) : pas un secret.
+          ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcmVlc3VsdWNmc3lhbGFpcGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxNTg4MDgsImV4cCI6MjEwMjczNDgwOH0.Fl3dn5f8ef43IjkHwM2GKrE1qK1PIyO6REh4kk28M7g
+        run: |
+          set -u
+          body='{"cvContext":"Antoine Berthaud, Senior Product Manager à Nantes. 10 ans de produit en SaaS B2B (AB Tasty, Everysens) et grands comptes (SNCF Connect & Tech). Growth, PLG, discovery, data (SQL, Metabase, Mixpanel). Ingénieur Polytech Nantes, anglais courant.","jobPosting":"Senior Product Manager Growth (H/F), Nantes. SaaS B2B, activation, A/B testing, anglais courant. Sonde automatique quotidienne du site cv.antoine.berthaud.me.","lang":"fr"}'
+          appel() {
+            # -m 90 : le repli multi-modèles côté serveur peut prendre du temps (un appel réel ~22 s).
+            curl -sS -m 90 -o /tmp/reponse.json -w '%{http_code}' \
+              -X POST "$FUNCTION_URL" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $ANON_KEY" \
+              -H "Origin: https://cv.antoine.berthaud.me" \
+              --data "$body" 2>/dev/null || true
+          }
+          verdict() {
+            if [ "$1" = "200" ] && grep -q '"score"' /tmp/reponse.json; then return 0; fi
+            if [ "$1" = "429" ]; then echo "Rate limit atteint (HTTP 429) : la fonction répond, c'est bon signe."; return 0; fi
+            return 1
+          }
+          code=$(appel)
+          if verdict "$code"; then echo "Fit-Checker OK (HTTP $code)"; exit 0; fi
+          echo "Premier essai : HTTP $code — $(head -c 300 /tmp/reponse.json 2>/dev/null)"
+          echo "Nouvel essai dans 60 s…"
+          sleep 60
+          code=$(appel)
+          if verdict "$code"; then echo "Fit-Checker OK au second essai (HTTP $code)"; exit 0; fi
+          echo "::error::Fit-Checker KO (HTTP $code) — $(head -c 300 /tmp/reponse.json 2>/dev/null)"
+          exit 1
+
+      # Une issue (label fit-checker-down) avec le lien vers le projet Supabase
+      # (bouton « Restore » si le projet est en pause). Un commentaire sur
+      # l'issue déjà ouverte si la panne se répète, jamais de doublon.
+      - name: Signaler la panne via une issue
+        if: failure()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const title = "🚨 Le Fit-Checker ne répond plus";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              "La sonde quotidienne n'a pas obtenu de réponse valide de la fonction Supabase `gemini-fit` (deux essais à 60 s d'intervalle).",
+              "",
+              "À vérifier, dans l'ordre :",
+              "1. Le projet Supabase est-il en pause ? https://supabase.com/dashboard/project/tpreesulucfsyalaipcj (bouton **Restore**).",
+              "2. La clé Gemini a-t-elle encore du quota ? https://aistudio.google.com/apikey",
+              "3. Les logs de la fonction : https://supabase.com/dashboard/project/tpreesulucfsyalaipcj/functions/gemini-fit/logs",
+              "",
+              `Logs du workflow : ${runUrl}`,
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "fit-checker-down",
+            });
+
+            if (existing.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: `Toujours en panne : ${runUrl}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["fit-checker-down"],
+              });
+            }

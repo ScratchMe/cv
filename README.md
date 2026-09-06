@@ -349,3 +349,16 @@ tout simplement pas ce second lien.
 - [ ] Remplir `metrics` dans `PROJECT_DETAILS` (Tour de Growth) dès qu'il y a de vrais chiffres d'usage (visites, taux de partage, coefficient viral) — le texte de repli actuel est temporaire, pas un oubli
 - [ ] Quand le projet climat sera prêt à être montré : lui ajouter aussi sa carte + page de détail en suivant le même pattern (section 11)
 - [ ] ~~Déployer sur GitHub Pages~~ — fait
+
+## 12. Continuité du Fit-Checker (Supabase en plan Free)
+
+Le projet Supabase (`tpreesulucfsyalaipcj`, plan Free) **est mis en pause après 7 jours sans requête API** — et les appels à la fonction `gemini-fit` ne comptent pas comme de l'activité, seules les requêtes à la base (PostgREST) comptent. Un projet en pause = un Fit-Checker qui affiche le message d'indisponibilité à tous les recruteurs sans que personne ne le sache.
+
+Trois filets, du plus important au moins :
+
+1. **`.github/workflows/surveiller-fit-checker.yml`** — sonde quotidienne (6h43 UTC) : un vrai appel à la fonction, comme un recruteur. OK si HTTP 200 avec un `score` (ou 429 : le rate limit répond, donc la fonction vit). Second essai après 60 s, puis issue GitHub avec le label `fit-checker-down` et le lien vers le projet (bouton **Restore**). À tester à la main : onglet Actions → « Surveiller le Fit-Checker » → Run workflow → le log doit dire `Fit-Checker OK (HTTP 200)`.
+2. **`.github/workflows/keepalive.yml`** + table `public.keepalive` (`supabase/migrations/`) — trois lectures quotidiennes (5h17 UTC) de cette table d'une ligne, en lecture seule pour la clé anon : c'est l'activité qui empêche la pause.
+3. **Un moniteur externe gratuit** (UptimeRobot ou cron-job.org) sur la même URL de lecture — `https://tpreesulucfsyalaipcj.supabase.co/rest/v1/keepalive?select=id&limit=1` avec l'en-tête `apikey: <clé anon>` — toutes les 12 h. Il fait activité **et** alerte sans dépendre de GitHub : GitHub désactive les workflows planifiés d'un dépôt public après 60 jours sans commit (réactivation par « Enable workflow » dans l'onglet Actions, ou par un commit qui modifie la ligne `cron`).
+
+Si le projet est passé en pause malgré tout : dashboard Supabase → **Restore** (quelques minutes), puis relancer la sonde à la main pour vérifier.
+
