@@ -164,6 +164,10 @@ async function generateFor(browser, { lang, format, outPath }) {
     path: outPath,
     format,
     printBackground: true,
+    // PDF balisé (arbre de structure pour les lecteurs d'écran et les ATS)
+    // et signets à partir des titres. Quelques dizaines de Ko de plus.
+    tagged: true,
+    outline: true,
     margin: { top: "14mm", bottom: "14mm", left: "12mm", right: "12mm" },
   });
   await page.close();
@@ -178,11 +182,12 @@ async function generateFor(browser, { lang, format, outPath }) {
   const browser = await chromium.launch();
 
   try {
-    // A4 pour la version française (norme France/Europe), Letter pour la
-    // version anglaise (norme US) — petit détail qui compte pour un
-    // recruteur qui imprime le document.
+    // A4 dans les deux langues : la cible anglophone est européenne (équipes
+    // internationales à Nantes, Londres...), et le format Letter, plus court,
+    // ajoutait deux pages à la version anglaise. À repasser en Letter
+    // seulement pour une cible US explicite.
     await generateFor(browser, { lang: "fr", format: "A4", outPath: path.join(OUT_DIR, `${BASE_NAME}-fr.pdf`) });
-    await generateFor(browser, { lang: "en", format: "Letter", outPath: path.join(OUT_DIR, `${BASE_NAME}-en.pdf`) });
+    await generateFor(browser, { lang: "en", format: "A4", outPath: path.join(OUT_DIR, `${BASE_NAME}-en.pdf`) });
   } finally {
     await browser.close();
     server.close();

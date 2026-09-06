@@ -71,6 +71,7 @@ const PROFILE = {
   contact: {
     email: "antoine.berthaud@gmail.com",
     linkedin: "https://www.linkedin.com/in/antoine-berthaud-pm/",
+    site: "https://cv.antoine.berthaud.me/", // affichée en toutes lettres en page 1 du PDF
     // Galerie photos (portfolio perso) : lien affiché dans le pied de page,
     // à côté de l'e-mail et de LinkedIn. Vide = pas de lien.
     photos: "https://antoine.berthaud.me/",

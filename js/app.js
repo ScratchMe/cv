@@ -140,6 +140,17 @@
       footerLinks.innerHTML += `<a href="${PROFILE.contact.photos}" target="_blank" rel="noopener">${t("footer.photos")}</a>`;
     }
     document.getElementById("footerTagline").textContent = `${tc(PROFILE.role)} — ${PROFILE.contact.location}`;
+
+    // Ligne de contact du PDF (page 1) : e-mail · LinkedIn · site, en toutes
+    // lettres et cliquables. Masquée à l'écran (voir .print-contact).
+    const printContact = document.getElementById("printContact");
+    if (printContact) {
+      const parts = [];
+      if (PROFILE.contact.email) parts.push(`<a href="mailto:${PROFILE.contact.email}">${PROFILE.contact.email}</a>`);
+      if (PROFILE.contact.linkedin) parts.push(`<a href="${PROFILE.contact.linkedin}">${PROFILE.contact.linkedin.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</a>`);
+      if (PROFILE.contact.site) parts.push(`<a href="${PROFILE.contact.site}">${PROFILE.contact.site.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>`);
+      printContact.innerHTML = parts.join(" · ");
+    }
   }
 
   // --------------------------------------------------------------------
@@ -235,7 +246,7 @@
           return `
         <div class="role-block" data-company="${ci}" data-role="${ri}" data-skills="${r.skills.join(",")}">
           <div class="role-top">
-            <span class="role-title">${tc(r.title)}</span>
+            <h4 class="role-title">${tc(r.title)}</h4>
             <span class="role-dates">${formatDateLabel(r.start)} — ${formatDateLabel(r.end)} · ${formatDuration(r.start, r.end)}</span>
           </div>
           ${r.context ? `<p class="role-context">${richText(r.context)}</p>` : ""}
@@ -257,7 +268,7 @@
         <div class="company-header">
           ${logoHtml}
           <div>
-            <div class="company-name">${company.company}</div>
+            <h3 class="company-name">${company.company}</h3>
             <div class="company-meta">${company.location}</div>
           </div>
           ${total ? `<div class="company-total">${t("experiences.total")}<strong>${total}</strong></div>` : ""}
