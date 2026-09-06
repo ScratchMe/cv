@@ -594,6 +594,7 @@ const EXPERIENCES = [
   // Regroupées en un seul bloc pour rester lisible sur un CV senior PM.
   {
     company: "Eurogiciel · Sigma Informatique · Virage Group",
+    shortName: "Eurogiciel · Sigma · Virage", // nom affiché dans le rail chronologique (desktop), où le nom complet ne tient pas
     location: "Nantes, France",
     logo: "",
     logoLabel: "ESN", // texte de la pastille quand il n'y a pas de logo (sinon : 2 premières lettres du nom)

@@ -9,7 +9,7 @@ index.html               → structure de la page ; les zones entre marqueurs st
 css/style.css             → tous les styles (tokens de couleur en haut du fichier)
 js/i18n.js                  → dictionnaire des textes fixes de l'interface (FR/EN) + logique de bascule de langue
 js/data.js                 → ⭐ LE FICHIER À ÉDITER : ton contenu (profil, expériences, compétences, side projects)
-js/app.js                  → génère le HTML à partir de data.js, gère les filtres, durées, focus mode, impression, langue
+js/app.js                  → génère le HTML à partir de data.js, gère les filtres, durées, focus mode, impression, langue, rail chronologique (desktop)
 js/gemini.js                → logique du Fit-Checker (appelle la fonction Supabase, jamais Gemini directement)
 results.html + js/results.js → page « Résultats » : les études de cas (format STAR) derrière les chiffres du hero (zone pré-rendue aussi)
 project-detail.html + js/project-detail.js → page gabarit des études de cas de side projects (?slug=), pré-rendue avec le seul side project
@@ -293,6 +293,10 @@ Dans GoatCounter, ces événements apparaissent **dans la liste « Pages »** du
 **Exclure tes propres visites** : ouvre une fois `https://cv.antoine.berthaud.me/#toggle-goatcounter` sur chaque navigateur et appareil que tu utilises (ordinateur, téléphone) — un message confirme que les visites de ce navigateur ne sont plus comptées (réglage stocké en `localStorage`, à refaire si tu vides les données du site). Même URL pour réactiver.
 
 **Savoir d'où viennent les visites** : ajoute `?utm_campaign=linkedin` (ou un autre nom : `?utm_campaign=candidature-nomdelaboite`) aux liens que tu partages — GoatCounter les affiche dans « Campaigns ». Jamais dans le sitemap, un canonical ou un lien du site lui-même.
+
+## 8b. Rail chronologique (ordinateur seulement)
+
+Pendant la lecture des expériences, un rail fixe dans la marge gauche montre tout le parcours d'un coup d'œil : une ligne proportionnelle aux durées (24 px par an), un logo par entreprise, le nom et les années, et un point qui suit la position de lecture. Un clic amène à l'entreprise (et déplie les débuts si besoin). Il n'existe qu'à partir de 1 300 px de large (logos seuls) et 1 480 px (noms et années), pour ne jamais empiéter sur les blocs ; jamais sur téléphone, dans le PDF ni pour les lecteurs d'écran. Un nom trop long pour le rail se raccourcit avec `shortName` dans l'entrée de l'entreprise (`data.js`).
 
 ## 9. Scorecard chiffré dans le Hero
 
