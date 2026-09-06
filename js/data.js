@@ -412,25 +412,25 @@ const EXPERIENCES = [
         start: "2023-09",
         end: "2025-05",
         context: {
-          fr: "PM responsable de la « Product eXperience » sur la plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation).",
-          en: "PM responsible for \"Product eXperience\" on the Experience Optimization SaaS platform (A/B Testing, Personalization).",
+          fr: "Mission : la « Product eXperience » de la plateforme d'Experience Optimization (A/B Testing, Personnalisation) : onboarding, activation, rétention.",
+          en: "Mission: the \"Product eXperience\" of the Experience Optimization platform (A/B Testing, Personalization): onboarding, activation, retention.",
         },
         achievements: [
           {
-            fr: "Déploiement de l'authentification 2FA obligatoire sur **100% de la base utilisateur**, avec un impact support quasi nul et aucune perte d'activité.",
-            en: "Rolled out mandatory 2FA authentication across **100% of the user base**, with near-zero support impact and no activity loss.",
+            fr: "**+15 % de taux d'activation, -20 % de Time-to-Value** : refonte de l'onboarding avec un moteur de qualification utilisateur et un nouveau parcours d'activation.",
+            en: "**+15% activation rate, -20% Time-to-Value**: reworked onboarding with a user qualification engine and a new activation journey.",
           },
           {
-            fr: "Redéfinition de la vision produit autour de la rétention et de l'engagement (« Make our users fall in love with our product, repeatedly »).",
-            en: "Redefined the product vision around retention and engagement (\"Make our users fall in love with our product, repeatedly\").",
+            fr: "**2FA obligatoire déployée sur 100 % de la base utilisateur** par vagues successives, calées sur la capacité des Customer Success Managers à accompagner leurs clients : aucune perte d'activité, impact support quasi nul.",
+            en: "**Mandatory 2FA rolled out to 100% of the user base** in successive waves, paced so Customer Success Managers could support their clients: no activity loss, near-zero support impact.",
           },
           {
-            fr: "Mise en place d'une infrastructure de données automatisant le suivi des **KPIs clés (churn, rétention, activation, TTV)**.",
-            en: "Built a product data infrastructure automating tracking of **key KPIs (churn, retention, activation, TTV)**.",
+            fr: "**Churn, rétention, activation et Time-to-Value suivis automatiquement** : mise en place de l'infrastructure de données produit (SQL, Metabase, Mixpanel).",
+            en: "**Churn, retention, activation and Time-to-Value tracked automatically**: built the product data infrastructure (SQL, Metabase, Mixpanel).",
           },
           {
-            fr: "Refonte de l'onboarding via un moteur de qualification utilisateur et un nouveau parcours d'activation : **-20% de Time-to-Value, +15% de taux d'activation**.",
-            en: "Reworked onboarding through a user qualification engine and a new activation journey: **-20% Time-to-Value, +15% activation rate**.",
+            fr: "**Vision produit recentrée sur la rétention et l'engagement** : « Make our users fall in love with our product, repeatedly ».",
+            en: "**Product vision refocused on retention and engagement**: \"Make our users fall in love with our product, repeatedly\".",
           },
         ],
         methodology: "Scrum",
