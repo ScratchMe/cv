@@ -197,6 +197,16 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .role-skills{display:flex;gap:8px;flex-wrap:wrap;}
 .role-skill{font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;background:var(--mint-soft);color:var(--mint-text);}
 .role-skill.is-matched{background:var(--violet);color:#fff;}
+/* Débuts repliés (CONFIG.collapseRolesEndingBefore) : les rôles anciens et les
+   entreprises qui n'en ont que restent dans le DOM (indexables), masqués tant
+   que body.early-collapsed est posé par app.js. Le PDF montre tout (print). */
+body.early-collapsed .role-early,body.early-collapsed .company-early{display:none;}
+.early-toggle-wrap{margin:-6px 0 22px;}
+.early-toggle-wrap[hidden]{display:none;} /* piège n°1 : jamais de display explicite sans cette règle */
+.role-early:focus{outline:none;} /* focus programmatique après le clic, pas d'anneau sur tout le bloc */
+.early-toggle{font-size:14px;font-weight:600;color:var(--violet);background:none;border:none;padding:6px 0;cursor:pointer;transition:opacity .15s ease;}
+.early-toggle:hover{opacity:.75;text-decoration:underline;}
+.early-toggle:focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:4px;}
 
 /* ============================================================================
    FORMATION / LANGUES / CERTIFICATIONS
@@ -357,6 +367,10 @@ body.focus-mode .ai-badge{background:var(--ink);}
   nav li{white-space:nowrap;}
   nav a{font-size:13px;}
   section[id]{scroll-margin-top:150px;} /* header + menu sur deux lignes (~135 px) */
+  /* Les tags par rôle répètent la section Compétences : sur téléphone ils
+     n'apparaissent qu'avec un filtre actif (body.has-filters, app.js), où ils
+     montrent ce qui a matché. Retiré ~2 écrans sur 20. */
+  body:not(.has-filters) .role-skills{display:none;}
   #fit-checker{scroll-margin-top:178px;} /* +28px : la section arrive translatée (.fit-reveal-pending) au moment du calcul du scroll */
   h1{font-size:34px;}
   .navrow{flex-wrap:wrap;gap:8px 20px;padding:14px 22px;}
@@ -571,7 +585,10 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Rien de tout ça n'a de sens sur un document figé : nav interactive,
      Fit-Checker (nécessite une vraie IA en direct), bandeau teaser,
      indicateur de scroll, bouton de reset des filtres. */
-  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.quote-mark{display:none !important;}
+  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.quote-mark,.early-toggle-wrap{display:none !important;}
+  /* Le PDF montre toujours les débuts repliés sur le site (body.early-collapsed). */
+  body.early-collapsed .role-early{display:block !important;}
+  body.early-collapsed .company-early{display:block !important;}
   /* .skills-hint : consigne « Clique sur… » sans objet sur papier.
      .role-skills : les tags par rôle répètent la section Compétences (1,8 page
      de tags dans l'ancien PDF) ; les mots-clés restent une fois pour l'ATS.

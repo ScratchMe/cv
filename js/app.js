@@ -64,6 +64,9 @@
   // État des filtres compétences
   // --------------------------------------------------------------------
   const activeFilters = new Set();
+  // Débuts (rôles anciens, cf. CONFIG.collapseRolesEndingBefore) dépliés à la
+  // main ; un filtre actif les déplie aussi, sans toucher à ce choix.
+  let earlyExpanded = false;
 
   // Copie statique du pitch FR telle qu'écrite dans index.html (#heroPitch),
   // capturée au premier rendu pour vérifier qu'elle ne dérive pas de data.js.
@@ -243,10 +246,23 @@
   // --------------------------------------------------------------------
   const skillLabel = (id) => tc((SKILLS.find((s) => s.id === id) || {}).label) || id;
 
+  // Un rôle est « ancien » quand il s'est terminé au plus tard à la date de
+  // CONFIG.collapseRolesEndingBefore (comparaison de chaînes "AAAA-MM").
+  const isEarlyRole = (r) => Boolean(CONFIG.collapseRolesEndingBefore && r.end && r.end <= CONFIG.collapseRolesEndingBefore);
+  const earlyRoles = () => EXPERIENCES.flatMap((c) => c.roles).filter(isEarlyRole);
+  function earlyRange() {
+    const roles = earlyRoles();
+    if (!roles.length) return "";
+    const from = Math.min(...roles.map((r) => Number(r.start.slice(0, 4))));
+    const to = Math.max(...roles.map((r) => Number(r.end.slice(0, 4))));
+    return from === to ? String(from) : `${from} – ${to}`;
+  }
+
   function renderExperiences() {
     const list = document.getElementById("experiencesList");
     list.innerHTML = EXPERIENCES.map((company, ci) => {
       const total = company.roles.length > 1 ? companyTotalDuration(company.roles) : null;
+      const companyEarly = company.roles.every(isEarlyRole);
       const logoHtml = company.logo
         ? `<img class="company-logo" src="${company.logo}" alt="Logo ${company.company}" width="56" height="56" loading="lazy" decoding="async">`
         : `<div class="company-logo-fallback">${(company.logoLabel || company.company.slice(0, 2)).toUpperCase()}</div>`;
@@ -264,7 +280,7 @@
           const metaHtml = metaParts.length ? `<div class="role-meta">${metaParts.join("")}</div>` : "";
 
           return `
-        <div class="role-block" data-company="${ci}" data-role="${ri}" data-skills="${r.skills.join(",")}">
+        <div class="role-block${isEarlyRole(r) ? " role-early" : ""}" data-company="${ci}" data-role="${ri}" data-skills="${r.skills.join(",")}">
           <div class="role-top">
             <h4 class="role-title">${tc(r.title)}</h4>
             <span class="role-dates">${formatDateLabel(r.start)} — ${formatDateLabel(r.end)} · ${formatDuration(r.start, r.end)}</span>
@@ -284,7 +300,7 @@
         .join("");
 
       return `
-      <article class="company-block" data-company="${ci}">
+      <article class="company-block${companyEarly ? " company-early" : ""}" data-company="${ci}">
         <div class="company-header">
           ${logoHtml}
           <div>
@@ -296,6 +312,50 @@
         ${rolesHtml}
       </article>`;
     }).join("");
+
+    // Bouton « Voir mes débuts » juste après le dernier rôle récent : les
+    // rôles anciens (et les entreprises qui n'en ont que) restent dans le
+    // DOM, repliés en CSS via body.early-collapsed. Ils réapparaissent dès
+    // qu'un filtre de compétence est actif (applyFilters), et toujours dans
+    // le PDF.
+    const range = earlyRange();
+    const recent = [...list.querySelectorAll(".role-block:not(.role-early)")].pop();
+    if (range && recent) {
+      recent.insertAdjacentHTML(
+        "afterend",
+        `<div class="early-toggle-wrap"><button class="early-toggle" type="button">${t("experiences.showEarly").replace("{range}", range)}</button></div>`
+      );
+    }
+    updateEarlyToggle();
+  }
+
+  // Repli effectif : replié tant que les débuts n'ont pas été dépliés à la
+  // main ET qu'aucun filtre n'est actif. Une fois dépliés, le bouton
+  // disparaît (le contenu se déroule sur place, pas de « Masquer » qui
+  // flotterait entre deux rôles). Appelé au rendu et à chaque changement de
+  // filtre.
+  function updateEarlyToggle() {
+    const wrap = document.querySelector(".early-toggle-wrap");
+    const expanded = earlyExpanded || activeFilters.size > 0;
+    document.body.classList.toggle("early-collapsed", Boolean(wrap) && !expanded);
+    if (wrap) wrap.hidden = expanded;
+  }
+
+  // Posé une seule fois (setupControls) : le bouton est recréé à chaque
+  // rendu, d'où la délégation sur la liste.
+  function setupEarlyToggle() {
+    document.getElementById("experiencesList").addEventListener("click", (e) => {
+      if (!e.target.closest(".early-toggle")) return;
+      earlyExpanded = true;
+      updateEarlyToggle();
+      // Le bouton disparaît : on pose le focus sur le premier rôle déplié
+      // pour que clavier et lecteur d'écran suivent le contenu.
+      const first = document.querySelector(".role-early");
+      if (first) {
+        first.setAttribute("tabindex", "-1");
+        first.focus({ preventScroll: true });
+      }
+    });
   }
 
   function applyFilters() {
@@ -303,6 +363,11 @@
     const clearBtn = document.getElementById("clearFilters");
     const hasFilters = activeFilters.size > 0;
     clearBtn.hidden = !hasFilters;
+    // Sur téléphone, les tags par rôle ne s'affichent qu'avec un filtre actif
+    // (css : body:not(.has-filters) .role-skills) — ils répètent la section
+    // Compétences et allongeaient la page d'environ 2 écrans.
+    document.body.classList.toggle("has-filters", hasFilters);
+    updateEarlyToggle();
 
     let visibleRoles = 0;
     document.querySelectorAll(".company-block").forEach((block) => {
@@ -627,6 +692,7 @@
     });
 
     setupClearFilters();
+    setupEarlyToggle();
     setupScrollSpy();
     setupFitReveal();
   }

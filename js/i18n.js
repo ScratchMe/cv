@@ -59,6 +59,7 @@
     "experiences.team": { fr: "Équipe", en: "Team" },
     "experiences.filterStatusPrefix": { fr: "Filtré par : ", en: "Filtered by: " },
     "experiences.filterStatusSuffix": { fr: "expérience(s) correspondante(s).", en: "matching experience(s)." },
+    "experiences.showEarly": { fr: "Voir mes débuts ({range}) →", en: "See my early career ({range}) →" },
     "experiences.lessThanMonth": { fr: "< 1 mois", en: "< 1 month" },
     "experiences.year": { fr: "an", en: "year" },
     "experiences.years": { fr: "ans", en: "years" },
