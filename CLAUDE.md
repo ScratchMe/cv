@@ -58,7 +58,8 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   dans le navigateur, l'autre sur Supabase/Deno). Le code déployé sur
   Supabase peut diverger du repo si quelqu'un le modifie directement dans
   le dashboard (vécu : rate limit changé à 3/min en prod, resté à 5/min
-  dans `index.ts`) — avant de redéployer depuis le repo, comparer avec
+  dans `index.ts` — divergence résorbée le 03/09/2026, repo et prod à
+  3/min depuis) — avant de redéployer depuis le repo, comparer avec
   `mcp__Supabase__get_edge_function` pour ne pas écraser un réglage prod.
 
 ## Design

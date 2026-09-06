@@ -15,8 +15,10 @@ name: Générer les PDF du CV
       - "css/**"
       - "js/**"
       - "assets/photo/**"
+      - "assets/logos/**"
       - "scripts/generate-pdf.js"
       - "package.json"
+      - "package-lock.json"
   schedule:
     - cron: "0 4 1 * *" # le 1er de chaque mois à 4h UTC, pour rafraîchir les durées affichées
   workflow_dispatch: {} # permet aussi de le relancer manuellement depuis l'onglet Actions
@@ -30,15 +32,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout du dépôt
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Installer Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
 
+      # npm ci + package-lock.json : les mêmes versions à chaque run. Avec
+      # npm install sans lockfile, Chromium (via Playwright) changeait tout
+      # seul et la pagination des PDF avec, sans que personne ne regarde.
       - name: Installer les dépendances npm
-        run: npm install
+        run: npm ci
 
       - name: Installer Chromium (Playwright)
         run: npx playwright install --with-deps chromium
@@ -68,7 +74,7 @@ jobs:
       # dans l'onglet Actions. Évite les doublons si l'échec se répète.
       - name: Signaler l'échec via une issue
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const title = "⚠️ Échec de la génération des PDF du CV";
