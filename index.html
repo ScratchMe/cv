@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <title> et description : copie statique de PROFILE.seo (js/data.js), version
-     française. app.js les remplace à l'exécution selon la langue affichée ;
-     cette copie est ce que lisent les robots sans JavaScript. Si tu modifies
-     PROFILE.seo, reporte le changement ici (et dans les balises og:/twitter:
-     plus bas). -->
+<!-- <title>, description et titres/descriptions og:/twitter: : version française
+     de PROFILE.seo (js/data.js), posée ici par scripts/generate-static.js (CI) —
+     ne pas éditer à la main. app.js les remplace à l'exécution selon la langue
+     affichée ; cette copie est ce que lisent les robots sans JavaScript. -->
 <title>Antoine Berthaud — Senior Product Manager à Nantes · Growth &amp; SaaS</title>
 <meta name="description" content="CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.">
 
@@ -144,12 +143,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  // Sur ?lang=en, la page pré-rendue en français reste invisible jusqu'au
+  // premier rendu JavaScript en anglais (qui retire la classe) — au plus 1,5 s
+  // si le JS échoue, pour ne jamais laisser une page blanche.
+  if (/[?&]lang=en(?:&|$)/.test(location.search)) {
+    document.documentElement.classList.add("lang-pending");
+    setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 1500);
+  }
+</script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
-      <p>Ce site a besoin de JavaScript pour s'afficher correctement.</p>
+      <p>Sans JavaScript, ce CV s'affiche en français, sans les filtres de compétences, le Fit-Checker ni la version anglaise.</p>
       <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
          <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
       <p><a href="results.html">Études de cas</a></p>
@@ -199,23 +207,44 @@
   </header>
 
   <main>
+    <!-- Les blocs entre les marqueurs « static:ID » (ouvrant et fermant) sont
+         GÉNÉRÉS par scripts/generate-static.js, en CI, à partir de js/data.js :
+         c'est la version française pré-rendue, lue par les robots qui
+         n'exécutent pas JavaScript. Ne pas les éditer à la main — modifier
+         js/data.js, la CI régénère. app.js re-rend par-dessus au chargement
+         (et en anglais sur ?lang=en). -->
     <!-- ============================= HERO / PROFIL ============================= -->
     <section id="profil" class="hero wrap">
       <div class="hero-grid">
         <div>
           <div class="eyebrow" id="heroEyebrow">Product Manager · Growth · Nantes</div>
-          <h1 id="heroName">Antoine Berthaud</h1>
-          <div class="role" id="heroRole">Senior Growth Product Manager — AB Tasty</div>
-          <!-- Coordonnées en page 1 du PDF (e-mail, LinkedIn, site) : masquées à
-               l'écran où le pied de page fait ce travail. Remplies par app.js. -->
-          <p class="print-contact" id="printContact"></p>
-          <div class="pills" id="heroPills"></div>
-          <!-- Copie statique du pitch FR (PROFILE.pitch.fr dans js/data.js), lue par
-               les robots qui n'exécutent pas JavaScript. app.js la remplace au
-               chargement et signale dans la console si les deux textes divergent :
-               si tu changes le pitch dans data.js, reporte-le ici. -->
-          <p class="pitch" id="heroPitch">Senior Product Manager, <strong>10 ans de produit</strong> en <strong>SaaS B2B</strong> (AB Tasty, Everysens) et grands comptes (SNCF Connect &amp; Tech), <strong>ingénieur de formation</strong> (Polytech Nantes). Aujourd'hui sur les sujets <strong>growth</strong> chez AB Tasty : onboarding, activation, tunnel self-serve. Je tranche avec la donnée (<strong>SQL, Metabase, Mixpanel</strong>) autant qu'avec les entretiens utilisateurs. Et j'ai aussi tenu le rôle de <strong>Product Owner</strong> au quotidien : backlog, user stories, sprints.</p>
-          <div class="hero-stats" id="heroStats"></div>
+          <!-- static:heroName -->
+<h1 id="heroName">Antoine Berthaud</h1>
+<!-- /static:heroName -->
+          <!-- static:heroRole -->
+<div class="role" id="heroRole">Senior Growth Product Manager — AB Tasty</div>
+<!-- /static:heroRole -->
+          <!-- Coordonnées en page 1 du PDF (e-mail, LinkedIn, site), masquées à
+               l'écran où le pied de page fait ce travail. -->
+          <!-- static:printContact -->
+<p class="print-contact" id="printContact"><a href="mailto:antoine.berthaud@gmail.com">antoine.berthaud@gmail.com</a> · <a href="https://www.linkedin.com/in/antoine-berthaud-pm/">linkedin.com/in/antoine-berthaud-pm</a> · <a href="https://cv.antoine.berthaud.me/">cv.antoine.berthaud.me</a></p>
+<!-- /static:printContact -->
+          <!-- static:heroPills -->
+<div class="pills" id="heroPills"><span class="pill"><span aria-hidden="true">📍</span> Nantes, France</span><span class="pill"><span aria-hidden="true">🚀</span> 10 ans en Product</span><span class="pill"><span aria-hidden="true">🎯</span> Ouvert aux opportunités Senior / Lead PM · SaaS B2B · Nantes, hybride ou remote</span></div>
+<!-- /static:heroPills -->
+          <!-- static:heroPitch -->
+<p class="pitch" id="heroPitch">Senior Product Manager, <strong>10 ans de produit</strong> en <strong>SaaS B2B</strong> (AB Tasty, Everysens) et grands comptes (SNCF Connect &amp; Tech), <strong>ingénieur de formation</strong> (Polytech Nantes). Aujourd'hui sur les sujets <strong>growth</strong> chez AB Tasty : onboarding, activation, tunnel self-serve. Je tranche avec la donnée (<strong>SQL, Metabase, Mixpanel</strong>) autant qu'avec les entretiens utilisateurs. Et j'ai aussi tenu le rôle de <strong>Product Owner</strong> au quotidien : backlog, user stories, sprints.</p>
+<!-- /static:heroPitch -->
+          <!-- static:heroStats -->
+<div class="hero-stats" id="heroStats"><a class="hero-stat is-linked" href="results.html#ab-tasty-activation" data-goatcounter-click="hero-stat-ab-tasty-activation">
+          <div class="hero-stat-value">+15%</div>
+          <div class="hero-stat-label">Taux d'activation (AB Tasty)</div></a><a class="hero-stat is-linked" href="results.html#everysens-entry-time" data-goatcounter-click="hero-stat-everysens-entry-time">
+          <div class="hero-stat-value">-50%</div>
+          <div class="hero-stat-label">Temps de saisie (Everysens)</div></a><a class="hero-stat is-linked" href="results.html#sncf-ticket-retrieval" data-goatcounter-click="hero-stat-sncf-ticket-retrieval">
+          <div class="hero-stat-value">+100%</div>
+          <div class="hero-stat-label">Taux de conversion, récupération du billet (SNCF Connect)</div></a></div>
+<a class="hero-stats-link" id="heroStatsLink" href="results.html" data-goatcounter-click="hero-stats-link">Voir les 3 études de cas →</a>
+<!-- /static:heroStats -->
           <div class="herobtns">
             <a href="#experiences" class="btn solid" data-i18n="hero.ctaExperience">Voir les expériences</a>
             <a href="#contact" class="btn" data-i18n="hero.ctaContact">Me contacter</a>
@@ -248,7 +277,24 @@
         </svg>
         <h2 data-i18n="pillars.sectionTitle">Ce qui me définit</h2>
       </div>
-      <div class="pillar-grid" id="pillarGrid"></div>
+      <!-- static:pillarGrid -->
+<div class="pillar-grid" id="pillarGrid">
+      <article class="pillar" data-id="user-first">
+        <h3>User First</h3>
+        <div class="sub">Pas de feature sans un problème utilisateur quantifié.</div>
+        <ul><li>Discovery chaque semaine : entretiens et tests utilisateurs.</li><li>Quand l'entretien est impossible, en gare en pleine épidémie, je vais chercher le signal ailleurs : extraction quotidienne des tweets.</li></ul>
+      </article>
+      <article class="pillar" data-id="data-informed">
+        <h3>Data Informed</h3>
+        <div class="sub">Les intuitions lancent les tests, les données valident.</div>
+        <ul><li>Je construis mes propres tableaux de bord : churn, rétention, activation, Time-to-Value.</li><li>Un benchmark externe avant d'investir : c'est lui qui a montré que notre activation décrochait.</li></ul>
+      </article>
+      <article class="pillar" data-id="iterative">
+        <h3>Iterative</h3>
+        <div class="sub">L'apprentissage continu vers le Product-Market Fit.</div>
+        <ul><li>Culture du « Fail Fast » et cycles de livraison courts.</li><li>Livraison par étapes plutôt qu'un big bang, et déploiement progressif quand le risque est élevé.</li></ul>
+      </article></div>
+<!-- /static:pillarGrid -->
     </section>
 
     <!-- ============================= COMPÉTENCES / FILTRES ============================= -->
@@ -260,7 +306,39 @@
         <span data-i18n="skills.hint">Clique sur une ou plusieurs compétences pour filtrer les expériences correspondantes ci-dessous.</span>
         <button id="clearFilters" class="link-btn" type="button" hidden data-i18n="skills.clearFilters">Réinitialiser les filtres ✕</button>
       </p>
-      <div class="skills-groups" id="skillsGroups" role="group" aria-labelledby="skillsTitle"></div>
+      <!-- static:skillsGroups -->
+<div class="skills-groups" id="skillsGroups" role="group" aria-labelledby="skillsTitle">
+      <div class="skills-group">
+        <span class="skills-group-label">Produit</span>
+        <div class="skills-chips">
+          <button class="chip" type="button" aria-pressed="false" data-skill="discovery">Discovery</button><button class="chip" type="button" aria-pressed="false" data-skill="user-research">User Research</button><button class="chip" type="button" aria-pressed="false" data-skill="roadmapping">Roadmapping</button><button class="chip" type="button" aria-pressed="false" data-skill="user-stories">User Stories &amp; Backlog</button><button class="chip" type="button" aria-pressed="false" data-skill="product-ownership">Product Ownership</button><button class="chip" type="button" aria-pressed="false" data-skill="plg">Product-Led Growth</button><button class="chip" type="button" aria-pressed="false" data-skill="ab-testing">A/B testing &amp; expérimentation</button><button class="chip" type="button" aria-pressed="false" data-skill="activation">Onboarding &amp; activation</button><button class="chip" type="button" aria-pressed="false" data-skill="monetization">Monétisation self-serve</button><button class="chip" type="button" aria-pressed="false" data-skill="stakeholder">Stakeholder Management</button><button class="chip" type="button" aria-pressed="false" data-skill="cross-functional-leadership">Cross-functional Leadership</button><button class="chip" type="button" aria-pressed="false" data-skill="mentoring">Mentoring &amp; Coaching</button><button class="chip" type="button" aria-pressed="false" data-skill="project-management">Gestion de projet</button><button class="chip" type="button" aria-pressed="false" data-skill="functional-analysis">Analyse fonctionnelle</button>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Méthode</span>
+        <div class="skills-chips">
+          <button class="chip" type="button" aria-pressed="false" data-skill="agile">Agile / Scrum</button><button class="chip" type="button" aria-pressed="false" data-skill="okr">OKR</button><button class="chip" type="button" aria-pressed="false" data-skill="story-mapping">Story Mapping</button><button class="chip" type="button" aria-pressed="false" data-skill="bdd">BDD</button><button class="chip" type="button" aria-pressed="false" data-skill="feature-flagging">Feature Flagging / Progressive Rollout</button>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Data</span>
+        <div class="skills-chips">
+          <button class="chip" type="button" aria-pressed="false" data-skill="sql">SQL</button><button class="chip" type="button" aria-pressed="false" data-skill="metabase">Metabase</button><button class="chip" type="button" aria-pressed="false" data-skill="mixpanel">Mixpanel</button><button class="chip" type="button" aria-pressed="false" data-skill="segment">Segment</button><button class="chip" type="button" aria-pressed="false" data-skill="looker-studio">Looker Studio</button><button class="chip" type="button" aria-pressed="false" data-skill="matomo">Matomo</button><button class="chip" type="button" aria-pressed="false" data-skill="hotjar">Hotjar</button><button class="chip" type="button" aria-pressed="false" data-skill="heap">Heap</button>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Outils</span>
+        <div class="skills-chips">
+          <button class="chip" type="button" aria-pressed="false" data-skill="zapier">Zapier</button><button class="chip" type="button" aria-pressed="false" data-skill="jira">Jira</button><button class="chip" type="button" aria-pressed="false" data-skill="genai">IA générative</button><button class="chip" type="button" aria-pressed="false" data-skill="flagship">Flagship</button><button class="chip" type="button" aria-pressed="false" data-skill="productboard">ProductBoard</button><button class="chip" type="button" aria-pressed="false" data-skill="figma">Figma</button><button class="chip" type="button" aria-pressed="false" data-skill="miro">Miro</button><button class="chip" type="button" aria-pressed="false" data-skill="akeneo">Akeneo</button>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Technique</span>
+        <div class="skills-chips">
+          <button class="chip" type="button" aria-pressed="false" data-skill="api">API &amp; intégrations</button><button class="chip" type="button" aria-pressed="false" data-skill="llm-integration">Intégration LLM (API Gemini)</button><button class="chip" type="button" aria-pressed="false" data-skill="postman">Postman</button>
+        </div>
+      </div></div>
+<!-- /static:skillsGroups -->
     </section>
 
     <!-- ============================= EXPÉRIENCES ============================= -->
@@ -269,7 +347,161 @@
         <h2 data-i18n="experiences.sectionTitle">Expériences</h2>
       </div>
       <p class="filter-status" id="filterStatus" role="status" aria-live="polite" hidden></p>
-      <div id="experiencesList" class="experiences-list"></div>
+      <!-- static:experiencesList -->
+<div id="experiencesList" class="experiences-list">
+      <article class="company-block" data-company="0">
+        <div class="company-header">
+          <img class="company-logo" src="assets/logos/ab-tasty.webp" alt="Logo AB Tasty" width="56" height="56" loading="lazy" decoding="async">
+          <div>
+            <h3 class="company-name">AB Tasty</h3>
+            <div class="company-meta">Nantes, France</div>
+          </div>
+          <div class="company-total">Total<strong>3 ans</strong></div>
+        </div>
+        
+        <div class="role-block" data-company="0" data-role="0" data-skills="plg,activation,monetization,ab-testing,api,discovery,roadmapping,stakeholder,cross-functional-leadership,user-stories,mentoring,jira,sql,metabase,mixpanel,segment,genai,okr,user-research">
+          <div class="role-top">
+            <h4 class="role-title">Senior Growth Product Manager</h4>
+            <span class="role-dates">Mai 2025 — Aujourd'hui · 1 an 4 mois</span>
+          </div>
+          <p class="role-context">Product Manager senior au sein du pilier Growth d'AB Tasty, plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Pilotage de la transition d'un modèle 100 % Sales-Led vers un <strong>modèle hybride</strong> : cadrage, business case et roadmap avec la direction, les grands comptes restant suivis par les sales, les autres s'inscrivant et payant en autonomie.</li><li>Conception et construction de bout en bout du <strong>tunnel self-serve</strong> : inscription publique, freemium limité, et intégration de la plateforme de facturation Hyperline, que j'ai cadrée (paiement, abonnements, accès aux fonctionnalités selon l'offre). <strong>Livré en production derrière un feature flag</strong>, prêt au lancement ; lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.</li><li>Animation de 2 autres Product Managers sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 4 développeurs, 1 tech lead, 1 QA, 1 Product Designer</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="plg">Product-Led Growth</span><span class="role-skill" data-skill="activation">Onboarding &amp; activation</span><span class="role-skill" data-skill="monetization">Monétisation self-serve</span><span class="role-skill" data-skill="ab-testing">A/B testing &amp; expérimentation</span><span class="role-skill" data-skill="api">API &amp; intégrations</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="cross-functional-leadership">Cross-functional Leadership</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="mentoring">Mentoring &amp; Coaching</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="sql">SQL</span><span class="role-skill" data-skill="metabase">Metabase</span><span class="role-skill" data-skill="mixpanel">Mixpanel</span><span class="role-skill" data-skill="segment">Segment</span><span class="role-skill" data-skill="genai">IA générative</span><span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="user-research">User Research</span>
+          </div>
+        </div>
+        <div class="role-block" data-company="0" data-role="1" data-skills="activation,ab-testing,discovery,roadmapping,stakeholder,user-stories,sql,metabase,mixpanel,jira,zapier,looker-studio,segment,genai,okr,user-research,flagship,feature-flagging">
+          <div class="role-top">
+            <h4 class="role-title">Product Manager</h4>
+            <span class="role-dates">Sep 2023 — Mai 2025 · 1 an 8 mois</span>
+          </div>
+          <p class="role-context">PM responsable de la « Product eXperience » sur la plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation).</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Déploiement de l'authentification 2FA obligatoire sur <strong>100% de la base utilisateur</strong>, avec un impact support quasi nul et aucune perte d'activité.</li><li>Redéfinition de la vision produit autour de la rétention et de l'engagement (« Make our users fall in love with our product, repeatedly »).</li><li>Mise en place d'une infrastructure de données automatisant le suivi des <strong>KPIs clés (churn, rétention, activation, TTV)</strong>.</li><li>Refonte de l'onboarding via un moteur de qualification utilisateur et un nouveau parcours d'activation : <strong>-20% de Time-to-Value, +15% de taux d'activation</strong>.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 3 développeurs, 1 tech lead, 1 QA, 1 Product Designer</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="activation">Onboarding &amp; activation</span><span class="role-skill" data-skill="ab-testing">A/B testing &amp; expérimentation</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="sql">SQL</span><span class="role-skill" data-skill="metabase">Metabase</span><span class="role-skill" data-skill="mixpanel">Mixpanel</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="zapier">Zapier</span><span class="role-skill" data-skill="looker-studio">Looker Studio</span><span class="role-skill" data-skill="segment">Segment</span><span class="role-skill" data-skill="genai">IA générative</span><span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="flagship">Flagship</span><span class="role-skill" data-skill="feature-flagging">Feature Flagging / Progressive Rollout</span>
+          </div>
+        </div>
+      </article>
+      <article class="company-block" data-company="1">
+        <div class="company-header">
+          <img class="company-logo" src="assets/logos/everysens.webp" alt="Logo Everysens" width="56" height="56" loading="lazy" decoding="async">
+          <div>
+            <h3 class="company-name">Everysens</h3>
+            <div class="company-meta">Nantes, France</div>
+          </div>
+          
+        </div>
+        
+        <div class="role-block" data-company="1" data-role="0" data-skills="discovery,user-research,roadmapping,hotjar,heap,stakeholder,jira,metabase,productboard,figma,miro">
+          <div class="role-top">
+            <h4 class="role-title">Product Manager</h4>
+            <span class="role-dates">Avr 2022 — Sep 2023 · 1 an 5 mois</span>
+          </div>
+          <p class="role-context">Responsable du module « Exécution » (lettres de voiture, trains de 30 wagons et plus) au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, pour favoriser le report modal des camions vers le rail et décarboner le transport. Anglais au quotidien avec l'équipe.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Pilotage de la roadmap du module de saisie des transports, validation des lettres de voiture et suivi en temps réel, avec un focus sur l'adoption utilisateur et la fiabilité des données.</li><li>Stakeholder management auprès de la direction pour lancer une refonte technique et fonctionnelle en approche incrémentale (<strong>MVP livré en moins de 2 mois</strong>).</li><li>Résultat de la refonte : <strong>-50% de temps de saisie, +20% de satisfaction utilisateur</strong>.</li><li>Recherche utilisateur et maquettage UI/UX réalisés en autonomie (Hotjar, Heap) avant l'arrivée d'une Product Designer.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 4 développeurs, 1 QA, puis 1 Product Designer</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="hotjar">Hotjar</span><span class="role-skill" data-skill="heap">Heap</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="metabase">Metabase</span><span class="role-skill" data-skill="productboard">ProductBoard</span><span class="role-skill" data-skill="figma">Figma</span><span class="role-skill" data-skill="miro">Miro</span>
+          </div>
+        </div>
+      </article>
+      <article class="company-block" data-company="2">
+        <div class="company-header">
+          <img class="company-logo" src="assets/logos/sncf-connect-tech.webp" alt="Logo SNCF Connect &amp; Tech" width="56" height="56" loading="lazy" decoding="async">
+          <div>
+            <h3 class="company-name">SNCF Connect &amp; Tech</h3>
+            <div class="company-meta">Nantes, France</div>
+          </div>
+          <div class="company-total">Total<strong>7 ans 3 mois</strong></div>
+        </div>
+        
+        <div class="role-block" data-company="2" data-role="0" data-skills="user-research,zapier,discovery,jira,matomo">
+          <div class="role-top">
+            <h4 class="role-title">Product Manager</h4>
+            <span class="role-dates">Oct 2021 — Avr 2022 · 6 mois</span>
+          </div>
+          <p class="role-context">PM sur la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à <strong>40 000 visiteurs par jour</strong> : les voyageurs y vérifiaient eux-mêmes leur pass sanitaire et leur billet dans le contexte Covid-19. Poste mené en parallèle de celui sur les boutiques en ligne.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Redéveloppement d'une plateforme initialement développée en externe, avec un objectif business de fluidifier l'embarquement en gare.</li><li>Récupération d'insights utilisateurs (Twitter, Zapier) et amélioration du parcours utilisateur : <strong>+100% sur le taux de conversion</strong> de la première étape de récupération du billet.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Kanban</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 4 développeurs, 1 Engineering Manager</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="zapier">Zapier</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="matomo">Matomo</span>
+          </div>
+        </div>
+        <div class="role-block" data-company="2" data-role="1" data-skills="okr,roadmapping,user-stories,product-ownership,agile,discovery,stakeholder,jira,miro,akeneo">
+          <div class="role-top">
+            <h4 class="role-title">Product Manager</h4>
+            <span class="role-dates">Sep 2020 — Avr 2022 · 1 an 7 mois</span>
+          </div>
+          <p class="role-context">PM sur l'outil de génération de boutiques en ligne pour la vente de titres de transport, avec deux clients : Transilien (boutique.transilien.com) et TER (boutiques de commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Définition d'une mission et d'une vision produit communes aux stakeholders et au service marketing.</li><li>Stratégie 2021 appuyée par des OKR, roadmap de delivery, priorisation du backlog et rédaction des User Stories.</li><li>Relance du discovery (sondages utilisateurs, exploitation de la data disponible) et lead de la veille agilité/product management au sein de la communauté de pratiques.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 3 développeurs, 1 Scrum Master, 1 Delivery Manager</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="product-ownership">Product Ownership</span><span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="miro">Miro</span><span class="role-skill" data-skill="akeneo">Akeneo</span>
+          </div>
+        </div>
+        <div class="role-block" data-company="2" data-role="2" data-skills="agile,mentoring">
+          <div class="role-top">
+            <h4 class="role-title">Animateur de la communauté Product Management</h4>
+            <span class="role-dates">Avr 2019 — Fév 2020 · 10 mois</span>
+          </div>
+          <p class="role-context">Animation de la communauté de pratiques Product Management de l'entreprise, <strong>plus de 100 personnes</strong>, en parallèle du poste de Product Manager.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Partage de veille sur les pratiques Product Management et animation des temps d'échange.</li><li>Ateliers et exercices pour faire progresser la communauté.</li><li>Mentorat de 2 à 3 personnes tout au long du mandat.</li></ul>
+          
+          <div class="role-skills">
+            <span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="mentoring">Mentoring &amp; Coaching</span>
+          </div>
+        </div>
+        <div class="role-block" data-company="2" data-role="3" data-skills="api,roadmapping,story-mapping,user-stories,product-ownership,stakeholder,agile,bdd,jira,miro,postman">
+          <div class="role-top">
+            <h4 class="role-title">Product Manager Junior</h4>
+            <span class="role-dates">Août 2016 — Sep 2020 · 4 ans 1 mois</span>
+          </div>
+          <p class="role-context">D'abord la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains, utilisés par les canaux de vente.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Ateliers d'étude du besoin et macro-chiffrage des demandes portées par les équipes métier, tenue de roadmap et Story Mapping.</li><li>Rédaction des User Stories et scénarios BDD associés, animation des Sprint Planning.</li><li>Définition de la solution en coordination avec les projets partenaires, support fonctionnel à l'équipe de développement et validation des fonctionnalités livrées.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — Jusqu'à 15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="api">API &amp; intégrations</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="story-mapping">Story Mapping</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="product-ownership">Product Ownership</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="bdd">BDD</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="miro">Miro</span><span class="role-skill" data-skill="postman">Postman</span>
+          </div>
+        </div><div class="early-toggle-wrap"><button class="early-toggle" type="button">Voir mes débuts (2011 – 2016) →</button></div>
+        <div class="role-block role-early" data-company="2" data-role="4" data-skills="agile,user-stories">
+          <div class="role-top">
+            <h4 class="role-title">QA</h4>
+            <span class="role-dates">Jan 2015 — Août 2016 · 1 an 7 mois</span>
+          </div>
+          <p class="role-context">Exécution et rédaction de campagnes de tests sur les applications web et mobiles de réservation de billets Thalys et sur un portail entreprises B2B.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Lead test sur la première phase du projet de digitalisation de la vente de billets groupes, côté grand public.</li><li>Participation aux cérémonies agiles et appui fonctionnel sur certaines User Stories.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 4 développeurs, 1 Product Manager</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span>
+          </div>
+        </div>
+      </article>
+      <article class="company-block company-early" data-company="3">
+        <div class="company-header">
+          <div class="company-logo-fallback">ESN</div>
+          <div>
+            <h3 class="company-name">Eurogiciel · Sigma Informatique · Virage Group</h3>
+            <div class="company-meta">Nantes, France</div>
+          </div>
+          
+        </div>
+        
+        <div class="role-block role-early" data-company="3" data-role="0" data-skills="project-management,functional-analysis">
+          <div class="role-top">
+            <h4 class="role-title">Développeur Java, puis analyste fonctionnel (missions ESN)</h4>
+            <span class="role-dates">Fév 2011 — Jan 2015 · 3 ans 11 mois</span>
+          </div>
+          <p class="role-context">Quatre ans côté technique avant de basculer vers le Product Management.</p>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Développement (Java), analyse fonctionnelle et rédaction de spécifications pour des clients comme Thales Alenia Space et plusieurs enseignes de la grande distribution (groupement Gileco / E.Leclerc).</li><li>Gestion de projet (planning, tableaux de bord) et tests/QA.</li></ul>
+          <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Cycle en V, Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — Jusqu'à 5 personnes selon les missions</span></div>
+          <div class="role-skills">
+            <span class="role-skill" data-skill="project-management">Gestion de projet</span><span class="role-skill" data-skill="functional-analysis">Analyse fonctionnelle</span>
+          </div>
+        </div>
+      </article></div>
+<!-- /static:experiencesList -->
     </section>
 
     <!-- ============================= FORMATION / LANGUES / CERTIFICATIONS ============================= -->
@@ -280,18 +512,26 @@
       <div class="formation-grid">
         <div class="formation-col">
           <h3 class="formation-subtitle" data-i18n="formation.education">Éducation</h3>
-          <ul class="formation-list" id="educationList"></ul>
+          <!-- static:educationList -->
+<ul class="formation-list" id="educationList"><li><div class="formation-item-title">Ingénieur Systèmes Informatiques, Logiciels et Réseaux</div><div class="formation-item-meta">Polytech Nantes · 2006 – 2011</div></li></ul>
+<!-- /static:educationList -->
           <h3 class="formation-subtitle" data-i18n="formation.trainings">Formations continues</h3>
-          <ul class="formation-list" id="trainingsList"></ul>
+          <!-- static:trainingsList -->
+<ul class="formation-list" id="trainingsList"><li><div class="formation-item-title">Réussir la conduite du changement, donner du sens à vos équipes</div><div class="formation-item-meta">Orsys · Sept. 2020 · 2 jours</div></li><li><div class="formation-item-title">Big Data et stratégie marketing, usages et mise en œuvre</div><div class="formation-item-meta">Orsys · Sept. 2021 · 2 jours</div></li></ul>
+<!-- /static:trainingsList -->
         </div>
         <div class="formation-col formation-side">
           <div class="formation-card">
             <h3 class="formation-subtitle" data-i18n="formation.languages">Langues</h3>
-            <ul class="lang-list" id="languagesList"></ul>
+            <!-- static:languagesList -->
+<ul class="lang-list" id="languagesList"><li><span>Français</span><span class="lang-level">Langue maternelle</span></li><li><span>Anglais</span><span class="lang-level">Courant · langue de travail depuis 2022 (TOEIC 925/990)</span></li></ul>
+<!-- /static:languagesList -->
           </div>
           <div class="formation-card">
             <h3 class="formation-subtitle" data-i18n="formation.certifications">Certifications</h3>
-            <ul class="formation-list" id="certificationsList"></ul>
+            <!-- static:certificationsList -->
+<ul class="formation-list" id="certificationsList"><li><div class="formation-item-title">AB Tasty — Fundamentals Certificate</div><div class="formation-item-meta">Certification interne sur la maîtrise de la plateforme AB Tasty (Experience Optimization : A/B Testing, Personnalisation).</div></li></ul>
+<!-- /static:certificationsList -->
           </div>
         </div>
       </div>
@@ -302,12 +542,20 @@
       <div class="testimonial-card">
         <span class="eyebrow testimonial-eyebrow" data-i18n="testimonial.eyebrow">Recommandation LinkedIn</span>
         <span class="quote-mark" aria-hidden="true">&ldquo;</span>
-        <p class="testimonial-quote" id="testimonialQuote"></p>
+        <!-- static:testimonialQuote -->
+<p class="testimonial-quote" id="testimonialQuote">“Antoine est un product manager humain, impliqué et exigeant, porté par beaucoup d'enthousiasme. Il sait structurer intelligemment les temps de partage de son équipe et aime valoriser les talents de chacun. Je ne peux que le recommander pour renforcer une équipe ambitieuse et collaborative.”</p>
+<!-- /static:testimonialQuote -->
         <div class="testimonial-attribution">
-          <div class="testimonial-avatar" id="testimonialAvatar"></div>
+          <!-- static:testimonialAvatar -->
+<div class="testimonial-avatar" id="testimonialAvatar">AP</div>
+<!-- /static:testimonialAvatar -->
           <div>
-            <div class="testimonial-name" id="testimonialName"></div>
-            <div class="testimonial-role" id="testimonialRole"></div>
+            <!-- static:testimonialName -->
+<div class="testimonial-name" id="testimonialName">Alix Paoli</div>
+<!-- /static:testimonialName -->
+            <!-- static:testimonialRole -->
+<div class="testimonial-role" id="testimonialRole">CX Designer chez Decathlon · Ancienne collègue chez AB Tasty</div>
+<!-- /static:testimonialRole -->
           </div>
         </div>
       </div>
@@ -347,7 +595,18 @@
       <div class="sectitle">
         <h2 data-i18n="projects.sectionTitle">Side projects</h2>
       </div>
-      <div class="projects-grid" id="projectsGrid"></div>
+      <!-- static:projectsGrid -->
+<div class="projects-grid" id="projectsGrid">
+      <div class="project-card">
+        <h3>Tour de Growth</h3>
+        <p>Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.</p>
+        <div class="project-links">
+          <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" data-goatcounter-click="project-tour-de-growth">Voir le projet →</a>
+          <a href="project-detail.html?slug=tour-de-growth">Voir l'étude de cas →</a>
+        </div>
+        <div class="project-skills"><span>Product-Led Growth</span><span>User Research</span><span>Intégration LLM (API Gemini)</span><span>IA générative</span></div>
+      </div></div>
+<!-- /static:projectsGrid -->
     </section>
   </main>
 
@@ -356,19 +615,16 @@
     <div class="wrap footer-grid">
       <div>
         <div class="mark">Antoine<span>.</span></div>
-        <p id="footerTagline">Product Manager — Nantes, France</p>
-        <!-- Rempli par app.js depuis PROFILE.contact.availability ; reste masqué si vide. -->
-        <p id="footerAvailability" class="footer-availability" hidden></p>
+        <!-- static:footerTagline -->
+<p id="footerTagline">Senior Growth Product Manager — AB Tasty — Nantes, France</p>
+<!-- /static:footerTagline -->
+        <!-- static:footerAvailability -->
+<p id="footerAvailability" class="footer-availability" hidden=""></p>
+<!-- /static:footerAvailability -->
       </div>
-      <!-- Liens en dur (copie de PROFILE.contact) pour les robots sans JavaScript :
-           app.js vide ce bloc et le reconstruit depuis data.js. -->
-      <div class="footer-links" id="footerLinks">
-        <a href="results.html">Études de cas</a>
-        <a href="project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
-        <a href="mailto:antoine.berthaud@gmail.com">antoine.berthaud@gmail.com</a>
-        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener">Photos</a>
-      </div>
+      <!-- static:footerLinks -->
+<div class="footer-links" id="footerLinks"><a href="results.html">Études de cas</a><a href="project-detail.html?slug=tour-de-growth" data-goatcounter-click="footer-project-tour-de-growth">Tour de Growth</a><a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a><a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a><a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a></div>
+<!-- /static:footerLinks -->
       <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les deux PDF
            restent atteignables même sans JavaScript. -->
       <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a></p>

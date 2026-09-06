@@ -157,9 +157,10 @@
     // référence, ?lang=en n'est qu'une variante d'affichage.
     const canonical = document.getElementById("canonicalLink");
     if (canonical) canonical.href = `${canonical.href.split("?")[0]}?slug=${encodeURIComponent(slug)}`;
-    // Aperçus de partage : les balises og:/twitter: statiques sont génériques
-    // (page gabarit) ; on les aligne sur le projet affiché. Les robots des
-    // réseaux sociaux n'exécutent pas ce JS : ils voient la version générique.
+    // Aperçus de partage : on aligne les balises og:/twitter: sur le projet
+    // affiché. Les robots des réseaux sociaux n'exécutent pas ce JS : ils
+    // voient les valeurs pré-rendues dans le HTML (celles du seul side
+    // project, posées par scripts/generate-static.js).
     setMeta('meta[property="og:title"]', pageTitle);
     setMeta('meta[name="twitter:title"]', pageTitle);
     setMeta('meta[property="og:description"]', tc(project.tagline));
@@ -203,6 +204,9 @@
     const langBtn = document.getElementById("langToggle");
     langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
     langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
+    // Sur ?lang=en, project-detail.html masque la page pré-rendue en français
+    // jusqu'ici (script inline du <head>) : le rendu anglais est en place.
+    document.documentElement.classList.remove("lang-pending");
     // Clics comptés (data-goatcounter-click) sur les liens que ce rendu
     // vient de recréer — même logique que bindAnalytics() dans app.js.
     if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();

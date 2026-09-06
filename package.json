@@ -3,7 +3,9 @@
   "private": true,
   "description": "Site CV — génération des PDF FR/EN via Playwright",
   "scripts": {
-    "generate-pdf": "node scripts/generate-pdf.js"
+    "generate-static": "node scripts/generate-static.js",
+    "generate-pdf": "node scripts/generate-pdf.js",
+    "generate": "npm run generate-static && npm run generate-pdf"
   },
   "devDependencies": {
     "pdf-lib": "^1.17.1",

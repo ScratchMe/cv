@@ -1,22 +1,28 @@
-name: Générer les PDF du CV
+name: Pré-rendre les pages et générer les PDF
 
+# Deux produits dérivés de js/data.js, régénérés et recommittés ici :
+# 1. les zones pré-rendues (version française) des trois pages HTML, lues par
+#    les robots qui n'exécutent pas JavaScript (scripts/generate-static.js) ;
+# 2. les deux PDF (scripts/generate-pdf.js).
 # Se déclenche quand le contenu/style du CV change (pas sur le README ou
 # d'autres fichiers sans rapport), ET une fois par mois indépendamment de
 # tout changement de code : les durées d'expérience affichées sur le CV
 # (calculées depuis js/data.js jusqu'à "aujourd'hui") avancent avec le
-# calendrier, donc les PDF doivent être régénérés régulièrement pour rester
-# à jour même quand rien d'autre n'a changé.
+# calendrier, donc pages pré-rendues et PDF doivent être régénérés
+# régulièrement pour rester à jour même quand rien d'autre n'a changé.
 # Les mêmes étapes tournent sur chaque PR, sans commit : voir pr-checks.yml.
 "on":
   push:
     branches: [main]
     paths:
       - "index.html"
+      - "results.html"
+      - "project-detail.html"
       - "css/**"
       - "js/**"
       - "assets/photo/**"
       - "assets/logos/**"
-      - "scripts/generate-pdf.js"
+      - "scripts/**"
       - "package.json"
       - "package-lock.json"
   schedule:
@@ -24,11 +30,11 @@ name: Générer les PDF du CV
   workflow_dispatch: {} # permet aussi de le relancer manuellement depuis l'onglet Actions
 
 permissions:
-  contents: write # nécessaire pour que le workflow puisse recommitter les PDF générés
+  contents: write # nécessaire pour que le workflow puisse recommitter les pages pré-rendues et les PDF
   issues: write # nécessaire pour ouvrir une issue si la génération échoue (surveillance)
 
 jobs:
-  generate-pdf:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout du dépôt
@@ -54,28 +60,48 @@ jobs:
       - name: Vérifier la syntaxe des fichiers JS
         run: node --check js/data.js && node --check js/app.js && node --check js/i18n.js && node --check js/gemini.js && node --check js/project-detail.js && node --check js/results.js
 
+      # Avant les PDF : les pages HTML que Chromium imprime ensuite sont
+      # celles qui viennent d'être pré-rendues (même rendu, aucune différence
+      # attendue, mais c'est l'ordre logique).
+      - name: Pré-rendre les pages (zones générées des trois HTML, en français)
+        run: npm run generate-static
+
       - name: Générer les PDF FR et EN
         run: npm run generate-pdf
 
-      - name: Committer les PDF s'ils ont changé
+      - name: Committer les pages pré-rendues et les PDF s'ils ont changé
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf
+          git add index.html results.html project-detail.html assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf
           if git diff --cached --quiet; then
-            echo "Aucun changement dans les PDF, rien à committer."
+            echo "Aucun changement dans les pages ni les PDF, rien à committer."
           else
-            # Les deux PDF sont déclarés dans sitemap.xml : on y reporte la date
-            # de régénération (UTC) pour que leur <lastmod> reste vrai.
-            python3 - "$(date -u +%Y-%m-%d)" <<'EOF'
+            # Pages et PDF sont déclarés dans sitemap.xml : on reporte la date de
+            # régénération (UTC) sur le <lastmod> de chaque fichier qui a changé.
+            python3 - "$(date -u +%Y-%m-%d)" $(git diff --cached --name-only) <<'EOF'
           import re, sys, pathlib
+          today, changed = sys.argv[1], set(sys.argv[2:])
+          # Fichier du dépôt → URL(s) du sitemap qu'il porte.
+          urls = {
+              "index.html": ["https://cv.antoine.berthaud.me/", "https://cv.antoine.berthaud.me/?lang=en"],
+              "results.html": ["https://cv.antoine.berthaud.me/results.html"],
+              "project-detail.html": ["https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth"],
+              "assets/cv-antoine-berthaud-fr.pdf": ["https://cv.antoine.berthaud.me/assets/cv-antoine-berthaud-fr.pdf"],
+              "assets/cv-antoine-berthaud-en.pdf": ["https://cv.antoine.berthaud.me/assets/cv-antoine-berthaud-en.pdf"],
+          }
           p = pathlib.Path("sitemap.xml")
-          s, n = re.subn(r"(<loc>[^<]*\.pdf</loc>\s*<lastmod>)\d{4}-\d{2}-\d{2}", r"\g<1>" + sys.argv[1], p.read_text())
+          s = p.read_text()
+          total = 0
+          for f in sorted(changed):
+              for url in urls.get(f, []):
+                  s, n = re.subn(r"(<loc>" + re.escape(url) + r"</loc>\s*<lastmod>)\d{4}-\d{2}-\d{2}", r"\g<1>" + today, s)
+                  total += n
           p.write_text(s)
-          print(f"sitemap.xml : {n} lastmod de PDF mis à jour au {sys.argv[1]}")
+          print(f"sitemap.xml : {total} lastmod mis à jour au {today} pour {', '.join(sorted(changed))}")
           EOF
             git add sitemap.xml
-            git commit -m "chore: régénère les PDF du CV [skip ci]"
+            git commit -m "chore: régénère les pages pré-rendues et les PDF [skip ci]"
             git push
           fi
 
@@ -87,10 +113,10 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const title = "⚠️ Échec de la génération des PDF du CV";
+            const title = "⚠️ Échec du pré-rendu des pages ou de la génération des PDF du CV";
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const body = [
-              `Le workflow **Générer les PDF du CV** a échoué (déclenché par \`${context.eventName}\`).`,
+              `Le workflow **Pré-rendre les pages et générer les PDF** a échoué (déclenché par \`${context.eventName}\`).`,
               "",
               `Voir les logs : ${runUrl}`,
             ].join("\n");

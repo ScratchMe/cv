@@ -68,8 +68,8 @@
   // main ; un filtre actif les déplie aussi, sans toucher à ce choix.
   let earlyExpanded = false;
 
-  // Copie statique du pitch FR telle qu'écrite dans index.html (#heroPitch),
-  // capturée au premier rendu pour vérifier qu'elle ne dérive pas de data.js.
+  // Pitch FR pré-rendu dans index.html (#heroPitch), capturé au premier rendu
+  // pour vérifier qu'il ne dérive pas de data.js (page pas régénérée).
   let staticPitchHtml = null;
   let staticI18nChecked = false;
 
@@ -80,11 +80,10 @@
     document.getElementById("heroName").textContent = `${PROFILE.firstName} ${PROFILE.lastName}`;
     document.getElementById("heroRole").textContent = tc(PROFILE.role);
 
-    // Le pitch FR est aussi écrit en dur dans index.html, pour les robots qui
-    // n'exécutent pas JavaScript (moteurs IA, aperçus...). Au premier rendu on
-    // garde cette copie statique, et on prévient dans la console si elle
-    // diverge de PROFILE.pitch.fr — invisible pour le visiteur, c'est juste un
-    // garde-fou pour ne pas laisser les deux textes dériver.
+    // index.html porte le pitch FR pré-rendu (zone static:heroPitch, générée
+    // en CI par scripts/generate-static.js). Au premier rendu on garde cette
+    // copie, et on prévient dans la console si elle diverge de PROFILE.pitch.fr :
+    // ça signale une page pas encore régénérée après un changement de data.js.
     const pitchEl = document.getElementById("heroPitch");
     if (staticPitchHtml === null) staticPitchHtml = pitchEl.innerHTML.trim();
     pitchEl.innerHTML = richText(PROFILE.pitch);
@@ -143,8 +142,8 @@
 
     const photoEl = document.getElementById("heroPhoto");
     if (PROFILE.photo) {
-      // index.html porte déjà l'<img> (copie statique pour les robots sans
-      // JS) : on met à jour src/alt plutôt que de recréer l'image.
+      // index.html porte déjà l'<img> (en dur, pour les robots sans JS) :
+      // on met à jour src/alt plutôt que de recréer l'image.
       const img = photoEl.querySelector("img") || photoEl.appendChild(document.createElement("img"));
       if (img.getAttribute("src") !== PROFILE.photo) img.src = PROFILE.photo;
       img.alt = t("hero.photoAlt");
@@ -514,6 +513,18 @@
     document.title = tc(PROFILE.seo.title);
     const descEl = document.querySelector('meta[name="description"]');
     if (descEl) descEl.setAttribute("content", tc(PROFILE.seo.description));
+    // Aperçus de partage : même titre et même description que la page. Les
+    // valeurs françaises sont pré-rendues dans index.html par
+    // scripts/generate-static.js à partir de ce même rendu.
+    [
+      ['meta[property="og:title"]', tc(PROFILE.seo.title)],
+      ['meta[name="twitter:title"]', tc(PROFILE.seo.title)],
+      ['meta[property="og:description"]', tc(PROFILE.seo.description)],
+      ['meta[name="twitter:description"]', tc(PROFILE.seo.description)],
+    ].forEach(([sel, content]) => {
+      const el = document.querySelector(sel);
+      if (el) el.setAttribute("content", content);
+    });
 
     // Canonical par langue : l'URL nue pour le français (langue par défaut),
     // ?lang=en pour l'anglais — chaque version se déclare elle-même, en
@@ -524,9 +535,10 @@
       canonicalEl.href = window.i18n.lang === "en" ? `${base}?lang=en` : base;
     }
     document.querySelectorAll("[data-i18n]").forEach((el) => {
-      // Les textes écrits en dur dans index.html sont ce que lisent les
-      // robots sans JavaScript : au premier rendu, on signale en console
-      // ceux qui ne correspondent plus à la version française d'i18n.js.
+      // Les textes écrits en dur dans index.html (menu, titres de section :
+      // hors zones générées) sont ce que lisent les robots sans JavaScript :
+      // au premier rendu, on signale en console ceux qui ne correspondent
+      // plus à la version française d'i18n.js.
       if (!staticI18nChecked && window.i18n.lang === "fr" && el.textContent.trim() !== t(el.dataset.i18n).trim()) {
         console.warn(`[cv] Texte statique de index.html différent d'i18n.js pour « ${el.dataset.i18n} » : « ${el.textContent.trim().slice(0, 60)} » ≠ « ${t(el.dataset.i18n).slice(0, 60)} »`);
       }
@@ -686,6 +698,9 @@
     const current = navLinksEls.find((a) => a.classList.contains("is-active"));
     moveIndicatorTo(current || navLinksEls[0]);
     bindAnalytics();
+    // Sur ?lang=en, index.html masque la page pré-rendue en français jusqu'ici
+    // (script inline du <head>) : le rendu anglais est en place, on affiche.
+    document.documentElement.classList.remove("lang-pending");
   }
 
   // Relie les clics à compter (data-goatcounter-click) aux éléments qui
