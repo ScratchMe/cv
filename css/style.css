@@ -6,7 +6,9 @@
   --surface:#FFFFFF;
   --ink:#1B1030;
   --ink-soft:#5B5270;
-  --ink-faint:#9A90B0;
+  --ink-faint:#75698C; /* 5.05:1 sur blanc, 4.57:1 sur --bg : l'ancien #9A90B0 (3:1) échouait sur 110 éléments (dates, libellés) */
+  --mint-text:#0B7A5B;  /* menthe lisible en texte (tags, sous-titre du pilier) ; --mint reste pour les bordures et puces */
+  --coral-text:#C43823; /* corail lisible en texte ; --coral reste pour les bordures et puces */
   --violet:#6C3CE9;
   --violet-soft:#EFE7FD;
   --coral:#FF6B57;
@@ -142,8 +144,8 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .pillar[data-id="iterative"]{border-top-color:var(--coral);}
 .pillar h3{font-size:19px;font-weight:700;margin-bottom:6px;}
 .pillar .sub{font-size:13.5px;color:var(--violet);font-weight:600;margin-bottom:16px;}
-.pillar[data-id="data-informed"] .sub{color:var(--mint);}
-.pillar[data-id="iterative"] .sub{color:var(--coral);}
+.pillar[data-id="data-informed"] .sub{color:var(--mint-text);}
+.pillar[data-id="iterative"] .sub{color:var(--coral-text);}
 .pillar ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
 .pillar li{font-size:14px;color:var(--ink-soft);padding-left:16px;position:relative;line-height:1.5;}
 .pillar li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--violet);}
@@ -193,7 +195,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .role-meta-item{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;}
 .role-meta-item b{color:var(--ink);font-weight:600;}
 .role-skills{display:flex;gap:8px;flex-wrap:wrap;}
-.role-skill{font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;background:var(--mint-soft);color:var(--mint);}
+.role-skill{font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;background:var(--mint-soft);color:var(--mint-text);}
 .role-skill.is-matched{background:var(--violet);color:#fff;}
 
 /* ============================================================================
@@ -262,7 +264,7 @@ body.focus-mode .testimonial-avatar{background:var(--ink);}
 .fit-box textarea:focus{outline:none;border-color:var(--violet);}
 .fit-actions{display:flex;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap;}
 .fit-actions .btn{flex-shrink:0;white-space:nowrap;} /* le bouton reste sur une ligne, l'erreur passe dessous */
-.fit-error{color:var(--coral);font-size:13.5px;font-weight:600;flex:1 1 100%;overflow-wrap:anywhere;} /* pas de display ici (piège n°1) */
+.fit-error{color:var(--coral-text);font-size:13.5px;font-weight:600;flex:1 1 100%;overflow-wrap:anywhere;} /* pas de display ici (piège n°1) */
 .fit-loading-status{margin-top:10px;font-size:13.5px;color:var(--ink-soft);transition:opacity .25s ease;display:flex;align-items:center;gap:8px;}
 .fit-loading-status[hidden]{display:none;}
 .fit-loading-status::before{
@@ -310,7 +312,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
 .project-links{display:flex;gap:16px;flex-wrap:wrap;}
 .project-card a{font-size:13px;font-weight:600;color:var(--violet);text-decoration:none;}
 .project-skills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
-.project-skills span{font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;background:var(--coral-soft);color:var(--coral);}
+.project-skills span{font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;background:var(--coral-soft);color:var(--coral-text);}
 
 /* ============================================================================
    FOOTER
@@ -324,6 +326,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
 .footer-links a{color:#fff;text-decoration:none;font-size:13.5px;font-weight:500;}
 .footer-links a:hover{color:var(--coral);}
 .footer-pdf{flex-basis:100%;margin-top:6px;font-size:13px;color:#B6ADC9;}
+.results-page,.project-detail{min-height:100vh;} /* le contenu arrive en JS : sans hauteur minimale, le pied de page saute de 5 000 px au chargement */
 .footer-pdf a{color:#fff;text-decoration:none;font-weight:500;}
 .footer-pdf a:hover{color:var(--coral);}
 
@@ -378,6 +381,17 @@ body.focus-mode .ai-badge{background:var(--ink);}
   /* Formation sur une colonne : à 360-375 px, la carte Langues/Certifications
      faisait 190 px de large et le TOEIC passait sur quatre lignes. */
   .formation-grid{grid-template-columns:1fr;}
+  /* En-tête d'entreprise : « TOTAL 7 ans / 3 / mois » s'empilait en colonne ;
+     le total passe sous le nom, logo et nom restent sur la même ligne. */
+  .company-header{flex-wrap:wrap;gap:14px;}
+  .company-header>div:not(.company-total){flex:1 1 140px;min-width:0;}
+  .company-total{flex-basis:100%;margin-left:0;text-align:left;}
+  .company-total strong{display:inline;margin-left:6px;}
+  .role-meta-item{display:block;}
+  /* Témoignage : colonne de 176 px et 16 lignes de 2-4 mots. */
+  .testimonial-card{padding:32px 22px;}
+  .testimonial-quote{font-size:17px;}
+  .quote-mark{font-size:56px;margin-bottom:-8px;}
 }
 
 /* ============================================================================
@@ -410,7 +424,7 @@ body.focus-mode .pill{background:#F1F1EF;}
 
 .project-detail-hero{margin-bottom:48px;}
 .project-detail-eyebrow{
-  font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--coral);
+  font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--coral-text);
   margin-bottom:10px;
 }
 .project-detail-hero h1{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;margin-bottom:14px;}
