@@ -283,6 +283,9 @@ const SKILLS = [
   { id: "user-stories", label: "User Stories & Backlog", category: "Produit" },
   { id: "product-ownership", label: "Product Ownership", category: "Produit" },
   { id: "plg", label: "Product-Led Growth", category: "Produit" },
+  { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "Produit" },
+  { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "Produit" },
+  { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "Produit" },
   { id: "stakeholder", label: "Stakeholder Management", category: "Produit" },
   { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "Produit" },
   { id: "mentoring", label: "Mentoring & Coaching", category: "Produit" },
@@ -303,13 +306,19 @@ const SKILLS = [
   { id: "heap", label: "Heap", category: "Data" },
   { id: "zapier", label: "Zapier", category: "Outils" },
   { id: "jira", label: "Jira", category: "Outils" },
-  { id: "chatgpt", label: "ChatGPT", category: "Outils" },
+  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "Outils" },
   { id: "flagship", label: "Flagship", category: "Outils" },
   { id: "productboard", label: "ProductBoard", category: "Outils" },
   { id: "figma", label: "Figma", category: "Outils" },
   { id: "miro", label: "Miro", category: "Outils" },
   { id: "akeneo", label: "Akeneo", category: "Outils" },
-  { id: "postman", label: "Postman", category: "Outils" },
+  // Catégorie « Technique » : ce qu'un PM qui construit des tunnels, des
+  // paiements et des intégrations doit pouvoir montrer (4 offres nantaises
+  // sur 10 citent les API). La clé de traduction skills.cat.Technique est
+  // dans i18n.js — sans elle, la page afficherait la clé brute.
+  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "Technique" },
+  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "Technique" },
+  { id: "postman", label: "Postman", category: "Technique" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -347,8 +356,8 @@ const EXPERIENCES = [
             en: "Led the shift from a 100% Sales-Led model to a **hybrid model**: framing, business case and roadmap with leadership, with large accounts kept with Sales and everyone else signing up and paying on their own.",
           },
           {
-            fr: "Conception et construction de bout en bout du **tunnel self-serve** (inscription publique, freemium limité, paiement intégré), **livré en production derrière un feature flag** et prêt au lancement. Lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
-            en: "Designed and built the **self-serve funnel** end to end (public sign-up, limited freemium, integrated payment), **shipped to production behind a feature flag** and ready to launch. Launch put on hold after AB Tasty's merger with VWO.",
+            fr: "Conception et construction de bout en bout du **tunnel self-serve** : inscription publique, freemium limité, et intégration d'une plateforme de facturation que j'ai cadrée (paiement, abonnements, accès aux fonctionnalités selon l'offre). **Livré en production derrière un feature flag**, prêt au lancement ; lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
+            en: "Designed and built the **self-serve funnel** end to end: public sign-up, limited freemium, and the integration of a billing platform I scoped (payments, subscriptions, feature access by plan). **Shipped to production behind a feature flag**, ready to launch; launch put on hold after AB Tasty's merger with VWO.",
           },
           {
             fr: "Animation de 2 autres Product Managers sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
@@ -360,7 +369,7 @@ const EXPERIENCES = [
           fr: "4 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "4 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["plg", "discovery", "roadmapping", "stakeholder", "cross-functional-leadership", "user-stories", "mentoring", "jira", "metabase", "mixpanel", "segment", "chatgpt", "okr", "user-research"],
+        skills: ["plg", "activation", "monetization", "ab-testing", "api", "discovery", "roadmapping", "stakeholder", "cross-functional-leadership", "user-stories", "mentoring", "jira", "sql", "metabase", "mixpanel", "segment", "genai", "okr", "user-research"],
       },
       {
         title: "Product Manager",
@@ -393,7 +402,7 @@ const EXPERIENCES = [
           fr: "3 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "3 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["discovery", "roadmapping", "stakeholder", "user-stories", "sql", "metabase", "mixpanel", "jira", "zapier", "looker-studio", "segment", "chatgpt", "okr", "user-research", "flagship", "feature-flagging"],
+        skills: ["activation", "ab-testing", "discovery", "roadmapping", "stakeholder", "user-stories", "sql", "metabase", "mixpanel", "jira", "zapier", "looker-studio", "segment", "genai", "okr", "user-research", "flagship", "feature-flagging"],
       },
     ],
   },
@@ -513,8 +522,8 @@ const EXPERIENCES = [
         start: "2017-11",
         end: "2020-09",
         context: {
-          fr: "En charge de l'asset de web services de distribution pour la vente de titres TER et urbains.",
-          en: "Owned the web services distribution asset for regional and urban ticket sales (TER).",
+          fr: "En charge des web services (API) de distribution des titres TER et urbains, utilisés par les canaux de vente.",
+          en: "Owned the distribution web services (APIs) behind regional (TER) and urban ticket sales, used by the sales channels.",
         },
         achievements: [
           {
@@ -535,7 +544,7 @@ const EXPERIENCES = [
           fr: "15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
           en: "15 developers, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
         },
-        skills: ["roadmapping", "story-mapping", "user-stories", "product-ownership", "agile", "bdd", "jira", "miro", "postman"],
+        skills: ["api", "roadmapping", "story-mapping", "user-stories", "product-ownership", "agile", "bdd", "jira", "miro", "postman"],
       },
       {
         title: { fr: "Product Manager Junior", en: "Junior Product Manager" },
@@ -720,12 +729,12 @@ const SIDE_PROJECTS = [
   {
     title: "Tour de Growth",
     description: {
-      fr: "Un outil public de growth check-up (framework AARRR), conçu et lancé pour servir de miroir rapide. En mots clairs plutôt qu'en jargon, on voit où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
-      en: "A free growth check-up tool (AARRR framework), designed and launched to provide a quick assessment. In plain language rather than jargon, it shows where a growth strategy is already on the right track and where it isn’t yet.",
+      fr: "Un outil public de growth check-up (framework AARRR), conçu et lancé pour servir de miroir rapide. En mots clairs plutôt qu'en jargon, on voit où une stratégie growth tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.",
+      en: "A free growth check-up tool (AARRR framework), designed and launched to provide a quick assessment. In plain language rather than jargon, it shows where a growth strategy is already on the right track and where it isn’t yet. The in-depth mode runs on the Gemini API; the product was designed and built with Claude Code.",
     },
     link: "https://tourdegrowth.com",
     detailSlug: "tour-de-growth",
-    skills: ["plg", "user-research"],
+    skills: ["plg", "user-research", "llm-integration", "genai"],
   },
 ];
 
