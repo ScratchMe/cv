@@ -1,0 +1,14 @@
+# GitHub Pages passe le site par Jekyll (pas de fichier .nojekyll). On en
+# profite pour ne PAS servir sur cv.antoine.berthaud.me les fichiers de
+# travail du dépôt : ils n'ont rien à faire sur le domaine (CLAUDE.md était
+# lisible à https://cv.antoine.berthaud.me/CLAUDE.md). Les pages, css/, js/
+# et assets/ restent servis normalement.
+exclude:
+  - CLAUDE.md
+  - README.md
+  - package.json
+  - package-lock.json
+  - scripts/
+  - supabase/
+  - .github/
+  - node_modules/
