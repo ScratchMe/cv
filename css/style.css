@@ -207,8 +207,9 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .formation-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;border-top:5px solid var(--mint);}
 .formation-card:last-child{border-top-color:var(--coral);}
 .lang-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
-.lang-list li{display:flex;justify-content:space-between;font-size:14px;}
-.lang-list .lang-level{color:var(--ink-soft);font-weight:500;}
+.lang-list li{display:flex;justify-content:space-between;gap:12px;font-size:14px;} /* gap : sans lui, un niveau long collait au nom de la langue (« AnglaisCourant… ») */
+.lang-list li>span:first-child{flex-shrink:0;}
+.lang-list .lang-level{color:var(--ink-soft);font-weight:500;text-align:right;}
 
 /* ============================================================================
    RECOMMANDATION — citation vedette
@@ -351,6 +352,9 @@ body.focus-mode .ai-badge{background:var(--ink);}
 @media(max-width:640px){
   .hero{padding-top:32px;}
   .hero-grid{gap:24px;}
+  /* Formation sur une colonne : à 360-375 px, la carte Langues/Certifications
+     faisait 190 px de large et le TOEIC passait sur quatre lignes. */
+  .formation-grid{grid-template-columns:1fr;}
 }
 
 /* ============================================================================
