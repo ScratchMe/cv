@@ -4,21 +4,20 @@ name: Vérifier la PR
 # syntaxe des JS, rendu complet du site dans Chromium, génération des deux
 # PDF avec leurs garde-fous (erreur JS, page sans expérience, polices
 # absentes, liens locaux, PDF trop court). Rien n'empêchait jusqu'ici de
-# merger une page cassée. À exiger sur main dans Settings → Branches.
+# merger une page cassée.
+#
+# Tourne sur TOUTES les PR, sans filtre de chemins : un check exigé par un
+# ruleset qui ne se déclenche pas (PR sur le README seul) laisse la PR
+# bloquée sur « Expected — Waiting for status to be reported ». Trois minutes
+# par PR, c'est le prix d'un garde-fou fiable.
 "on":
   pull_request:
     branches: [main]
-    paths:
-      - "index.html"
-      - "results.html"
-      - "project-detail.html"
-      - "css/**"
-      - "js/**"
-      - "assets/photo/**"
-      - "assets/logos/**"
-      - "scripts/generate-pdf.js"
-      - "package.json"
-      - ".github/workflows/pr-checks.yml"
+
+# Une nouvelle poussée sur la même PR annule le run précédent.
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
