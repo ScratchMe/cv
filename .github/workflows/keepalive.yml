@@ -1,0 +1,81 @@
+name: Garder Supabase éveillé
+
+# Le projet Supabase du Fit-Checker est en plan Free : mis en pause après
+# 7 jours sans requête API à la base (les appels à la fonction gemini-fit ne
+# comptent pas). Trois lectures quotidiennes de la table keepalive (une ligne,
+# lecture seule pour la clé anon — voir supabase/migrations/) suffisent à le
+# garder actif. Un moniteur externe (UptimeRobot / cron-job.org) lit la même
+# URL toutes les 12 h : il fait activité et alerte sans dépendre de GitHub,
+# qui désactive les crons d'un dépôt public après 60 jours sans commit
+# (réactivation : « Enable workflow », ou un commit qui modifie la ligne cron).
+on:
+  schedule:
+    - cron: "17 5 * * *" # tous les jours à 5h17 UTC, loin de l'heure pile
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  lire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lire la table keepalive (3 fois)
+        env:
+          REST_URL: https://tpreesulucfsyalaipcj.supabase.co/rest/v1/keepalive?select=id&limit=1
+          # Clé « anon » publique du projet (la même que dans js/data.js) : pas un secret.
+          ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcmVlc3VsdWNmc3lhbGFpcGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcxNTg4MDgsImV4cCI6MjEwMjczNDgwOH0.Fl3dn5f8ef43IjkHwM2GKrE1qK1PIyO6REh4kk28M7g
+        run: |
+          set -u
+          ok=0
+          for i in 1 2 3; do
+            code=$(curl -sS -m 20 -o /tmp/reponse.json -w '%{http_code}' "$REST_URL" \
+              -H "apikey: $ANON_KEY" -H "Authorization: Bearer $ANON_KEY" 2>/dev/null || true)
+            echo "Lecture $i : HTTP $code $(head -c 120 /tmp/reponse.json 2>/dev/null)"
+            if [ "$code" = "200" ]; then ok=$((ok + 1)); fi
+            sleep 2
+          done
+          if [ "$ok" -ge 1 ]; then echo "Supabase répond ($ok/3 lectures OK)"; exit 0; fi
+          echo "::error::Aucune lecture n'a abouti : projet Supabase en pause, ou table keepalive absente (migration non appliquée)"
+          exit 1
+
+      - name: Signaler la panne via une issue
+        if: failure()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const title = "🚨 Supabase ne répond plus (keep-alive du Fit-Checker)";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              "Les trois lectures quotidiennes de la table `keepalive` ont échoué : le projet Supabase est probablement en pause (plan Free), ou la table n'existe pas (migration `supabase/migrations/20260906120000_keepalive.sql` non appliquée).",
+              "",
+              "1. https://supabase.com/dashboard/project/tpreesulucfsyalaipcj — bouton **Restore** si le projet est en pause.",
+              "2. Puis relancer ce workflow et « Surveiller le Fit-Checker » à la main (onglet Actions).",
+              "",
+              `Logs du workflow : ${runUrl}`,
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "fit-checker-down",
+            });
+
+            if (existing.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: `Toujours en panne (keep-alive) : ${runUrl}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["fit-checker-down"],
+              });
+            }
