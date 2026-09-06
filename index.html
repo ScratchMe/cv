@@ -172,12 +172,13 @@
             <line x1="8" y1="17" x2="12" y2="17"/>
           </svg>
         </button>
-        <button id="printBtn" class="btn icon-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF">
+        <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"/>
             <path d="M7 10l5 5 5-5"/>
             <path d="M4 19h16"/>
           </svg>
+          <span>PDF</span>
         </button>
       </div>
     </div>
@@ -335,6 +336,9 @@
         <p id="footerTagline">Product Manager — Nantes, France</p>
       </div>
       <div class="footer-links" id="footerLinks"></div>
+      <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les deux PDF
+           restent atteignables même sans JavaScript. -->
+      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf">CV as PDF (English)</a></p>
     </div>
   </footer>
 
