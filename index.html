@@ -196,7 +196,11 @@
             <line x1="8" y1="17" x2="12" y2="17"/>
           </svg>
         </button>
-        <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF" data-goatcounter-click="pdf-download">
+        <!-- Une seule pastille pour les deux PDF : « PDF » (complet, 5 pages) et
+             son segment « court » (2 pages). Deux boutons séparés faisaient passer
+             le menu sur deux lignes à 1 280 px. -->
+        <div class="pdf-group">
+          <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF" data-goatcounter-click="pdf-download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"/>
             <path d="M7 10l5 5 5-5"/>
@@ -204,14 +208,8 @@
           </svg>
           <span data-i18n="nav.printShort">PDF</span>
         </button>
-        <button id="printShortBtn" class="btn label-btn" type="button" data-i18n-aria="nav.printShortBtn" title="Télécharger le CV court (PDF, 2 pages)" data-goatcounter-click="pdf-download-court">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3v12"/>
-            <path d="M7 10l5 5 5-5"/>
-            <path d="M4 19h16"/>
-          </svg>
-          <span data-i18n="nav.printShortLabel">PDF court</span>
-        </button>
+          <button id="printShortBtn" class="btn label-btn pdf-short" type="button" data-i18n-aria="nav.printShortBtn" aria-label="Télécharger le CV court (PDF, 2 pages)" title="Télécharger le CV court (PDF, 2 pages)" data-goatcounter-click="pdf-download-court"><span data-i18n="nav.printShortLabel">court</span></button>
+        </div>
       </div>
     </div>
   </header>
