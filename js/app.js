@@ -242,7 +242,7 @@
     list.innerHTML = EXPERIENCES.map((company, ci) => {
       const total = company.roles.length > 1 ? companyTotalDuration(company.roles) : null;
       const logoHtml = company.logo
-        ? `<img class="company-logo" src="${company.logo}" alt="Logo ${company.company}">`
+        ? `<img class="company-logo" src="${company.logo}" alt="Logo ${company.company}" width="56" height="56" loading="lazy" decoding="async">`
         : `<div class="company-logo-fallback">${(company.logoLabel || company.company.slice(0, 2)).toUpperCase()}</div>`;
 
       const rolesHtml = company.roles
