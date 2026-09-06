@@ -38,8 +38,8 @@ const PROFILE = {
   firstName: "Antoine",
   lastName: "Berthaud",
   role: {
-    fr: "Senior Growth Product Manager — AB Tasty",
-    en: "Senior Growth Product Manager at AB Tasty",
+    fr: "Senior Product Manager · Growth, PLG & SaaS B2B",
+    en: "Senior Product Manager · Growth, PLG & B2B SaaS",
   },
   location: "Nantes, France",
   yearsExperience: "10", // même chiffre que le pitch (« 10 ans de produit ») et la meta description : un seul nombre partout
@@ -55,8 +55,8 @@ const PROFILE = {
   // le modifies ici, reporte la modification là-bas : app.js signale l'écart
   // dans la console du navigateur, mais ne le corrige pas tout seul.
   pitch: {
-    fr: "Senior Product Manager, **10 ans de produit** en **SaaS B2B** (AB Tasty, Everysens) et grands comptes (SNCF Connect & Tech), **ingénieur de formation** (Polytech Nantes). Aujourd'hui sur les sujets **growth** chez AB Tasty : onboarding, activation, tunnel self-serve, avec la roadmap et le business case portés auprès de la direction. J'ai animé deux PM sur ce chantier, et une **communauté PM de plus de 100 personnes** chez SNCF. Je tranche avec la donnée (**SQL, Metabase, Mixpanel**) autant qu'avec les entretiens utilisateurs. Et j'ai aussi tenu le rôle de **Product Owner** au quotidien : backlog, user stories, sprints.",
-    en: "Senior Product Manager, **10 years in product**, in **B2B SaaS** (AB Tasty, Everysens) and enterprise settings (SNCF Connect & Tech), **engineer by training** (Polytech Nantes). Currently on **growth** topics at AB Tasty: onboarding, activation, self-serve funnel, with the roadmap and business case carried to leadership. I led two other PMs on that workstream, and a **Product Management community of 100+ people** at SNCF. I decide with data (**SQL, Metabase, Mixpanel**) as much as with user interviews. And I've also held the day-to-day **Product Owner** role: backlog, user stories, sprints.",
+    fr: "Senior Product Manager, **10 ans de produit** en **SaaS B2B** (AB Tasty, Everysens) et grands comptes (SNCF Connect & Tech), **ingénieur de formation**. Ma spécialité : le **growth** des produits SaaS, de l'onboarding à la monétisation self-serve. Chez AB Tasty, je porte le passage d'un modèle Sales-Led à un **modèle hybride** : business case et roadmap avec la direction, deux PM animés, un tunnel self-serve livré derrière un feature flag. Je tranche avec la donnée (**SQL, Metabase, Mixpanel**) autant qu'avec les entretiens utilisateurs.",
+    en: "Senior Product Manager, **10 years in product**, in **B2B SaaS** (AB Tasty, Everysens) and enterprise settings (SNCF Connect & Tech), **engineer by training**. My specialty: **growth** for SaaS products, from onboarding to self-serve monetization. At AB Tasty, I lead the shift from a Sales-Led to a **hybrid model**: business case and roadmap with leadership, two PMs led, a self-serve funnel shipped behind a feature flag. I decide with data (**SQL, Metabase, Mixpanel**) as much as with user interviews.",
   },
   // Balises <title> et <meta name="description"> de la page d'accueil, par
   // langue. C'est ce que Google affiche dans ses résultats : le lieu (Nantes)
