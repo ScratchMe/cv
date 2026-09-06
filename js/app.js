@@ -218,7 +218,7 @@
       const total = company.roles.length > 1 ? companyTotalDuration(company.roles) : null;
       const logoHtml = company.logo
         ? `<img class="company-logo" src="${company.logo}" alt="Logo ${company.company}">`
-        : `<div class="company-logo-fallback">${company.company.slice(0, 2).toUpperCase()}</div>`;
+        : `<div class="company-logo-fallback">${(company.logoLabel || company.company.slice(0, 2)).toUpperCase()}</div>`;
 
       const rolesHtml = company.roles
         .map((r, ri) => {
