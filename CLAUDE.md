@@ -31,6 +31,10 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   `RESULT_DETAILS`) — `results.js` avertit en console s'ils divergent.
   `project-detail.html` reste générique (page gabarit) : `project-detail.js`
   pose titre, description, canonical et `og:` du projet affiché.
+- **Tout fichier du dépôt qui n'est pas dans la liste `exclude` de `_config.yml`
+  est servi tel quel sur cv.antoine.berthaud.me** (GitHub Pages) : ce fichier
+  en fait partie, comme README, scripts, supabase et .github. Ne jamais y
+  écrire quelque chose qui n'aurait pas sa place en public.
 - `js/app.js` : rendu, filtres de compétences, scroll-spy, durées
   dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`).
 - `js/gemini.js` : logique du Fit-Checker (appelle une fonction Supabase,
@@ -180,8 +184,12 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
    (grilles en colonnes), sinon la pagination PDF explose (9 pages au
    lieu de 7 constaté une fois).
 3. **Les halos de fond en `position:fixed` sont ré-encodés en image sur
-   CHAQUE page PDF** — remplacés par un dégradé CSS léger en fond de
-   `body` pour le print (a fait passer un export de 4,7 Mo à 379 Ko).
+   CHAQUE page PDF** — retirés pour le print, où `body` a un fond blanc
+   uni (a fait passer un export de 4,7 Mo à 379 Ko ; un dégradé sur `body`
+   a été essayé entre-temps et faisait une tache sous le contact en
+   dernière page). Un fond peint dans la boîte du `body` reste blanc sur
+   les pages suivantes, et `break-after:avoid` sur les titres de section
+   coûte une page entière quand il ne rentre pas — mesuré.
 4. **Les labels de compétences doivent passer par `tc()`**, pas juste
    `.label` brut — sinon un label bilingue `{fr, en}` s'affiche identique
    dans les deux langues (bug réel trouvé sur "Gestion de projet"/"Project

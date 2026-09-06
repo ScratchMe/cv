@@ -124,15 +124,20 @@
     // Pas d'âge dans les pastilles (ni ailleurs) : inutile pour juger un
     // profil, et c'est un critère de discrimination à l'embauche — autant ne
     // pas le mettre sous les yeux d'un recruteur.
+    // L'émoji est décoratif : hors du nom accessible (aria-hidden), sinon un
+    // lecteur d'écran lit « épingle ronde Nantes, France ».
     [
-      `📍 ${PROFILE.location}`,
-      `🚀 ${PROFILE.yearsExperience} ${t("hero.pillYears")}`,
+      ["📍", PROFILE.location],
+      ["🚀", `${PROFILE.yearsExperience} ${t("hero.pillYears")}`],
       // Pastille « ce que je cherche » : seulement si le champ est renseigné.
-      ...(tc(PROFILE.lookingFor) ? [`🎯 ${tc(PROFILE.lookingFor)}`] : []),
-    ].forEach((text) => {
+      ...(tc(PROFILE.lookingFor) ? [["🎯", tc(PROFILE.lookingFor)]] : []),
+    ].forEach(([emoji, text]) => {
       const span = document.createElement("span");
       span.className = "pill";
-      span.textContent = text;
+      const icon = document.createElement("span");
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = emoji;
+      span.append(icon, ` ${text}`);
       pillsEl.appendChild(span);
     });
 
@@ -153,6 +158,13 @@
     const footerLinks = document.getElementById("footerLinks");
     footerLinks.innerHTML = "";
     footerLinks.innerHTML += `<a href="results.html${window.i18n.langSuffix()}">${t("footer.caseStudies")}</a>`;
+    // Étude de cas de chaque side project : results.html ne renvoyait vers
+    // project-detail.html nulle part (constat F07 de l'audit).
+    if (CONFIG.showSideProjects) {
+      SIDE_PROJECTS.filter((p) => p.detailSlug).forEach((p) => {
+        footerLinks.innerHTML += `<a href="project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}" data-goatcounter-click="footer-project-${p.detailSlug}">${p.title}</a>`;
+      });
+    }
     // data-goatcounter-click : clics comptés comme événements GoatCounter
     // (liés par bindAnalytics() après chaque rendu) — voir README §8.
     if (PROFILE.contact.email) {
@@ -289,10 +301,10 @@
           const achievementsHtml = (r.achievements || []).map((a) => `<li>${richText(a)}</li>`).join("");
           const metaParts = [];
           if (r.methodology) {
-            metaParts.push(`<span class="role-meta-item">🧭 <b>${t("experiences.methodology")}</b> — ${tc(r.methodology)}</span>`);
+            metaParts.push(`<span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>${t("experiences.methodology")}</b> — ${tc(r.methodology)}</span>`);
           }
           if (r.team) {
-            metaParts.push(`<span class="role-meta-item">👥 <b>${t("experiences.team")}</b> — ${tc(r.team)}</span>`);
+            metaParts.push(`<span class="role-meta-item"><span aria-hidden="true">👥</span> <b>${t("experiences.team")}</b> — ${tc(r.team)}</span>`);
           }
           const metaHtml = metaParts.length ? `<div class="role-meta">${metaParts.join("")}</div>` : "";
 
@@ -520,10 +532,13 @@
       }
       el.textContent = t(el.dataset.i18n);
     });
-    staticI18nChecked = true;
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      if (!staticI18nChecked && window.i18n.lang === "fr" && el.placeholder.trim() !== t(el.dataset.i18nPlaceholder).trim()) {
+        console.warn(`[cv] Placeholder statique de index.html différent d'i18n.js pour « ${el.dataset.i18nPlaceholder} »`);
+      }
       el.placeholder = t(el.dataset.i18nPlaceholder);
     });
+    staticI18nChecked = true;
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
       const label = t(el.dataset.i18nAria);
       el.setAttribute("aria-label", label);

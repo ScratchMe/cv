@@ -40,7 +40,7 @@
     "givenName": "Antoine",
     "familyName": "Berthaud",
     "jobTitle": "Senior Growth Product Manager",
-    "description": "Product Manager depuis plus de 10 ans, basé à Nantes. SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF Connect & Tech) : growth, Product-Led Growth, discovery, décisions appuyées sur la donnée.",
+    "description": "Product Manager depuis 10 ans, basé à Nantes. SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF Connect & Tech) : growth, Product-Led Growth, discovery, décisions appuyées sur la donnée.",
     "url": "https://cv.antoine.berthaud.me/",
     "image": "https://cv.antoine.berthaud.me/assets/photo/antoine.jpg",
     "email": "mailto:antoine.berthaud@gmail.com",
@@ -192,7 +192,7 @@
             <path d="M7 10l5 5 5-5"/>
             <path d="M4 19h16"/>
           </svg>
-          <span>PDF</span>
+          <span data-i18n="nav.printShort">PDF</span>
         </button>
       </div>
     </div>
@@ -233,7 +233,7 @@
     <!-- ============================= TEASER FIT-CHECKER ============================= -->
     <div class="fit-teaser wrap">
       <a href="#fit-checker" class="fit-teaser-inner">
-        <span class="ai-badge ai-badge-lg">✨ <span data-i18n="fit.badge">IA</span></span>
+        <span class="ai-badge ai-badge-lg"><span aria-hidden="true">✨</span> <span data-i18n="fit.badge">IA</span></span>
         <span class="fit-teaser-text" data-i18n="fitTeaser.text">Recruteur·se ? Vérifiez en 10 secondes si mon profil correspond à votre poste.</span>
         <span class="fit-teaser-cta" data-i18n="fitTeaser.cta">Essayer le Fit-Checker →</span>
       </a>
@@ -318,12 +318,12 @@
       <div class="wrap">
         <div class="sectitle">
           <h2 data-i18n="fit.sectionTitle">Recruteur·se ? Vérifiez le fit en 10 secondes</h2>
-          <span class="ai-badge ai-badge-lg">✨ <span data-i18n="fit.badge">IA</span></span>
+          <span class="ai-badge ai-badge-lg"><span aria-hidden="true">✨</span> <span data-i18n="fit.badge">IA</span></span>
         </div>
         <p class="fit-intro" data-i18n="fit.intro">Collez votre offre d'emploi ci-dessous. Une IA (Gemini) compare mon profil à votre besoin et vous donne un score de compatibilité argumenté — points forts, points de vigilance, et une question d'entretien suggérée.</p>
         <div class="fit-box">
           <label for="jobPosting" class="sr-only" data-i18n="fit.label">Texte de l'offre d'emploi</label>
-          <textarea id="jobPosting" rows="8" data-i18n-placeholder="fit.placeholder" placeholder="Colle ici le texte de l'offre d'emploi (intitulé, missions, compétences recherchées...)"></textarea>
+          <textarea id="jobPosting" rows="8" data-i18n-placeholder="fit.placeholder" placeholder="Collez ici le texte de l'offre d'emploi (intitulé, missions, compétences recherchées...)"></textarea>
           <div class="fit-actions">
             <button id="analyzeBtn" class="btn solid" type="button" data-i18n="fit.analyzeBtn">Analyser le fit</button>
             <span id="fitError" class="fit-error" role="alert" hidden></span>
@@ -364,6 +364,7 @@
            app.js vide ce bloc et le reconstruit depuis data.js. -->
       <div class="footer-links" id="footerLinks">
         <a href="results.html">Études de cas</a>
+        <a href="project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
         <a href="mailto:antoine.berthaud@gmail.com">antoine.berthaud@gmail.com</a>
         <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener">Photos</a>

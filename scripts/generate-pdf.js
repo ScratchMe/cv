@@ -61,6 +61,7 @@ const MIME = {
   ".js": "application/javascript",
   ".svg": "image/svg+xml",
   ".png": "image/png",
+  ".webp": "image/webp", // logos d'entreprise : sans ce type, Chromium ignore l'image et le PDF sort sans logos
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".ico": "image/x-icon",
@@ -137,13 +138,34 @@ async function generateFor(browser, { lang, format, outPath }) {
   // Attend que les polices web (Google Fonts) soient réellement chargées,
   // sinon le PDF peut capturer un instant la police de secours système.
   await page.evaluate(() => document.fonts.ready);
+  // Les logos d'entreprise sont en loading="lazy" et sous le pli : à ce
+  // stade le navigateur ne les a pas chargés, et page.pdf() ne déclenche pas
+  // le chargement différé — le PDF sortait sans logos. On force le chargement
+  // de toutes les images et on attend qu'elles soient là.
+  await page.evaluate(async () => {
+    const images = [...document.images];
+    images.forEach((img) => {
+      img.loading = "eager";
+    });
+    await Promise.all(
+      images.map((img) =>
+        img.complete ? Promise.resolve() : new Promise((resolve) => img.addEventListener("load", resolve, { once: true }) || img.addEventListener("error", resolve, { once: true }))
+      )
+    );
+  });
 
   if (pageErrors.length) throw new Error(`Erreur JS sur la page (${lang}) : ${pageErrors[0]}`);
   const check = await page.evaluate(() => ({
     roles: document.querySelectorAll(".role-block").length,
-    fontFaces: document.fonts.size, // 0 = la feuille Google Fonts n'a pas chargé
+    // Une image qui n'a pas chargé (chemin cassé, type MIME inconnu du
+    // serveur) sort du PDF sans bruit : on la compte.
+    brokenImages: [...document.images].filter((img) => img.naturalWidth === 0).map((img) => img.getAttribute("src")),
+    // Faces réellement chargées (pas seulement déclarées) : 0 = la feuille
+    // Google Fonts n'a pas chargé, ou les fichiers woff2 n'ont pas suivi.
+    fontFaces: [...document.fonts].filter((f) => f.status === "loaded").length,
   }));
   if (check.roles === 0) throw new Error(`Aucune expérience rendue (${lang}) — data.js probablement cassé.`);
+  if (check.brokenImages.length) throw new Error(`Image(s) non chargée(s) (${lang}) : ${check.brokenImages.join(", ")}`);
   // PDF_ALLOW_FALLBACK_FONTS=1 : pour un test local sans accès à Google Fonts.
   if (check.fontFaces === 0 && !process.env.PDF_ALLOW_FALLBACK_FONTS) {
     throw new Error(`Polices web absentes (${lang}) — le PDF sortirait en police de secours.`);
