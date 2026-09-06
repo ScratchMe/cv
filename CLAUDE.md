@@ -22,7 +22,15 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   `PROFILE.seo` (FR) sont recopiés en dur dans `index.html` (`#heroPitch`,
   `<title>`, description, `og:`/`twitter:`) pour les robots qui n'exécutent
   pas JavaScript — toute modification de l'un se reporte dans l'autre
-  (`app.js` avertit en console si le pitch diverge, rien de plus).
+  (`app.js` avertit en console si le pitch diverge, rien de plus). Même
+  principe pour la photo du hero (`<img>` dans `#heroPhoto`) et les liens du
+  pied de page (`#footerLinks`, copie de `PROFILE.contact`) dans
+  `index.html`, et pour `results.html` : `<title>`, description, `og:`
+  (copies de `results.metaTitle`/`metaDescription` d'`i18n.js`) et, dans
+  `<main>`, l'en-tête + les trois chiffres (copies d'`i18n.js` et de
+  `RESULT_DETAILS`) — `results.js` avertit en console s'ils divergent.
+  `project-detail.html` reste générique (page gabarit) : `project-detail.js`
+  pose titre, description, canonical et `og:` du projet affiché.
 - `js/app.js` : rendu, filtres de compétences, scroll-spy, durées
   dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`).
 - `js/gemini.js` : logique du Fit-Checker (appelle une fonction Supabase,

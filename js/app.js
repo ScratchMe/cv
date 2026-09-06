@@ -138,7 +138,12 @@
 
     const photoEl = document.getElementById("heroPhoto");
     if (PROFILE.photo) {
-      photoEl.innerHTML = `<img src="${PROFILE.photo}" alt="${t("hero.photoAlt")}">`;
+      // index.html porte déjà l'<img> (copie statique pour les robots sans
+      // JS) : on met à jour src/alt plutôt que de recréer l'image.
+      const img = photoEl.querySelector("img") || photoEl.appendChild(document.createElement("img"));
+      if (img.getAttribute("src") !== PROFILE.photo) img.src = PROFILE.photo;
+      img.alt = t("hero.photoAlt");
+      photoEl.querySelectorAll(":scope > :not(img)").forEach((el) => el.remove());
     } else {
       const initials = (PROFILE.firstName[0] || "") + (PROFILE.lastName[0] || "");
       photoEl.innerHTML = `<strong>${initials}</strong><span>Photo</span>`;

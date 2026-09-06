@@ -140,6 +140,7 @@
       <p>Ce site a besoin de JavaScript pour s'afficher correctement.</p>
       <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
          <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
+      <p><a href="results.html">Études de cas</a></p>
     </div>
   </noscript>
 
@@ -208,7 +209,10 @@
           </div>
         </div>
         <div class="photo-ring">
-          <div class="photo-box" id="heroPhoto"><strong>AB</strong><span>Photo</span></div>
+          <!-- Photo en dur (copie de PROFILE.photo et de hero.photoAlt en FR) pour
+               les robots sans JavaScript ; app.js met à jour src/alt selon la
+               langue au lieu de réécrire le bloc. -->
+          <div class="photo-box" id="heroPhoto"><img src="assets/photo/antoine.jpg" alt="Portrait d'Antoine Berthaud, Product Manager à Nantes" decoding="async"></div>
         </div>
       </div>
     </section>
@@ -337,7 +341,14 @@
         <div class="mark">Antoine<span>.</span></div>
         <p id="footerTagline">Product Manager — Nantes, France</p>
       </div>
-      <div class="footer-links" id="footerLinks"></div>
+      <!-- Liens en dur (copie de PROFILE.contact) pour les robots sans JavaScript :
+           app.js vide ce bloc et le reconstruit depuis data.js. -->
+      <div class="footer-links" id="footerLinks">
+        <a href="results.html">Études de cas</a>
+        <a href="mailto:antoine.berthaud@gmail.com">antoine.berthaud@gmail.com</a>
+        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener">Photos</a>
+      </div>
       <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les deux PDF
            restent atteignables même sans JavaScript. -->
       <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf">CV as PDF (English)</a></p>
