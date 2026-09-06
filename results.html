@@ -36,6 +36,22 @@
 <link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
+<!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
+     pas de données personnelles. Le chemin compté est figé ICI, avant le
+     chargement de count.js (async) : on ne garde que ?slug= et ?lang=en,
+     jamais ref/utm ni le fragment, pour que /?lang=en remonte toujours pareil
+     quelle que soit la vitesse du réseau. Compte configuré (site
+     "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
+     — voir README §8 (événements, exclure ses propres visites). -->
+<script>
+  window.goatcounter = { path: (function () {
+    var q = new URLSearchParams(location.search), keep = [];
+    if (q.get("slug")) keep.push("slug=" + encodeURIComponent(q.get("slug")));
+    if (q.get("lang") === "en") keep.push("lang=en");
+    return location.pathname + (keep.length ? "?" + keep.join("&") : "");
+  })() };
+</script>
+<script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -100,11 +116,11 @@
       <div class="footer-links">
         <a href="index.html" id="footerCvLink">CV</a>
         <a href="results.html" id="footerResultsLink">Études de cas</a>
-        <a href="mailto:antoine.berthaud@gmail.com">antoine.berthaud@gmail.com</a>
-        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener">Photos</a>
+        <a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a>
+        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>
+        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a>
       </div>
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf">CV as PDF (English)</a></p>
+      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a></p>
     </div>
   </footer>
 

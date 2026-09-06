@@ -252,11 +252,24 @@ Je l'ai déjà appliqué sur tes expériences les plus récentes (AB Tasty, Ever
 
 Pas de cookies, pas de données personnelles collectées, pas de bannière de consentement nécessaire. **Gratuit indéfiniment** pour un usage personnel (contrairement à Plausible, qui n'a plus de forfait gratuit permanent depuis 2026 — je suis parti sur GoatCounter pour cette raison).
 
-1. Crée un compte gratuit sur https://www.goatcounter.com ("Sign up" → "I want to sign up" → choisis un code de site, ex. `antoineberthaud`).
-2. Dans `index.html`, remplace `TON-CODE` par ce code dans la balise `<script data-goatcounter="https://TON-CODE.goatcounter.com/count" ...>`.
-3. C'est tout. Le tableau de bord (visites, pages vues, provenance) est visible sur `https://TON-CODE.goatcounter.com`.
+Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineberthaud.goatcounter.com. Le script `count.js` est chargé dans le `<head>` des trois pages (`index.html`, `results.html`, `project-detail.html`), précédé d'un petit script inline qui **fige le chemin compté** : seuls `?slug=` et `?lang=en` sont conservés (`/`, `/?lang=en`, `/results.html`, `/project-detail.html?slug=tour-de-growth`…), jamais `ref`/`utm` ni le fragment `#…`. Sans ça, `/?lang=en` remontait tantôt avec, tantôt sans son paramètre selon la vitesse du réseau.
 
-**Événement suivi en plus des visites** : chaque analyse Fit-Checker réussie envoie un événement `fit-checker-used`, visible dans l'onglet "Campaigns" du tableau de bord GoatCounter — de quoi savoir combien de recruteurs utilisent réellement l'outil, pas seulement combien visitent la page.
+**Événements suivis en plus des visites** (attribut `data-goatcounter-click`, ou `goatcounter.count()` dans `gemini.js`) :
+
+| Événement | Ce qu'il compte |
+|---|---|
+| `pdf-download` | clic sur le bouton PDF du menu ou sur un lien PDF du pied de page |
+| `contact-email`, `contact-linkedin`, `link-photos` | clics sur les liens du pied de page |
+| `hero-stat-<resultId>`, `hero-stats-link` | clics sur un chiffre du hero ou sur « Voir les études de cas » |
+| `project-tour-de-growth` | clic vers Tour de Growth (carte du CV ou bouton de l'étude de cas) |
+| `fit-checker-used` | analyse Fit-Checker réussie |
+| `fit-checker-error`, `fit-checker-rate-limited` | analyse en échec (panne, délai) ou bloquée par le rate limit |
+
+Dans GoatCounter, ces événements apparaissent **dans la liste « Pages »** du tableau de bord, marqués d'un exposant `event` — pas dans « Campaigns ». Les liens recréés par le JS (pied de page, chiffres du hero, cartes) sont reliés par `bindAnalytics()` (`app.js`) et son équivalent dans `project-detail.js` après chaque rendu.
+
+**Exclure tes propres visites** : ouvre une fois `https://cv.antoine.berthaud.me/#toggle-goatcounter` sur chaque navigateur et appareil que tu utilises (ordinateur, téléphone) — un message confirme que les visites de ce navigateur ne sont plus comptées (réglage stocké en `localStorage`, à refaire si tu vides les données du site). Même URL pour réactiver.
+
+**Savoir d'où viennent les visites** : ajoute `?utm_campaign=linkedin` (ou un autre nom : `?utm_campaign=candidature-nomdelaboite`) aux liens que tu partages — GoatCounter les affiche dans « Campaigns ». Jamais dans le sitemap, un canonical ou un lien du site lui-même.
 
 ## 9. Scorecard chiffré dans le Hero
 

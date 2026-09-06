@@ -224,13 +224,11 @@ Autre réalisation : ${fitCheckerTxt}`;
 
       // Analytics respectueux de la vie privée : compte les analyses
       // réussies (pas les visites, déjà comptées automatiquement par le
-      // script GoatCounter chargé dans <head>). Ne fait rien si GoatCounter
-      // n'est pas configuré ou bloqué par un bloqueur de pub.
-      if (window.goatcounter && window.goatcounter.count) {
-        window.goatcounter.count({ path: "fit-checker-used", title: "Fit-Checker used", event: true });
-      }
+      // script GoatCounter chargé dans <head>).
+      countEvent("fit-checker-used", "Fit-Checker used");
     } catch (err) {
       console.error("Fit-Checker :", err);
+      countEvent(err.cause === "rate-limited" ? "fit-checker-rate-limited" : "fit-checker-error", "Fit-Checker error");
       announce("");
       errorEl.hidden = false;
       if (err.cause === "rate-limited") {
@@ -299,6 +297,14 @@ Autre réalisation : ${fitCheckerTxt}`;
   }
 
   const reducedMotion = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Événement GoatCounter (voir README §8). Ne fait rien si count.js n'est
+  // pas chargé (bloqueur de pub, hors-ligne) ou si les visites sont exclues.
+  function countEvent(path, title) {
+    if (window.goatcounter && typeof window.goatcounter.count === "function") {
+      window.goatcounter.count({ path, title, event: true });
+    }
+  }
 
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("analyzeBtn");
