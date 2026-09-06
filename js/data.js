@@ -82,6 +82,10 @@ const PROFILE = {
     // à côté de l'e-mail et de LinkedIn. Vide = pas de lien.
     photos: "https://antoine.berthaud.me/",
     location: "Nantes, France",
+    // Phrase de disponibilité affichée sous le rôle dans le pied de page
+    // (ex : { fr: "Je réponds sous 48 h.", en: "I reply within 48 hours." }).
+    // Vide = rien ne s'affiche. N'écris que ce que tu tiendras vraiment.
+    availability: { fr: "", en: "" },
   },
 };
 

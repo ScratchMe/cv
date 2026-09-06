@@ -21,6 +21,7 @@
     "nav.formation": { fr: "Formation", en: "Education" },
     "nav.fit": { fr: "Fit-Checker", en: "Fit Checker" },
     "nav.projects": { fr: "Side projects", en: "Side projects" },
+    "nav.contact": { fr: "Contact", en: "Contact" },
 
     "nav.focusToggle": { fr: "Focus lecture", en: "Focus mode" },
     "nav.printBtn": { fr: "Télécharger PDF", en: "Download PDF" },
@@ -127,6 +128,18 @@
     "fit.strengths": { fr: "Points forts", en: "Strengths" },
     "fit.gaps": { fr: "Points de vigilance", en: "Areas of caution" },
     "fit.interviewQuestion": { fr: "Question d'entretien suggérée :", en: "Suggested interview question:" },
+    // Appel à l'action sous le résultat du Fit-Checker + ligne de confidentialité.
+    "fit.nextLead": { fr: "Envie d'en parler ?", en: "Want to talk about it?" },
+    "fit.nextEmail": { fr: "M'écrire", en: "Email me" },
+    "fit.nextLinkedin": { fr: "Me contacter sur LinkedIn", en: "Reach me on LinkedIn" },
+    "fit.mailSubject": { fr: "À propos d'un poste (via le Fit-Checker)", en: "About a role (via the Fit-Checker)" },
+    "fit.privacy": {
+      fr: "Le texte que vous collez part vers l'API Google Gemini pour l'analyse. Ce site ne l'enregistre pas.",
+      en: "The text you paste is sent to the Google Gemini API for analysis. This site does not store it.",
+    },
+    // Rangée d'appels à l'action en fin de page Résultats / étude de cas.
+    "pageCta.contact": { fr: "Me contacter", en: "Contact me" },
+    "pageCta.fit": { fr: "Tester votre poste avec le Fit-Checker →", en: "Test your role with the Fit-Checker →" },
 
     "fitTeaser.text": {
       fr: "Recruteur·se ? Vérifiez en 10 secondes si mon profil correspond à votre poste.",
