@@ -11,18 +11,23 @@ js/i18n.js                  → dictionnaire des textes fixes de l'interface (FR
 js/data.js                 → ⭐ LE FICHIER À ÉDITER : ton contenu (profil, expériences, compétences, side projects)
 js/app.js                  → génère le HTML à partir de data.js, gère les filtres, durées, focus mode, impression, langue
 js/gemini.js                → logique du Fit-Checker (appelle la fonction Supabase, jamais Gemini directement)
+results.html + js/results.js → page « Résultats » : les études de cas (format STAR) derrière les chiffres du hero
+project-detail.html + js/project-detail.js → page gabarit des études de cas de side projects (?slug=)
 supabase/functions/gemini-fit/index.ts  → code de la fonction serveur à déployer sur Supabase
 scripts/generate-pdf.js      → génère les PDF FR/EN à partir du site (voir section 5)
-package.json                → déclare la dépendance Playwright utilisée par generate-pdf.js
+package.json + package-lock.json → dépendances de generate-pdf.js, versions figées (voir section 5)
+CLAUDE.md                    → contexte et décisions pour Claude Code (exclu du site publié)
 .github/workflows/generate-pdf.yml → régénère les PDF automatiquement à chaque changement (GitHub Actions)
 assets/cv-antoine-berthaud-fr.pdf, -en.pdf → PDF générés (ne pas éditer à la main, ils sont régénérés à chaque fois)
 assets/photo/               → dépose ta photo ici
-assets/logos/               → dépose les logos des entreprises ici (PNG/SVG, fond transparent de préférence)
+assets/logos/               → dépose les logos des entreprises ici (WebP ou PNG 224×224, fond transparent de préférence)
 robots.txt / sitemap.xml     → référencement (voir section 10)
 CNAME                        → domaine personnalisé pour GitHub Pages (cv.antoine.berthaud.me)
 _config.yml                  → exclut du site publié les fichiers de travail (README, CLAUDE.md, scripts…)
 404.html                     → page « introuvable » servie par GitHub Pages, sans JavaScript
 .github/workflows/pr-checks.yml → rejoue la génération des PDF sur chaque PR, sans commit (garde-fou avant merge)
+.github/workflows/keepalive.yml + surveiller-fit-checker.yml → continuité du Fit-Checker (voir section 12)
+supabase/migrations/         → la table keepalive lue chaque jour pour garder le projet Supabase actif
 ```
 
 ## 0. Le site est bilingue FR/EN
@@ -133,7 +138,7 @@ Une fois le lien public partagé à des recruteurs, n'importe qui peut aussi spa
    ```
 4. Redéploie la fonction : `supabase functions deploy gemini-fit --no-verify-jwt`.
 
-Si un recruteur dépasse la limite, il voit un message clair ("Trop de tentatives, réessaie dans une minute") plutôt qu'une erreur brute. Pour changer le seuil (3/minute, identique dans le repo et en prod depuis le 3 septembre 2026), ajuste `Ratelimit.slidingWindow(3, "60 s")` dans `index.ts`.
+Si un recruteur dépasse la limite, il voit un message clair (« Trop de tentatives depuis cet appareil. Réessayez dans une minute. ») plutôt qu'une erreur brute. Pour changer le seuil (3/minute, identique dans le repo et en prod depuis le 3 septembre 2026), ajuste `Ratelimit.slidingWindow(3, "60 s")` dans `index.ts`.
 
 ## 3. Tester en local
 
@@ -227,6 +232,8 @@ Le workflow a besoin d'écrire sur ton dépôt (pour committer les PDF régéné
 ### Focus Lecture
 
 Le bouton **"Focus lecture"** ajoute une classe `focus-mode` sur `<body>` qui neutralise les dégradés/ombres pour une lecture plus sobre à l'écran. L'état n'est pas mémorisé entre deux visites (pas de `localStorage`) — dis-moi si tu veux que je l'ajoute, c'est une modification mineure.
+
+**Quand tu montes la version de Playwright dans `package-lock.json`** (Chromium change avec elle), regarde les deux PDF régénérés par le check de la PR avant de merger : nombre de pages FR/EN et polices. C'est exactement le genre de changement qui repagine silencieusement.
 
 ## 6. Mettre en avant des mots ou chiffres (gras)
 

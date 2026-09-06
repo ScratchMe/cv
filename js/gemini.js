@@ -173,6 +173,7 @@ Autre réalisation : ${fitCheckerTxt}`;
     btn.textContent = t("fit.analyzing");
     resultEl.hidden = true;
     startLoadingMessages();
+    let failed = false;
 
     try {
       const res = await fetch(CONFIG.supabaseFunctionUrl, {
@@ -227,6 +228,7 @@ Autre réalisation : ${fitCheckerTxt}`;
       // script GoatCounter chargé dans <head>).
       countEvent("fit-checker-used", "Fit-Checker used");
     } catch (err) {
+      failed = true;
       console.error("Fit-Checker :", err);
       countEvent(err.cause === "rate-limited" ? "fit-checker-rate-limited" : "fit-checker-error", "Fit-Checker error");
       announce("");
@@ -251,6 +253,9 @@ Autre réalisation : ${fitCheckerTxt}`;
       stopLoadingMessages();
       btn.disabled = false;
       btn.textContent = t("fit.analyzeBtn");
+      // En cas d'erreur, le focus clavier repartait de <body> (le bouton
+      // désactivé l'avait perdu) : on le rend au bouton, à côté de l'alerte.
+      if (failed) btn.focus({ preventScroll: true });
     }
   }
 
@@ -273,7 +278,7 @@ Autre réalisation : ${fitCheckerTxt}`;
 
     resultEl.innerHTML = `
       <div class="fit-score-row">
-        <div class="fit-score" style="--pct:${score}"><span>${score}</span></div>
+        <div class="fit-score" style="--pct:${score}" role="img" aria-label="${t("fit.scoreAria").replace("{score}", String(score))}"><span>${score}</span></div>
         <p class="fit-explanation">${esc(explanation)}</p>
       </div>
       <div class="fit-columns">

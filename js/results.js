@@ -129,7 +129,7 @@
     const sfx = window.i18n.langSuffix();
     return `
       <div class="page-cta">
-        <a class="btn solid" href="mailto:${PROFILE.contact.email}" data-goatcounter-click="contact-email">${t("pageCta.contact")}</a>
+        <a class="btn solid" href="mailto:${PROFILE.contact.email}?subject=${encodeURIComponent(t("pageCta.mailSubject"))}" data-goatcounter-click="contact-email">${t("pageCta.contact")}</a>
         <a class="btn" href="./${sfx}#fit-checker">${t("pageCta.fit")}</a>
         <a class="btn" href="./${sfx}">${t("projectDetail.backToCv")}</a>
       </div>`;
@@ -161,6 +161,9 @@
       footerResults.textContent = t("footer.caseStudies");
       footerResults.href = `results.html${window.i18n.langSuffix()}`;
     }
+    document.querySelectorAll("a[data-footer-project]").forEach((a) => {
+      a.href = `project-detail.html?slug=${a.dataset.footerProject}${window.i18n.langSuffix("&")}`;
+    });
     const langBtn = document.getElementById("langToggle");
     langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
     langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));

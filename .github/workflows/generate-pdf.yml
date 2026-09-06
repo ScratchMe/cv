@@ -44,7 +44,7 @@ jobs:
       # npm install sans lockfile, Chromium (via Playwright) changeait tout
       # seul et la pagination des PDF avec, sans que personne ne regarde.
       - name: Installer les dépendances npm
-        run: npm ci
+        run: npm ci --ignore-scripts # aucun script d'installation ne tourne à côté du jeton du dépôt
 
       - name: Installer Chromium (Playwright)
         run: npx playwright install --with-deps chromium

@@ -42,7 +42,7 @@ const PROFILE = {
     en: "Senior Growth Product Manager at AB Tasty",
   },
   location: "Nantes, France",
-  yearsExperience: "10+", // repris de ton résumé LinkedIn ("plus de 10 ans d'expérience")
+  yearsExperience: "10", // même chiffre que le pitch (« 10 ans de produit ») et la meta description : un seul nombre partout
   // Ce que tu cherches : affiché en pastille dans le hero (🎯) et transmis au
   // Fit-Checker (ligne « Recherche »). Vide ("") = rien ne s'affiche.
   lookingFor: {
@@ -118,7 +118,7 @@ const HERO_STATS = [
 const RESULT_DETAILS = {
   "ab-tasty-activation": {
     company: "AB Tasty",
-    companyLogo: "assets/logos/ab-tasty.png",
+    companyLogo: "assets/logos/ab-tasty.webp",
     role: "Product Manager",
     period: "2023 – 2025",
     value: "+15%",
@@ -151,14 +151,14 @@ const RESULT_DETAILS = {
 
   "everysens-entry-time": {
     company: "Everysens",
-    companyLogo: "assets/logos/everysens.png",
+    companyLogo: "assets/logos/everysens.webp",
     role: "Product Manager",
     period: "2022 – 2023",
     value: "-50%",
     label: { fr: "Temps de saisie", en: "Entry time" },
     context: {
-      fr: "Everysens, SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail. PM responsable du **module « Exécution »** (saisie des transports, validation des lettres de voiture, suivi temps réel), au sein d'une équipe de 4 développeurs et 1 QA, rejointe plus tard par 1 Product Designer.",
-      en: "Everysens, a SaaS platform for managing and tracking rail freight transport, aimed at shifting freight from road to rail. PM in charge of the **\"Execution\" module** (transport entry, waybill validation, real-time tracking), within a team of 4 developers and 1 QA, later joined by 1 Product Designer.",
+      fr: "Everysens, SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail et de décarboner le transport. PM responsable du **module « Exécution »** (saisie des transports, validation des lettres de voiture, suivi temps réel), au sein d'une équipe de 4 développeurs et 1 QA, rejointe plus tard par 1 Product Designer.",
+      en: "Everysens, a SaaS platform for managing and tracking rail freight transport, aimed at shifting freight from road to rail and decarbonizing transport. PM in charge of the **\"Execution\" module** (transport entry, waybill validation, real-time tracking), within a team of 4 developers and 1 QA, later joined by 1 Product Designer.",
     },
     challenge: {
       fr: "Le module « Exécution », historique et vieillissant, ne dialoguait pas avec le nouveau module « Planification », qui contenait pourtant déjà une partie des informations nécessaires (trajet, wagons, marchandises).\n\nCôté saisie, il fallait renseigner le détail complet d'un train (numéro, marchandise, poids, scellés de chaque wagon) pour établir les lettres de voiture et assurer le suivi — un calvaire dès **30 wagons**, sur une UI clairement pas à la hauteur :",
@@ -185,7 +185,7 @@ const RESULT_DETAILS = {
 
   "sncf-ticket-retrieval": {
     company: "SNCF Connect & Tech",
-    companyLogo: "assets/logos/sncf-connect-tech.png",
+    companyLogo: "assets/logos/sncf-connect-tech.webp",
     role: "Product Manager",
     period: "2021 – 2022",
     value: "+100%",
@@ -351,7 +351,7 @@ const EXPERIENCES = [
   {
     company: "AB Tasty",
     location: "Nantes, France",
-    logo: "assets/logos/ab-tasty.png",
+    logo: "assets/logos/ab-tasty.webp",
     roles: [
       {
         title: "Senior Growth Product Manager",
@@ -420,7 +420,7 @@ const EXPERIENCES = [
   {
     company: "Everysens",
     location: "Nantes, France",
-    logo: "assets/logos/everysens.png",
+    logo: "assets/logos/everysens.webp",
     roles: [
       {
         title: "Product Manager",
@@ -457,7 +457,7 @@ const EXPERIENCES = [
   {
     company: "SNCF Connect & Tech",
     location: "Nantes, France",
-    logo: "assets/logos/sncf-connect-tech.png",
+    logo: "assets/logos/sncf-connect-tech.webp",
     roles: [
       {
         title: "Product Manager",
@@ -543,7 +543,7 @@ const EXPERIENCES = [
         achievements: [
           {
             fr: "Ateliers d'étude du besoin et macro-chiffrage des demandes portées par les équipes métier, tenue de roadmap et Story Mapping.",
-            en: "Ran needs-gathering workshops and rough estimation of requests from business teams, maintained the roadmap and Story Mapping.",
+            en: "Ran needs-gathering workshops and high-level sizing of requests from business teams, maintained the roadmap and Story Mapping.",
           },
           {
             fr: "Rédaction des User Stories et scénarios BDD associés, animation des Sprint Planning.",

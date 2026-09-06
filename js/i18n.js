@@ -25,6 +25,7 @@
 
     "nav.focusToggle": { fr: "Focus lecture", en: "Focus mode" },
     "nav.printBtn": { fr: "Télécharger PDF", en: "Download PDF" },
+    "nav.printShort": { fr: "PDF", en: "PDF" },
     "nav.langToggleLabel": { fr: "Switch to English", en: "Passer en français" },
 
     "hero.ctaExperience": { fr: "Voir les expériences", en: "View my experience" },
@@ -85,6 +86,7 @@
     },
     "fit.label": { fr: "Texte de l'offre d'emploi", en: "Job posting text" },
     "fit.resultLabel": { fr: "Résultat de l'analyse", en: "Analysis result" },
+    "fit.scoreAria": { fr: "Score de compatibilité : {score} sur 100", en: "Compatibility score: {score} out of 100" },
     "fit.resultReady": { fr: "Analyse terminée : score de compatibilité {score} sur 100.", en: "Analysis complete: compatibility score {score} out of 100." },
     "fit.analyzeBtn": { fr: "Analyser le fit", en: "Analyze fit" },
     "fit.analyzing": { fr: "Analyse en cours...", en: "Analyzing..." },
@@ -143,6 +145,7 @@
     },
     // Rangée d'appels à l'action en fin de page Résultats / étude de cas.
     "pageCta.contact": { fr: "Me contacter", en: "Contact me" },
+    "pageCta.mailSubject": { fr: "À propos d'un poste", en: "About a role" },
     "pageCta.fit": { fr: "Tester votre poste avec le Fit-Checker →", en: "Test your role with the Fit-Checker →" },
 
     "fitTeaser.text": {
