@@ -697,7 +697,7 @@ const TRAININGS = [
 
 const LANGUAGES = [
   { label: { fr: "Français", en: "French" }, level: { fr: "Langue maternelle", en: "Native" } },
-  { label: { fr: "Anglais", en: "English" }, level: { fr: "Courant, à l'oral comme à l'écrit (TOEIC 925/990)", en: "Fluent, spoken and written (TOEIC 925/990)" } },
+  { label: { fr: "Anglais", en: "English" }, level: { fr: "Courant · langue de travail depuis 2022 (TOEIC 925/990)", en: "Fluent · working language since 2022 (TOEIC 925/990)" } },
 ];
 
 const CERTIFICATIONS = [
