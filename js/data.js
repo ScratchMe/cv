@@ -49,8 +49,8 @@ const PROFILE = {
   // le modifies ici, reporte la modification là-bas : app.js signale l'écart
   // dans la console du navigateur, mais ne le corrige pas tout seul.
   pitch: {
-    fr: "Product Manager avec plus de **10 ans d'expérience** en environnements SaaS et grands comptes (AB Tasty, Everysens, SNCF Connect & Tech). Je pilote la découverte, la priorisation et la livraison de fonctionnalités à impact mesurable, en m'appuyant autant sur les entretiens utilisateurs que sur la donnée — **SQL, Metabase, Mixpanel** — pour transformer des intuitions en décisions validées et scalables. Dans plusieurs équipes, j'ai aussi tenu le rôle de **Product Owner** au quotidien : backlog, user stories, sprints.",
-    en: "Product Manager with **10+ years of experience** across SaaS and enterprise environments (AB Tasty, Everysens, SNCF Connect & Tech). I drive discovery, prioritization, and delivery of features with measurable impact, relying as much on user interviews as on data — **SQL, Metabase, Mixpanel** — to turn intuitions into validated, scalable decisions. In several teams I've also held the day-to-day **Product Owner** role: backlog, user stories, sprints.",
+    fr: "Senior Product Manager, **10 ans de produit** en **SaaS B2B** (AB Tasty, Everysens) et grands comptes (SNCF Connect & Tech), **ingénieur de formation** (Polytech Nantes). Aujourd'hui sur les sujets **growth** chez AB Tasty : onboarding, activation, tunnel self-serve. Je tranche avec la donnée (**SQL, Metabase, Mixpanel**) autant qu'avec les entretiens utilisateurs. Et j'ai aussi tenu le rôle de **Product Owner** au quotidien : backlog, user stories, sprints.",
+    en: "Senior Product Manager, **10 years in product**, in **B2B SaaS** (AB Tasty, Everysens) and enterprise settings (SNCF Connect & Tech), **engineer by training** (Polytech Nantes). Currently on **growth** topics at AB Tasty: onboarding, activation, self-serve funnel. I decide with data (**SQL, Metabase, Mixpanel**) as much as with user interviews. And I've also held the day-to-day **Product Owner** role: backlog, user stories, sprints.",
   },
   // Balises <title> et <meta name="description"> de la page d'accueil, par
   // langue. C'est ce que Google affiche dans ses résultats : le lieu (Nantes)
@@ -64,8 +64,8 @@ const PROFILE = {
       en: "Antoine Berthaud — Senior Growth Product Manager · Nantes, France",
     },
     description: {
-      fr: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
-      en: "Antoine Berthaud's CV, Senior Product Manager in Nantes, France: 10+ years in B2B SaaS product (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
+      fr: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.",
+      en: "Antoine Berthaud's CV, Senior Product Manager in Nantes: 10 years in B2B SaaS and enterprise product (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.",
     },
   },
   contact: {

@@ -345,6 +345,13 @@ body.focus-mode .ai-badge{background:var(--ink);}
 @media(max-width:480px){
   .eyebrow{font-size:12px;letter-spacing:.03em;padding:6px 12px;}
 }
+/* Hero plus compact sur téléphone : ramène le premier chiffre du hero vers le
+   pli. padding-top seul (jamais le raccourci padding, piège n°8). Seuil 640
+   et non 800 : la largeur A4 du PDF (~794px) n'y tombe pas. */
+@media(max-width:640px){
+  .hero{padding-top:32px;}
+  .hero-grid{gap:24px;}
+}
 
 /* ============================================================================
    FOCUS LECTURE MODE — vision allégée : on coupe la déco, on resserre la palette
