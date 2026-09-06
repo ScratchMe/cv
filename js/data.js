@@ -338,21 +338,21 @@ const EXPERIENCES = [
         start: "2025-05",
         end: null,
         context: {
-          fr: "Product Manager senior au sein du pilier Growth d'AB Tasty, plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation).",
-          en: "Senior Product Manager within AB Tasty's Growth pillar, on the Experience Optimization SaaS platform (A/B Testing, Personalization).",
+          fr: "Product Manager senior au sein du pilier Growth d'AB Tasty, plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.",
+          en: "Senior Product Manager within AB Tasty's Growth pillar, on the Experience Optimization SaaS platform (A/B Testing, Personalization). International team, English as the working language.",
         },
         achievements: [
           {
-            fr: "Pilotage de la transition stratégique du modèle Sales-Led vers un **modèle hybride** (Sales-Led pour les grands comptes, Product-Led pour le reste).",
-            en: "Led the strategic shift from a Sales-Led model to a **hybrid model** (Sales-Led for large accounts, Product-Led for the rest).",
+            fr: "Pilotage de la transition d'un modèle 100 % Sales-Led vers un **modèle hybride** : cadrage, business case et roadmap avec la direction, les grands comptes restant suivis par les sales, les autres s'inscrivant et payant en autonomie.",
+            en: "Led the shift from a 100% Sales-Led model to a **hybrid model**: framing, business case and roadmap with leadership, with large accounts kept with Sales and everyone else signing up and paying on their own.",
           },
           {
-            fr: "Conception et lancement d'un **tunnel d'acquisition autonome** : inscription publique, offre freemium limitée, monétisation self-service avec paiement intégré.",
-            en: "Designed and launched a **self-serve acquisition funnel**: public sign-up, limited freemium offer, self-service monetization with integrated payment.",
+            fr: "Conception et construction de bout en bout du **tunnel self-serve** (inscription publique, freemium limité, paiement intégré), **livré en production derrière un feature flag** et prêt au lancement. Lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
+            en: "Designed and built the **self-serve funnel** end to end (public sign-up, limited freemium, integrated payment), **shipped to production behind a feature flag** and ready to launch. Launch put on hold after AB Tasty's merger with VWO.",
           },
           {
-            fr: "Coordination de 2 autres Product Managers sur un périmètre, chacun pilotant une partie déléguée de la stratégie.",
-            en: "Coordinated 2 other Product Managers across a scope, each steering a delegated part of the strategy.",
+            fr: "Animation de 2 autres Product Managers sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
+            en: "Led 2 other Product Managers on the self-serve workstream: splitting the plan, scoping trade-offs, overall consistency.",
           },
         ],
         methodology: "Scrum",
@@ -407,8 +407,8 @@ const EXPERIENCES = [
         start: "2022-04",
         end: "2023-09",
         context: {
-          fr: "Responsable de la factory « Exécution » au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail.",
-          en: "Owned the \"Execution\" factory within a SaaS platform for rail freight transport management and tracking, aimed at shifting freight from road to rail to decarbonize transport.",
+          fr: "Responsable de la factory « Exécution » au sein d'un SaaS de gestion et suivi du transport de fret ferroviaire, avec pour objectif de favoriser le report modal des camions vers le rail. Anglais au quotidien avec l'équipe.",
+          en: "Owned the \"Execution\" factory within a SaaS platform for rail freight transport management and tracking, aimed at shifting freight from road to rail to decarbonize transport. English as the working language.",
         },
         achievements: [
           {
@@ -697,7 +697,7 @@ const TRAININGS = [
 
 const LANGUAGES = [
   { label: { fr: "Français", en: "French" }, level: { fr: "Langue maternelle", en: "Native" } },
-  { label: { fr: "Anglais", en: "English" }, level: { fr: "Professionnel complet (TOEIC 925/990)", en: "Full professional (TOEIC 925/990)" } },
+  { label: { fr: "Anglais", en: "English" }, level: { fr: "Courant, à l'oral comme à l'écrit (TOEIC 925/990)", en: "Fluent, spoken and written (TOEIC 925/990)" } },
 ];
 
 const CERTIFICATIONS = [
