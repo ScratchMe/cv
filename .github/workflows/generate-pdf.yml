@@ -65,6 +65,16 @@ jobs:
           if git diff --cached --quiet; then
             echo "Aucun changement dans les PDF, rien à committer."
           else
+            # Les deux PDF sont déclarés dans sitemap.xml : on y reporte la date
+            # de régénération (UTC) pour que leur <lastmod> reste vrai.
+            python3 - "$(date -u +%Y-%m-%d)" <<'EOF'
+          import re, sys, pathlib
+          p = pathlib.Path("sitemap.xml")
+          s, n = re.subn(r"(<loc>[^<]*\.pdf</loc>\s*<lastmod>)\d{4}-\d{2}-\d{2}", r"\g<1>" + sys.argv[1], p.read_text())
+          p.write_text(s)
+          print(f"sitemap.xml : {n} lastmod de PDF mis à jour au {sys.argv[1]}")
+          EOF
+            git add sitemap.xml
             git commit -m "chore: régénère les PDF du CV [skip ci]"
             git push
           fi
