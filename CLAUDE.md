@@ -75,7 +75,11 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
 - `scripts/generate-static.js` (pré-rendu, voir ci-dessus ; `--check` pour
   savoir si les pages sont à jour sans écrire) et `scripts/generate-pdf.js`
   (PDF FR/EN via Playwright à partir du site lui-même, pas un simple
-  `window.print()`), avec `scripts/lib/site-server.js` en commun. Le
+  `window.print()` ; deux par langue depuis sept. 2026 : le complet, 5
+  pages, et le court, 2 pages, imprimé avec `?pdf=court` → `body.cv-court`
+  dans le `@media print`, le générateur refusant un court de plus de 2
+  pages ; les courts sont hors sitemap, voulu), avec
+  `scripts/lib/site-server.js` en commun. Le
   workflow `.github/workflows/generate-pdf.yml` enchaîne les deux et
   recommit pages + PDF (+ `lastmod` du sitemap) ; il tourne aussi une fois
   par mois (1er, 4h UTC) indépendamment de tout push, pour rafraîchir les

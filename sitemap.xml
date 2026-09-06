@@ -29,8 +29,11 @@
     <loc>https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth</loc>
     <lastmod>2026-09-06</lastmod>
   </url>
-  <!-- Les deux PDF du CV (décision d'Antoine, 06/09/2026) : déjà liés depuis les
-       trois pages, déclarés ici pour que Google les compte. -->
+  <!-- Les deux PDF complets du CV (décision d'Antoine, 06/09/2026) : déjà liés
+       depuis les trois pages, déclarés ici pour que Google les compte. Les
+       versions courtes (-fr-court, -en-short) ne sont volontairement pas
+       déclarées : même contenu en résumé, elles concurrenceraient les
+       complets sur le nom. -->
   <url>
     <loc>https://cv.antoine.berthaud.me/assets/cv-antoine-berthaud-fr.pdf</loc>
     <lastmod>2026-09-06</lastmod>

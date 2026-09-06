@@ -26,6 +26,8 @@
     "nav.focusToggle": { fr: "Focus lecture", en: "Focus mode" },
     "nav.printBtn": { fr: "Télécharger PDF", en: "Download PDF" },
     "nav.printShort": { fr: "PDF", en: "PDF" },
+    "nav.printShortBtn": { fr: "Télécharger le CV court (PDF, 2 pages)", en: "Download the short CV (PDF, 2 pages)" },
+    "nav.printShortLabel": { fr: "PDF court", en: "Short PDF" },
     "nav.langToggleLabel": { fr: "Switch to English", en: "Passer en français" },
 
     "hero.ctaExperience": { fr: "Voir les expériences", en: "View my experience" },

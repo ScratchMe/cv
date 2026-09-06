@@ -14,7 +14,10 @@
  *   npm install -D playwright
  *   npx playwright install --with-deps chromium
  *
- * Sortie : assets/cv-antoine-berthaud-fr.pdf et assets/cv-antoine-berthaud-en.pdf
+ * Sortie : assets/cv-antoine-berthaud-fr.pdf et -en.pdf (complets, 5 pages),
+ *          assets/cv-antoine-berthaud-fr-court.pdf et -en-short.pdf (courts,
+ *          2 pages : la page rendue avec ?pdf=court, voir body.cv-court dans
+ *          le @media print de style.css).
  *
  * Ce script tourne aussi automatiquement via GitHub Actions à chaque push
  * (voir .github/workflows/generate-pdf.yml) : tu n'as normalement jamais
@@ -42,19 +45,21 @@ const SITE_URL = "https://cv.antoine.berthaud.me/";
 const PDF_META = {
   fr: {
     title: "CV Antoine Berthaud — Senior Product Manager à Nantes (Growth, SaaS)",
+    shortTitle: "CV court Antoine Berthaud — Senior Product Manager à Nantes (Growth, SaaS)",
     subject: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
     keywords: ["Antoine Berthaud", "CV", "Product Manager", "Product Owner", "Growth", "SaaS", "Nantes"],
     language: "fr-FR",
   },
   en: {
     title: "Antoine Berthaud — Resume, Senior Growth Product Manager, Nantes (France)",
+    shortTitle: "Antoine Berthaud — Short resume, Senior Growth Product Manager, Nantes (France)",
     subject: "Antoine Berthaud's CV, Senior Product Manager in Nantes, France: 10+ years in B2B SaaS product (AB Tasty, Everysens, SNCF Connect). Growth, PLG, discovery, data.",
     keywords: ["Antoine Berthaud", "resume", "CV", "Product Manager", "Product Owner", "Growth", "SaaS", "Nantes", "France"],
     language: "en-US",
   },
 };
 
-async function stampMetadata(pdfPath, lang) {
+async function stampMetadata(pdfPath, lang, variant) {
   const meta = PDF_META[lang];
   // updateMetadata:false — on garde les dates écrites par Chromium, on ne
   // touche qu'aux champs descriptifs.
@@ -62,9 +67,15 @@ async function stampMetadata(pdfPath, lang) {
 
   // Garde-fous de bout en bout : le workflow ouvre une issue si ce script
   // échoue, donc mieux vaut échouer ici que publier un PDF cassé sans bruit.
-  // 1) Un data.js cassé produit un PDF de 2 pages (hero seul) sans erreur.
-  if (doc.getPageCount() < 3) {
-    throw new Error(`PDF ${lang} anormalement court : ${doc.getPageCount()} page(s) — data.js cassé ?`);
+  // 1) Nombre de pages : le complet fait 5 pages (un data.js cassé en
+  //    produit 2, hero seul), le court doit tenir en 2 — c'est sa raison
+  //    d'être, un court de 3 pages est un bug de mise en page à corriger.
+  const pages = doc.getPageCount();
+  if (variant === "court" && pages > 2) {
+    throw new Error(`PDF court ${lang} : ${pages} pages, attendu 2 au plus — revoir body.cv-court dans le @media print.`);
+  }
+  if (variant !== "court" && pages < 3) {
+    throw new Error(`PDF ${lang} anormalement court : ${pages} page(s) — data.js cassé ?`);
   }
   // 2) Aucun lien ne doit pointer vers le serveur local de génération.
   const localLinks = [];
@@ -82,7 +93,7 @@ async function stampMetadata(pdfPath, lang) {
     throw new Error(`Liens locaux dans ${path.basename(pdfPath)} : ${localLinks.join(", ")}`);
   }
 
-  doc.setTitle(meta.title);
+  doc.setTitle(variant === "court" ? meta.shortTitle : meta.title);
   doc.setAuthor("Antoine Berthaud");
   doc.setSubject(meta.subject);
   doc.setKeywords(meta.keywords);
@@ -91,13 +102,13 @@ async function stampMetadata(pdfPath, lang) {
   fs.writeFileSync(pdfPath, await doc.save());
 }
 
-async function generateFor(browser, { lang, format, outPath }) {
+async function generateFor(browser, { lang, format, outPath, variant }) {
   const page = await browser.newPage();
   // Une erreur JS sur la page (data.js cassé, par exemple) rend un site
   // réduit au hero, et page.pdf() sortirait un PDF vide sans se plaindre.
   const pageErrors = [];
   page.on("pageerror", (err) => pageErrors.push(err.message));
-  await page.goto(`http://127.0.0.1:${PORT}/index.html?lang=${lang}`, { waitUntil: "networkidle" });
+  await page.goto(`http://127.0.0.1:${PORT}/index.html?lang=${lang}${variant === "court" ? "&pdf=court" : ""}`, { waitUntil: "networkidle" });
   // Attend que les polices web (Google Fonts) soient réellement chargées,
   // sinon le PDF peut capturer un instant la police de secours système.
   await page.evaluate(() => document.fonts.ready);
@@ -153,10 +164,11 @@ async function generateFor(browser, { lang, format, outPath }) {
     // et signets à partir des titres. Quelques dizaines de Ko de plus.
     tagged: true,
     outline: true,
-    margin: { top: "14mm", bottom: "14mm", left: "12mm", right: "12mm" },
+    // Le court serre un peu les marges : deux pages, c'est sa promesse.
+    margin: variant === "court" ? { top: "11mm", bottom: "11mm", left: "11mm", right: "11mm" } : { top: "14mm", bottom: "14mm", left: "12mm", right: "12mm" },
   });
   await page.close();
-  await stampMetadata(outPath, lang);
+  await stampMetadata(outPath, lang, variant);
   console.log(`✓ ${path.relative(ROOT, outPath)}`);
 }
 
@@ -173,6 +185,9 @@ async function generateFor(browser, { lang, format, outPath }) {
     // seulement pour une cible US explicite.
     await generateFor(browser, { lang: "fr", format: "A4", outPath: path.join(OUT_DIR, `${BASE_NAME}-fr.pdf`) });
     await generateFor(browser, { lang: "en", format: "A4", outPath: path.join(OUT_DIR, `${BASE_NAME}-en.pdf`) });
+    // Versions courtes (2 pages), suffixe dans la langue du document.
+    await generateFor(browser, { lang: "fr", format: "A4", variant: "court", outPath: path.join(OUT_DIR, `${BASE_NAME}-fr-court.pdf`) });
+    await generateFor(browser, { lang: "en", format: "A4", variant: "court", outPath: path.join(OUT_DIR, `${BASE_NAME}-en-short.pdf`) });
   } finally {
     await browser.close();
     server.close();

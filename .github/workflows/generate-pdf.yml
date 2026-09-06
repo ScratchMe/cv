@@ -66,14 +66,14 @@ jobs:
       - name: Pré-rendre les pages (zones générées des trois HTML, en français)
         run: npm run generate-static
 
-      - name: Générer les PDF FR et EN
+      - name: Générer les PDF FR et EN (complets et courts)
         run: npm run generate-pdf
 
       - name: Committer les pages pré-rendues et les PDF s'ils ont changé
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html results.html project-detail.html assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf
+          git add index.html results.html project-detail.html assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf assets/cv-antoine-berthaud-fr-court.pdf assets/cv-antoine-berthaud-en-short.pdf
           if git diff --cached --quiet; then
             echo "Aucun changement dans les pages ni les PDF, rien à committer."
           else
