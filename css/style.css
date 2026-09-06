@@ -736,4 +736,73 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Filet de sécurité pour forcer la conservation des couleurs même si
      un moteur de rendu ignore l'option printBackground. */
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* ---- CV court (2 pages) : body.cv-court, posé par app.js sur ?pdf=court
+     et imprimé par scripts/generate-pdf.js. Pour la candidature qu'un
+     recruteur transmet : l'essentiel, sans les sections qui racontent. Ce
+     qui saute : piliers, témoignage, side projects, contexte et ligne
+     Méthodologie/Équipe de chaque rôle, formations continues ; les débuts
+     (QA, ESN) gardent leur titre et leurs dates, sans puces ; au plus trois
+     puces par rôle. Le complet reste le PDF de référence. ---- */
+  body.cv-court .pillars,body.cv-court .testimonial-section,body.cv-court .projects-section,
+  body.cv-court .role-context,body.cv-court .role-meta,
+  body.cv-court #trainingsList,body.cv-court .formation-subtitle:has(+ #trainingsList),
+  body.cv-court .role-early .role-achievements-label,body.cv-court .role-early .role-achievements,
+  body.cv-court .role-achievements li:nth-child(n+4){display:none !important;}
+  body.cv-court .hero{padding-top:0;}
+  body.cv-court .photo-ring{width:104px;height:104px;}
+  body.cv-court h1{font-size:28px;}
+  body.cv-court .pitch{font-size:12.5px;margin-bottom:10px;}
+  body.cv-court .hero-stats{margin-bottom:8px;}
+  body.cv-court .chip{font-size:11px;padding:4px 9px;}
+  body.cv-court .skills-groups{gap:6px;}
+  body.cv-court .sectitle h2{font-size:17px;}
+  body.cv-court .sectitle{margin-bottom:6px;}
+  body.cv-court .skills-section,body.cv-court .experiences-section,body.cv-court .formation-section{padding-top:4px;padding-bottom:4px;}
+  body.cv-court .company-block{padding:10px 14px 0;}
+  body.cv-court .company-header{margin-bottom:6px;padding-bottom:6px;}
+  body.cv-court .role-block{padding-bottom:6px;margin-bottom:6px;}
+  body.cv-court .role-early{padding-bottom:2px;margin-bottom:4px;}
+  body.cv-court .role-achievements li{font-size:12px;line-height:1.35;}
+  body.cv-court .experiences-list{gap:8px;}
+  /* Compétences en lignes (une par catégorie) plutôt qu'en pastilles : les
+     mêmes mots-clés pour les outils de tri, sur un tiers de la hauteur. */
+  body.cv-court .skills-groups{display:block;}
+  body.cv-court .skills-group{display:flex;align-items:baseline;gap:10px;margin-bottom:3px;}
+  body.cv-court .skills-group-label{flex:0 0 76px;margin:0;}
+  body.cv-court .skills-chips{display:block;gap:0;}
+  body.cv-court .chip{display:inline;padding:0;border:0;background:none;font-size:11.5px;line-height:1.5;color:#000;font-weight:500;}
+  body.cv-court .chip:not(:last-child)::after{content:" · ";color:#9A93AB;font-weight:400;}
+  /* Formation en lignes serrées, sans la description de la certification. */
+  body.cv-court .formation-grid{gap:12px;}
+  body.cv-court .formation-list li{padding:4px 8px;}
+  body.cv-court .formation-card{padding:8px 10px;}
+  body.cv-court .formation-list{gap:4px;}
+  body.cv-court .formation-subtitle{margin-bottom:4px;}
+  body.cv-court #certificationsList .formation-item-meta{display:none;}
+  body.cv-court .lang-list{gap:4px;}
+  body.cv-court .lang-list li{font-size:12px;}
+  /* Formation sur une seule rangée : éducation, langues, certification. */
+  body.cv-court .formation-grid{grid-template-columns:1.4fr 1fr 1fr;}
+  body.cv-court .formation-side{display:contents;}
+  /* Le libellé « Accomplissements » se devine ; les rôles d'avant 2022
+     (3e entreprise et suivantes : SNCF, ESN) se limitent à deux puces. */
+  body.cv-court .role-achievements-label{display:none !important;}
+  body.cv-court .company-block:nth-child(n+3) .role-achievements li:nth-child(n+3){display:none !important;}
+  body.cv-court .company-logo,body.cv-court .company-logo-fallback{width:32px;height:32px;}
+  body.cv-court .company-name{font-size:15px;}
+  body.cv-court .photo-ring{width:88px;height:88px;}
+  body.cv-court .hero-grid{gap:16px;grid-template-columns:1fr 100px;}
+  body.cv-court .pitch{font-size:11.5px;line-height:1.4;}
+  body.cv-court .role-achievements li{font-size:11.5px;line-height:1.3;}
+  body.cv-court .role-block{padding-bottom:4px;margin-bottom:4px;}
+  body.cv-court .company-block{padding:8px 12px 0;}
+  body.cv-court .company-header{margin-bottom:4px;padding-bottom:4px;}
+  body.cv-court .formation-card{padding:6px 8px;}
+  body.cv-court .formation-list li{padding:3px 6px;}
+  body.cv-court .formation-subtitle{font-size:10px;margin-bottom:3px;}
+  body.cv-court .formation-item-title{font-size:12px;}
+  body.cv-court .formation-item-meta{font-size:11px;}
+  body.cv-court .hero-stat-value{font-size:18px;}
+  body.cv-court .hero-stat-label{font-size:10px;}
 }

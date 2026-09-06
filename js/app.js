@@ -674,8 +674,12 @@
   //    un recruteur anglophone reçoit un lien avec ?lang=en.
   // --------------------------------------------------------------------
   function initLangFromUrl() {
-    const urlLang = new URLSearchParams(window.location.search).get("lang");
-    window.i18n.setLang(urlLang === "en" ? "en" : "fr");
+    const params = new URLSearchParams(window.location.search);
+    window.i18n.setLang(params.get("lang") === "en" ? "en" : "fr");
+    // ?pdf=court : mode d'impression « CV court » (2 pages), utilisé par
+    // scripts/generate-pdf.js — voir body.cv-court dans le @media print.
+    // Sans effet à l'écran.
+    document.body.classList.toggle("cv-court", params.get("pdf") === "court");
   }
 
 
@@ -724,24 +728,38 @@
       focusBtn.setAttribute("aria-pressed", String(isOn));
     });
 
-    document.getElementById("printBtn").addEventListener("click", async () => {
-      const lang = window.i18n.lang;
-      const pdfPath = `assets/cv-antoine-berthaud-${lang}.pdf`;
-      try {
-        const res = await fetch(pdfPath, { method: "HEAD" });
-        if (res.ok) {
-          const a = document.createElement("a");
-          a.href = pdfPath;
-          a.download = `Antoine-Berthaud-CV-${lang.toUpperCase()}.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          return;
+    // Deux PDF par langue (scripts/generate-pdf.js) : le complet (5 pages)
+    // et le court (2 pages, pour les candidatures transmises par un
+    // recruteur). Le suffixe du fichier est dans la langue du document.
+    const pdfVariants = {
+      printBtn: { file: (lang) => `assets/cv-antoine-berthaud-${lang}.pdf`, name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}.pdf` },
+      printShortBtn: {
+        file: (lang) => `assets/cv-antoine-berthaud-${lang}-${lang === "fr" ? "court" : "short"}.pdf`,
+        name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}-${lang === "fr" ? "court" : "short"}.pdf`,
+      },
+    };
+    Object.entries(pdfVariants).forEach(([id, variant]) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener("click", async () => {
+        const lang = window.i18n.lang;
+        const pdfPath = variant.file(lang);
+        try {
+          const res = await fetch(pdfPath, { method: "HEAD" });
+          if (res.ok) {
+            const a = document.createElement("a");
+            a.href = pdfPath;
+            a.download = variant.name(lang);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            return;
+          }
+        } catch (_err) {
+          // PDF pas encore généré (ou hors-ligne) : on retombe sur l'impression navigateur.
         }
-      } catch (_err) {
-        // PDF pas encore généré (ou hors-ligne) : on retombe sur l'impression navigateur.
-      }
-      window.print();
+        window.print();
+      });
     });
 
     document.getElementById("langToggle").addEventListener("click", () => {

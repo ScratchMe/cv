@@ -159,7 +159,9 @@
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
       <p>Sans JavaScript, ce CV s'affiche en français, sans les filtres de compétences, le Fit-Checker ni la version anglaise.</p>
       <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
-         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a></p>
+         <a href="assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
+         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
+         <a href="assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
       <p><a href="results.html">Études de cas</a></p>
     </div>
   </noscript>
@@ -201,6 +203,14 @@
             <path d="M4 19h16"/>
           </svg>
           <span data-i18n="nav.printShort">PDF</span>
+        </button>
+        <button id="printShortBtn" class="btn label-btn" type="button" data-i18n-aria="nav.printShortBtn" title="Télécharger le CV court (PDF, 2 pages)" data-goatcounter-click="pdf-download-court">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"/>
+            <path d="M7 10l5 5 5-5"/>
+            <path d="M4 19h16"/>
+          </svg>
+          <span data-i18n="nav.printShortLabel">PDF court</span>
         </button>
       </div>
     </div>
@@ -625,9 +635,10 @@
       <!-- static:footerLinks -->
 <div class="footer-links" id="footerLinks"><a href="results.html">Études de cas</a><a href="project-detail.html?slug=tour-de-growth" data-goatcounter-click="footer-project-tour-de-growth">Tour de Growth</a><a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a><a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a><a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a></div>
 <!-- /static:footerLinks -->
-      <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les deux PDF
-           restent atteignables même sans JavaScript. -->
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a></p>
+      <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les quatre PDF
+           (complet et court, par langue) restent atteignables même sans
+           JavaScript. -->
+      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
     </div>
   </footer>
 

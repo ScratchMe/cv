@@ -20,7 +20,7 @@ scripts/lib/site-server.js   → mini-serveur local partagé par les deux script
 package.json + package-lock.json → dépendances des scripts, versions figées (voir section 5)
 CLAUDE.md                    → contexte et décisions pour Claude Code (exclu du site publié)
 .github/workflows/generate-pdf.yml → régénère les pages pré-rendues et les PDF à chaque changement, et une fois par mois (GitHub Actions)
-assets/cv-antoine-berthaud-fr.pdf, -en.pdf → PDF générés (ne pas éditer à la main, ils sont régénérés à chaque fois)
+assets/cv-antoine-berthaud-fr.pdf, -en.pdf, -fr-court.pdf, -en-short.pdf → PDF générés, complets et courts (ne pas éditer à la main, ils sont régénérés à chaque fois)
 assets/photo/               → dépose ta photo ici
 assets/logos/               → dépose les logos des entreprises ici (WebP ou PNG 224×224, fond transparent de préférence)
 robots.txt / sitemap.xml     → référencement (voir section 10)
@@ -210,11 +210,13 @@ Garde-fous du script : erreur JavaScript, zone vide, marqueur manquant, page tro
 
 ### PDF téléchargeable
 
+Deux PDF par langue. Le **complet** (5 pages, bouton « PDF » du menu) est le document de référence : tout le site, études de cas comprises. Le **court** (2 pages, bouton « PDF court ») est fait pour la candidature qu'un recruteur transmet à un CPO : hero, compétences en lignes, expériences avec au plus trois puces (deux pour les rôles d'avant 2022), débuts réduits à leur titre, formation sur une rangée — sans piliers, témoignage, side projects ni contexte de rôle. C'est la même page, imprimée avec `?pdf=court` (classe `body.cv-court`, règles dans le `@media print` de `style.css`) : rien à entretenir en double, tu édites `data.js` et les quatre PDF suivent. Le générateur refuse un court de plus de 2 pages : si ça arrive après un ajout de contenu, resserrer les règles `body.cv-court` plutôt que d'accepter une 3e page. Les courts ne sont pas dans le sitemap (voulu : ils concurrenceraient les complets sur ton nom).
+
 Le bouton **"Télécharger PDF"** ne fait plus un simple `Ctrl/Cmd+P` navigateur (rendu peu maîtrisé, dépendant des réglages de chacun). Il télécharge un **vrai PDF pré-généré**, produit par Chromium piloté en script (Playwright) directement à partir du site : mêmes couleurs, mêmes polices, mise en page adaptée au format papier (A4 pour le français, Letter pour l'anglais). Si le PDF n'existe pas encore (avant la première génération), le bouton retombe automatiquement sur l'impression navigateur classique — rien ne peut casser.
 
 ### Comment ça marche
 
-1. `scripts/generate-pdf.js` lance un mini-serveur local, ouvre le site dans Chromium, et exporte deux fichiers : `assets/cv-antoine-berthaud-fr.pdf` et `-en.pdf`.
+1. `scripts/generate-pdf.js` lance un mini-serveur local, ouvre le site dans Chromium, et exporte quatre fichiers : `assets/cv-antoine-berthaud-fr.pdf` et `-en.pdf` (complets), `-fr-court.pdf` et `-en-short.pdf` (courts).
 2. Le CSS `@media print` (dans `style.css`) définit un rendu pensé spécifiquement pour le papier : les couleurs de marque sont conservées (bordures des piliers, dégradés d'avatar), les ombres portées sont retirées (elles ne rendent pas bien sur un support figé), et les sections interactives (navigation, Fit-Checker, bandeau teaser) sont masquées.
 3. `.github/workflows/generate-pdf.yml` relance le pré-rendu puis cette génération automatiquement à chaque `git push` sur `main` qui touche le contenu ou le style, **et une fois par mois** (le 1er à 4h UTC) pour rafraîchir les durées d'expérience calculées jusqu'à « aujourd'hui », puis recommit les pages et les PDF à jour (avec leur `lastmod` dans `sitemap.xml`) — **tu n'as normalement jamais besoin de lancer ces scripts toi-même**. S'il échoue, il ouvre une issue GitHub (label `pdf-generation-failure`). Les mêmes scripts tournent sur chaque PR via `pr-checks.yml`, sans commit, avec leurs garde-fous (erreur JS, page vide, polices absentes, lien local, PDF trop court). Le problème "CV à jour" est réglé une fois pour toutes : tu édites `data.js`, tu push, les pages et les PDF suivent.
 
@@ -278,7 +280,8 @@ Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineb
 
 | Événement | Ce qu'il compte |
 |---|---|
-| `pdf-download` | clic sur le bouton PDF du menu ou sur un lien PDF du pied de page |
+| `pdf-download` | clic sur le bouton PDF du menu ou sur un lien PDF complet du pied de page |
+| `pdf-download-court` | clic sur le bouton « PDF court » du menu ou sur un lien PDF court du pied de page |
 | `contact-email`, `contact-linkedin`, `link-photos` | clics sur les liens du pied de page |
 | `hero-stat-<resultId>`, `hero-stats-link` | clics sur un chiffre du hero ou sur « Voir les études de cas » |
 | `project-tour-de-growth` | clic vers Tour de Growth (carte du CV ou bouton de l'étude de cas) |
