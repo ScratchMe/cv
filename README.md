@@ -365,3 +365,5 @@ Trois filets, du plus important au moins :
 
 Si le projet est passé en pause malgré tout : dashboard Supabase → **Restore** (quelques minutes), puis relancer la sonde à la main pour vérifier.
 
+**Clé Gemini en prépayé (depuis le 06/09/2026).** Le projet Google de la clé est relié à un compte de facturation **Prepay** (Tier 1) : les offres collées par les recruteurs ne servent pas à améliorer les modèles Google (conditions Gemini API, « Paid Services »), et il est impossible de dépenser plus que le solde chargé. Ordre de grandeur : 0,6 centime par analyse, 5 $ couvrent largement un an ; les crédits expirent au bout d'un an. Si l'issue « Le Fit-Checker ne répond plus » s'ouvre, vérifier le solde sur https://aistudio.google.com/billing et recharger 5 $ (à zéro, toutes les clés du compte s'arrêtent). Le plafond mensuel de dépense se règle sur la page « Spend » d'AI Studio.
+

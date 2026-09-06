@@ -75,7 +75,9 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   (`supabase/migrations/`) et un moniteur externe (README §12). GitHub
   désactive les crons d'un dépôt public après 60 jours sans commit
   (réactivation : « Enable workflow », ou un commit qui modifie la ligne
-  `cron`).
+  `cron`). La clé Gemini est sur un compte **Prepay** (Tier 1, 5 $ chargés
+  le 06/09/2026, plafond mensuel sur la page « Spend » d'AI Studio) : à
+  solde zéro, la fonction s'arrête — recharger, ne pas chercher un bug.
 - `supabase/functions/gemini-fit/index.ts` : fonction serveur du
   Fit-Checker — **ne jamais confondre avec `js/gemini.js`** (l'un tourne
   dans le navigateur, l'autre sur Supabase/Deno). Le code déployé sur
