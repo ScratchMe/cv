@@ -383,21 +383,21 @@ const EXPERIENCES = [
         start: "2025-05",
         end: null,
         context: {
-          fr: "Product Manager senior au sein du pilier Growth d'AB Tasty, plateforme SaaS d'Experience Optimization (A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.",
-          en: "Senior Product Manager within AB Tasty's Growth pillar, on the Experience Optimization SaaS platform (A/B Testing, Personalization). International team, English as the working language.",
+          fr: "Mission : ouvrir la plateforme au self-serve en complément de la vente grands comptes, au sein du pilier Growth d'AB Tasty (SaaS d'Experience Optimization : A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.",
+          en: "Mission: open the platform to self-serve alongside enterprise sales, within AB Tasty's Growth pillar (Experience Optimization SaaS: A/B Testing, Personalization). International team, English as the working language.",
         },
         achievements: [
           {
-            fr: "Pilotage de la transition d'un modèle 100 % Sales-Led vers un **modèle hybride** : cadrage, business case et roadmap avec la direction, les grands comptes restant suivis par les sales, les autres s'inscrivant et payant en autonomie.",
-            en: "Led the shift from a 100% Sales-Led model to a **hybrid model**: framing, business case and roadmap with leadership, with large accounts kept with Sales and everyone else signing up and paying on their own.",
+            fr: "**Tunnel self-serve livré en production derrière un feature flag**, prêt au lancement : inscription publique, freemium limité, facturation Hyperline cadrée de bout en bout (paiement, abonnements, accès aux fonctionnalités selon l'offre). Lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
+            en: "**Self-serve funnel shipped to production behind a feature flag**, ready to launch: public sign-up, limited freemium, Hyperline billing scoped end to end (payments, subscriptions, feature access by plan). Launch put on hold after AB Tasty's merger with VWO.",
           },
           {
-            fr: "Conception et construction de bout en bout du **tunnel self-serve** : inscription publique, freemium limité, et intégration de la plateforme de facturation Hyperline, que j'ai cadrée (paiement, abonnements, accès aux fonctionnalités selon l'offre). **Livré en production derrière un feature flag**, prêt au lancement ; lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.",
-            en: "Designed and built the **self-serve funnel** end to end: public sign-up, limited freemium, and the integration of the Hyperline billing platform, which I scoped (payments, subscriptions, feature access by plan). **Shipped to production behind a feature flag**, ready to launch; launch put on hold after AB Tasty's merger with VWO.",
+            fr: "**Business case et roadmap du modèle hybride portés devant la direction** : passage d'un modèle 100 % Sales-Led à un modèle où les grands comptes restent suivis par les sales et les autres s'inscrivent et paient en autonomie.",
+            en: "**Business case and roadmap for the hybrid model carried to leadership**: moving from a 100% Sales-Led model to one where large accounts stay with Sales and everyone else signs up and pays on their own.",
           },
           {
-            fr: "Animation de 2 autres Product Managers sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
-            en: "Led 2 other Product Managers on the self-serve workstream: splitting the plan, scoping trade-offs, overall consistency.",
+            fr: "**2 Product Managers animés** sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.",
+            en: "**Led 2 Product Managers** on the workstream: splitting the plan, scoping trade-offs, overall consistency.",
           },
         ],
         methodology: "Scrum",
