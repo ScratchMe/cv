@@ -723,7 +723,7 @@ const SIDE_PROJECTS = [
       fr: "Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.",
       en: "A free growth check-up tool (AARRR framework), designed and launched to size up a growth strategy in three minutes. In plain language rather than jargon, it shows where it already holds up and where it doesn't yet. The in-depth mode runs on the Gemini API; the product was designed and built with Claude Code.",
     },
-    link: "https://tourdegrowth.com",
+    link: "https://www.tourdegrowth.com",
     detailSlug: "tour-de-growth",
     skills: ["plg", "user-research", "llm-integration", "genai"],
   },
@@ -748,7 +748,7 @@ const PROJECT_DETAILS = {
       fr: "Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.",
       en: "A quick mirror to see where your growth strategy really stands — explained in plain words, not jargon.",
     },
-    liveUrl: "https://tourdegrowth.com",
+    liveUrl: "https://www.tourdegrowth.com",
 
     problem: {
       fr: "Beaucoup de gens qui pilotent un produit savent qu'ils devraient \"faire de la croissance\", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle \"growth\" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ?\n\nTour de Growth part de cette question toute simple : **quinze questions**, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.",
