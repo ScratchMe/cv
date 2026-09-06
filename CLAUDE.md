@@ -163,7 +163,14 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   version EN indexable** : sur `results.html` et `project-detail.html`,
   `?lang=en` est un affichage — canonical = FR, pas de hreflang, pas d'URL
   EN dans le sitemap. C'est voulu (deux pages EN minces sans demande de
-  recherche), pas un oubli.
+  recherche), pas un oubli. **Seule exception à « pas de détection
+  navigateur » : `404.html`** (sept. 2026, décision d'Antoine). GitHub Pages
+  la sert pour toute URL inconnue sans aucun signal de langue ; un script
+  inline garde le bloc FR ou EN d'après `?lang=` si l'URL cassée le porte,
+  sinon d'après `navigator.language` (français → FR, tout le reste → EN),
+  les deux blocs restant dans le HTML pour les visiteurs sans JavaScript.
+  Acceptable parce qu'une 404 n'est pas indexée (aucun enjeu Googlebot) ;
+  ne pas s'en servir comme précédent pour les autres pages.
 - **Objectif SEO réaliste** : premier sur le nom et ses variantes, longue
   traîne localisée ("senior growth product manager Nantes"), lisible par les
   moteurs IA. Pas de course à "product manager Nantes" (page de résultats

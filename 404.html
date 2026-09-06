@@ -7,15 +7,36 @@
 <meta name="description" content="Cette page n'existe pas ou plus. Retour au CV d'Antoine Berthaud, Product Manager à Nantes.">
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="stylesheet" href="/css/style.css">
-<!-- Page servie par GitHub Pages pour toute URL inconnue : pas de JavaScript,
-     chemins absolus (l'URL demandée peut être à n'importe quelle profondeur),
-     français puis anglais. -->
+<!-- Page servie par GitHub Pages pour toute URL inconnue, chemins absolus
+     (l'URL demandée peut être à n'importe quelle profondeur). Les deux
+     langues sont dans le HTML, français puis anglais : sans JavaScript, un
+     visiteur voit les deux blocs.
+     SEULE DÉTECTION DE LA LANGUE DU NAVIGATEUR DU SITE (décision d'Antoine,
+     sept. 2026, voir CLAUDE.md) : le script ci-dessous ne garde que le bloc
+     qui correspond à ?lang= si l'URL cassée le portait, sinon à
+     navigator.language (français → FR, tout le reste → EN). Partout ailleurs
+     la langue vient de l'URL, jamais du navigateur (Googlebot navigue en
+     anglais) ; ici une 404 n'est pas indexée, donc pas d'enjeu SEO, et
+     GitHub Pages ne donne aucun autre signal de langue. Ne pas étendre. -->
+<script>
+  (function () {
+    var fromUrl = /[?&]lang=(fr|en)(?:&|$)/.exec(location.search);
+    var browser = String(navigator.language || "").toLowerCase();
+    var lang = fromUrl ? fromUrl[1] : (browser.indexOf("fr") === 0 ? "fr" : "en");
+    document.documentElement.lang = lang;
+    document.documentElement.classList.add("lang-" + lang);
+    if (lang === "en") document.title = "Page not found — Antoine Berthaud";
+  })();
+</script>
 <style>
   .notfound{max-width:640px;margin:0 auto;padding:80px 22px 100px;}
   .notfound h1{font-size:34px;margin-bottom:12px;}
   .notfound p{color:var(--ink-soft);margin-bottom:22px;}
   .notfound .btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px;}
   .notfound hr{border:0;border-top:1px solid var(--line);margin:0 0 40px;}
+  /* Une langue choisie par le script : l'autre bloc et le filet disparaissent. */
+  html.lang-fr [data-lang="en"],html.lang-en [data-lang="fr"],
+  html.lang-fr .notfound hr,html.lang-en .notfound hr{display:none;}
 </style>
 </head>
 <body>
@@ -25,21 +46,25 @@
     </div>
   </header>
   <main class="notfound">
-    <span class="eyebrow">404</span>
-    <h1>Cette page n'existe pas</h1>
-    <p>L'adresse est peut-être erronée, ou la page a été déplacée. Le CV, lui, est bien là.</p>
-    <div class="btns">
-      <a href="/" class="btn solid">Retour au CV</a>
-      <a href="/assets/cv-antoine-berthaud-fr.pdf" class="btn">CV en PDF</a>
-    </div>
+    <section data-lang="fr" lang="fr">
+      <span class="eyebrow">404</span>
+      <h1>Cette page n'existe pas</h1>
+      <p>L'adresse est peut-être erronée, ou la page a été déplacée. Le CV, lui, est bien là.</p>
+      <div class="btns">
+        <a href="/" class="btn solid">Retour au CV</a>
+        <a href="/assets/cv-antoine-berthaud-fr.pdf" class="btn">CV en PDF</a>
+      </div>
+    </section>
     <hr>
-    <span class="eyebrow" lang="en">404</span>
-    <h1 lang="en">This page doesn't exist</h1>
-    <p lang="en">The address may be wrong, or the page has moved. The CV is right here.</p>
-    <div class="btns" lang="en">
-      <a href="/?lang=en" class="btn solid">Back to the CV</a>
-      <a href="/assets/cv-antoine-berthaud-en.pdf" class="btn">CV as PDF</a>
-    </div>
+    <section data-lang="en" lang="en">
+      <span class="eyebrow">404</span>
+      <h1>This page doesn't exist</h1>
+      <p>The address may be wrong, or the page has moved. The CV is right here.</p>
+      <div class="btns">
+        <a href="/?lang=en" class="btn solid">Back to the CV</a>
+        <a href="/assets/cv-antoine-berthaud-en.pdf" class="btn">CV as PDF</a>
+      </div>
+    </section>
   </main>
 </body>
 </html>
