@@ -785,15 +785,18 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Formation sur une seule rangée : éducation, langues, certification. */
   body.cv-court .formation-grid{grid-template-columns:1.4fr 1fr 1fr;}
   body.cv-court .formation-side{display:contents;}
-  /* Le libellé « Accomplissements » se devine ; les rôles d'avant 2022
-     (3e entreprise et suivantes : SNCF, ESN) se limitent à deux puces. */
+  /* Le libellé « Accomplissements » se devine ; trois puces pour le poste
+     actuel, deux pour tous les autres. Marge de sécurité voulue : à 95 %
+     de remplissage, la CI (autre Chromium, polices woff2) faisait déborder
+     le court sur une troisième page alors qu'il tenait en local. */
   body.cv-court .role-achievements-label{display:none !important;}
-  body.cv-court .company-block:nth-child(n+3) .role-achievements li:nth-child(n+3){display:none !important;}
+  body.cv-court .role-block:not(:first-child) .role-achievements li:nth-child(n+3),
+  body.cv-court .company-block:not(:first-child) .role-achievements li:nth-child(n+3){display:none !important;}
   body.cv-court .company-logo,body.cv-court .company-logo-fallback{width:32px;height:32px;}
   body.cv-court .company-name{font-size:15px;}
   body.cv-court .photo-ring{width:88px;height:88px;}
   body.cv-court .hero-grid{gap:16px;grid-template-columns:1fr 100px;}
-  body.cv-court .pitch{font-size:11.5px;line-height:1.4;}
+  body.cv-court .pitch{font-size:11.2px;line-height:1.38;}
   body.cv-court .role-achievements li{font-size:11.5px;line-height:1.3;}
   body.cv-court .role-block{padding-bottom:4px;margin-bottom:4px;}
   body.cv-court .company-block{padding:8px 12px 0;}

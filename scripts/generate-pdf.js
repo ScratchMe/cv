@@ -165,7 +165,7 @@ async function generateFor(browser, { lang, format, outPath, variant }) {
     tagged: true,
     outline: true,
     // Le court serre un peu les marges : deux pages, c'est sa promesse.
-    margin: variant === "court" ? { top: "11mm", bottom: "11mm", left: "11mm", right: "11mm" } : { top: "14mm", bottom: "14mm", left: "12mm", right: "12mm" },
+    margin: variant === "court" ? { top: "10mm", bottom: "10mm", left: "11mm", right: "11mm" } : { top: "14mm", bottom: "14mm", left: "12mm", right: "12mm" },
   });
   await page.close();
   await stampMetadata(outPath, lang, variant);
