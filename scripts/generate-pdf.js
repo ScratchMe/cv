@@ -25,12 +25,16 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
-const { PDFDocument } = require("pdf-lib");
+const { PDFDocument, PDFName } = require("pdf-lib");
 
 const ROOT = path.join(__dirname, "..");
 const PORT = 4173;
 const OUT_DIR = path.join(ROOT, "assets");
-const BASE_NAME = "cv-antoine-berthaud"; // [À COMPLÉTER] change ici si tu renommes le CV
+const BASE_NAME = "cv-antoine-berthaud"; // nom des fichiers PDF générés
+// Origine publique du site (cf. CNAME). Chromium résout les liens relatifs
+// contre le serveur local de génération : sans réécriture, les liens du PDF
+// (chiffres du hero, étude de cas) pointaient vers http://127.0.0.1:4173/.
+const SITE_URL = "https://cv.antoine.berthaud.me/";
 
 // Métadonnées écrites dans chaque PDF (titre, auteur, sujet, mots-clés,
 // langue). Chromium n'en écrit aucune ; or les PDF sont indexables par Google
@@ -91,21 +95,70 @@ async function stampMetadata(pdfPath, lang) {
   // updateMetadata:false — on garde les dates écrites par Chromium, on ne
   // touche qu'aux champs descriptifs.
   const doc = await PDFDocument.load(fs.readFileSync(pdfPath), { updateMetadata: false });
+
+  // Garde-fous de bout en bout : le workflow ouvre une issue si ce script
+  // échoue, donc mieux vaut échouer ici que publier un PDF cassé sans bruit.
+  // 1) Un data.js cassé produit un PDF de 2 pages (hero seul) sans erreur.
+  if (doc.getPageCount() < 3) {
+    throw new Error(`PDF ${lang} anormalement court : ${doc.getPageCount()} page(s) — data.js cassé ?`);
+  }
+  // 2) Aucun lien ne doit pointer vers le serveur local de génération.
+  const localLinks = [];
+  for (const page of doc.getPages()) {
+    const annots = page.node.Annots();
+    if (!annots) continue;
+    for (let i = 0; i < annots.size(); i++) {
+      const annot = annots.lookup(i);
+      const uri = annot?.lookup?.(PDFName.of("A"))?.lookup?.(PDFName.of("URI"));
+      const value = uri?.decodeText?.();
+      if (value && /^https?:\/\/(127\.|localhost)/.test(value)) localLinks.push(value);
+    }
+  }
+  if (localLinks.length) {
+    throw new Error(`Liens locaux dans ${path.basename(pdfPath)} : ${localLinks.join(", ")}`);
+  }
+
   doc.setTitle(meta.title);
   doc.setAuthor("Antoine Berthaud");
   doc.setSubject(meta.subject);
   doc.setKeywords(meta.keywords);
   doc.setLanguage(meta.language);
-  doc.setCreator("cv.antoine.berthaud.me");
+  doc.setCreator(new URL(SITE_URL).host);
   fs.writeFileSync(pdfPath, await doc.save());
 }
 
 async function generateFor(browser, { lang, format, outPath }) {
   const page = await browser.newPage();
+  // Une erreur JS sur la page (data.js cassé, par exemple) rend un site
+  // réduit au hero, et page.pdf() sortirait un PDF vide sans se plaindre.
+  const pageErrors = [];
+  page.on("pageerror", (err) => pageErrors.push(err.message));
   await page.goto(`http://127.0.0.1:${PORT}/index.html?lang=${lang}`, { waitUntil: "networkidle" });
   // Attend que les polices web (Google Fonts) soient réellement chargées,
   // sinon le PDF peut capturer un instant la police de secours système.
   await page.evaluate(() => document.fonts.ready);
+
+  if (pageErrors.length) throw new Error(`Erreur JS sur la page (${lang}) : ${pageErrors[0]}`);
+  const check = await page.evaluate(() => ({
+    roles: document.querySelectorAll(".role-block").length,
+    fontFaces: document.fonts.size, // 0 = la feuille Google Fonts n'a pas chargé
+  }));
+  if (check.roles === 0) throw new Error(`Aucune expérience rendue (${lang}) — data.js probablement cassé.`);
+  // PDF_ALLOW_FALLBACK_FONTS=1 : pour un test local sans accès à Google Fonts.
+  if (check.fontFaces === 0 && !process.env.PDF_ALLOW_FALLBACK_FONTS) {
+    throw new Error(`Polices web absentes (${lang}) — le PDF sortirait en police de secours.`);
+  }
+
+  // Réécrit les liens relatifs en absolus vers le site public (voir SITE_URL).
+  // Les ancres #..., mailto:, tel: et les URLs déjà absolues restent intacts.
+  await page.evaluate((site) => {
+    document.querySelectorAll("a[href]").forEach((a) => {
+      const href = a.getAttribute("href");
+      if (!href || /^(https?:|mailto:|tel:|#)/i.test(href)) return;
+      a.href = new URL(href, site).href;
+    });
+  }, SITE_URL);
+
   await page.emulateMedia({ media: "print" });
   await page.pdf({
     path: outPath,
