@@ -135,8 +135,8 @@ const RESULT_DETAILS = {
       en: "Early churn and an overloaded support team, activation below the market benchmark.",
     },
     approach: {
-      fr: "Entretiens utilisateurs, benchmark externe, moteur de qualification à l'inscription, nouveau parcours d'activation.",
-      en: "User interviews, external benchmark, a qualification engine at sign-up, a new activation journey.",
+      fr: "Entretiens utilisateurs, benchmark externe, moteur de qualification à l'inscription, puis un onboarding personnalisé par profil.",
+      en: "User interviews, external benchmark, a qualification engine at sign-up, then a personalized onboarding for each profile.",
     },
     company: "AB Tasty",
     companyLogo: "assets/logos/ab-tasty.webp",
@@ -165,7 +165,7 @@ const RESULT_DETAILS = {
       en: "I ran interviews with freshly onboarded users: fear of getting started despite CSM support, and a setup that took too long, came up again and again. Digging further, I noticed our users covered very different profiles (developers, marketers, analysts, product people), with different skills and expectations.\n\nSo I designed a **qualification engine at sign-up** (role, A/B testing level, technical skills, main goal), framed as a service to the user rather than a plain form to maximize response rates — serving a double purpose:",
     },
     actionPoints: [
-      { fr: "Adapter l'onboarding à chaque profil utilisateur.", en: "Tailor onboarding to each user profile." },
+      { fr: "**Livrer un onboarding personnalisé** : un parcours différent selon le profil, plutôt qu'une visite guidée unique.", en: "**Ship a personalized onboarding**: a different journey per profile, rather than one guided tour for everyone." },
       { fr: "Alimenter la segmentation utilisateur pour d'autres besoins produit.", en: "Feed user segmentation for other product needs." },
     ],
     result: {
@@ -175,6 +175,75 @@ const RESULT_DETAILS = {
     lesson: {
       fr: "Le moteur de qualification était une évidence a posteriori. Ce que je ferais plus tôt la prochaine fois : **cartographier dès le départ les cohortes/segmentations disponibles** (et celles qui manquent) — plus ce découpage arrive tôt, plus l'amélioration continue du produit devient facile ensuite.",
       en: "The qualification engine was an obvious move in hindsight. What I'd do earlier next time: **map out available cohorts/segmentations from day one** (and spot the gaps) — the sooner that breakdown exists, the easier continuous product improvement becomes afterward.",
+    },
+  },
+
+  // Quatrième étude (7 sept. 2026, matière donnée par Antoine). Pas de champ
+  // `value` : le chantier a été livré mais jamais lancé, il n'y a donc aucun
+  // chiffre d'impact — `status` prend la place du chiffre, sur la carte de
+  // l'accueil comme en tête de l'étude. Ne jamais inventer un résultat ici.
+  "ab-tasty-hybride": {
+    company: "AB Tasty",
+    companyLogo: "assets/logos/ab-tasty.webp",
+    role: "Senior Growth Product Manager",
+    period: { fr: "2025 – aujourd'hui", en: "2025 – present" },
+    status: {
+      fr: "Livré en production derrière un feature flag, prêt au lancement — suspendu à la suite de la fusion d'AB Tasty avec VWO.",
+      en: "Shipped to production behind a feature flag, ready to launch — put on hold after AB Tasty's merger with VWO.",
+    },
+    label: { fr: "Du Sales-Led au modèle hybride", en: "From Sales-Led to a hybrid model" },
+    cardTitle: { fr: "Ouvrir le produit au self-serve", en: "Opening the product to self-serve" },
+    problem: {
+      fr: "Le marché des grands comptes sature, et le modèle 100 % Sales-Led ne sait pas servir les petites structures de façon rentable.",
+      en: "The enterprise market is saturating, and a 100% Sales-Led model cannot serve small companies profitably.",
+    },
+    approach: {
+      fr: "Business case et roadmap devant la direction, tunnel self-serve construit de bout en bout, deux Product Managers animés.",
+      en: "Business case and roadmap to leadership, a self-serve funnel built end to end, two Product Managers led.",
+    },
+    context: {
+      fr: "AB Tasty, plateforme SaaS d'**Experience Optimization**, vendue historiquement en **100 % Sales-Led**. Senior Growth Product Manager au sein du pilier Growth, avec 4 développeurs, 1 tech lead, 1 QA et 1 Product Designer.",
+      en: "AB Tasty, a SaaS **Experience Optimization** platform, historically sold **100% Sales-Led**. Senior Growth Product Manager within the Growth pillar, with 4 developers, 1 tech lead, 1 QA and 1 Product Designer.",
+    },
+    challenge: {
+      fr: "Le marché des grands comptes commence à saturer, et la croissance qui reste se trouve chez les petites structures — celles que l'offre ne sait pas servir en restant rentable.\n\nEn vente accompagnée, acquérir un client coûte cher : il faut en moyenne **16 mois** pour qu'il devienne rentable. Ce coût fixe un prix plancher, et ce plancher reste trop haut pour une petite structure.",
+      en: "The enterprise market is starting to saturate. What growth is left sits with small companies — the ones the offer cannot serve while staying profitable.\n\nIn a sales-led motion, acquiring a customer is expensive: it takes **16 months** on average to break even. That cost sets a price floor, and the floor stays too high for a small company.",
+    },
+    challengePoints: [
+      {
+        fr: "Les rares petites structures signées n'avaient pas les moyens de financer l'accompagnement qui fait la valeur du produit — et churnaient d'autant plus.",
+        en: "The few small companies that did sign could not afford the support that makes the product valuable — and churned all the more.",
+      },
+      {
+        fr: "L'ICP écartait donc ce segment de lui-même, sans que personne ait eu à en décider.",
+        en: "So the ICP ruled that segment out on its own, without anyone having to decide it.",
+      },
+    ],
+    hypothesis: {
+      fr: "Pour ouvrir ce segment, il fallait s'attaquer au **coût de servir** avant le prix affiché. Sans sales ni CSM sur ces clients, un abonnement abordable redevient rentable.",
+      en: "To open that segment, the **cost to serve** had to come down before the list price. With no sales and no CSM on those customers, an affordable subscription becomes profitable again.",
+    },
+    discarded: {
+      fr: "**Baisser les prix dans le modèle existant** : le plancher venait du coût d'acquisition, pas de la grille tarifaire. Descendre en dessous revenait à vendre à perte.\n\n**Pousser encore sur les grands comptes** : c'est précisément le segment qui sature.",
+      en: "**Cutting prices within the existing model**: the floor came from the cost of acquisition, not from the price list. Going below it meant selling at a loss.\n\n**Pushing harder on enterprise**: that is exactly the segment that is saturating.",
+    },
+    action: {
+      fr: "J'ai construit le **business case et la roadmap du modèle hybride** et je les ai portés devant la direction : garder la vente accompagnée pour les grands comptes, qui ont un département achats et instruisent l'abonnement comme une dépense, et ouvrir un parcours **self-serve** pour les autres.\n\nJ'ai conçu et construit ce tunnel de bout en bout : inscription publique, freemium limité, facturation Hyperline cadrée de bout en bout (paiement, abonnements, accès aux fonctionnalités selon l'offre). J'ai animé **2 autres Product Managers** : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.\n\nDeux passerelles étaient prévues dès le cadrage :",
+      en: "I built the **business case and roadmap for the hybrid model** and carried them to leadership: keep the sales-led motion for enterprise accounts, which have a procurement department and review the subscription as a spend anyway, and open a **self-serve** path for everyone else.\n\nI designed and built that funnel end to end: public sign-up, limited freemium, and the integration of the Hyperline billing platform, which I scoped (payments, subscriptions, feature access by plan). I led **2 other Product Managers** on the workstream: splitting the plan, scoping trade-offs, overall consistency.\n\nTwo bridges were planned from the start:",
+    },
+    actionPoints: [
+      {
+        fr: "**Du self-serve vers la vente accompagnée**, quand le volume d'usage ou le besoin de fonctionnalités avancées le justifie.",
+        en: "**From self-serve to sales-led**, when usage volume or the need for advanced features justifies it.",
+      },
+      {
+        fr: "**Le mois offert sert aussi de compte de démonstration** aux grands prospects — ce que le modèle historique rendait lourd à mettre en place.",
+        en: "**The free month doubles as a demo account** for enterprise prospects — something the historical model made cumbersome to set up.",
+      },
+    ],
+    lesson: {
+      fr: "Le plancher tarifaire venait du coût de servir, pas de la grille : tant qu'un client demandait un cycle de vente et un accompagnement, aucun abonnement ne pouvait descendre au niveau d'une petite structure. Le business case a convaincu en montrant ce que devient ce coût quand on retire les sales et les CSM d'un segment — la taille du marché, elle, était déjà connue.",
+      en: "The price floor came from the cost to serve, not from the price list: as long as a customer required a sales cycle and hands-on support, no subscription could come down to a small company's level. The business case convinced leadership by showing what that cost becomes once sales and CSMs are taken out of a segment — not by restating the size of the market, which they already knew.",
     },
   },
 
@@ -490,8 +559,8 @@ const EXPERIENCES = [
         },
         achievements: [
           {
-            fr: "**+15 % de taux d'activation, -20 % de Time-to-Value** : refonte de l'onboarding avec un moteur de qualification utilisateur et un nouveau parcours d'activation.",
-            en: "**+15% activation rate, -20% Time-to-Value**: reworked onboarding with a user qualification engine and a new activation journey.",
+            fr: "**+15 % de taux d'activation, -20 % de Time-to-Value** : un moteur de qualification à l'inscription, puis un **onboarding personnalisé** par profil utilisateur.",
+            en: "**+15% activation rate, -20% Time-to-Value**: a qualification engine at sign-up, then a **personalized onboarding** for each user profile.",
           },
           {
             fr: "**2FA obligatoire déployée sur 100 % de la base utilisateur** par vagues successives, calées sur la capacité des Customer Success Managers à accompagner leurs clients : aucune perte d'activité, impact support quasi nul.",

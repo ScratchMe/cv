@@ -177,7 +177,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
    ============================================================================ */
 .cases-section{padding-bottom:80px;}
 .cases-intro{color:var(--ink-soft);font-size:15px;margin-bottom:22px;}
-.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;}
+.case-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;align-items:stretch;} /* quatre études depuis le modèle hybride : 2 × 2 plutôt que quatre colonnes étroites */
 .case-card{
   display:flex;flex-direction:column;gap:8px;
   background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);
@@ -186,6 +186,11 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 }
 .case-card:nth-child(2){border-top-color:var(--mint);}
 .case-card:nth-child(3){border-top-color:var(--coral);}
+/* La quatrième étude n'a pas de chiffre : sa barre reprend le dégradé de la
+   carte Leadership, dont elle raconte le pendant en pratique. */
+.case-card:nth-child(4){border-top-color:transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,linear-gradient(90deg,var(--violet),var(--coral)) border-box;}
+.case-result-status{font-weight:600;color:var(--ink);}
+.result-status{font-size:14.5px;color:var(--ink-soft);background:var(--violet-soft);border-left:3px solid var(--violet);padding:10px 14px;border-radius:0 10px 10px 0;margin:14px 0 18px;}
 .case-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(27,21,48,.12);}
 .case-company{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);}
 .case-title{font-size:17px;font-weight:700;line-height:1.3;}
@@ -404,7 +409,6 @@ body.focus-mode .ai-badge{background:var(--ink);}
    pour repousser le point où il passerait sur 2 lignes. */
 @media(max-width:1080px) and (min-width:801px){
   .pillar-grid{grid-template-columns:repeat(2,1fr);} /* quatre cartes en 2 × 2 sur tablette */
-  .case-grid{grid-template-columns:repeat(2,1fr);}
   nav ul{gap:16px;}
   nav a{font-size:13px;}
   .navrow{padding:16px 20px;}

@@ -52,7 +52,9 @@
   function orderedResultIds() {
     // Dédupliqué : deux chiffres du hero peuvent pointer la même étude
     // (AB Tasty porte le +15 % d'activation et le -20 % de Time-to-Value).
-    return [...new Set(HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]))];
+    const fromHero = [...new Set(HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]))];
+    // Puis les études sans chiffre du hero, dans l'ordre de RESULT_DETAILS.
+    return [...fromHero, ...Object.keys(RESULT_DETAILS).filter((id) => !fromHero.includes(id))];
   }
 
   function renderBlock(id) {
@@ -71,11 +73,12 @@
           <img src="${r.companyLogo}" alt="${r.company}" class="result-logo">
           <div>
             <h2 class="result-company">${r.company}</h2>
-            <div class="result-role">${r.role} · ${r.period}</div>
+            <div class="result-role">${tc(r.role)} · ${tc(r.period)}</div>
           </div>
         </div>
-        <div class="result-value">${r.value}</div>
+        ${r.value ? `<div class="result-value">${r.value}</div>` : ""}
         <div class="result-label">${tc(r.label)}</div>
+        ${r.status ? `<p class="result-status">${richText(r.status)}</p>` : ""}
 
         <section class="result-star">
           <h3>${t("results.context")}</h3>
@@ -138,7 +141,9 @@ ${
       const r = RESULT_DETAILS[el.id];
       if (!r) return;
       if (txt(".result-company", el) !== r.company) warn(`${el.id} company`, txt(".result-company", el), r.company);
-      if (txt(".result-value", el) !== r.value) warn(`${el.id} value`, txt(".result-value", el), r.value);
+      // Une étude sans chiffre (`value` absent) n'affiche pas de .result-value :
+      // comparer une chaîne vide à undefined déclenchait un faux avertissement.
+      if (r.value && txt(".result-value", el) !== r.value) warn(`${el.id} value`, txt(".result-value", el), r.value);
       if (txt(".result-label", el) !== tc(r.label)) warn(`${el.id} label`, txt(".result-label", el), tc(r.label));
     });
   }

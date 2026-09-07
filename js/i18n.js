@@ -47,8 +47,8 @@
 
     "cases.sectionTitle": { fr: "Études de cas", en: "Case studies" },
     "cases.intro": {
-      fr: "Trois problèmes produit, ce que j'ai fait et ce que ça a donné.",
-      en: "Three product problems, what I did and what came out of it.",
+      fr: "Le problème, ce que j'ai écarté, ce que j'ai fait et ce que ça a donné.",
+      en: "The problem, what I ruled out, what I did and what came out of it.",
     },
     "cases.problem": { fr: "Problème —", en: "Problem —" },
     "cases.approach": { fr: "Approche —", en: "Approach —" },
@@ -185,13 +185,13 @@
     // <title> et <meta name="description"> de results.html, par langue.
     "results.metaTitle": { fr: "Études de cas Product Manager — Antoine Berthaud, Nantes", en: "Product Manager case studies — Antoine Berthaud, Nantes" },
     "results.metaDescription": {
-      fr: "Le détail derrière les chiffres clés du CV d'Antoine Berthaud, Product Manager à Nantes : contexte, défi, action, résultat, leçon (AB Tasty, Everysens, SNCF Connect & Tech).",
-      en: "The story behind the key numbers of Antoine Berthaud's CV, Product Manager in Nantes, France: context, challenge, action, result, lesson (AB Tasty, Everysens, SNCF Connect & Tech).",
+      fr: "Les études de cas produit d'Antoine Berthaud, Product Manager à Nantes : contexte, hypothèse, options écartées, action et résultat (AB Tasty, Everysens, SNCF Connect & Tech).",
+      en: "Antoine Berthaud's product case studies, Product Manager in Nantes, France: context, hypothesis, options ruled out, action and result (AB Tasty, Everysens, SNCF Connect & Tech).",
     },
     "results.title": { fr: "Le détail derrière les chiffres", en: "The story behind the numbers" },
     "results.intro": {
-      fr: "Un chiffre seul ne dit jamais tout. Voici, pour chacun des chiffres affichés en haut du CV, le contexte, le problème identifié, ce que j'ai concrètement fait, et ce que j'en retiens.",
-      en: "A number alone never tells the full story. For each figure shown at the top of the CV, here's the context, the problem identified, what I actually did, and what I took away from it.",
+      fr: "Un chiffre seul ne dit jamais tout, et certains chantiers n'en ont pas. Voici, pour chacun, le contexte, le problème, mon hypothèse, ce que j'ai écarté, ce que j'ai fait et ce que j'en retiens.",
+      en: "A number alone never tells the full story, and some projects have none. For each one, here's the context, the problem, my hypothesis, what I ruled out, what I did and what I took away from it.",
     },
     "results.context": { fr: "Contexte", en: "Context" },
     "results.challenge": { fr: "Défi", en: "Challenge" },
