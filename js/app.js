@@ -107,7 +107,8 @@
       // Lien texte vers la page Résultats sous les chiffres : sur téléphone,
       // rien ne disait que les chiffres étaient cliquables, et results.html
       // n'était liée nulle part ailleurs.
-      const linkedCount = HERO_STATS.filter((s) => s.resultId && RESULT_DETAILS[s.resultId]).length;
+      // Études DISTINCTES : deux chiffres peuvent pointer la même étude.
+      const linkedCount = new Set(HERO_STATS.filter((s) => s.resultId && RESULT_DETAILS[s.resultId]).map((s) => s.resultId)).size;
       const existing = document.getElementById("heroStatsLink");
       if (existing) existing.remove();
       if (linkedCount > 0) {
@@ -127,7 +128,7 @@
     // lecteur d'écran lit « épingle ronde Nantes, France ».
     [
       ["📍", PROFILE.location],
-      ["🚀", `${PROFILE.yearsExperience} ${t("hero.pillYears")}`],
+      ["🚀", `${PROFILE.yearsDigital} ${t("hero.pillYearsDigital")} · ${PROFILE.yearsExperience} ${t("hero.pillYears")}`],
       // Pastille « ce que je cherche » : seulement si le champ est renseigné.
       ...(tc(PROFILE.lookingFor) ? [["🎯", tc(PROFILE.lookingFor)]] : []),
     ].forEach(([emoji, text]) => {

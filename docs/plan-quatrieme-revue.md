@@ -138,7 +138,11 @@ Versions anglaises rédigées dans la PR, à relire.
 
 ---
 
-## Lot 2 — Hero
+## Lot 2 — Hero · FAIT (PR #62)
+
+Le quatrième chiffre pointe la même étude de cas que le +15 % : `results.js`
+et le lien « Voir les N études de cas » comptent désormais les études
+distinctes, sinon l'étude AB Tasty s'affichait deux fois sur `results.html`.
 
 ### Changements
 

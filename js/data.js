@@ -42,7 +42,13 @@ const PROFILE = {
     en: "Senior Product Manager · Growth, PLG & B2B SaaS",
   },
   location: "Nantes, France",
-  yearsExperience: "10", // même chiffre que le pitch (« 10 ans de produit ») et la meta description : un seul nombre partout
+  // Deux compteurs, chacun défini une seule fois ici (7 sept. 2026, quatrième
+  // revue) : `yearsExperience` (Product Management, depuis août 2016) est repris
+  // mot pour mot dans le pitch et la meta description ; `yearsDigital` (depuis
+  // février 2011) valorise les années techniques au lieu de les taire. Les
+  // dix-huit mois de QA ne sont comptés ni comme technique ni comme produit.
+  yearsExperience: "10",
+  yearsDigital: "15",
   // Ce que tu cherches : affiché en pastille dans le hero (🎯) et transmis au
   // Fit-Checker (ligne « Recherche »). Vide ("") = rien ne s'affiche.
   lookingFor: {
@@ -55,8 +61,8 @@ const PROFILE = {
   // le modifies ici, reporte la modification là-bas : app.js signale l'écart
   // dans la console du navigateur, mais ne le corrige pas tout seul.
   pitch: {
-    fr: "Senior Product Manager, **10 ans de produit** en **SaaS B2B** (AB Tasty, Everysens) et grands comptes (SNCF Connect & Tech), **ingénieur de formation**. Ma spécialité : le **growth** des produits SaaS, de l'onboarding à la monétisation self-serve. Chez AB Tasty, je porte le passage d'un modèle Sales-Led à un **modèle hybride** : business case et roadmap avec la direction, deux PM animés, un tunnel self-serve livré derrière un feature flag. Je tranche avec la donnée (**SQL, Metabase, Mixpanel**) autant qu'avec les entretiens utilisateurs.",
-    en: "Senior Product Manager, **10 years in product**, in **B2B SaaS** (AB Tasty, Everysens) and enterprise settings (SNCF Connect & Tech), **engineer by training**. My specialty: **growth** for SaaS products, from onboarding to self-serve monetization. At AB Tasty, I lead the shift from a Sales-Led to a **hybrid model**: business case and roadmap with leadership, two PMs led, a self-serve funnel shipped behind a feature flag. I decide with data (**SQL, Metabase, Mixpanel**) as much as with user interviews.",
+    fr: "Senior Product Manager, **10 ans de produit** en **SaaS B2B** (AB Tasty, Everysens) et grands comptes (SNCF Connect & Tech), **ingénieur de formation** et quatre ans côté technique avant le produit. Ma spécialité : le **growth** des produits SaaS, de l'onboarding à la monétisation self-serve. Chez AB Tasty, je porte le passage d'un modèle Sales-Led à un **modèle hybride** : business case et roadmap avec la direction, deux PM animés, un tunnel self-serve livré derrière un feature flag. Je tranche avec la donnée (**SQL, Metabase, Mixpanel**) autant qu'avec les entretiens utilisateurs.",
+    en: "Senior Product Manager, **10 years in product**, in **B2B SaaS** (AB Tasty, Everysens) and enterprise settings (SNCF Connect & Tech), **engineer by training**, with four years on the technical side before product. My specialty: **growth** for SaaS products, from onboarding to self-serve monetization. At AB Tasty, I lead the shift from a Sales-Led to a **hybrid model**: business case and roadmap with leadership, two PMs led, a self-serve funnel shipped behind a feature flag. I decide with data (**SQL, Metabase, Mixpanel**) as much as with user interviews.",
   },
   // Balises <title> et <meta name="description"> de la page d'accueil, par
   // langue. C'est ce que Google affiche dans ses résultats : le lieu (Nantes)
@@ -98,6 +104,9 @@ const PROFILE = {
 // cliquable. Un chiffre sans `resultId` reste un simple texte, non cliquable.
 const HERO_STATS = [
   { value: "+15%", label: { fr: "Taux d'activation (AB Tasty)", en: "Activation rate (AB Tasty)" }, resultId: "ab-tasty-activation" },
+  // Deuxième chiffre de la même étude de cas (elle en porte deux) : le lien
+  // « Voir les N études de cas » compte les études distinctes, pas les chiffres.
+  { value: "-20%", label: { fr: "Time-to-Value (AB Tasty)", en: "Time-to-Value (AB Tasty)" }, resultId: "ab-tasty-activation" },
   { value: "-50%", label: { fr: "Temps de saisie (Everysens)", en: "Entry time (Everysens)" }, resultId: "everysens-entry-time" },
   { value: "+100%", label: { fr: "Taux de conversion, récupération du billet (SNCF Connect)", en: "Conversion rate, ticket retrieval (SNCF Connect)" }, resultId: "sncf-ticket-retrieval" },
 ];

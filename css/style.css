@@ -103,7 +103,7 @@ h1{font-size:48px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-h
 .pitch{max-width:560px;color:var(--ink-soft);font-size:16px;margin-bottom:28px;}
 .pitch strong,.role-context strong,.role-achievements strong{color:var(--ink);font-weight:700;}
 
-.hero-stats{display:flex;gap:28px;margin-bottom:28px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:22px 26px;margin-bottom:28px;flex-wrap:wrap;} /* quatre chiffres depuis sept. 2026 : deux par ligne dans la colonne texte du hero */
 /* Sur ?lang=en, le <head> pose html.lang-pending le temps que le JavaScript
    remplace la page pré-rendue en français par le rendu anglais (retirée
    après le premier rendu, ou au bout de 1,5 s si le JS échoue). */
@@ -699,7 +699,7 @@ body.focus-mode .pill{background:#F1F1EF;}
      colonnes fixes : la colonne texte du hero est plus étroite en print,
      un flex qui wrap ferait sauter le 3e chiffre tout seul sur une 2e
      ligne avec un vilain trou en dessous. */
-  .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+  .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
   .hero-stat{padding-left:12px;border-left:1.5px solid var(--line);}
   .hero-stat:first-child{padding-left:0;border-left:none;}
   .hero-stat-value{font-size:20px;}
