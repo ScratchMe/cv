@@ -232,6 +232,13 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   après la fusion avec VWO. Ne jamais combler ce vide par un chiffre inventé.
   L'ordre d'affichage met les études reliées à un chiffre du hero d'abord,
   puis les autres dans l'ordre de `RESULT_DETAILS`.
+- **Chiffres internes d'AB Tasty : demander avant de publier** (7 sept. 2026).
+  L'ARR, le nombre d'organisations clientes et d'utilisateurs actifs sont
+  publics (ligne de scope du bloc AB Tasty). Le délai d'amortissement du coût
+  d'acquisition en vente accompagnée ne l'est pas : Antoine l'a donné pour
+  expliquer le raisonnement de l'étude « modèle hybride », pas pour le
+  publier. L'étude dit « plus d'un an » sans le chiffre exact. Même réflexe
+  pour toute donnée business obtenue en conversation.
 - **Pas de ligne de scope pour Everysens** (7 sept. 2026, réponse d'Antoine) :
   trop de clients et de cas d'usage différents sur une faible volumétrie, un
   ordre de grandeur n'y aurait aucun sens. Ne pas reposer la question.

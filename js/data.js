@@ -206,8 +206,8 @@ const RESULT_DETAILS = {
       en: "AB Tasty, a SaaS **Experience Optimization** platform, historically sold **100% Sales-Led**. Senior Growth Product Manager within the Growth pillar, with 4 developers, 1 tech lead, 1 QA and 1 Product Designer.",
     },
     challenge: {
-      fr: "Le marché des grands comptes commence à saturer, et la croissance qui reste se trouve chez les petites structures — celles que l'offre ne sait pas servir en restant rentable.\n\nEn vente accompagnée, acquérir un client coûte cher : il faut en moyenne **16 mois** pour qu'il devienne rentable. Ce coût fixe un prix plancher, et ce plancher reste trop haut pour une petite structure.",
-      en: "The enterprise market is starting to saturate. What growth is left sits with small companies — the ones the offer cannot serve while staying profitable.\n\nIn a sales-led motion, acquiring a customer is expensive: it takes **16 months** on average to break even. That cost sets a price floor, and the floor stays too high for a small company.",
+      fr: "Le marché des grands comptes commence à saturer, et la croissance qui reste se trouve chez les petites structures — celles que l'offre ne sait pas servir en restant rentable.\n\nEn vente accompagnée, un client coûte cher à acquérir, et il faut plus d'un an pour que ce coût soit amorti. Cela fixe un prix plancher, qui reste trop haut pour une petite structure.",
+      en: "The enterprise market is starting to saturate. What growth is left sits with small companies — the ones the offer cannot serve while staying profitable.\n\nIn a sales-led motion, a customer is expensive to acquire, and it takes over a year to earn that cost back. It sets a price floor, and the floor stays too high for a small company.",
     },
     challengePoints: [
       {
