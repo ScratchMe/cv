@@ -5,11 +5,13 @@ Lu automatiquement par Claude Code au démarrage d'une session dans ce dossier.
 
 ## Ce que c'est
 
-**Chantier en cours (sept. 2026)** : `docs/plan-quatrieme-revue.md` — le plan
-d'implémentation en six lots issu de la quatrième revue externe, avec les
-décisions d'Antoine, les textes à valider et le statut par lot. Le lire avant
-de toucher aux expériences, aux compétences ou à l'ordre des sections.
-`docs/` n'est pas servi sur le domaine (`exclude` de `_config.yml`).
+**Dernier grand chantier** : la quatrième revue externe (7 sept. 2026), livrée
+en huit PR — expériences rééquilibrées, hero à quatre chiffres, compétences
+réduites et sans filtres, ordre des sections revu avec une section « Études de
+cas », PDF court par défaut, quatrième étude sans chiffre. Chaque arbitrage est
+dans « Décisions déjà prises » ci-dessous ; le plan de travail a été retiré une
+fois terminé. `docs/` reste exclu du domaine dans `_config.yml` pour le
+prochain document de travail.
 
 Site CV statique bilingue (FR/EN), HTML/CSS/JS vanilla, hébergé sur GitHub
 Pages avec domaine personnalisé `cv.antoine.berthaud.me`. Piloté par la
