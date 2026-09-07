@@ -320,9 +320,11 @@
               : ""
           }
           ${metaHtml}
-          <div class="role-skills">
-            ${r.skills.map((s) => `<span class="role-skill" data-skill="${s}">${skillLabel(s)}</span>`).join("")}
-          </div>
+          ${
+            r.skills.length
+              ? `<div class="role-skills">${r.skills.map((s) => `<span class="role-skill" data-skill="${s}">${skillLabel(s)}</span>`).join("")}</div>`
+              : ""
+          }
         </div>`;
         })
         .join("");
@@ -334,6 +336,7 @@
           <div>
             <h3 class="company-name">${company.company}</h3>
             <div class="company-meta">${company.location}</div>
+            ${company.scope ? `<div class="company-scope">${tc(company.scope)}</div>` : ""}
           </div>
           ${total ? `<div class="company-total">${t("experiences.total")}<strong>${total}</strong></div>` : ""}
         </div>

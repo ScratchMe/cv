@@ -379,6 +379,13 @@ const EXPERIENCES = [
   {
     company: "AB Tasty",
     location: "Nantes, France",
+    // Ordre de grandeur du produit (chiffres publics, donnés par Antoine le
+    // 7 sept. 2026) : sans lui, un « +15 % d'activation » ne se situe pas.
+    // Champ optionnel : une entreprise sans `scope` n'affiche pas la ligne.
+    scope: {
+      fr: "1 000+ organisations clientes · 5 000 utilisateurs actifs mensuels · 50 M€ d'ARR",
+      en: "1,000+ client organizations · 5,000 monthly active users · €50M ARR",
+    },
     logo: "assets/logos/ab-tasty.webp",
     roles: [
       {
@@ -483,59 +490,39 @@ const EXPERIENCES = [
     location: "Nantes, France",
     logo: "assets/logos/sncf-connect-tech.webp",
     roles: [
-      {
-        title: "Product Manager",
-        start: "2021-10",
-        end: "2022-04",
-        context: {
-          fr: "Mission : la plateforme sanitaire Prêt à Voyager (pretavoyager.sncf.com, aujourd'hui décommissionnée), jusqu'à **40 000 visiteurs par jour**, où les voyageurs vérifiaient eux-mêmes leur pass sanitaire et leur billet pendant le Covid-19. En parallèle du poste sur les boutiques en ligne.",
-          en: "Mission: the Prêt à Voyager health-pass platform (pretavoyager.sncf.com, now decommissioned), up to **40,000 visitors a day**, where travelers self-checked their health pass and train ticket during Covid-19. In parallel with the online-stores role.",
-        },
-        achievements: [
-          {
-            fr: "**+100 % sur le taux de conversion** de la première étape de récupération du billet : parcours retravaillé à partir des retours des voyageurs collectés sur Twitter (extraction quotidienne via Zapier).",
-            en: "**+100% conversion rate** on the first step of ticket retrieval: journey reworked from traveler feedback collected on Twitter (daily extraction via Zapier).",
-          },
-          {
-            fr: "**Plateforme redéveloppée en interne** après une première version externalisée, pour fluidifier l'embarquement en gare.",
-            en: "**Platform rebuilt in-house** after a first outsourced version, to smooth station boarding.",
-          },
-        ],
-        methodology: "Kanban",
-        team: {
-          fr: "4 développeurs, 1 Engineering Manager",
-          en: "4 developers, 1 Engineering Manager",
-        },
-        skills: ["user-research", "zapier", "discovery", "jira", "matomo"],
-      },
+      // Les deux postes 2020-2022 (boutiques en ligne, puis Prêt à Voyager en
+      // parallèle d'octobre 2021 à avril 2022) tenaient deux blocs et faisaient
+      // peser SNCF 46 % de la section Expériences contre 29 % à AB Tasty
+      // (mesuré le 7 sept. 2026). Fusionnés en un bloc, quatrième revue externe,
+      // choix d'Antoine : « elles ont peu de valeur face aux plus récentes ».
       {
         title: "Product Manager",
         start: "2020-09",
         end: "2022-04",
         context: {
-          fr: "Mission : l'outil de génération de boutiques en ligne de titres de transport, pour deux clients : Transilien (boutique.transilien.com) et TER (commande de cartes billettique). D'octobre 2021 à avril 2022, en parallèle du poste sur Prêt à Voyager.",
-          en: "Mission: the online store generator for transport tickets, for two clients: Transilien (boutique.transilien.com) and TER (smart-card ordering). From October 2021 to April 2022, in parallel with the Prêt à Voyager role.",
+          fr: "Mission : l'outil de génération de boutiques en ligne de titres de transport (Transilien, TER), puis en parallèle, d'octobre 2021 à avril 2022, la plateforme sanitaire Prêt à Voyager (jusqu'à **40 000 visiteurs par jour**), où les voyageurs vérifiaient eux-mêmes pass sanitaire et billet pendant le Covid-19.",
+          en: "Mission: the online store generator for transport tickets (Transilien, TER), then in parallel, from October 2021 to April 2022, the Prêt à Voyager health-pass platform (up to **40,000 visitors a day**), where travelers self-checked their health pass and ticket during Covid-19.",
         },
         achievements: [
           {
-            fr: "**Une mission et une vision produit communes** aux stakeholders et au service marketing, formalisées et partagées.",
-            en: "**A shared product mission and vision** for stakeholders and the marketing team, formalized and communicated.",
+            fr: "**+100 % sur le taux de conversion** de la première étape de récupération du billet sur Prêt à Voyager : parcours retravaillé à partir des retours des voyageurs collectés sur Twitter (extraction quotidienne via Zapier), plateforme redéveloppée en interne.",
+            en: "**+100% conversion rate** on the first step of ticket retrieval on Prêt à Voyager: journey reworked from traveler feedback collected on Twitter (daily extraction via Zapier), platform rebuilt in-house.",
           },
           {
-            fr: "**Stratégie 2021 tenue par des OKR** : roadmap de delivery, priorisation du backlog, User Stories.",
-            en: "**2021 strategy held by OKRs**: delivery roadmap, backlog prioritization, User Stories.",
+            fr: "**Une mission et une vision produit communes** aux stakeholders et au service marketing des boutiques en ligne, formalisées et partagées.",
+            en: "**A shared product mission and vision** for the online-store stakeholders and the marketing team, formalized and communicated.",
           },
           {
-            fr: "**Discovery relancé** : sondages utilisateurs, exploitation de la data disponible.",
-            en: "**Discovery relaunched**: user surveys, mining the available data.",
+            fr: "**Stratégie 2021 tenue par des OKR** : roadmap de delivery, priorisation du backlog, discovery relancé (sondages utilisateurs, exploitation de la data disponible).",
+            en: "**2021 strategy held by OKRs**: delivery roadmap, backlog prioritization, discovery relaunched (user surveys, mining the available data).",
           },
         ],
-        methodology: "Scrum",
+        methodology: { fr: "Scrum, Kanban", en: "Scrum, Kanban" },
         team: {
-          fr: "3 développeurs, 1 Scrum Master, 1 Delivery Manager",
-          en: "3 developers, 1 Scrum Master, 1 Delivery Manager",
+          fr: "3 développeurs, 1 Scrum Master, 1 Delivery Manager (boutiques) · 4 développeurs, 1 Engineering Manager (Prêt à Voyager)",
+          en: "3 developers, 1 Scrum Master, 1 Delivery Manager (stores) · 4 developers, 1 Engineering Manager (Prêt à Voyager)",
         },
-        skills: ["okr", "roadmapping", "user-stories", "product-ownership", "agile", "discovery", "stakeholder", "jira", "miro", "akeneo"],
+        skills: ["user-research", "okr", "roadmapping", "user-stories", "product-ownership", "agile", "discovery", "stakeholder", "zapier", "jira", "miro", "matomo", "akeneo"],
       },
       {
         // Rôle d'animation gardé en bloc à part (et pas en simple puce) :
@@ -561,8 +548,8 @@ const EXPERIENCES = [
         start: "2016-08",
         end: "2020-09",
         context: {
-          fr: "Mission : la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), puis les web services (API) de distribution des titres TER et urbains utilisés par les canaux de vente.",
-          en: "Mission: digitizing B2B group-ticket sales (SNCF sales staff, travel agencies), then the web services (APIs) distributing regional (TER) and urban tickets to the sales channels.",
+          fr: "Mission : la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), dont j'avais été lead test côté grand public, puis les web services (API) de distribution des titres TER et urbains utilisés par les canaux de vente.",
+          en: "Mission: digitizing B2B group-ticket sales (SNCF sales staff, travel agencies), where I had been test lead on the consumer side, then the web services (APIs) distributing regional (TER) and urban tickets to the sales channels.",
         },
         // Condensé à une mission et une puce (sept. 2026, second retour
         // d'expert, choix d'Antoine) : le bloc SNCF pesait plus que les rôles
@@ -581,26 +568,15 @@ const EXPERIENCES = [
         },
         skills: ["api", "roadmapping", "story-mapping", "user-stories", "product-ownership", "stakeholder", "agile", "bdd", "jira", "miro", "postman"],
       },
+      // Réduit au titre et aux dates (7 sept. 2026, quatrième revue) : dix-huit
+      // mois de QA il y a dix ans n'ont plus à occuper un bloc entier. Le fait
+      // est repris dans la mission du poste Junior juste au-dessus. Les dates
+      // restent : elles portent la durée totale SNCF et le rail chronologique.
       {
         title: "QA",
         start: "2015-01",
         end: "2016-08",
-        context: {
-          fr: "Mission : les campagnes de tests des applications web et mobiles de réservation Thalys et d'un portail entreprises B2B.",
-          en: "Mission: test campaigns for the Thalys web and mobile booking apps and a B2B corporate portal.",
-        },
-        achievements: [
-          {
-            fr: "**Lead test de la première phase** de la digitalisation de la vente de billets groupes, côté grand public.",
-            en: "**Test lead on the first phase** of the group-ticket sales digitization, consumer side.",
-          },
-        ],
-        methodology: "Scrum",
-        team: {
-          fr: "4 développeurs, 1 Product Manager",
-          en: "4 developers, 1 Product Manager",
-        },
-        skills: ["agile", "user-stories"],
+        skills: [],
       },
     ],
   },
