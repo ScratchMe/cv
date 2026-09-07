@@ -5,6 +5,12 @@ Lu automatiquement par Claude Code au démarrage d'une session dans ce dossier.
 
 ## Ce que c'est
 
+**Chantier en cours (sept. 2026)** : `docs/plan-quatrieme-revue.md` — le plan
+d'implémentation en six lots issu de la quatrième revue externe, avec les
+décisions d'Antoine, les textes à valider et le statut par lot. Le lire avant
+de toucher aux expériences, aux compétences ou à l'ordre des sections.
+`docs/` n'est pas servi sur le domaine (`exclude` de `_config.yml`).
+
 Site CV statique bilingue (FR/EN), HTML/CSS/JS vanilla, hébergé sur GitHub
 Pages avec domaine personnalisé `cv.antoine.berthaud.me`. Piloté par la
 donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.

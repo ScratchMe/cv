@@ -5,6 +5,7 @@
 # et assets/ restent servis normalement.
 exclude:
   - CLAUDE.md
+  - docs/
   - README.md
   - package.json
   - package-lock.json
