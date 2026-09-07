@@ -267,7 +267,18 @@ analysis » dans la chaîne SNCF : les études ne les décrivent pas.
 
 ## Lot 6 — Contenu
 
-### Réponse à la question 8 (structure des études de cas)
+### Fait (PR #66) — structure des études de cas
+
+Les hypothèses et les arbitrages étaient déjà écrits, noyés dans les champs
+`challenge` et `action`. Le travail a été de les sortir, pas de les inventer :
+deux blocs optionnels « Mon hypothèse » et « Ce que j'ai écarté » dans
+`RESULT_DETAILS`, rendus par `results.js` entre le défi et l'action. Aucun
+fait nouveau. Longueurs : 309, 410 et 319 mots en français (budget 450).
+
+Le bloc « En bref » du plan n'a pas été ajouté : le chiffre et son libellé sont
+déjà en tête de chaque étude, et la carte de l'accueil joue ce rôle.
+
+### Réponse initiale à la question 8 (structure des études de cas)
 
 La structure en dix sections de l'auditeur (Contexte, Signal, Hypothèses,
 Discovery, Options, Arbitrages, Delivery, Expérimentation, Résultat,

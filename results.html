@@ -113,13 +113,22 @@
 
         <section class="result-star">
           <h3>Défi</h3>
-          <p>Un churn à <strong>15%</strong> et une sur-sollicitation du support CSM, alors que le produit n'offrait aucun accompagnement à l'onboarding. Mon hypothèse : un problème d'activation plutôt que de fit produit — confirmée en comparant nos chiffres au benchmark <strong>Userpilot</strong>, nettement en dessous.</p><p>Plutôt que d'attaquer tout le sujet du churn (ICP à revoir, accessibilité des outils...), j'ai choisi de me concentrer sur ce trou en tout début de funnel, là où le gain potentiel était le plus important.</p>
+          <p>Un churn à <strong>15%</strong> et une sur-sollicitation du support CSM, alors que le produit n'offrait aucun accompagnement à l'onboarding.</p>
           
         </section>
 
+
+        <section class="result-star">
+          <h3>Mon hypothèse</h3>
+          <p>Un problème d'<strong>activation</strong> plutôt que de fit produit. Vérifié avant d'investir, en comparant nos chiffres au benchmark <strong>Userpilot</strong> : nettement en dessous.</p>
+        </section>
+        <section class="result-star">
+          <h3>Ce que j'ai écarté</h3>
+          <p><strong>Attaquer le churn dans son ensemble</strong> (ICP à revoir, accessibilité des outils...) : j'ai préféré le trou en tout début de funnel, là où le gain potentiel était le plus important.</p><p><strong>Un simple correctif d'onboarding</strong> : il aurait traité le symptôme sans rien laisser derrière lui pour la suite.</p>
+        </section>
         <section class="result-star">
           <h3>Action</h3>
-          <p>J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.</p><p>Plutôt qu'un simple correctif, j'ai conçu un <strong>moteur de qualification à l'inscription</strong> (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :</p>
+          <p>J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.</p><p>J'ai donc conçu un <strong>moteur de qualification à l'inscription</strong> (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :</p>
           <ul class="detail-list"><li>Adapter l'onboarding à chaque profil utilisateur.</li><li>Alimenter la segmentation utilisateur pour d'autres besoins produit.</li></ul>
         </section>
         
@@ -154,6 +163,15 @@
           <ul class="detail-list"><li>Seulement 6 wagons affichés à la fois.</li><li>Aucune navigation rapide entre les champs.</li><li>Pas d'import de tableur.</li></ul>
         </section>
 
+
+        <section class="result-star">
+          <h3>Mon hypothèse</h3>
+          <p>Le temps de saisie ne venait pas que de l'interface : une partie des informations demandées existait déjà dans le module « Planification ». En faisant dialoguer les deux, une bonne part du formulaire pouvait se remplir toute seule.</p>
+        </section>
+        <section class="result-star">
+          <h3>Ce que j'ai écarté</h3>
+          <p><strong>Retoucher l'interface existante au fil de l'eau</strong>, sans plan de migration : plus rapide à lancer, mais impossible à tenir sur la durée et bien moins rassurant pour la direction, qui devait engager une refonte d'architecture.</p>
+        </section>
         <section class="result-star">
           <h3>Action</h3>
           <p>J'ai construit et porté auprès de la direction un <strong>plan de migration</strong> du module Exécution vers une nouvelle architecture, livré en approche incrémentale avec un premier MVP en moins de 2 mois. Cette nouvelle architecture m'a permis de faire dialoguer le module avec « Planification » pour <strong>pré-remplir automatiquement le formulaire</strong> à partir d'informations déjà saisies ailleurs (trajet, nombre de wagons, marchandises).</p><p>En parallèle, j'ai mené moi-même la recherche utilisateur et le maquettage UI/UX (Hotjar, Heap) — avant l'arrivée d'une Product Designer — pour repenser un formulaire cette fois pensé pour des trains de 30 wagons et plus.</p>
@@ -191,9 +209,18 @@
           <ul class="detail-list"><li>Aucune donnée produit disponible — la plateforme ayant été développée à l'extérieur, on n'avait que le nombre de visiteurs et le taux de validation du pass sanitaire.</li><li>Les interviews utilisateurs classiques étaient à exclure : en gare, en pleine épidémie, elles auraient créé un risque d'attroupement évitable.</li></ul>
         </section>
 
+
+        <section class="result-star">
+          <h3>Mon hypothèse</h3>
+          <p>Le blocage venait de la première étape elle-même : l'outil imposait de <strong>scanner le QR code du billet</strong>, alors qu'une grande partie des voyageurs n'avaient leur billet que sur mobile — donc rien à scanner.</p>
+        </section>
+        <section class="result-star">
+          <h3>Ce que j'ai écarté</h3>
+          <p><strong>Les entretiens utilisateurs classiques</strong> : en gare, en pleine épidémie, ils auraient créé un risque sanitaire. Il fallait un signal sans contact — d'où les tweets.</p>
+        </section>
         <section class="result-star">
           <h3>Action</h3>
-          <p>J'ai mis en place une <strong>extraction quotidienne automatique des tweets</strong> mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.</p><p>Ça a confirmé un point noir que je soupçonnais déjà : l'outil imposait de <strong>scanner le QR code du billet</strong>, alors qu'une grande partie des utilisateurs avaient leur billet uniquement sur mobile — donc rien à scanner. J'ai ajouté une <strong>deuxième méthode de récupération</strong>, par nom et numéro de dossier, en alternative au QR code.</p><p>Le taux de conversion de cette première étape a doublé.</p>
+          <p>J'ai mis en place une <strong>extraction quotidienne automatique des tweets</strong> mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.</p><p>Ça a confirmé l'hypothèse. J'ai ajouté une <strong>deuxième méthode de récupération</strong>, par nom et numéro de dossier, en alternative au QR code.</p><p>Le taux de conversion de cette première étape a doublé.</p>
           
         </section>
         

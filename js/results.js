@@ -88,6 +88,23 @@
           ${r.challengePoints ? richList(r.challengePoints) : ""}
         </section>
 
+${
+          r.hypothesis
+            ? `
+        <section class="result-star">
+          <h3>${t("results.hypothesis")}</h3>
+          ${richParagraphs(r.hypothesis)}
+        </section>`
+            : ""
+        }${
+          r.discarded
+            ? `
+        <section class="result-star">
+          <h3>${t("results.discarded")}</h3>
+          ${richParagraphs(r.discarded)}
+        </section>`
+            : ""
+        }
         <section class="result-star">
           <h3>${t("results.action")}</h3>
           ${richParagraphs(r.action)}

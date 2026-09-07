@@ -195,6 +195,11 @@
     },
     "results.context": { fr: "Contexte", en: "Context" },
     "results.challenge": { fr: "Défi", en: "Challenge" },
+    // Deux étapes ajoutées le 7 sept. 2026 (quatrième revue) : ce qui manquait
+    // n'était pas le résultat mais le raisonnement — ce que j'ai supposé, et ce
+    // que j'ai écarté. Les deux champs sont optionnels dans RESULT_DETAILS.
+    "results.hypothesis": { fr: "Mon hypothèse", en: "My hypothesis" },
+    "results.discarded": { fr: "Ce que j'ai écarté", en: "What I ruled out" },
     "results.action": { fr: "Action", en: "Action" },
     "results.result": { fr: "Résultat", en: "Result" },
     "results.lesson": { fr: "Leçon", en: "Lesson" },
