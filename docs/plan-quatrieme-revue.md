@@ -305,20 +305,17 @@ Proposition : le fond en six blocs, le format STAR actuel plus deux champs.
 Budget : 450 mots par étude au plus. Les trois cartes de l'accueil donnent la
 lecture en 30 secondes, `results.html` la lecture en trois minutes.
 
-### Quatrième étude : Sales-Led → hybride chez AB Tasty
+### Quatrième étude : Sales-Led → hybride chez AB Tasty · FAIT (PR #67)
 
-Sans chiffre d'impact (lancement suspendu), et c'est l'histoire la plus
-senior du site : business case, arbitrages de périmètre entre trois PM,
-tunnel livré derrière un feature flag, décision de la direction après la
-fusion avec VWO. Reliée à la carte Leadership plutôt qu'à un chiffre du hero.
-Méthode : brouillon préparé à partir des puces du rôle, puis une question à
-la fois à Antoine (hypothèse, options écartées, ce qu'il en retient).
+Écrite à partir de la matière donnée par Antoine le 7 septembre. Pas de champ
+`value` : le chantier a été livré mais jamais lancé. Un champ `status` prend
+la place du chiffre. 450 mots en français, 442 en anglais.
 
-### Scope Everysens et SNCF
+### Scope Everysens et SNCF · ABANDONNÉ
 
-Une question par entreprise, dans cet ordre : Everysens (nombre de clients
-ou d'opérateurs, volume de wagons ou de trains suivis), puis SNCF boutiques
-(nombre de boutiques générées, commandes). Sans chiffre, pas de ligne.
+Réponse d'Antoine : trop de clients et de cas d'usage différents sur une
+faible volumétrie, un ordre de grandeur n'aurait aucun sens. Seul AB Tasty
+porte une ligne de scope.
 
 ---
 

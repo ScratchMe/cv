@@ -107,7 +107,9 @@
       // rien ne disait que les chiffres étaient cliquables, et results.html
       // n'était liée nulle part ailleurs.
       // Études DISTINCTES : deux chiffres peuvent pointer la même étude.
-      const linkedCount = new Set(HERO_STATS.filter((s) => s.resultId && RESULT_DETAILS[s.resultId]).map((s) => s.resultId)).size;
+      // Toutes les études publiées, pas seulement celles reliées à un chiffre :
+      // la quatrième (modèle hybride) n'en a pas et compte quand même.
+      const linkedCount = Object.values(RESULT_DETAILS).filter((d) => d.cardTitle).length;
       const existing = document.getElementById("heroStatsLink");
       if (existing) existing.remove();
       if (linkedCount > 0) {
@@ -260,7 +262,11 @@
   function renderCaseStudies() {
     const grid = document.getElementById("caseGrid");
     if (!grid) return;
-    const ids = [...new Set(HERO_STATS.map((s) => s.resultId).filter(Boolean))].filter(
+    // Les études reliées à un chiffre du hero d'abord (le chiffre est
+    // l'accroche), puis celles qui n'en ont pas — une étude peut n'avoir aucun
+    // résultat chiffré et rester la plus intéressante à lire.
+    const fromHero = [...new Set(HERO_STATS.map((s) => s.resultId).filter(Boolean))];
+    const ids = [...fromHero, ...Object.keys(RESULT_DETAILS).filter((id) => !fromHero.includes(id))].filter(
       (id) => RESULT_DETAILS[id] && RESULT_DETAILS[id].cardTitle
     );
     grid.innerHTML = ids
@@ -273,7 +279,11 @@
         <h3 class="case-title">${tc(d.cardTitle)}</h3>
         <p class="case-line"><b>${t("cases.problem")}</b> ${tc(d.problem)}</p>
         <p class="case-line"><b>${t("cases.approach")}</b> ${tc(d.approach)}</p>
-        <p class="case-result"><span class="case-value">${stat ? stat.value : d.value}</span> ${tc(d.label)}</p>
+        ${
+          stat || d.value
+            ? `<p class="case-result"><span class="case-value">${stat ? stat.value : d.value}</span> ${tc(d.label)}</p>`
+            : `<p class="case-result case-result-status">${tc(d.label)}</p>`
+        }
         <span class="case-cta">${t("cases.cta")}</span>
       </a>`;
       })
