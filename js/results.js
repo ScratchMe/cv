@@ -50,7 +50,9 @@
   // que d'itérer RESULT_DETAILS directement, pour que l'ordre d'affichage
   // ici corresponde toujours à l'ordre des chiffres dans le hero.
   function orderedResultIds() {
-    return HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]);
+    // Dédupliqué : deux chiffres du hero peuvent pointer la même étude
+    // (AB Tasty porte le +15 % d'activation et le -20 % de Time-to-Value).
+    return [...new Set(HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]))];
   }
 
   function renderBlock(id) {
