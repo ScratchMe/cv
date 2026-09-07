@@ -534,25 +534,6 @@ const EXPERIENCES = [
         skills: ["user-research", "okr", "roadmapping", "prioritization", "stakeholder", "discovery"],
       },
       {
-        // Rôle d'animation gardé en bloc à part (et pas en simple puce) :
-        // c'est le signal « sait animer et faire grandir des gens » qu'un
-        // recruteur cherche pour un profil de manager. Titre lisible de
-        // l'extérieur, sans le nom interne « cercle ».
-        title: { fr: "Animateur de la communauté Product Management", en: "Product Management Community Lead" },
-        start: "2019-04",
-        end: "2020-02",
-        context: {
-          fr: "Animation de la communauté de pratiques Product Management de l'entreprise, **plus de 100 personnes**, en parallèle du poste de Product Manager.",
-          en: "Led the company's Product Management community of practice, **100+ people**, alongside the Product Manager role.",
-        },
-        achievements: [
-          { fr: "Partage de veille sur les pratiques Product Management et animation des temps d'échange.", en: "Shared Product Management practice insights and ran the community's sessions." },
-          { fr: "Ateliers et exercices pour faire progresser la communauté.", en: "Workshops and exercises to help the community grow." },
-          { fr: "Mentorat de 2 à 3 personnes tout au long du mandat.", en: "Mentored 2 to 3 people throughout the term." },
-        ],
-        skills: ["mentoring", "cross-functional-leadership"],
-      },
-      {
         title: { fr: "Product Manager Junior", en: "Junior Product Manager" },
         start: "2016-08",
         end: "2020-09",
@@ -569,13 +550,24 @@ const EXPERIENCES = [
             fr: "**Du besoin métier à la livraison** : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.",
             en: "**From business need to delivery**: workshops and high-level sizing with business teams, roadmap and Story Mapping, User Stories and BDD scenarios, acceptance of delivered features.",
           },
+          // Le rôle d'animation de la communauté PM avait son propre bloc
+          // (avr. 2019 – févr. 2020) : supprimé le 7 sept. 2026 (choix
+          // d'Antoine, quatrième revue). Dix mois en parallèle d'un poste
+          // junior ne valaient pas un bloc entier sur un CV senior, et le
+          // signal leadership est déjà porté par la carte « Leadership » du
+          // haut de page, que le recruteur voit avant les expériences. La
+          // puce garde le verbe, le chiffre et la durée.
+          {
+            fr: "**Communauté de pratiques PM de plus de 100 personnes animée** pendant dix mois, en parallèle du poste : veille, ateliers, mentorat de 2 à 3 personnes.",
+            en: "**Ran the company's 100+ people Product Management community** for ten months alongside the role: practice insights, workshops, mentoring 2 to 3 people.",
+          },
         ],
         methodology: "Scrum",
         team: {
           fr: "Jusqu'à 15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
           en: "Up to 15 developers, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
         },
-        skills: ["api", "user-stories", "story-mapping", "bdd", "agile"],
+        skills: ["api", "user-stories", "story-mapping", "bdd", "agile", "mentoring"],
       },
       // Réduit au titre et aux dates (7 sept. 2026, quatrième revue) : dix-huit
       // mois de QA il y a dix ans n'ont plus à occuper un bloc entier. Le fait
