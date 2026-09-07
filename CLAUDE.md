@@ -178,21 +178,30 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   format : quand un rôle n'en a pas (boutiques en ligne SNCF), la puce
   ouvre sur le livrable. Une puce qui ne faisait que donner le résultat
   d'une autre fusionne avec elle (Everysens) ; ce qui est déjà dit dans un
-  autre bloc n'est pas répété (la veille PM est dans le bloc communauté).
+  autre bloc n'est pas répété.
 - **Compétences en cinq groupes par ordre d'importance** (sept. 2026,
   second retour d'expert) : Growth & stratégie, Discovery & data,
   Leadership, Delivery, Outils & technique (clés `growth`, `discovery`,
   `leadership`, `delivery`, `tools` dans `data.js`, libellés dans
   `i18n.js`). Rien n'est supprimé, les mots-clés servent aux outils de tri.
   Sur le site le libellé est toujours au-dessus des chips ; dans les PDF il
-  passe en colonne à gauche (108 px complet, 96 px court).
+  passe en colonne à gauche (108 px complet, 96 px court). Depuis le 7 sept.
+  2026 le cinquième groupe s'appelle « Technique » (clé `tech`) et les outils
+  ont leur ligne à part (voir la décision suivante).
 - **Débuts SNCF condensés** (sept. 2026, choix d'Antoine sur le second
   retour d'expert : « l'expérience SNCF est énorme alors que ce n'est pas
   celle qui a le plus d'importance, AB Tasty reste la plus intéressante »)
   : Product Manager Junior 2016-2020 et QA 2015-2016 tiennent en une
   mission et une puce chacun, ligne Équipe conservée (15 développeurs,
-  2 PM). Revient sur l'item 18 de l'audit qui les avait étoffés ; le
-  bloc « Animateur de la communauté » garde ses trois puces (leadership).
+  2 PM). Revient sur l'item 18 de l'audit qui les avait étoffés.
+- **Bloc « Animateur de la communauté » supprimé, la puce reste** (7 sept.
+  2026, choix d'Antoine sur la quatrième revue) : dix mois d'animation en
+  parallèle d'un poste junior ne valaient pas un bloc de rôle sur un CV
+  senior. Le fait vit désormais dans une puce du poste Junior (verbe, chiffre,
+  durée) et surtout dans la carte « Leadership » du haut de page, que le
+  recruteur voit avant les expériences. Ne pas écrire « Responsable de la
+  communauté » : le titre réel était « Animateur », et la carte Leadership
+  n'est pas rallongée — trois puces courtes est ce qui la rend lisible.
 - **Compétences sans filtres, trente pratiques** (7 sept. 2026, quatrième
   revue, choix d'Antoine : les filtres étaient « plus gadget qu'autre chose »
   et n'ont plus de sens une fois la section passée sous les expériences) : les

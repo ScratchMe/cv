@@ -65,76 +65,17 @@ est trivial et peut se glisser n'importe où après le 4.
 perd 420 px, la page mobile passe de 21,0 à 20,4 écrans, le PDF complet
 garde 5 pages mais la dernière est à moitié vide (449 pt contre 48 pt avant).
 
-**Cible non atteinte** : les 30 % supposent de retirer un bloc SNCF de plus.
-Les quatre blocs restants pèsent 1 331 px (PM 2020-2022 460, Animateur 268,
-PM Junior 324, QA 62). Le lot 3 (tags réduits) n'y changera rien : il fait
-maigrir AB Tasty autant que SNCF. Options soumises à Antoine, à trancher :
-(a) en rester là — AB Tasty ouvre la section, SNCF est réparti sur quatre
-rôles dont deux anciens ; (b) réduire le poste Junior à sa mission et le bloc
-Animateur à sa mission plus la puce de mentorat → SNCF ≈ 36 % ; (c) fondre le
-bloc Animateur en puce du poste Junior, ce qui revient sur une décision de
-CLAUDE.md → SNCF ≈ 32 %.
+**Après le lot 3bis** (bloc « Animateur » supprimé, PR #64, option C
+retenue par Antoine) : AB Tasty 33,6 %, Everysens 17,2 %, SNCF 34,6 %, ESN
+14,7 %. Départ : 28,8 / 14,0 / 46,0 / 11,2. La section a perdu un tiers de sa
+hauteur (4 320 → 2 925 px), la page mobile 21,0 → 20,2 écrans, l'accueil
+1 857 → 1 644 mots sans JavaScript.
 
-### Changements
-
-`js/data.js`, `EXPERIENCES`, bloc SNCF Connect & Tech :
-
-1. **Fusion des deux postes 2020–2022** (Prêt à Voyager 2021-10 → 2022-04 et
-   boutiques en ligne 2020-09 → 2022-04) en un seul rôle `Product Manager`,
-   `start: "2020-09"`, `end: "2022-04"`, méthodologie `Scrum, Kanban`, équipe
-   « 3 développeurs, 1 Scrum Master, 1 Delivery Manager (boutiques) · 4
-   développeurs, 1 Engineering Manager (Prêt à Voyager) ». `RESULT_DETAILS`
-   (`sncf-ticket-retrieval`, période 2021 – 2022) ne change pas.
-2. **QA réduite au titre et aux dates** : `context` et `achievements` retirés,
-   `methodology` et `team` retirés (le rendu d'un rôle sans puces n'affiche
-   pas le libellé « Accomplissements », `app.js` l. 318). Dates conservées,
-   donc durée totale SNCF et rail chronologique inchangés. Le rôle reste
-   replié sur téléphone derrière « Voir mes débuts ».
-3. **Scope AB Tasty** : nouveau champ `scope: { fr, en }` au niveau entreprise,
-   rendu sous la localisation dans `.company-header` (`app.js`, nouvelle
-   classe `.company-scope`, 13 px, `--ink-soft`). Affiché dans les deux PDF
-   (une ligne). Le champ est optionnel : Everysens et SNCF l'auront au lot 6.
-
-### Textes à valider
-
-Rôle fusionné, contexte :
-
-> Mission : l'outil de génération de boutiques en ligne de titres de
-> transport (Transilien, TER), puis en parallèle, d'octobre 2021 à avril
-> 2022, la plateforme sanitaire Prêt à Voyager (jusqu'à **40 000 visiteurs
-> par jour**), où les voyageurs vérifiaient eux-mêmes pass sanitaire et
-> billet pendant le Covid-19.
-
-Puces :
-
-1. **+100 % sur le taux de conversion** de la première étape de récupération
-   du billet sur Prêt à Voyager : parcours retravaillé à partir des retours
-   des voyageurs collectés sur Twitter (extraction quotidienne via Zapier),
-   plateforme redéveloppée en interne.
-2. **Une mission et une vision produit communes** aux stakeholders et au
-   service marketing des boutiques en ligne, formalisées et partagées.
-3. **Stratégie 2021 tenue par des OKR** : roadmap de delivery, priorisation
-   du backlog, discovery relancé (sondages utilisateurs, data disponible).
-
-Scope AB Tasty (sous « Nantes, France ») :
-
-> 1 000+ organisations clientes · 5 000 utilisateurs actifs mensuels ·
-> 50 M€ d'ARR
-
-À confirmer par Antoine : la devise (euros ?) et le fait que l'ARR soit
-partageable publiquement (le site est public). Sans confirmation, la ligne
-s'arrête aux organisations et aux utilisateurs.
-
-Versions anglaises rédigées dans la PR, à relire.
-
-### Vérifications propres au lot
-
-- Rail chronologique : le segment SNCF garde ses dates (2015-01 → 2022-04).
-- Rôle QA sans puces : pas de libellé orphelin, pas de ligne Méthodologie.
-- Bloc « Animateur de la communauté » inchangé.
-- PDF complet : la page 3 ou 4 ne laisse pas de trou (les règles de saut de
-  page ont été assouplies le 6 septembre, à re-vérifier avec un bloc de
-  moins).
+Les 30 % ne sont pas atteints et ne le seront pas sans abîmer le contenu : il
+resterait à retirer 134 px des trois blocs SNCF (le poste 2020-2022, le poste
+Junior, la QA à deux lignes). SNCF pèse 6,7 ans sur 15 ; 34,6 % pour 45 % du
+temps, avec AB Tasty en tête de section, est l'équilibre retenu. Sujet clos
+sauf demande d'Antoine.
 
 ---
 
