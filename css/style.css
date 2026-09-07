@@ -269,6 +269,10 @@ body.early-collapsed .role-early,body.early-collapsed .company-early{display:non
 .formation-subtitle{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:12px;font-family:'Space Grotesk',sans-serif;}
 .formation-col .formation-subtitle:not(:first-child){margin-top:22px;}
 .formation-list{list-style:none;display:flex;flex-direction:column;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+/* Une liste vide (TRAININGS = [] depuis sept. 2026) laissait une carte blanche
+   sans contenu : son titre est masqué par app.js, la carte l'est par :empty —
+   qui l'emporte sur .formation-list (spécificité classe + pseudo-classe). */
+.formation-list:empty{display:none;}
 .formation-list li{padding:16px 20px;border-bottom:1px solid var(--line);}
 .formation-list li:last-child{border-bottom:none;}
 .formation-item-title{font-size:14.5px;font-weight:600;margin-bottom:3px;}
