@@ -177,11 +177,12 @@
       <nav>
         <ul>
           <li><a href="#profil" data-i18n="nav.profile">Profil</a></li>
-          <li><a href="#competences" data-i18n="nav.skills">Compétences</a></li>
           <li><a href="#experiences" data-i18n="nav.experience">Expériences</a></li>
+          <li><a href="#etudes-de-cas" data-i18n="nav.cases">Études de cas</a></li>
+          <li><a href="#competences" data-i18n="nav.skills">Compétences</a></li>
           <li><a href="#formation" data-i18n="nav.formation">Formation</a></li>
-          <li><a href="#fit-checker" data-i18n="nav.fit">Fit-Checker</a><span class="ai-badge" data-i18n="fit.badge">IA</span></li>
           <li class="nav-side-projects"><a href="#projects" data-i18n="nav.projects">Side projects</a></li>
+          <li><a href="#fit-checker" data-i18n="nav.fit">Fit-Checker</a><span class="ai-badge" data-i18n="fit.badge">IA</span></li>
           <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
           <li class="nav-indicator" id="navIndicator" aria-hidden="true"></li>
         </ul>
@@ -200,7 +201,7 @@
              son segment « court » (2 pages). Deux boutons séparés faisaient passer
              le menu sur deux lignes à 1 280 px. -->
         <div class="pdf-group">
-          <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger PDF" data-goatcounter-click="pdf-download">
+          <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger le CV (PDF, 2 pages)" data-goatcounter-click="pdf-download">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"/>
             <path d="M7 10l5 5 5-5"/>
@@ -208,7 +209,7 @@
           </svg>
           <span data-i18n="nav.printShort">PDF</span>
         </button>
-          <button id="printShortBtn" class="btn label-btn pdf-short" type="button" data-i18n-aria="nav.printShortBtn" aria-label="Télécharger le CV court (PDF, 2 pages)" title="Télécharger le CV court (PDF, 2 pages)" data-goatcounter-click="pdf-download-court"><span data-i18n="nav.printShortLabel">court</span></button>
+          <button id="printShortBtn" class="btn label-btn pdf-short" type="button" data-i18n-aria="nav.printShortBtn" aria-label="Télécharger le CV complet (PDF, 5 pages)" title="Télécharger le CV complet (PDF, 5 pages)" data-goatcounter-click="pdf-download-complet"><span data-i18n="nav.printShortLabel">complet</span></button>
         </div>
       </div>
     </div>
@@ -269,14 +270,6 @@
       </div>
     </section>
 
-    <!-- ============================= TEASER FIT-CHECKER ============================= -->
-    <div class="fit-teaser wrap">
-      <a href="#fit-checker" class="fit-teaser-inner">
-        <span class="ai-badge ai-badge-lg"><span aria-hidden="true">✨</span> <span data-i18n="fit.badge">IA</span></span>
-        <span class="fit-teaser-text" data-i18n="fitTeaser.text">Recruteur·se ? Vérifiez en 10 secondes si mon profil correspond à votre poste.</span>
-        <span class="fit-teaser-cta" data-i18n="fitTeaser.cta">Essayer le Fit-Checker →</span>
-      </a>
-    </div>
 
     <!-- ============================= PILIERS (4 cartes) ============================= -->
     <section class="pillars wrap">
@@ -307,54 +300,11 @@
       <article class="pillar" data-id="leadership">
         <h3>Leadership</h3>
         <div class="sub">Des PM et des équipes à faire avancer, un cap tenu avec la direction.</div>
-        <ul><li>Deux PM animés sur le chantier self-serve d'AB Tasty : répartition du plan, arbitrages de périmètre.</li><li>Communauté de pratiques PM de plus de 100 personnes chez SNCF, mentorat de 2 à 3 personnes.</li><li>Business case et roadmap portés auprès de la direction ; squads jusqu'à 15 développeurs.</li></ul>
+        <ul><li>Deux PM animés sur le chantier self-serve d'AB Tasty : répartition du plan, arbitrages de périmètre.</li><li>Élu responsable de la communauté de pratiques PM de SNCF, plus de 100 personnes, reconduit pour un second mandat ; mentorat de 2 à 3 personnes.</li><li>Business case et roadmap portés auprès de la direction ; squads jusqu'à 15 développeurs.</li></ul>
       </article></div>
 <!-- /static:pillarGrid -->
     </section>
 
-    <!-- ============================= COMPÉTENCES ============================= -->
-    <section id="competences" class="skills-section wrap">
-      <div class="sectitle">
-        <h2 id="skillsTitle" data-i18n="skills.sectionTitle">Compétences</h2>
-      </div>
-      <!-- static:skillsGroups -->
-<div class="skills-groups" id="skillsGroups" role="group" aria-labelledby="skillsTitle">
-      <div class="skills-group">
-        <span class="skills-group-label">Growth &amp; stratégie</span>
-        <div class="skills-chips">
-          <span class="chip">Product-Led Growth</span><span class="chip">Monétisation self-serve</span><span class="chip">Onboarding &amp; activation</span><span class="chip">Rétention</span><span class="chip">A/B testing &amp; expérimentation</span><span class="chip">Stratégie produit</span><span class="chip">OKR</span><span class="chip">Roadmapping</span><span class="chip">Priorisation</span>
-        </div>
-      </div>
-      <div class="skills-group">
-        <span class="skills-group-label">Discovery &amp; data</span>
-        <div class="skills-chips">
-          <span class="chip">Discovery</span><span class="chip">User Research</span><span class="chip">Product Analytics</span><span class="chip">SQL</span><span class="chip">Metabase</span><span class="chip">Mixpanel</span><span class="chip">Segment</span>
-        </div>
-      </div>
-      <div class="skills-group">
-        <span class="skills-group-label">Leadership</span>
-        <div class="skills-chips">
-          <span class="chip">Stakeholder Management</span><span class="chip">Cross-functional Leadership</span><span class="chip">Mentoring &amp; Coaching</span>
-        </div>
-      </div>
-      <div class="skills-group">
-        <span class="skills-group-label">Delivery</span>
-        <div class="skills-chips">
-          <span class="chip">Agile / Scrum</span><span class="chip">User Stories &amp; Backlog</span><span class="chip">Story Mapping</span><span class="chip">BDD</span><span class="chip">Feature Flagging / Progressive Rollout</span><span class="chip">Product Ownership</span><span class="chip">Gestion de projet</span><span class="chip">Analyse fonctionnelle</span>
-        </div>
-      </div>
-      <div class="skills-group">
-        <span class="skills-group-label">Technique</span>
-        <div class="skills-chips">
-          <span class="chip">API &amp; intégrations</span><span class="chip">Intégration LLM (API Gemini)</span><span class="chip">IA générative</span>
-        </div>
-      </div>
-      <div class="skills-group skills-tools">
-        <span class="skills-group-label">Outils du quotidien</span>
-        <p class="skills-tools-line">Jira · ProductBoard · Figma · Miro · Zapier · Flagship · Akeneo · Postman · Looker Studio · Matomo · Hotjar · Heap</p>
-      </div></div>
-<!-- /static:skillsGroups -->
-    </section>
 
     <!-- ============================= EXPÉRIENCES ============================= -->
     <section id="experiences" class="experiences-section wrap">
@@ -444,7 +394,7 @@
             <span class="role-dates">Août 2016 — Sep 2020 · 4 ans 1 mois</span>
           </div>
           <p class="role-context">Mission : la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), dont j'avais été lead test côté grand public, puis les web services (API) de distribution des titres TER et urbains utilisés par les canaux de vente.</p>
-          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>Du besoin métier à la livraison</strong> : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.</li><li><strong>Communauté de pratiques PM de plus de 100 personnes animée</strong> pendant dix mois, en parallèle du poste : veille, ateliers, mentorat de 2 à 3 personnes.</li></ul>
+          <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>Du besoin métier à la livraison</strong> : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.</li><li><strong>Élu responsable de la communauté de pratiques Product Management</strong> de l'entreprise, <strong>plus de 100 personnes</strong> : premier titulaire du poste, reconduit pour un second mandat (2 × 5 mois). Veille, ateliers, mentorat de 2 à 3 personnes.</li></ul>
           <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — Jusqu'à 15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager</span></div>
           <div class="role-skills"><span class="role-skill" data-skill="api">API &amp; intégrations</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="story-mapping">Story Mapping</span><span class="role-skill" data-skill="bdd">BDD</span><span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="mentoring">Mentoring &amp; Coaching</span></div>
         </div><div class="early-toggle-wrap"><button class="early-toggle" type="button">Voir mes débuts (2011 – 2016) →</button></div>
@@ -484,6 +434,89 @@
 <!-- /static:experiencesList -->
     </section>
 
+    <!-- ============================= ÉTUDES DE CAS ============================= -->
+    <!-- Trois cartes Problème → Approche → Résultat, alimentées par
+         RESULT_DETAILS (les mêmes entrées que results.html, où elles sont
+         détaillées). Le lien de chaque carte ouvre l'étude complète. -->
+    <section id="etudes-de-cas" class="cases-section wrap">
+      <div class="sectitle">
+        <span class="sec-ico" aria-hidden="true">🔎</span>
+        <h2 data-i18n="cases.sectionTitle">Études de cas</h2>
+      </div>
+      <p class="cases-intro" data-i18n="cases.intro">Trois problèmes produit, ce que j'ai fait et ce que ça a donné.</p>
+      <!-- static:caseGrid -->
+<div class="case-grid" id="caseGrid">
+      <a class="case-card" href="results.html#ab-tasty-activation" data-goatcounter-click="case-card-ab-tasty-activation">
+        <span class="case-company">AB Tasty</span>
+        <h3 class="case-title">Repenser l'onboarding</h3>
+        <p class="case-line"><b>Problème —</b> Churn précoce et support saturé, une activation sous le benchmark du marché.</p>
+        <p class="case-line"><b>Approche —</b> Entretiens utilisateurs, benchmark externe, moteur de qualification à l'inscription, nouveau parcours d'activation.</p>
+        <p class="case-result"><span class="case-value">+15%</span> Taux d'activation</p>
+        <span class="case-cta">Lire l'étude de cas →</span>
+      </a>
+      <a class="case-card" href="results.html#everysens-entry-time" data-goatcounter-click="case-card-everysens-entry-time">
+        <span class="case-company">Everysens</span>
+        <h3 class="case-title">Réduire la friction de saisie</h3>
+        <p class="case-line"><b>Problème —</b> Une saisie longue et peu fiable sur des trains de 30 wagons et plus.</p>
+        <p class="case-line"><b>Approche —</b> Recherche utilisateur, plan de migration porté auprès de la direction, refonte incrémentale, MVP en moins de 2 mois.</p>
+        <p class="case-result"><span class="case-value">-50%</span> Temps de saisie</p>
+        <span class="case-cta">Lire l'étude de cas →</span>
+      </a>
+      <a class="case-card" href="results.html#sncf-ticket-retrieval" data-goatcounter-click="case-card-sncf-ticket-retrieval">
+        <span class="case-company">SNCF Connect &amp; Tech</span>
+        <h3 class="case-title">Un parcours critique sans données produit</h3>
+        <p class="case-line"><b>Problème —</b> Des voyageurs bloqués à la première étape de récupération du billet, sans analytics disponibles.</p>
+        <p class="case-line"><b>Approche —</b> Extraction quotidienne des retours sur Twitter via Zapier, seconde méthode de récupération ajoutée.</p>
+        <p class="case-result"><span class="case-value">+100%</span> Taux de conversion, récupération du billet</p>
+        <span class="case-cta">Lire l'étude de cas →</span>
+      </a></div>
+<!-- /static:caseGrid -->
+    </section>
+
+    <!-- ============================= COMPÉTENCES ============================= -->
+    <section id="competences" class="skills-section wrap">
+      <div class="sectitle">
+        <h2 id="skillsTitle" data-i18n="skills.sectionTitle">Compétences</h2>
+      </div>
+      <!-- static:skillsGroups -->
+<div class="skills-groups" id="skillsGroups" role="group" aria-labelledby="skillsTitle">
+      <div class="skills-group">
+        <span class="skills-group-label">Growth &amp; stratégie</span>
+        <div class="skills-chips">
+          <span class="chip">Product-Led Growth</span><span class="chip">Monétisation self-serve</span><span class="chip">Onboarding &amp; activation</span><span class="chip">Rétention</span><span class="chip">A/B testing &amp; expérimentation</span><span class="chip">Stratégie produit</span><span class="chip">OKR</span><span class="chip">Roadmapping</span><span class="chip">Priorisation</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Discovery &amp; data</span>
+        <div class="skills-chips">
+          <span class="chip">Discovery</span><span class="chip">User Research</span><span class="chip">Product Analytics</span><span class="chip">SQL</span><span class="chip">Metabase</span><span class="chip">Mixpanel</span><span class="chip">Segment</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Leadership</span>
+        <div class="skills-chips">
+          <span class="chip">Stakeholder Management</span><span class="chip">Cross-functional Leadership</span><span class="chip">Mentoring &amp; Coaching</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Delivery</span>
+        <div class="skills-chips">
+          <span class="chip">Agile / Scrum</span><span class="chip">User Stories &amp; Backlog</span><span class="chip">Story Mapping</span><span class="chip">BDD</span><span class="chip">Feature Flagging / Progressive Rollout</span><span class="chip">Product Ownership</span><span class="chip">Gestion de projet</span><span class="chip">Analyse fonctionnelle</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <span class="skills-group-label">Technique</span>
+        <div class="skills-chips">
+          <span class="chip">API &amp; intégrations</span><span class="chip">Intégration LLM (API Gemini)</span><span class="chip">IA générative</span>
+        </div>
+      </div>
+      <div class="skills-group skills-tools">
+        <span class="skills-group-label">Outils du quotidien</span>
+        <p class="skills-tools-line">Jira · ProductBoard · Figma · Miro · Zapier · Flagship · Akeneo · Postman · Looker Studio · Matomo · Hotjar · Heap</p>
+      </div></div>
+<!-- /static:skillsGroups -->
+    </section>
+
     <!-- ============================= FORMATION / LANGUES / CERTIFICATIONS ============================= -->
     <section id="formation" class="formation-section wrap">
       <div class="sectitle">
@@ -497,7 +530,7 @@
 <!-- /static:educationList -->
           <h3 class="formation-subtitle" data-i18n="formation.trainings">Formations continues</h3>
           <!-- static:trainingsList -->
-<ul class="formation-list" id="trainingsList"><li><div class="formation-item-title">Réussir la conduite du changement, donner du sens à vos équipes</div><div class="formation-item-meta">Orsys · Sept. 2020 · 2 jours</div></li><li><div class="formation-item-title">Big Data et stratégie marketing, usages et mise en œuvre</div><div class="formation-item-meta">Orsys · Sept. 2021 · 2 jours</div></li></ul>
+<ul class="formation-list" id="trainingsList"></ul>
 <!-- /static:trainingsList -->
         </div>
         <div class="formation-col formation-side">
@@ -515,6 +548,27 @@
           </div>
         </div>
       </div>
+    </section>
+
+
+
+    <!-- ============================= SIDE PROJECTS ============================= -->
+    <section id="projects" class="projects-section wrap">
+      <div class="sectitle">
+        <h2 data-i18n="projects.sectionTitle">Side projects</h2>
+      </div>
+      <!-- static:projectsGrid -->
+<div class="projects-grid" id="projectsGrid">
+      <div class="project-card">
+        <h3>Tour de Growth</h3>
+        <p>Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini.</p>
+        <div class="project-links">
+          <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" data-goatcounter-click="project-tour-de-growth">Voir le projet →</a>
+          <a href="project-detail.html?slug=tour-de-growth">Voir l'étude de cas →</a>
+        </div>
+        <div class="project-skills"><span>Product-Led Growth</span><span>User Research</span><span>Intégration LLM (API Gemini)</span><span>IA générative</span></div>
+      </div></div>
+<!-- /static:projectsGrid -->
     </section>
 
     <!-- ============================= RECOMMANDATION (citation vedette) ============================= -->
@@ -569,25 +623,6 @@
         <section id="fitResult" class="fit-result" tabindex="-1" data-i18n-aria="fit.resultLabel" hidden></section>
       </div>
     </section>
-
-    <!-- ============================= SIDE PROJECTS ============================= -->
-    <section id="projects" class="projects-section wrap">
-      <div class="sectitle">
-        <h2 data-i18n="projects.sectionTitle">Side projects</h2>
-      </div>
-      <!-- static:projectsGrid -->
-<div class="projects-grid" id="projectsGrid">
-      <div class="project-card">
-        <h3>Tour de Growth</h3>
-        <p>Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.</p>
-        <div class="project-links">
-          <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" data-goatcounter-click="project-tour-de-growth">Voir le projet →</a>
-          <a href="project-detail.html?slug=tour-de-growth">Voir l'étude de cas →</a>
-        </div>
-        <div class="project-skills"><span>Product-Led Growth</span><span>User Research</span><span>Intégration LLM (API Gemini)</span><span>IA générative</span></div>
-      </div></div>
-<!-- /static:projectsGrid -->
-    </section>
   </main>
 
   <!-- ============================= FOOTER ============================= -->
@@ -608,7 +643,7 @@
       <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les quatre PDF
            (complet et court, par langue) restent atteignables même sans
            JavaScript. -->
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
+      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download-complet">version complète</a> · <a href="assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download-complet">full version</a></p>
     </div>
   </footer>
 

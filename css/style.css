@@ -173,6 +173,34 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .pillar[data-id="iterative"] li::before{background:var(--coral);}
 
 /* ============================================================================
+   ÉTUDES DE CAS
+   ============================================================================ */
+.cases-section{padding-bottom:80px;}
+.cases-intro{color:var(--ink-soft);font-size:15px;margin-bottom:22px;}
+.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;}
+.case-card{
+  display:flex;flex-direction:column;gap:8px;
+  background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:22px 20px;border-top:5px solid var(--violet);
+  text-decoration:none;color:inherit;transition:transform .15s ease, box-shadow .15s ease;
+}
+.case-card:nth-child(2){border-top-color:var(--mint);}
+.case-card:nth-child(3){border-top-color:var(--coral);}
+.case-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(27,21,48,.12);}
+.case-company{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);}
+.case-title{font-size:17px;font-weight:700;line-height:1.3;}
+.case-line{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin:0;}
+.case-line b{color:var(--ink);font-weight:600;}
+/* Le résultat ferme la carte : c'est la ligne qu'un recruteur cherche. */
+.case-result{margin:6px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);line-height:1.4;}
+.case-value{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--violet);display:block;line-height:1.1;}
+.case-card:nth-child(2) .case-value{color:var(--mint-text);}
+.case-card:nth-child(3) .case-value{color:var(--coral-text);}
+.case-cta{margin-top:auto;padding-top:10px;font-size:13px;font-weight:600;color:var(--violet);}
+body.focus-mode .case-card{box-shadow:none;border:1px solid var(--line);border-top:1px solid var(--line);}
+body.focus-mode .case-value,body.focus-mode .case-cta{color:var(--ink);}
+
+/* ============================================================================
    SKILLS / FILTERS
    ============================================================================ */
 .skills-section{padding-bottom:70px;}
@@ -376,6 +404,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
    pour repousser le point où il passerait sur 2 lignes. */
 @media(max-width:1080px) and (min-width:801px){
   .pillar-grid{grid-template-columns:repeat(2,1fr);} /* quatre cartes en 2 × 2 sur tablette */
+  .case-grid{grid-template-columns:repeat(2,1fr);}
   nav ul{gap:16px;}
   nav a{font-size:13px;}
   .navrow{padding:16px 20px;}
@@ -386,6 +415,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
   .hero-grid{grid-template-columns:1fr;text-align:left;}
   .photo-ring{order:-1;width:150px;height:150px;}
   .pillar-grid{grid-template-columns:1fr;}
+  .case-grid{grid-template-columns:1fr;}
   .fit-columns{grid-template-columns:1fr;}
   .fit-box textarea{font-size:16px;} /* sous 16px, Safari iOS zoome le champ au focus ; sans risque print, #fit-checker est masqué */
   /* Menu visible sur téléphone (variante A validée par Antoine) : la rangée
@@ -656,11 +686,15 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Rien de tout ça n'a de sens sur un document figé : nav interactive,
      Fit-Checker (nécessite une vraie IA en direct), bandeau teaser,
      indicateur de scroll, bouton de reset des filtres. */
-  header.top,#fit-checker,.fit-teaser,.herobtns,.nav-indicator,.site-footer,.project-skills,.quote-mark,.early-toggle-wrap,.xp-rail{display:none !important;}
+  header.top,#fit-checker,.fit-teaser,.herobtns,.nav-indicator,.site-footer,.project-skills,.quote-mark,.early-toggle-wrap,.xp-rail,#etudes-de-cas{display:none !important;}
   /* Le PDF montre toujours les débuts repliés sur le site (body.early-collapsed). */
   body.early-collapsed .role-early{display:block !important;}
   body.early-collapsed .company-early{display:block !important;}
-  /* .project-skills : les tags du side project répètent la section
+  /* #etudes-de-cas : les cartes Problème → Approche → Résultat sont une
+     synthèse pour arriver vite à results.html ; sur papier il n'y a pas de
+     lien à suivre, elles répètent les chiffres du hero et les puces des rôles,
+     et elles coûtaient une sixième page au complet français.
+     .project-skills : les tags du side project répètent la section
      Compétences. Les tags par rôle (.role-skills) reviennent en revanche dans
      le PDF complet depuis le 7 sept. 2026 : réduits à six par rôle, ils
      tiennent sur une ligne et donnent à un outil de tri le lien entre une
@@ -673,7 +707,7 @@ body.focus-mode .pill{background:#F1F1EF;}
 
   /* padding-top / padding-bottom déclarés séparément (piège n°8 : le
      raccourci padding écrase le padding horizontal de .wrap). */
-  .hero,.pillars,.skills-section,.experiences-section,.projects-section,.formation-section,.testimonial-section{padding-top:8px;padding-bottom:8px;}
+  .hero,.pillars,.cases-section,.skills-section,.experiences-section,.projects-section,.formation-section,.testimonial-section{padding-top:8px;padding-bottom:8px;}
 
   /* La largeur d'une page A4/Letter tombe pile dans le point de rupture
      "mobile" (≤800px) : on force donc ici les mises en page desktop
@@ -690,7 +724,20 @@ body.focus-mode .pill{background:#F1F1EF;}
   .pill{font-size:11px;padding:4px 10px;}
   .pitch{font-size:13px;margin-bottom:14px;max-width:none;}
   .sectitle h2{font-size:20px;}
-  .sectitle{break-after:avoid;} /* pas de titre de section orphelin en bas de page */
+  /* PIÈGE MESURÉ LE 7 SEPT. 2026 : `break-after:avoid` sur les titres de
+     section coûtait une page entière au complet français (6 pages pour
+     3 090 pt de contenu, soit 3,9 pages utiles). Quand la section qui suit ne
+     rentre pas, Chromium déplace le titre ET toute la section, en laissant
+     jusqu'à 430 pt blancs. Le même effet a été mesuré sur `break-inside:avoid`
+     des cartes, gardé lui parce qu'une carte coupée en deux est pire qu'un
+     bas de page vide. Si un titre se retrouve seul en bas de page après un
+     ajout de contenu, resserrer le contenu plutôt que de remettre cette
+     règle — et re-mesurer le nombre de pages. */
+  .sectitle{break-after:auto;}
+  /* Testé le 7 sept. 2026 et écarté : rendre les sections de fin insécables
+     (`break-inside:avoid` sur .formation-section et suivantes) pour éviter un
+     titre seul en bas de page ramenait le complet à 6 pages. Un titre de
+     section en bas de page coûte moins cher qu'une page à 40 % blanche. */
 
   /* Le scorecard (flex + wrap sur le site) est ici forcé en grille 3
      colonnes fixes : la colonne texte du hero est plus étroite en print,
@@ -708,7 +755,7 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Les ombres portées ne rendent pas bien sur un support figé ; on les
      retire mais on garde les à-plats de couleur (bordures colorées des
      piliers, dégradés d'avatar/photo...) qui, eux, impriment très bien. */
-  .pillar,.project-card,.formation-list,.formation-card,.testimonial-card{
+  .pillar,.case-card,.project-card,.formation-list,.formation-card,.testimonial-card{
     box-shadow:none;border:1px solid #E4E1EC;break-inside:avoid;
   }
   .pillar{border-top-width:5px;} /* garde la couleur d'identification de chaque pilier */
@@ -731,6 +778,7 @@ body.focus-mode .pill{background:#F1F1EF;}
   .role-achievements li,.role-meta{break-inside:avoid;}
   .role-meta{break-before:avoid;} /* pas de ligne « Méthodologie · Équipe » orpheline en haut de page */
   .role-context{break-inside:avoid;} /* un contexte de rôle ne se coupe pas au milieu d'une phrase */
+  .skills-group{break-inside:avoid;} /* un groupe ne se sépare pas de son libellé */
   .skills-group-label{break-after:avoid;} /* un libellé de catégorie ne reste pas seul en bas de page */
   .company-header{break-inside:avoid;break-after:avoid-page;margin-bottom:10px;padding-bottom:10px;}
   .company-logo,.company-logo-fallback{width:40px;height:40px;}
@@ -767,9 +815,9 @@ body.focus-mode .pill{background:#F1F1EF;}
   .formation-list li{padding:6px 12px;}
   .formation-item-title{font-size:13px;}
   .formation-item-meta{font-size:12px;}
-  .testimonial-card{padding:14px 20px;}
+  .testimonial-card{padding:12px 18px;}
   .testimonial-eyebrow{margin-bottom:10px;}
-  .testimonial-quote{font-size:13.5px;margin-bottom:10px;}
+  .testimonial-quote{font-size:13px;line-height:1.45;margin-bottom:8px;}
   .project-card{padding:14px;}
   .project-card p{font-size:13px;margin-bottom:10px;}
   .projects-grid{grid-template-columns:1fr;} /* une seule carte : pleine largeur, deux fois moins haute */
@@ -803,7 +851,7 @@ body.focus-mode .pill{background:#F1F1EF;}
      Méthodologie/Équipe de chaque rôle, formations continues ; les débuts
      (QA, ESN) gardent leur titre et leurs dates, sans puces ; au plus trois
      puces par rôle. Le complet reste le PDF de référence. ---- */
-  body.cv-court .pillars,body.cv-court .testimonial-section,body.cv-court .projects-section,
+  body.cv-court .pillars,body.cv-court .cases-section,body.cv-court .testimonial-section,body.cv-court .projects-section,
   body.cv-court .role-context,body.cv-court .role-meta,
   body.cv-court #trainingsList,body.cv-court .formation-subtitle:has(+ #trainingsList),
   body.cv-court .role-early .role-achievements-label,body.cv-court .role-early .role-achievements,

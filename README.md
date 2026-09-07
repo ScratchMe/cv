@@ -210,7 +210,11 @@ Garde-fous du script : erreur JavaScript, zone vide, marqueur manquant, page tro
 
 ### PDF téléchargeable
 
-Deux PDF par langue. Le **complet** (5 pages, bouton « PDF » du menu) est le document de référence : tout le site, études de cas comprises. Le **court** (2 pages, bouton « PDF court ») est fait pour la candidature qu'un recruteur transmet à un CPO : hero, compétences en lignes, expériences avec au plus trois puces (deux pour les rôles d'avant 2022), débuts réduits à leur titre, formation sur une rangée — sans piliers, témoignage, side projects ni contexte de rôle. C'est la même page, imprimée avec `?pdf=court` (classe `body.cv-court`, règles dans le `@media print` de `style.css`) : rien à entretenir en double, tu édites `data.js` et les quatre PDF suivent. Le générateur refuse un court de plus de 2 pages : si ça arrive après un ajout de contenu, resserrer les règles `body.cv-court` plutôt que d'accepter une 3e page. Les courts ne sont pas dans le sitemap (voulu : ils concurrenceraient les complets sur ton nom).
+Deux PDF par langue. Depuis le 7 septembre 2026, le bouton « PDF » du menu sert le **court** (2 pages) : c'est le document qu'un recruteur ouvre et transmet. Le segment « complet » sert le **complet** (5 pages), le dossier qui reprend tout le site.
+
+Le court garde le hero, les compétences en lignes, les expériences avec au plus trois puces (deux pour les rôles d'avant 2022), les débuts réduits à leur titre et la formation sur une rangée — sans piliers, études de cas, témoignage, side projects ni contexte de rôle. C'est la même page, imprimée avec `?pdf=court` (classe `body.cv-court`, règles dans le `@media print` de `style.css`) : rien à entretenir en double, tu édites `data.js` et les quatre PDF suivent. Le générateur refuse un court de plus de 2 pages : si ça arrive après un ajout de contenu, resserrer les règles `body.cv-court` plutôt que d'accepter une 3e page. Les courts ne sont pas dans le sitemap (voulu : ils concurrenceraient les complets sur ton nom).
+
+**Pagination** : le complet tient en 5 pages parce que deux règles de saut de page ont été mesurées et arbitrées le 7 septembre 2026. `break-after:avoid` sur les titres de section coûtait une page entière (Chromium déplace le titre *et* toute la section quand elle ne rentre pas) : retiré, au prix d'un titre parfois seul en bas de page. `break-inside:avoid` sur les cartes coûtait aussi une page mais a été gardé, une carte coupée en deux étant pire. Avant de toucher à ces règles, régénérer et compter les pages.
 
 Le bouton **"Télécharger PDF"** ne fait plus un simple `Ctrl/Cmd+P` navigateur (rendu peu maîtrisé, dépendant des réglages de chacun). Il télécharge un **vrai PDF pré-généré**, produit par Chromium piloté en script (Playwright) directement à partir du site : mêmes couleurs, mêmes polices, mise en page adaptée au format papier (A4 pour le français, Letter pour l'anglais). Si le PDF n'existe pas encore (avant la première génération), le bouton retombe automatiquement sur l'impression navigateur classique — rien ne peut casser.
 
@@ -280,8 +284,8 @@ Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineb
 
 | Événement | Ce qu'il compte |
 |---|---|
-| `pdf-download` | clic sur le bouton PDF du menu ou sur un lien PDF complet du pied de page |
-| `pdf-download-court` | clic sur le bouton « PDF court » du menu ou sur un lien PDF court du pied de page |
+| `pdf-download` | clic sur le bouton « PDF » du menu (CV court) ou sur un lien court du pied de page |
+| `pdf-download-complet` | clic sur le segment « complet » du menu ou sur un lien complet du pied de page |
 | `contact-email`, `contact-linkedin`, `link-photos` | clics sur les liens du pied de page |
 | `hero-stat-<resultId>`, `hero-stats-link` | clics sur un chiffre du hero ou sur « Voir les études de cas » |
 | `project-tour-de-growth` | clic vers Tour de Growth (carte du CV ou bouton de l'étude de cas) |
