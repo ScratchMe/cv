@@ -149,12 +149,20 @@ const RESULT_DETAILS = {
       en: "AB Tasty, an **Experience Optimization** SaaS platform (A/B Testing, Personalization). PM in charge of \"Product eXperience\", within a team of 3 developers, 1 tech lead, 1 QA and 1 Product Designer.",
     },
     challenge: {
-      fr: "Un churn à **15%** et une sur-sollicitation du support CSM, alors que le produit n'offrait aucun accompagnement à l'onboarding. Mon hypothèse : un problème d'activation plutôt que de fit produit — confirmée en comparant nos chiffres au benchmark **Userpilot**, nettement en dessous.\n\nPlutôt que d'attaquer tout le sujet du churn (ICP à revoir, accessibilité des outils...), j'ai choisi de me concentrer sur ce trou en tout début de funnel, là où le gain potentiel était le plus important.",
-      en: "A **15%** churn rate and CSM support overloaded with requests, while the product offered no in-app onboarding help. My hypothesis: an activation problem rather than a product-fit one — confirmed by comparing our numbers to the **Userpilot** benchmark, where we were clearly below par.\n\nRather than tackling churn as a whole (ICP to revisit, tool accessibility...), I chose to focus on this gap right at the start of the funnel, where the potential gain was highest.",
+      fr: "Un churn à **15%** et une sur-sollicitation du support CSM, alors que le produit n'offrait aucun accompagnement à l'onboarding.",
+      en: "A **15%** churn rate and CSM support overloaded with requests, while the product offered no in-app onboarding help.",
+    },
+    hypothesis: {
+      fr: "Un problème d'**activation** plutôt que de fit produit. Vérifié avant d'investir, en comparant nos chiffres au benchmark **Userpilot** : nettement en dessous.",
+      en: "An **activation** problem rather than a product-fit one. Checked before investing, by comparing our numbers to the **Userpilot** benchmark: clearly below par.",
+    },
+    discarded: {
+      fr: "**Attaquer le churn dans son ensemble** (ICP à revoir, accessibilité des outils...) : j'ai préféré le trou en tout début de funnel, là où le gain potentiel était le plus important.\n\n**Un simple correctif d'onboarding** : il aurait traité le symptôme sans rien laisser derrière lui pour la suite.",
+      en: "**Tackling churn as a whole** (ICP to revisit, tool accessibility...): I went for the gap right at the start of the funnel instead, where the potential gain was highest.\n\n**A quick onboarding fix**: it would have treated the symptom and left nothing behind for what came next.",
     },
     action: {
-      fr: "J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.\n\nPlutôt qu'un simple correctif, j'ai conçu un **moteur de qualification à l'inscription** (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :",
-      en: "I ran interviews with freshly onboarded users: fear of getting started despite CSM support, and a setup that took too long, came up again and again. Digging further, I noticed our users covered very different profiles (developers, marketers, analysts, product people), with different skills and expectations.\n\nRather than a quick fix, I designed a **qualification engine at sign-up** (role, A/B testing level, technical skills, main goal), framed as a service to the user rather than a plain form to maximize response rates — serving a double purpose:",
+      fr: "J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.\n\nJ'ai donc conçu un **moteur de qualification à l'inscription** (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :",
+      en: "I ran interviews with freshly onboarded users: fear of getting started despite CSM support, and a setup that took too long, came up again and again. Digging further, I noticed our users covered very different profiles (developers, marketers, analysts, product people), with different skills and expectations.\n\nSo I designed a **qualification engine at sign-up** (role, A/B testing level, technical skills, main goal), framed as a service to the user rather than a plain form to maximize response rates — serving a double purpose:",
     },
     actionPoints: [
       { fr: "Adapter l'onboarding à chaque profil utilisateur.", en: "Tailor onboarding to each user profile." },
@@ -199,6 +207,14 @@ const RESULT_DETAILS = {
       { fr: "Aucune navigation rapide entre les champs.", en: "No quick navigation between fields." },
       { fr: "Pas d'import de tableur.", en: "No spreadsheet import." },
     ],
+    hypothesis: {
+      fr: "Le temps de saisie ne venait pas que de l'interface : une partie des informations demandées existait déjà dans le module « Planification ». En faisant dialoguer les deux, une bonne part du formulaire pouvait se remplir toute seule.",
+      en: "Entry time wasn't only about the interface: part of the information being asked for already lived in the \"Planning\" module. Make the two talk to each other and a good share of the form could fill itself in.",
+    },
+    discarded: {
+      fr: "**Retoucher l'interface existante au fil de l'eau**, sans plan de migration : plus rapide à lancer, mais impossible à tenir sur la durée et bien moins rassurant pour la direction, qui devait engager une refonte d'architecture.",
+      en: "**Patching the existing interface as we went**, with no migration plan: faster to start, impossible to sustain, and far less reassuring for a leadership team that had to commit to an architecture rework.",
+    },
     action: {
       fr: "J'ai construit et porté auprès de la direction un **plan de migration** du module Exécution vers une nouvelle architecture, livré en approche incrémentale avec un premier MVP en moins de 2 mois. Cette nouvelle architecture m'a permis de faire dialoguer le module avec « Planification » pour **pré-remplir automatiquement le formulaire** à partir d'informations déjà saisies ailleurs (trajet, nombre de wagons, marchandises).\n\nEn parallèle, j'ai mené moi-même la recherche utilisateur et le maquettage UI/UX (Hotjar, Heap) — avant l'arrivée d'une Product Designer — pour repenser un formulaire cette fois pensé pour des trains de 30 wagons et plus.",
       en: "I built and pitched a **migration plan** for the Execution module toward a new architecture to leadership, delivered incrementally with a first MVP shipped in under 2 months. This new architecture let the module talk to \"Planning\" to **auto-fill the form** from information already entered elsewhere (route, wagon count, goods).\n\nIn parallel, I personally led user research and UI/UX design (Hotjar, Heap) — before a Product Designer joined — to redesign a form this time built for trains of 30+ wagons.",
@@ -247,9 +263,17 @@ const RESULT_DETAILS = {
         en: "Classic user interviews were off the table: in a station, in the middle of an epidemic, they'd have created an avoidable crowding risk.",
       },
     ],
+    hypothesis: {
+      fr: "Le blocage venait de la première étape elle-même : l'outil imposait de **scanner le QR code du billet**, alors qu'une grande partie des voyageurs n'avaient leur billet que sur mobile — donc rien à scanner.",
+      en: "The blocker was the first step itself: the tool required **scanning the ticket's QR code**, while a large share of travelers only had their ticket on mobile — nothing to scan.",
+    },
+    discarded: {
+      fr: "**Les entretiens utilisateurs classiques** : en gare, en pleine épidémie, ils auraient créé un risque sanitaire. Il fallait un signal sans contact — d'où les tweets.",
+      en: "**Classic user interviews**: in a station, in the middle of an epidemic, they would have created a health risk. The signal had to be contact-free — hence the tweets.",
+    },
     action: {
-      fr: "J'ai mis en place une **extraction quotidienne automatique des tweets** mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.\n\nÇa a confirmé un point noir que je soupçonnais déjà : l'outil imposait de **scanner le QR code du billet**, alors qu'une grande partie des utilisateurs avaient leur billet uniquement sur mobile — donc rien à scanner. J'ai ajouté une **deuxième méthode de récupération**, par nom et numéro de dossier, en alternative au QR code.\n\nLe taux de conversion de cette première étape a doublé.",
-      en: "I set up a **daily automated extraction of tweets** mentioning the project, Covid, and SNCF, to get a user signal without physical contact.\n\nIt confirmed a pain point I already suspected: the tool required **scanning the ticket's QR code**, while a large share of users only had their ticket on mobile — nothing to scan. I added a **second retrieval method**, by name and booking reference, as an alternative to the QR code.\n\nThe conversion rate of that first step doubled.",
+      fr: "J'ai mis en place une **extraction quotidienne automatique des tweets** mentionnant le projet, le Covid et la SNCF, pour obtenir un signal utilisateur sans contact physique.\n\nÇa a confirmé l'hypothèse. J'ai ajouté une **deuxième méthode de récupération**, par nom et numéro de dossier, en alternative au QR code.\n\nLe taux de conversion de cette première étape a doublé.",
+      en: "I set up a **daily automated extraction of tweets** mentioning the project, Covid, and SNCF, to get a user signal without physical contact.\n\nIt confirmed the hypothesis. I added a **second retrieval method**, by name and booking reference, as an alternative to the QR code.\n\nThe conversion rate of that first step doubled.",
     },
     lesson: {
       fr: "Regarder toute la chaîne, pas seulement son périmètre produit : seuls **10% des voyageurs** arrivaient jusqu'à l'outil, un frein bien plus grand que ce qu'on pouvait gagner côté produit. L'acquisition était ici hors de notre contrôle (contraintes légales entre transporteur et distributeur) — mais ça reste un rappel que ce sont les premières étapes d'un funnel qui pèsent le plus sur le résultat global.",
