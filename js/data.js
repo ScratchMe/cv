@@ -314,16 +314,18 @@ const PILLARS = [
 ];
 
 // ---------------------------------------------------------------------------
-// 2. COMPÉTENCES & OUTILS — liste maîtresse utilisée pour les filtres.
-//    Les labels (SQL, Metabase, Agile...) restent identiques en FR/EN — ce
-//    sont déjà des termes anglais utilisés tels quels en français. Seule la
-//    catégorie est traduite (via UI_STRINGS "skills.cat.*" dans i18n.js) :
-//    garde les valeurs de `category` exactement comme ci-dessous (growth,
-//    discovery, leadership, delivery, tools), elles servent de clé de
-//    traduction — sans la clé, la page afficherait la valeur brute.
-//    L'ordre des groupes est l'ordre d'apparition ici (sept. 2026, second
-//    retour d'expert) : growth et stratégie d'abord, delivery et outils en
-//    dernier — rien n'est supprimé, les mots-clés servent aux outils de tri.
+// 2. COMPÉTENCES — ce qu'un recruteur cherche, pas la liste des logiciels
+//    ouverts dans la journée. Trente entrées, toutes des pratiques, en cinq
+//    groupes rendus dans l'ordre d'apparition ici : growth et stratégie
+//    d'abord, delivery et technique ensuite (sept. 2026, second retour
+//    d'expert). Les douze outils purs (Jira, Figma, Miro...) sont sortis des
+//    pastilles le 7 sept. 2026 (quatrième revue, trois auditeurs sur quatre) :
+//    ils ne trient pas un Senior PM et diluaient la lecture. Ils restent
+//    lisibles par les outils de tri dans EVERYDAY_TOOLS ci-dessous.
+//    Les labels identiques en FR et EN restent des chaînes simples ; seuls
+//    ceux qui se traduisent sont des objets { fr, en }. La catégorie est
+//    traduite via UI_STRINGS "skills.cat.*" (i18n.js) : garder les valeurs de
+//    `category` exactement comme ci-dessous, ce sont des clés de traduction.
 //    Les API et intégrations restent listées : 4 offres nantaises sur 10 les
 //    citent, et un PM qui construit des tunnels et des paiements doit pouvoir
 //    les montrer.
@@ -332,19 +334,19 @@ const SKILLS = [
   { id: "plg", label: "Product-Led Growth", category: "growth" },
   { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "growth" },
   { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "growth" },
+  { id: "retention", label: { fr: "Rétention", en: "Retention" }, category: "growth" },
   { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "growth" },
+  { id: "product-strategy", label: { fr: "Stratégie produit", en: "Product Strategy" }, category: "growth" },
   { id: "okr", label: "OKR", category: "growth" },
   { id: "roadmapping", label: "Roadmapping", category: "growth" },
+  { id: "prioritization", label: { fr: "Priorisation", en: "Prioritization" }, category: "growth" },
   { id: "discovery", label: "Discovery", category: "discovery" },
   { id: "user-research", label: "User Research", category: "discovery" },
+  { id: "product-analytics", label: "Product Analytics", category: "discovery" },
   { id: "sql", label: "SQL", category: "discovery" },
   { id: "metabase", label: "Metabase", category: "discovery" },
   { id: "mixpanel", label: "Mixpanel", category: "discovery" },
   { id: "segment", label: "Segment", category: "discovery" },
-  { id: "looker-studio", label: "Looker Studio", category: "discovery" },
-  { id: "matomo", label: "Matomo", category: "discovery" },
-  { id: "hotjar", label: "Hotjar", category: "discovery" },
-  { id: "heap", label: "Heap", category: "discovery" },
   { id: "stakeholder", label: "Stakeholder Management", category: "leadership" },
   { id: "cross-functional-leadership", label: "Cross-functional Leadership", category: "leadership" },
   { id: "mentoring", label: "Mentoring & Coaching", category: "leadership" },
@@ -356,18 +358,16 @@ const SKILLS = [
   { id: "product-ownership", label: "Product Ownership", category: "delivery" },
   { id: "project-management", label: { fr: "Gestion de projet", en: "Project Management" }, category: "delivery" },
   { id: "functional-analysis", label: { fr: "Analyse fonctionnelle", en: "Functional Analysis" }, category: "delivery" },
-  { id: "jira", label: "Jira", category: "tools" },
-  { id: "productboard", label: "ProductBoard", category: "tools" },
-  { id: "figma", label: "Figma", category: "tools" },
-  { id: "miro", label: "Miro", category: "tools" },
-  { id: "zapier", label: "Zapier", category: "tools" },
-  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "tools" },
-  { id: "flagship", label: "Flagship", category: "tools" },
-  { id: "akeneo", label: "Akeneo", category: "tools" },
-  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "tools" },
-  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "tools" },
-  { id: "postman", label: "Postman", category: "tools" },
+  { id: "api", label: { fr: "API & intégrations", en: "APIs & integrations" }, category: "tech" },
+  { id: "llm-integration", label: { fr: "Intégration LLM (API Gemini)", en: "LLM integration (Gemini API)" }, category: "tech" },
+  { id: "genai", label: { fr: "IA générative", en: "Generative AI" }, category: "tech" },
 ];
+
+// Outils du quotidien : une ligne de texte sous les compétences, pas des
+// pastilles. Ils gardent leur valeur de mots-clés pour les outils de tri de
+// candidatures sans occuper le regard d'un lecteur humain. Vide ([]) = la
+// ligne disparaît.
+const EVERYDAY_TOOLS = ["Jira", "ProductBoard", "Figma", "Miro", "Zapier", "Flagship", "Akeneo", "Postman", "Looker Studio", "Matomo", "Hotjar", "Heap"];
 
 // ---------------------------------------------------------------------------
 // 3. EXPÉRIENCES — groupées par entreprise. La durée totale par entreprise
@@ -424,7 +424,7 @@ const EXPERIENCES = [
           fr: "4 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "4 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["plg", "activation", "monetization", "ab-testing", "api", "discovery", "roadmapping", "stakeholder", "cross-functional-leadership", "user-stories", "mentoring", "jira", "sql", "metabase", "mixpanel", "segment", "genai", "okr", "user-research"],
+        skills: ["plg", "monetization", "product-strategy", "roadmapping", "stakeholder", "cross-functional-leadership"],
       },
       {
         title: "Product Manager",
@@ -457,7 +457,7 @@ const EXPERIENCES = [
           fr: "3 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "3 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["activation", "ab-testing", "discovery", "roadmapping", "stakeholder", "user-stories", "sql", "metabase", "mixpanel", "jira", "zapier", "looker-studio", "segment", "genai", "okr", "user-research", "flagship", "feature-flagging"],
+        skills: ["activation", "retention", "ab-testing", "product-analytics", "discovery", "feature-flagging"],
       },
     ],
   },
@@ -490,7 +490,7 @@ const EXPERIENCES = [
         ],
         methodology: "Scrum",
         team: { fr: "4 développeurs, 1 QA, puis 1 Product Designer", en: "4 developers, 1 QA, later 1 Product Designer" },
-        skills: ["discovery", "user-research", "roadmapping", "hotjar", "heap", "stakeholder", "jira", "metabase", "productboard", "figma", "miro"],
+        skills: ["discovery", "user-research", "roadmapping", "prioritization", "stakeholder"],
       },
     ],
   },
@@ -531,7 +531,7 @@ const EXPERIENCES = [
           fr: "3 développeurs, 1 Scrum Master, 1 Delivery Manager (boutiques) · 4 développeurs, 1 Engineering Manager (Prêt à Voyager)",
           en: "3 developers, 1 Scrum Master, 1 Delivery Manager (stores) · 4 developers, 1 Engineering Manager (Prêt à Voyager)",
         },
-        skills: ["user-research", "okr", "roadmapping", "user-stories", "product-ownership", "agile", "discovery", "stakeholder", "zapier", "jira", "miro", "matomo", "akeneo"],
+        skills: ["user-research", "okr", "roadmapping", "prioritization", "stakeholder", "discovery"],
       },
       {
         // Rôle d'animation gardé en bloc à part (et pas en simple puce) :
@@ -550,7 +550,7 @@ const EXPERIENCES = [
           { fr: "Ateliers et exercices pour faire progresser la communauté.", en: "Workshops and exercises to help the community grow." },
           { fr: "Mentorat de 2 à 3 personnes tout au long du mandat.", en: "Mentored 2 to 3 people throughout the term." },
         ],
-        skills: ["agile", "mentoring"],
+        skills: ["mentoring", "cross-functional-leadership"],
       },
       {
         title: { fr: "Product Manager Junior", en: "Junior Product Manager" },
@@ -575,7 +575,7 @@ const EXPERIENCES = [
           fr: "Jusqu'à 15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
           en: "Up to 15 developers, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager",
         },
-        skills: ["api", "roadmapping", "story-mapping", "user-stories", "product-ownership", "stakeholder", "agile", "bdd", "jira", "miro", "postman"],
+        skills: ["api", "user-stories", "story-mapping", "bdd", "agile"],
       },
       // Réduit au titre et aux dates (7 sept. 2026, quatrième revue) : dix-huit
       // mois de QA il y a dix ans n'ont plus à occuper un bloc entier. Le fait

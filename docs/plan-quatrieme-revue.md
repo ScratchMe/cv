@@ -176,7 +176,18 @@ distinctes, sinon l'étude AB Tasty s'affichait deux fois sur `results.html`.
 
 ---
 
-## Lot 3 — Compétences (montré avant validation)
+## Lot 3 — Compétences · FAIT, EN ATTENTE DE VALIDATION (PR #63)
+
+Résultat : 30 compétences en cinq groupes (9 growth, 7 discovery,
+3 leadership, 8 delivery, 3 technique), une ligne « Outils du quotidien » de
+12 outils en texte, zéro bouton dans la section, six compétences au plus par
+rôle. Section : 743 px de haut contre 1 010 px avant. Accueil : 1 758 →
+1 687 mots sans JavaScript.
+
+**Mesure contre-intuitive** : réduire les tags par rôle fait maigrir AB Tasty
+(37 tags sur deux rôles) plus que SNCF (26 sur quatre). La part passe donc de
+33,0 % à 31,0 % pour AB Tasty et de 38,8 % à 39,6 % pour SNCF. Le rééquilibrage
+ne viendra pas de là : il tient au nombre de blocs SNCF (options du lot 1).
 
 ### Changements
 

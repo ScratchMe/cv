@@ -63,7 +63,6 @@
   // --------------------------------------------------------------------
   // État des filtres compétences
   // --------------------------------------------------------------------
-  const activeFilters = new Set();
   // Débuts (rôles anciens, cf. CONFIG.collapseRolesEndingBefore) dépliés à la
   // main ; un filtre actif les déplie aussi, sans toucher à ce choix.
   let earlyExpanded = false;
@@ -212,7 +211,12 @@
   }
 
   // --------------------------------------------------------------------
-  // 3. COMPÉTENCES / FILTRES
+  // 3. COMPÉTENCES
+  //    Cinq groupes de pratiques, dans l'ordre de SKILLS. Les pastilles ne
+  //    filtrent plus rien depuis le 7 sept. 2026 (quatrième revue, choix
+  //    d'Antoine : « plus gadget qu'autre chose ») : la section est descendue
+  //    sous les expériences, où filtrer ce qui est déjà lu n'a plus de sens.
+  //    Ce sont donc des <span>, pas des <button>.
   // --------------------------------------------------------------------
   function renderSkills() {
     const categories = {};
@@ -220,52 +224,30 @@
       (categories[s.category] = categories[s.category] || []).push(s);
     });
 
-    const container = document.getElementById("skillsGroups");
-    container.innerHTML = Object.entries(categories)
+    const groupsHtml = Object.entries(categories)
       .map(
         ([cat, items]) => `
       <div class="skills-group">
         <span class="skills-group-label">${t("skills.cat." + cat)}</span>
         <div class="skills-chips">
-          ${items
-            .map(
-              (s) =>
-                `<button class="chip${activeFilters.has(s.id) ? " active" : ""}" type="button" aria-pressed="${activeFilters.has(s.id)}" data-skill="${s.id}">${tc(s.label)}</button>`
-            )
-            .join("")}
+          ${items.map((s) => `<span class="chip">${tc(s.label)}</span>`).join("")}
         </div>
       </div>`
       )
       .join("");
 
-    container.querySelectorAll(".chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const id = chip.dataset.skill;
-        if (activeFilters.has(id)) {
-          activeFilters.delete(id);
-          chip.classList.remove("active");
-        } else {
-          activeFilters.add(id);
-          chip.classList.add("active");
-        }
-        chip.setAttribute("aria-pressed", String(activeFilters.has(id)));
-        applyFilters();
-      });
-    });
+    // Les outils sont une ligne de texte, pas des pastilles : lisibles par les
+    // outils de tri de candidatures sans occuper le regard.
+    const toolsHtml =
+      typeof EVERYDAY_TOOLS !== "undefined" && EVERYDAY_TOOLS.length
+        ? `
+      <div class="skills-group skills-tools">
+        <span class="skills-group-label">${t("skills.cat.everydayTools")}</span>
+        <p class="skills-tools-line">${EVERYDAY_TOOLS.join(" · ")}</p>
+      </div>`
+        : "";
 
-  }
-
-  // Posé une seule fois (setupControls) : dans renderSkills(), il était
-  // ré-empilé à chaque bascule de langue.
-  function setupClearFilters() {
-    document.getElementById("clearFilters").addEventListener("click", () => {
-      activeFilters.clear();
-      document.querySelectorAll("#skillsGroups .chip.active").forEach((c) => {
-        c.classList.remove("active");
-        c.setAttribute("aria-pressed", "false");
-      });
-      applyFilters();
-    });
+    document.getElementById("skillsGroups").innerHTML = groupsHtml + toolsHtml;
   }
 
   // --------------------------------------------------------------------
@@ -347,8 +329,7 @@
 
     // Bouton « Voir mes débuts » juste après le dernier rôle récent : les
     // rôles anciens (et les entreprises qui n'en ont que) restent dans le
-    // DOM, repliés en CSS via body.early-collapsed. Ils réapparaissent dès
-    // qu'un filtre de compétence est actif (applyFilters), et toujours dans
+    // DOM, repliés en CSS via body.early-collapsed, et toujours dépliés dans
     // le PDF.
     const range = earlyRange();
     const recent = [...list.querySelectorAll(".role-block:not(.role-early)")].pop();
@@ -362,13 +343,13 @@
   }
 
   // Repli effectif : replié tant que les débuts n'ont pas été dépliés à la
-  // main ET qu'aucun filtre n'est actif. Une fois dépliés, le bouton
+  // main. Une fois dépliés, le bouton
   // disparaît (le contenu se déroule sur place, pas de « Masquer » qui
   // flotterait entre deux rôles). Appelé au rendu et à chaque changement de
-  // filtre.
+  // rendu.
   function updateEarlyToggle() {
     const wrap = document.querySelector(".early-toggle-wrap");
-    const expanded = earlyExpanded || activeFilters.size > 0;
+    const expanded = earlyExpanded;
     document.body.classList.toggle("early-collapsed", Boolean(wrap) && !expanded);
     if (wrap) wrap.hidden = expanded;
   }
@@ -390,44 +371,7 @@
     });
   }
 
-  function applyFilters() {
-    requestAnimationFrame(updateExperienceRail);
-    const statusEl = document.getElementById("filterStatus");
-    const clearBtn = document.getElementById("clearFilters");
-    const hasFilters = activeFilters.size > 0;
-    clearBtn.hidden = !hasFilters;
-    // Sur téléphone, les tags par rôle ne s'affichent qu'avec un filtre actif
-    // (css : body:not(.has-filters) .role-skills) — ils répètent la section
-    // Compétences et allongeaient la page d'environ 2 écrans.
-    document.body.classList.toggle("has-filters", hasFilters);
-    updateEarlyToggle();
 
-    let visibleRoles = 0;
-    document.querySelectorAll(".company-block").forEach((block) => {
-      let anyVisible = false;
-      block.querySelectorAll(".role-block").forEach((role) => {
-        const skills = (role.dataset.skills || "").split(",").filter(Boolean);
-        const matches = !hasFilters || skills.some((s) => activeFilters.has(s));
-        role.classList.toggle("is-hidden", !matches);
-        if (matches) {
-          anyVisible = true;
-          visibleRoles++;
-        }
-        role.querySelectorAll(".role-skill").forEach((chip) => {
-          chip.classList.toggle("is-matched", activeFilters.has(chip.dataset.skill));
-        });
-      });
-      block.classList.toggle("is-hidden", !anyVisible);
-    });
-
-    if (hasFilters) {
-      const labels = [...activeFilters].map(skillLabel).join(", ");
-      statusEl.hidden = false;
-      statusEl.textContent = `${t("experiences.filterStatusPrefix")}${labels} — ${visibleRoles} ${t("experiences.filterStatusSuffix")}`;
-    } else {
-      statusEl.hidden = true;
-    }
-  }
 
   // --------------------------------------------------------------------
   // 5. FORMATION / LANGUES / CERTIFICATIONS
@@ -700,7 +644,6 @@
     renderTestimonials();
     renderFormation();
     renderSideProjects();
-    applyFilters(); // ré-applique les filtres actifs sur les nouveaux éléments du DOM
 
     // Les libellés du menu changent de largeur d'une langue à l'autre :
     // on repositionne l'indicateur sur le lien actif après le re-rendu.
@@ -774,7 +717,6 @@
       renderAll();
     });
 
-    setupClearFilters();
     setupEarlyToggle();
     setupScrollSpy();
     setupFitReveal();

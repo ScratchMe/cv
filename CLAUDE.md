@@ -49,7 +49,7 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   est servi tel quel sur cv.antoine.berthaud.me** (GitHub Pages) : ce fichier
   en fait partie, comme README, scripts, supabase et .github. Ne jamais y
   écrire quelque chose qui n'aurait pas sa place en public.
-- `js/app.js` : rendu, filtres de compétences, scroll-spy, durées
+- `js/app.js` : rendu, scroll-spy, durées
   dynamiques, `richText()` (syntaxe `**gras**` → `<strong>`), et le
   **rail chronologique** (`setupExperienceRail`, sept. 2026) : sur
   ordinateur, un rail fixe dans la marge gauche pendant la lecture des
@@ -70,8 +70,7 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   messages tournants de `#fitLoadingStatus` sont décoratifs (`aria-hidden`),
   une seule annonce passe par `#fitAnnounce` (`role=status`) au départ et à
   l'arrivée, `#fitError` est un `role=alert`, et le focus est posé sur
-  `#fitResult` (`tabindex=-1`) après le rendu. Les filtres de compétences
-  portent `aria-pressed`, `#filterStatus` est un `role=status`.
+  `#fitResult` (`tabindex=-1`) après le rendu.
 - `js/project-detail.js` + `project-detail.html` : gabarit réutilisable
   pour les pages de détail ("étude de cas") des side projects, piloté par
   `?slug=`. Ajouter un nouveau side project avec sa page de détail ne
@@ -194,13 +193,24 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   mission et une puce chacun, ligne Équipe conservée (15 développeurs,
   2 PM). Revient sur l'item 18 de l'audit qui les avait étoffés ; le
   bloc « Animateur de la communauté » garde ses trois puces (leadership).
+- **Compétences sans filtres, trente pratiques** (7 sept. 2026, quatrième
+  revue, choix d'Antoine : les filtres étaient « plus gadget qu'autre chose »
+  et n'ont plus de sens une fois la section passée sous les expériences) : les
+  pastilles sont des `<span>`, `applyFilters` et le statut de filtre ont
+  disparu. Les douze outils purs (Jira, Figma, Miro, Postman…) sortent des
+  pastilles pour une ligne de texte « Outils du quotidien » (`EVERYDAY_TOOLS`
+  dans `data.js`), qui garde leur valeur de mots-clés. Quatre pratiques
+  entrent, chacune portée par un fait du site : Stratégie produit,
+  Priorisation, Rétention, Product Analytics. Jamais de mot-clé sans un rôle
+  qui le décrit (ni « Technical Discovery », ni « Opportunity Assessment »).
+  Chaque rôle porte au plus six compétences, affichées sur ordinateur et dans
+  le PDF complet, masquées sur téléphone et dans le court.
 - **Page plus courte sur téléphone** (sept. 2026, validé par Antoine) : les
   rôles terminés au plus tard à `CONFIG.collapseRolesEndingBefore`
   (`"2016-08"` : QA et ESN) sont repliés derrière « Voir mes débuts
   (2011 – 2016) → » (`body.early-collapsed`, bouton inséré après le dernier
-  rôle récent, disparaît une fois déplié) ; un filtre actif les déplie. Les
-  tags par rôle (`.role-skills`) sont masqués ≤ 800 px sauf filtre actif
-  (`body.has-filters`). Le PDF montre toujours tout. 23 → 19 écrans à 375 px.
+  rôle récent, disparaît une fois déplié). Les tags par rôle
+  (`.role-skills`) sont masqués ≤ 800 px. Le PDF montre toujours tout. 23 → 19 écrans à 375 px.
 - **Domaine** : `cv.antoine.berthaud.me`, déjà configuré partout
   (canonical, OG, JSON-LD `Person`, `robots.txt`, `sitemap.xml`, `CNAME`).
 - **Rail chronologique en direction « échelle du temps »** (sept. 2026,
