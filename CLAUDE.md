@@ -199,9 +199,31 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   parallèle d'un poste junior ne valaient pas un bloc de rôle sur un CV
   senior. Le fait vit désormais dans une puce du poste Junior (verbe, chiffre,
   durée) et surtout dans la carte « Leadership » du haut de page, que le
-  recruteur voit avant les expériences. Ne pas écrire « Responsable de la
-  communauté » : le titre réel était « Animateur », et la carte Leadership
-  n'est pas rallongée — trois puces courtes est ce qui la rend lisible.
+  recruteur voit avant les expériences. **Le titre exact est « responsable »**,
+  pas « animateur » : Antoine a été élu par ses pairs à la création du cercle,
+  premier titulaire, puis reconduit pour un second mandat (2 × 5 mois) alors
+  qu'un seul était prévu. C'est le signal de leadership le plus fort du CV, et
+  il a manqué jusqu'au 7 sept. 2026 parce qu'une session précédente avait
+  traduit « responsable du cercle » en « animateur de la communauté » pour
+  éviter le jargon SNCF : garder « communauté de pratiques » (lisible de
+  l'extérieur), jamais « animateur ». Vérifier un titre auprès d'Antoine
+  plutôt que de l'adoucir.
+- **Ordre des sections = parcours du recruteur** (7 sept. 2026, quatrième
+  revue) : profil, ce qui me définit, expériences, **études de cas**,
+  compétences, formation, side projects, recommandation, Fit-Checker. Les
+  compétences sont passées SOUS les expériences (d'où la disparition des
+  filtres), le bandeau Fit-Checker du hero est retiré, la recommandation
+  descend sous les side projects. Les cartes d'études de cas (zone
+  `static:caseGrid`, champs `cardTitle`/`problem`/`approach` de
+  `RESULT_DETAILS`) sont **masquées dans les PDF** : sans lien à suivre elles
+  répètent les chiffres du hero et coûtaient une page.
+- **Le PDF court est le téléchargement par défaut** (7 sept. 2026) : bouton
+  « PDF » = 2 pages, segment « complet » = 5 pages. Les deux fichiers et le
+  sitemap ne changent pas.
+- **Formations continues retirées** (`TRAININGS = []`, 7 sept. 2026, choix
+  d'Antoine) : deux stages de deux jours n'apportaient rien à un profil
+  senior. Le sous-titre disparaît avec la liste (masqué par `app.js`, pas par
+  `:empty` : le titre est un frère de la liste).
 - **Compétences sans filtres, trente pratiques** (7 sept. 2026, quatrième
   revue, choix d'Antoine : les filtres étaient « plus gadget qu'autre chose »
   et n'ont plus de sens une fois la section passée sous les expériences) : les

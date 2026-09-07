@@ -18,16 +18,17 @@
     "nav.profile": { fr: "Profil", en: "Profile" },
     "nav.experience": { fr: "Expériences", en: "Experience" },
     "nav.skills": { fr: "Compétences", en: "Skills" },
+    "nav.cases": { fr: "Études de cas", en: "Case studies" },
     "nav.formation": { fr: "Formation", en: "Education" },
     "nav.fit": { fr: "Fit-Checker", en: "Fit Checker" },
     "nav.projects": { fr: "Side projects", en: "Side projects" },
     "nav.contact": { fr: "Contact", en: "Contact" },
 
     "nav.focusToggle": { fr: "Focus lecture", en: "Focus mode" },
-    "nav.printBtn": { fr: "Télécharger PDF", en: "Download PDF" },
+    "nav.printBtn": { fr: "Télécharger le CV (PDF, 2 pages)", en: "Download the CV (PDF, 2 pages)" },
     "nav.printShort": { fr: "PDF", en: "PDF" },
-    "nav.printShortBtn": { fr: "Télécharger le CV court (PDF, 2 pages)", en: "Download the short CV (PDF, 2 pages)" },
-    "nav.printShortLabel": { fr: "court", en: "short" },
+    "nav.printShortBtn": { fr: "Télécharger le CV complet (PDF, 5 pages)", en: "Download the full CV (PDF, 5 pages)" },
+    "nav.printShortLabel": { fr: "complet", en: "full" },
     "nav.langToggleLabel": { fr: "Switch to English", en: "Passer en français" },
 
     "hero.ctaExperience": { fr: "Voir les expériences", en: "View my experience" },
@@ -43,6 +44,15 @@
     "footer.photos": { fr: "Photos", en: "Photos" },
     "footer.caseStudies": { fr: "Études de cas", en: "Case studies" },
     "hero.seeCaseStudies": { fr: "Voir les {n} études de cas →", en: "See the {n} case studies →" },
+
+    "cases.sectionTitle": { fr: "Études de cas", en: "Case studies" },
+    "cases.intro": {
+      fr: "Trois problèmes produit, ce que j'ai fait et ce que ça a donné.",
+      en: "Three product problems, what I did and what came out of it.",
+    },
+    "cases.problem": { fr: "Problème —", en: "Problem —" },
+    "cases.approach": { fr: "Approche —", en: "Approach —" },
+    "cases.cta": { fr: "Lire l'étude de cas →", en: "Read the case study →" },
 
     "skills.sectionTitle": { fr: "Compétences", en: "Skills" },
     "skills.cat.growth": { fr: "Growth & stratégie", en: "Growth & strategy" },

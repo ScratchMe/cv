@@ -58,6 +58,7 @@ const PAGES = [
       ["pillarGrid", "#pillarGrid"],
       ["skillsGroups", "#skillsGroups"],
       ["experiencesList", "#experiencesList"],
+      ["caseGrid", "#caseGrid"],
       ["educationList", "#educationList"],
       ["trainingsList", "#trainingsList"],
       ["languagesList", "#languagesList"],

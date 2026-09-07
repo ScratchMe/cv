@@ -126,6 +126,18 @@ const HERO_STATS = [
 // jamais pour forcer un découpage artificiel.
 const RESULT_DETAILS = {
   "ab-tasty-activation": {
+    // cardTitle / problem / approach : la carte de la section « Études de cas »
+    // de l'accueil (7 sept. 2026). Le reste de l'entrée alimente results.html.
+    // Une entrée sans cardTitle n'a pas de carte : le champ est le contrat.
+    cardTitle: { fr: "Repenser l'onboarding", en: "Rethinking onboarding" },
+    problem: {
+      fr: "Churn précoce et support saturé, une activation sous le benchmark du marché.",
+      en: "Early churn and an overloaded support team, activation below the market benchmark.",
+    },
+    approach: {
+      fr: "Entretiens utilisateurs, benchmark externe, moteur de qualification à l'inscription, nouveau parcours d'activation.",
+      en: "User interviews, external benchmark, a qualification engine at sign-up, a new activation journey.",
+    },
     company: "AB Tasty",
     companyLogo: "assets/logos/ab-tasty.webp",
     role: "Product Manager",
@@ -159,6 +171,15 @@ const RESULT_DETAILS = {
   },
 
   "everysens-entry-time": {
+    cardTitle: { fr: "Réduire la friction de saisie", en: "Cutting data-entry friction" },
+    problem: {
+      fr: "Une saisie longue et peu fiable sur des trains de 30 wagons et plus.",
+      en: "Slow, error-prone data entry on trains of 30 wagons and more.",
+    },
+    approach: {
+      fr: "Recherche utilisateur, plan de migration porté auprès de la direction, refonte incrémentale, MVP en moins de 2 mois.",
+      en: "User research, a migration plan carried to leadership, incremental rework, MVP in under 2 months.",
+    },
     company: "Everysens",
     companyLogo: "assets/logos/everysens.webp",
     role: "Product Manager",
@@ -193,6 +214,15 @@ const RESULT_DETAILS = {
   },
 
   "sncf-ticket-retrieval": {
+    cardTitle: { fr: "Un parcours critique sans données produit", en: "A critical journey with no product data" },
+    problem: {
+      fr: "Des voyageurs bloqués à la première étape de récupération du billet, sans analytics disponibles.",
+      en: "Travelers stuck on the first step of ticket retrieval, with no analytics available.",
+    },
+    approach: {
+      fr: "Extraction quotidienne des retours sur Twitter via Zapier, seconde méthode de récupération ajoutée.",
+      en: "Daily extraction of Twitter feedback via Zapier, a second retrieval method added.",
+    },
     company: "SNCF Connect & Tech",
     companyLogo: "assets/logos/sncf-connect-tech.webp",
     role: "Product Manager",
@@ -302,8 +332,8 @@ const PILLARS = [
         en: "Two PMs led on AB Tasty's self-serve workstream: splitting the plan, scoping trade-offs.",
       },
       {
-        fr: "Communauté de pratiques PM de plus de 100 personnes chez SNCF, mentorat de 2 à 3 personnes.",
-        en: "A Product Management community of 100+ people at SNCF, mentoring 2 to 3 people.",
+        fr: "Élu responsable de la communauté de pratiques PM de SNCF, plus de 100 personnes, reconduit pour un second mandat ; mentorat de 2 à 3 personnes.",
+        en: "Elected lead of SNCF's 100+ people Product Management community, re-elected for a second term; mentoring 2 to 3 people.",
       },
       {
         fr: "Business case et roadmap portés auprès de la direction ; squads jusqu'à 15 développeurs.",
@@ -550,16 +580,17 @@ const EXPERIENCES = [
             fr: "**Du besoin métier à la livraison** : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.",
             en: "**From business need to delivery**: workshops and high-level sizing with business teams, roadmap and Story Mapping, User Stories and BDD scenarios, acceptance of delivered features.",
           },
-          // Le rôle d'animation de la communauté PM avait son propre bloc
-          // (avr. 2019 – févr. 2020) : supprimé le 7 sept. 2026 (choix
-          // d'Antoine, quatrième revue). Dix mois en parallèle d'un poste
-          // junior ne valaient pas un bloc entier sur un CV senior, et le
-          // signal leadership est déjà porté par la carte « Leadership » du
-          // haut de page, que le recruteur voit avant les expériences. La
-          // puce garde le verbe, le chiffre et la durée.
+          // Ce rôle avait son propre bloc (avr. 2019 – févr. 2020), supprimé
+          // le 7 sept. 2026 : dix mois en parallèle d'un poste junior ne
+          // valaient pas un bloc entier sur un CV senior. Le titre interne
+          // était « responsable du cercle » ; « cercle » est du jargon SNCF
+          // Connect, « communauté de pratiques » se comprend de l'extérieur,
+          // mais le mot « responsable », lui, est le titre exact — élu par ses
+          // pairs à la création, premier titulaire, reconduit alors qu'un seul
+          // mandat était prévu.
           {
-            fr: "**Communauté de pratiques PM de plus de 100 personnes animée** pendant dix mois, en parallèle du poste : veille, ateliers, mentorat de 2 à 3 personnes.",
-            en: "**Ran the company's 100+ people Product Management community** for ten months alongside the role: practice insights, workshops, mentoring 2 to 3 people.",
+            fr: "**Élu responsable de la communauté de pratiques Product Management** de l'entreprise, **plus de 100 personnes** : premier titulaire du poste, reconduit pour un second mandat (2 × 5 mois). Veille, ateliers, mentorat de 2 à 3 personnes.",
+            en: "**Elected lead of the company's Product Management community of practice**, **100+ people**: first to hold the role, re-elected for a second term (2 × 5 months). Practice insights, workshops, mentoring 2 to 3 people.",
           },
         ],
         methodology: "Scrum",
@@ -670,24 +701,11 @@ const EDUCATION = [
   },
 ];
 
-const TRAININGS = [
-  {
-    title: {
-      fr: "Réussir la conduite du changement, donner du sens à vos équipes",
-      en: "Leading change management, giving meaning to your teams",
-    },
-    institution: "Orsys",
-    period: { fr: "Sept. 2020 · 2 jours", en: "Sept. 2020 · 2 days" },
-  },
-  {
-    title: {
-      fr: "Big Data et stratégie marketing, usages et mise en œuvre",
-      en: "Big Data and marketing strategy: uses and implementation",
-    },
-    institution: "Orsys",
-    period: { fr: "Sept. 2021 · 2 jours", en: "Sept. 2021 · 2 days" },
-  },
-];
+// Formations continues. Vidé le 7 sept. 2026 (quatrième revue, choix
+// d'Antoine) : deux stages de deux jours n'apportaient rien à un profil senior
+// et prenaient une carte entière dans le PDF. Ils restent sur LinkedIn. Le
+// sous-titre « Formations continues » disparaît tant que la liste est vide.
+const TRAININGS = [];
 
 const LANGUAGES = [
   { label: { fr: "Français", en: "French" }, level: { fr: "Langue maternelle", en: "Native" } },
@@ -714,8 +732,8 @@ const SIDE_PROJECTS = [
   {
     title: "Tour de Growth",
     description: {
-      fr: "Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini ; le produit a été conçu et construit avec Claude Code.",
-      en: "A free growth check-up tool (AARRR framework), designed and launched to size up a growth strategy in three minutes. In plain language rather than jargon, it shows where it already holds up and where it doesn't yet. The in-depth mode runs on the Gemini API; the product was designed and built with Claude Code.",
+      fr: "Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini.",
+      en: "A free growth check-up tool (AARRR framework), designed and launched to size up a growth strategy in three minutes. In plain language rather than jargon, it shows where it already holds up and where it doesn't yet. The in-depth mode runs on the Gemini API.",
     },
     link: "https://www.tourdegrowth.com",
     detailSlug: "tour-de-growth",

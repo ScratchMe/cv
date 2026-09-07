@@ -251,6 +251,36 @@
   }
 
   // --------------------------------------------------------------------
+  // 3bis. ÉTUDES DE CAS — trois cartes Problème → Approche → Résultat sur
+  //    l'accueil (7 sept. 2026, quatrième revue). Même source que
+  //    results.html : RESULT_DETAILS, dans l'ordre des chiffres du hero,
+  //    dédoublonné (deux chiffres peuvent pointer la même étude). Une entrée
+  //    sans `cardTitle` n'a pas de carte : le champ est le contrat.
+  // --------------------------------------------------------------------
+  function renderCaseStudies() {
+    const grid = document.getElementById("caseGrid");
+    if (!grid) return;
+    const ids = [...new Set(HERO_STATS.map((s) => s.resultId).filter(Boolean))].filter(
+      (id) => RESULT_DETAILS[id] && RESULT_DETAILS[id].cardTitle
+    );
+    grid.innerHTML = ids
+      .map((id) => {
+        const d = RESULT_DETAILS[id];
+        const stat = HERO_STATS.find((s) => s.resultId === id);
+        return `
+      <a class="case-card" href="results.html${window.i18n.langSuffix()}#${id}" data-goatcounter-click="case-card-${id}">
+        <span class="case-company">${d.company}</span>
+        <h3 class="case-title">${tc(d.cardTitle)}</h3>
+        <p class="case-line"><b>${t("cases.problem")}</b> ${tc(d.problem)}</p>
+        <p class="case-line"><b>${t("cases.approach")}</b> ${tc(d.approach)}</p>
+        <p class="case-result"><span class="case-value">${stat ? stat.value : d.value}</span> ${tc(d.label)}</p>
+        <span class="case-cta">${t("cases.cta")}</span>
+      </a>`;
+      })
+      .join("");
+  }
+
+  // --------------------------------------------------------------------
   // 4. EXPÉRIENCES
   //    Chaque rôle : contexte (1-2 phrases), accomplissements (liste),
   //    puis un bandeau "cadre" optionnel (méthodologie / équipe).
@@ -381,9 +411,14 @@
       (e) => `<li><div class="formation-item-title">${tc(e.title)}</div><div class="formation-item-meta">${e.institution} · ${tc(e.period)}</div></li>`
     ).join("");
 
-    document.getElementById("trainingsList").innerHTML = TRAININGS.map(
+    // Liste vide : la liste ET son sous-titre disparaissent (CSS :empty ne
+    // peut pas cacher le titre, qui est un frère).
+    const trainings = document.getElementById("trainingsList");
+    trainings.innerHTML = TRAININGS.map(
       (tItem) => `<li><div class="formation-item-title">${tc(tItem.title)}</div><div class="formation-item-meta">${tItem.institution} · ${tc(tItem.period)}</div></li>`
     ).join("");
+    const trainingsTitle = document.querySelector('[data-i18n="formation.trainings"]');
+    if (trainingsTitle) trainingsTitle.hidden = TRAININGS.length === 0;
 
     document.getElementById("languagesList").innerHTML = LANGUAGES.map(
       (l) => `<li><span>${tc(l.label)}</span><span class="lang-level">${tc(l.level)}</span></li>`
@@ -639,6 +674,7 @@
     applyStaticTranslations();
     renderHero();
     renderPillars();
+    renderCaseStudies();
     renderSkills();
     renderExperiences();
     renderTestimonials();
@@ -681,11 +717,13 @@
     // et le court (2 pages, pour les candidatures transmises par un
     // recruteur). Le suffixe du fichier est dans la langue du document.
     const pdfVariants = {
-      printBtn: { file: (lang) => `assets/cv-antoine-berthaud-${lang}.pdf`, name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}.pdf` },
-      printShortBtn: {
+      // Le bouton principal sert le CV court (2 pages) depuis le 7 sept. 2026 :
+      // c'est le document qu'un recruteur ouvre. Le segment sert le complet.
+      printBtn: {
         file: (lang) => `assets/cv-antoine-berthaud-${lang}-${lang === "fr" ? "court" : "short"}.pdf`,
         name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}-${lang === "fr" ? "court" : "short"}.pdf`,
       },
+      printShortBtn: { file: (lang) => `assets/cv-antoine-berthaud-${lang}.pdf`, name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}.pdf` },
     };
     Object.entries(pdfVariants).forEach(([id, variant]) => {
       const btn = document.getElementById(id);
