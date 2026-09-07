@@ -55,10 +55,25 @@ est trivial et peut se glisser n'importe où après le 4.
 
 ---
 
-## Lot 1 — Expériences
+## Lot 1 — Expériences · FAIT (PR #61)
 
 **Objectif mesurable** : SNCF de 46 % à 30 % ou moins de la section, AB Tasty
-à 35 % ou plus. Mesure avant/après dans la description de la PR.
+à 35 % ou plus.
+
+**Mesuré après le lot 1** (1 280 px, débuts dépliés) : AB Tasty 33,0 %
+(+4,2 pts), Everysens 15,7 %, SNCF 38,8 % (-7,2 pts), ESN 12,5 %. La section
+perd 420 px, la page mobile passe de 21,0 à 20,4 écrans, le PDF complet
+garde 5 pages mais la dernière est à moitié vide (449 pt contre 48 pt avant).
+
+**Cible non atteinte** : les 30 % supposent de retirer un bloc SNCF de plus.
+Les quatre blocs restants pèsent 1 331 px (PM 2020-2022 460, Animateur 268,
+PM Junior 324, QA 62). Le lot 3 (tags réduits) n'y changera rien : il fait
+maigrir AB Tasty autant que SNCF. Options soumises à Antoine, à trancher :
+(a) en rester là — AB Tasty ouvre la section, SNCF est réparti sur quatre
+rôles dont deux anciens ; (b) réduire le poste Junior à sa mission et le bloc
+Animateur à sa mission plus la puce de mentorat → SNCF ≈ 36 % ; (c) fondre le
+bloc Animateur en puce du poste Junior, ce qui revient sur une décision de
+CLAUDE.md → SNCF ≈ 32 %.
 
 ### Changements
 
