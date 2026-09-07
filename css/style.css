@@ -176,14 +176,14 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
    SKILLS / FILTERS
    ============================================================================ */
 .skills-section{padding-bottom:70px;}
-.skills-hint{color:var(--ink-soft);font-size:14px;margin-bottom:22px;}
 .skills-groups{display:flex;flex-direction:column;gap:16px;}
 .skills-group{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
 .skills-group-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);flex:0 0 100%;} /* toujours au-dessus des chips : avec min-width seul, un groupe court (Leadership) restait seul en ligne à côté de son libellé */
 .skills-chips{display:flex;gap:10px;flex-wrap:wrap;}
-.chip{font-size:13.5px;font-weight:600;padding:8px 16px;border-radius:100px;background:var(--surface);border:1.5px solid var(--line);cursor:pointer;transition:all .15s ease;}
-.chip:hover{border-color:var(--violet);}
-.chip.active{background:var(--violet);border-color:var(--violet);color:#fff;}
+.chip{font-size:13.5px;font-weight:600;padding:8px 16px;border-radius:100px;background:var(--surface);border:1.5px solid var(--line);}
+/* Outils du quotidien : une ligne de texte, pas des pastilles (7 sept. 2026). */
+.skills-tools{margin-top:4px;}
+.skills-tools-line{font-size:13.5px;color:var(--ink-soft);line-height:1.7;flex:1 1 320px;min-width:0;}
 
 /* ============================================================================
    EXPERIENCES
@@ -217,7 +217,6 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .role-meta-item b{color:var(--ink);font-weight:600;}
 .role-skills{display:flex;gap:8px;flex-wrap:wrap;}
 .role-skill{font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;background:var(--mint-soft);color:var(--mint-text);}
-.role-skill.is-matched{background:var(--violet);color:#fff;}
 /* Débuts repliés (CONFIG.collapseRolesEndingBefore) : les rôles anciens et les
    entreprises qui n'en ont que restent dans le DOM (indexables), masqués tant
    que body.early-collapsed est posé par app.js. Le PDF montre tout (print). */
@@ -399,10 +398,9 @@ body.focus-mode .ai-badge{background:var(--ink);}
   nav a{font-size:13px;}
   section[id]{scroll-margin-top:150px;} /* header + menu sur deux lignes (~135 px) */
   .chip{font-size:12.5px;padding:6px 12px;} /* rangée de compétences plus courte sur téléphone */
-  /* Les tags par rôle répètent la section Compétences : sur téléphone ils
-     n'apparaissent qu'avec un filtre actif (body.has-filters, app.js), où ils
-     montrent ce qui a matché. Retiré ~2 écrans sur 20. */
-  body:not(.has-filters) .role-skills{display:none;}
+  /* Les tags par rôle répètent la section Compétences : masqués sur téléphone,
+     où ils coûtaient environ 2 écrans sur 20. */
+  .role-skills{display:none;}
   #fit-checker{scroll-margin-top:178px;} /* +28px : la section arrive translatée (.fit-reveal-pending) au moment du calcul du scroll */
   h1{font-size:34px;}
   .navrow{flex-wrap:wrap;gap:8px 20px;padding:14px 22px;}
@@ -485,10 +483,8 @@ body.focus-mode .project-card{box-shadow:none;border:1px solid var(--line);}
 body.focus-mode .pillar{border-top:1px solid var(--line);}
 body.focus-mode .pillar[data-id="leadership"]{background:var(--surface);}
 body.focus-mode .project-card{border-top:1px solid var(--line);}
-body.focus-mode .chip.active,
 body.focus-mode .btn.solid{background:var(--ink);border-color:var(--ink);}
 body.focus-mode .role-skill{background:#F1F1EF;color:var(--ink-soft);}
-body.focus-mode .role-skill.is-matched{background:var(--ink);color:#fff;}
 body.focus-mode .role-meta{background:#F1F1EF;}
 body.focus-mode .role-achievements li::before{background:#F1F1EF;border-color:var(--ink-soft);}
 body.focus-mode .pill{background:#F1F1EF;}
@@ -660,14 +656,15 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Rien de tout ça n'a de sens sur un document figé : nav interactive,
      Fit-Checker (nécessite une vraie IA en direct), bandeau teaser,
      indicateur de scroll, bouton de reset des filtres. */
-  header.top,#fit-checker,.fit-teaser,.herobtns,.skills-hint,.nav-indicator,.site-footer,.role-skills,.project-skills,.quote-mark,.early-toggle-wrap,.xp-rail{display:none !important;}
+  header.top,#fit-checker,.fit-teaser,.herobtns,.nav-indicator,.site-footer,.project-skills,.quote-mark,.early-toggle-wrap,.xp-rail{display:none !important;}
   /* Le PDF montre toujours les débuts repliés sur le site (body.early-collapsed). */
   body.early-collapsed .role-early{display:block !important;}
   body.early-collapsed .company-early{display:block !important;}
-  /* .skills-hint : consigne « Clique sur… » sans objet sur papier.
-     .role-skills et .project-skills : les tags par rôle et du side project
-     répètent la section Compétences (1,8 page
-     de tags dans l'ancien PDF) ; les mots-clés restent une fois pour l'ATS.
+  /* .project-skills : les tags du side project répètent la section
+     Compétences. Les tags par rôle (.role-skills) reviennent en revanche dans
+     le PDF complet depuis le 7 sept. 2026 : réduits à six par rôle, ils
+     tiennent sur une ligne et donnent à un outil de tri le lien entre une
+     compétence et le poste où elle a servi. Le court les masque (ci-dessous).
      .site-footer : les coordonnées sont en page 1 (.print-contact). */
 
   body{color:#000;line-height:1.4;background:#fff;} /* fond blanc : le dégradé faisait une tache sous le contact en dernière page */
@@ -816,6 +813,7 @@ body.focus-mode .pill{background:#F1F1EF;}
   body.cv-court h1{font-size:28px;}
   body.cv-court .pitch{font-size:12.5px;margin-bottom:10px;}
   body.cv-court .hero-stats{margin-bottom:8px;}
+  body.cv-court .role-skills{display:none;} /* le court tient en 2 pages : les tags sortent, les compétences restent en lignes */
   body.cv-court .chip{font-size:11px;padding:4px 9px;}
   body.cv-court .skills-groups{gap:6px;}
   body.cv-court .sectitle h2{font-size:17px;}

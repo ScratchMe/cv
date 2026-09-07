@@ -157,7 +157,7 @@
 <body>
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
-      <p>Sans JavaScript, ce CV s'affiche en français, sans les filtres de compétences, le Fit-Checker ni la version anglaise.</p>
+      <p>Sans JavaScript, ce CV s'affiche en français, sans le Fit-Checker ni la version anglaise.</p>
       <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
          <a href="assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
          <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
@@ -312,46 +312,46 @@
 <!-- /static:pillarGrid -->
     </section>
 
-    <!-- ============================= COMPÉTENCES / FILTRES ============================= -->
+    <!-- ============================= COMPÉTENCES ============================= -->
     <section id="competences" class="skills-section wrap">
       <div class="sectitle">
-        <h2 id="skillsTitle" data-i18n="skills.sectionTitle">Compétences &amp; outils</h2>
+        <h2 id="skillsTitle" data-i18n="skills.sectionTitle">Compétences</h2>
       </div>
-      <p class="skills-hint">
-        <span data-i18n="skills.hint">Clique sur une ou plusieurs compétences pour filtrer les expériences correspondantes ci-dessous.</span>
-        <button id="clearFilters" class="link-btn" type="button" hidden data-i18n="skills.clearFilters">Réinitialiser les filtres ✕</button>
-      </p>
       <!-- static:skillsGroups -->
 <div class="skills-groups" id="skillsGroups" role="group" aria-labelledby="skillsTitle">
       <div class="skills-group">
         <span class="skills-group-label">Growth &amp; stratégie</span>
         <div class="skills-chips">
-          <button class="chip" type="button" aria-pressed="false" data-skill="plg">Product-Led Growth</button><button class="chip" type="button" aria-pressed="false" data-skill="monetization">Monétisation self-serve</button><button class="chip" type="button" aria-pressed="false" data-skill="activation">Onboarding &amp; activation</button><button class="chip" type="button" aria-pressed="false" data-skill="ab-testing">A/B testing &amp; expérimentation</button><button class="chip" type="button" aria-pressed="false" data-skill="okr">OKR</button><button class="chip" type="button" aria-pressed="false" data-skill="roadmapping">Roadmapping</button>
+          <span class="chip">Product-Led Growth</span><span class="chip">Monétisation self-serve</span><span class="chip">Onboarding &amp; activation</span><span class="chip">Rétention</span><span class="chip">A/B testing &amp; expérimentation</span><span class="chip">Stratégie produit</span><span class="chip">OKR</span><span class="chip">Roadmapping</span><span class="chip">Priorisation</span>
         </div>
       </div>
       <div class="skills-group">
         <span class="skills-group-label">Discovery &amp; data</span>
         <div class="skills-chips">
-          <button class="chip" type="button" aria-pressed="false" data-skill="discovery">Discovery</button><button class="chip" type="button" aria-pressed="false" data-skill="user-research">User Research</button><button class="chip" type="button" aria-pressed="false" data-skill="sql">SQL</button><button class="chip" type="button" aria-pressed="false" data-skill="metabase">Metabase</button><button class="chip" type="button" aria-pressed="false" data-skill="mixpanel">Mixpanel</button><button class="chip" type="button" aria-pressed="false" data-skill="segment">Segment</button><button class="chip" type="button" aria-pressed="false" data-skill="looker-studio">Looker Studio</button><button class="chip" type="button" aria-pressed="false" data-skill="matomo">Matomo</button><button class="chip" type="button" aria-pressed="false" data-skill="hotjar">Hotjar</button><button class="chip" type="button" aria-pressed="false" data-skill="heap">Heap</button>
+          <span class="chip">Discovery</span><span class="chip">User Research</span><span class="chip">Product Analytics</span><span class="chip">SQL</span><span class="chip">Metabase</span><span class="chip">Mixpanel</span><span class="chip">Segment</span>
         </div>
       </div>
       <div class="skills-group">
         <span class="skills-group-label">Leadership</span>
         <div class="skills-chips">
-          <button class="chip" type="button" aria-pressed="false" data-skill="stakeholder">Stakeholder Management</button><button class="chip" type="button" aria-pressed="false" data-skill="cross-functional-leadership">Cross-functional Leadership</button><button class="chip" type="button" aria-pressed="false" data-skill="mentoring">Mentoring &amp; Coaching</button>
+          <span class="chip">Stakeholder Management</span><span class="chip">Cross-functional Leadership</span><span class="chip">Mentoring &amp; Coaching</span>
         </div>
       </div>
       <div class="skills-group">
         <span class="skills-group-label">Delivery</span>
         <div class="skills-chips">
-          <button class="chip" type="button" aria-pressed="false" data-skill="agile">Agile / Scrum</button><button class="chip" type="button" aria-pressed="false" data-skill="user-stories">User Stories &amp; Backlog</button><button class="chip" type="button" aria-pressed="false" data-skill="story-mapping">Story Mapping</button><button class="chip" type="button" aria-pressed="false" data-skill="bdd">BDD</button><button class="chip" type="button" aria-pressed="false" data-skill="feature-flagging">Feature Flagging / Progressive Rollout</button><button class="chip" type="button" aria-pressed="false" data-skill="product-ownership">Product Ownership</button><button class="chip" type="button" aria-pressed="false" data-skill="project-management">Gestion de projet</button><button class="chip" type="button" aria-pressed="false" data-skill="functional-analysis">Analyse fonctionnelle</button>
+          <span class="chip">Agile / Scrum</span><span class="chip">User Stories &amp; Backlog</span><span class="chip">Story Mapping</span><span class="chip">BDD</span><span class="chip">Feature Flagging / Progressive Rollout</span><span class="chip">Product Ownership</span><span class="chip">Gestion de projet</span><span class="chip">Analyse fonctionnelle</span>
         </div>
       </div>
       <div class="skills-group">
-        <span class="skills-group-label">Outils &amp; technique</span>
+        <span class="skills-group-label">Technique</span>
         <div class="skills-chips">
-          <button class="chip" type="button" aria-pressed="false" data-skill="jira">Jira</button><button class="chip" type="button" aria-pressed="false" data-skill="productboard">ProductBoard</button><button class="chip" type="button" aria-pressed="false" data-skill="figma">Figma</button><button class="chip" type="button" aria-pressed="false" data-skill="miro">Miro</button><button class="chip" type="button" aria-pressed="false" data-skill="zapier">Zapier</button><button class="chip" type="button" aria-pressed="false" data-skill="genai">IA générative</button><button class="chip" type="button" aria-pressed="false" data-skill="flagship">Flagship</button><button class="chip" type="button" aria-pressed="false" data-skill="akeneo">Akeneo</button><button class="chip" type="button" aria-pressed="false" data-skill="api">API &amp; intégrations</button><button class="chip" type="button" aria-pressed="false" data-skill="llm-integration">Intégration LLM (API Gemini)</button><button class="chip" type="button" aria-pressed="false" data-skill="postman">Postman</button>
+          <span class="chip">API &amp; intégrations</span><span class="chip">Intégration LLM (API Gemini)</span><span class="chip">IA générative</span>
         </div>
+      </div>
+      <div class="skills-group skills-tools">
+        <span class="skills-group-label">Outils du quotidien</span>
+        <p class="skills-tools-line">Jira · ProductBoard · Figma · Miro · Zapier · Flagship · Akeneo · Postman · Looker Studio · Matomo · Hotjar · Heap</p>
       </div></div>
 <!-- /static:skillsGroups -->
     </section>
@@ -361,7 +361,6 @@
       <div class="sectitle">
         <h2 data-i18n="experiences.sectionTitle">Expériences</h2>
       </div>
-      <p class="filter-status" id="filterStatus" role="status" aria-live="polite" hidden></p>
       <!-- static:experiencesList -->
 <div id="experiencesList" class="experiences-list">
       <article class="company-block" data-company="0">
@@ -375,7 +374,7 @@
           <div class="company-total">Total<strong>3 ans</strong></div>
         </div>
         
-        <div class="role-block" data-company="0" data-role="0" data-skills="plg,activation,monetization,ab-testing,api,discovery,roadmapping,stakeholder,cross-functional-leadership,user-stories,mentoring,jira,sql,metabase,mixpanel,segment,genai,okr,user-research">
+        <div class="role-block" data-company="0" data-role="0" data-skills="plg,monetization,product-strategy,roadmapping,stakeholder,cross-functional-leadership">
           <div class="role-top">
             <h4 class="role-title">Senior Growth Product Manager</h4>
             <span class="role-dates">Mai 2025 — Aujourd'hui · 1 an 4 mois</span>
@@ -383,9 +382,9 @@
           <p class="role-context">Mission : ouvrir la plateforme au self-serve en complément de la vente grands comptes, au sein du pilier Growth d'AB Tasty (SaaS d'Experience Optimization : A/B Testing, Personnalisation). Équipe internationale, anglais au quotidien.</p>
           <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>Tunnel self-serve livré en production derrière un feature flag</strong>, prêt au lancement : inscription publique, freemium limité, facturation Hyperline cadrée de bout en bout (paiement, abonnements, accès aux fonctionnalités selon l'offre). Lancement suspendu à la suite de la fusion d'AB Tasty avec VWO.</li><li><strong>Business case et roadmap du modèle hybride portés devant la direction</strong> : passage d'un modèle 100 % Sales-Led à un modèle où les grands comptes restent suivis par les sales et les autres s'inscrivent et paient en autonomie.</li><li><strong>2 Product Managers animés</strong> sur le chantier : répartition du plan, arbitrages de périmètre, cohérence d'ensemble.</li></ul>
           <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 4 développeurs, 1 tech lead, 1 QA, 1 Product Designer</span></div>
-          <div class="role-skills"><span class="role-skill" data-skill="plg">Product-Led Growth</span><span class="role-skill" data-skill="activation">Onboarding &amp; activation</span><span class="role-skill" data-skill="monetization">Monétisation self-serve</span><span class="role-skill" data-skill="ab-testing">A/B testing &amp; expérimentation</span><span class="role-skill" data-skill="api">API &amp; intégrations</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="cross-functional-leadership">Cross-functional Leadership</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="mentoring">Mentoring &amp; Coaching</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="sql">SQL</span><span class="role-skill" data-skill="metabase">Metabase</span><span class="role-skill" data-skill="mixpanel">Mixpanel</span><span class="role-skill" data-skill="segment">Segment</span><span class="role-skill" data-skill="genai">IA générative</span><span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="user-research">User Research</span></div>
+          <div class="role-skills"><span class="role-skill" data-skill="plg">Product-Led Growth</span><span class="role-skill" data-skill="monetization">Monétisation self-serve</span><span class="role-skill" data-skill="product-strategy">Stratégie produit</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="cross-functional-leadership">Cross-functional Leadership</span></div>
         </div>
-        <div class="role-block" data-company="0" data-role="1" data-skills="activation,ab-testing,discovery,roadmapping,stakeholder,user-stories,sql,metabase,mixpanel,jira,zapier,looker-studio,segment,genai,okr,user-research,flagship,feature-flagging">
+        <div class="role-block" data-company="0" data-role="1" data-skills="activation,retention,ab-testing,product-analytics,discovery,feature-flagging">
           <div class="role-top">
             <h4 class="role-title">Product Manager</h4>
             <span class="role-dates">Sep 2023 — Mai 2025 · 1 an 8 mois</span>
@@ -393,7 +392,7 @@
           <p class="role-context">Mission : la « Product eXperience » de la plateforme d'Experience Optimization (A/B Testing, Personnalisation) : onboarding, activation, rétention.</p>
           <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>+15 % de taux d'activation, -20 % de Time-to-Value</strong> : refonte de l'onboarding avec un moteur de qualification utilisateur et un nouveau parcours d'activation.</li><li><strong>2FA obligatoire déployée sur 100 % de la base utilisateur</strong> par vagues successives, calées sur la capacité des Customer Success Managers à accompagner leurs clients : aucune perte d'activité, impact support quasi nul.</li><li><strong>Churn, rétention, activation et Time-to-Value suivis automatiquement</strong> : mise en place de l'infrastructure de données produit (SQL, Metabase, Mixpanel).</li><li><strong>Vision produit recentrée sur la rétention et l'engagement</strong> : « Make our users fall in love with our product, repeatedly ».</li></ul>
           <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 3 développeurs, 1 tech lead, 1 QA, 1 Product Designer</span></div>
-          <div class="role-skills"><span class="role-skill" data-skill="activation">Onboarding &amp; activation</span><span class="role-skill" data-skill="ab-testing">A/B testing &amp; expérimentation</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="sql">SQL</span><span class="role-skill" data-skill="metabase">Metabase</span><span class="role-skill" data-skill="mixpanel">Mixpanel</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="zapier">Zapier</span><span class="role-skill" data-skill="looker-studio">Looker Studio</span><span class="role-skill" data-skill="segment">Segment</span><span class="role-skill" data-skill="genai">IA générative</span><span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="flagship">Flagship</span><span class="role-skill" data-skill="feature-flagging">Feature Flagging / Progressive Rollout</span></div>
+          <div class="role-skills"><span class="role-skill" data-skill="activation">Onboarding &amp; activation</span><span class="role-skill" data-skill="retention">Rétention</span><span class="role-skill" data-skill="ab-testing">A/B testing &amp; expérimentation</span><span class="role-skill" data-skill="product-analytics">Product Analytics</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="feature-flagging">Feature Flagging / Progressive Rollout</span></div>
         </div>
       </article>
       <article class="company-block" data-company="1">
@@ -407,7 +406,7 @@
           
         </div>
         
-        <div class="role-block" data-company="1" data-role="0" data-skills="discovery,user-research,roadmapping,hotjar,heap,stakeholder,jira,metabase,productboard,figma,miro">
+        <div class="role-block" data-company="1" data-role="0" data-skills="discovery,user-research,roadmapping,prioritization,stakeholder">
           <div class="role-top">
             <h4 class="role-title">Product Manager</h4>
             <span class="role-dates">Avr 2022 — Sep 2023 · 1 an 5 mois</span>
@@ -415,7 +414,7 @@
           <p class="role-context">Mission : le module « Exécution » (lettres de voiture, trains de 30 wagons et plus) d'un SaaS de gestion et de suivi du fret ferroviaire, au service du report modal de la route vers le rail. Anglais au quotidien avec l'équipe.</p>
           <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>-50 % de temps de saisie, +20 % de satisfaction utilisateur</strong> : refonte technique et fonctionnelle du module de saisie, obtenue auprès de la direction et menée en incrémental, <strong>MVP livré en moins de 2 mois</strong>.</li><li><strong>Adoption utilisateur et fiabilité des données comme priorités de la roadmap</strong> du module : saisie des transports, validation des lettres de voiture, suivi en temps réel.</li><li><strong>Recherche utilisateur et maquettes UI/UX menées en autonomie</strong> (Hotjar, Heap) avant l'arrivée d'une Product Designer.</li></ul>
           <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 4 développeurs, 1 QA, puis 1 Product Designer</span></div>
-          <div class="role-skills"><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="hotjar">Hotjar</span><span class="role-skill" data-skill="heap">Heap</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="metabase">Metabase</span><span class="role-skill" data-skill="productboard">ProductBoard</span><span class="role-skill" data-skill="figma">Figma</span><span class="role-skill" data-skill="miro">Miro</span></div>
+          <div class="role-skills"><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="prioritization">Priorisation</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span></div>
         </div>
       </article>
       <article class="company-block" data-company="2">
@@ -429,7 +428,7 @@
           <div class="company-total">Total<strong>7 ans 3 mois</strong></div>
         </div>
         
-        <div class="role-block" data-company="2" data-role="0" data-skills="user-research,okr,roadmapping,user-stories,product-ownership,agile,discovery,stakeholder,zapier,jira,miro,matomo,akeneo">
+        <div class="role-block" data-company="2" data-role="0" data-skills="user-research,okr,roadmapping,prioritization,stakeholder,discovery">
           <div class="role-top">
             <h4 class="role-title">Product Manager</h4>
             <span class="role-dates">Sep 2020 — Avr 2022 · 1 an 7 mois</span>
@@ -437,9 +436,9 @@
           <p class="role-context">Mission : l'outil de génération de boutiques en ligne de titres de transport (Transilien, TER), puis en parallèle, d'octobre 2021 à avril 2022, la plateforme sanitaire Prêt à Voyager (jusqu'à <strong>40 000 visiteurs par jour</strong>), où les voyageurs vérifiaient eux-mêmes pass sanitaire et billet pendant le Covid-19.</p>
           <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>+100 % sur le taux de conversion</strong> de la première étape de récupération du billet sur Prêt à Voyager : parcours retravaillé à partir des retours des voyageurs collectés sur Twitter (extraction quotidienne via Zapier), plateforme redéveloppée en interne.</li><li><strong>Une mission et une vision produit communes</strong> aux stakeholders et au service marketing des boutiques en ligne, formalisées et partagées.</li><li><strong>Stratégie 2021 tenue par des OKR</strong> : roadmap de delivery, priorisation du backlog, discovery relancé (sondages utilisateurs, exploitation de la data disponible).</li></ul>
           <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum, Kanban</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — 3 développeurs, 1 Scrum Master, 1 Delivery Manager (boutiques) · 4 développeurs, 1 Engineering Manager (Prêt à Voyager)</span></div>
-          <div class="role-skills"><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="product-ownership">Product Ownership</span><span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="discovery">Discovery</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="zapier">Zapier</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="miro">Miro</span><span class="role-skill" data-skill="matomo">Matomo</span><span class="role-skill" data-skill="akeneo">Akeneo</span></div>
+          <div class="role-skills"><span class="role-skill" data-skill="user-research">User Research</span><span class="role-skill" data-skill="okr">OKR</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="prioritization">Priorisation</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="discovery">Discovery</span></div>
         </div>
-        <div class="role-block" data-company="2" data-role="1" data-skills="agile,mentoring">
+        <div class="role-block" data-company="2" data-role="1" data-skills="mentoring,cross-functional-leadership">
           <div class="role-top">
             <h4 class="role-title">Animateur de la communauté Product Management</h4>
             <span class="role-dates">Avr 2019 — Fév 2020 · 10 mois</span>
@@ -447,9 +446,9 @@
           <p class="role-context">Animation de la communauté de pratiques Product Management de l'entreprise, <strong>plus de 100 personnes</strong>, en parallèle du poste de Product Manager.</p>
           <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li>Partage de veille sur les pratiques Product Management et animation des temps d'échange.</li><li>Ateliers et exercices pour faire progresser la communauté.</li><li>Mentorat de 2 à 3 personnes tout au long du mandat.</li></ul>
           
-          <div class="role-skills"><span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="mentoring">Mentoring &amp; Coaching</span></div>
+          <div class="role-skills"><span class="role-skill" data-skill="mentoring">Mentoring &amp; Coaching</span><span class="role-skill" data-skill="cross-functional-leadership">Cross-functional Leadership</span></div>
         </div>
-        <div class="role-block" data-company="2" data-role="2" data-skills="api,roadmapping,story-mapping,user-stories,product-ownership,stakeholder,agile,bdd,jira,miro,postman">
+        <div class="role-block" data-company="2" data-role="2" data-skills="api,user-stories,story-mapping,bdd,agile">
           <div class="role-top">
             <h4 class="role-title">Product Manager Junior</h4>
             <span class="role-dates">Août 2016 — Sep 2020 · 4 ans 1 mois</span>
@@ -457,7 +456,7 @@
           <p class="role-context">Mission : la digitalisation de la vente de billets groupes en B2B (vendeurs SNCF, agences de voyage), dont j'avais été lead test côté grand public, puis les web services (API) de distribution des titres TER et urbains utilisés par les canaux de vente.</p>
           <div class="role-achievements-label">Accomplissements</div><ul class="role-achievements"><li><strong>Du besoin métier à la livraison</strong> : ateliers et macro-chiffrage avec les équipes métier, roadmap et Story Mapping, User Stories et scénarios BDD, validation des fonctionnalités livrées.</li></ul>
           <div class="role-meta"><span class="role-meta-item"><span aria-hidden="true">🧭</span> <b>Méthodologie</b> — Scrum</span><span class="role-meta-item"><span aria-hidden="true">👥</span> <b>Équipe</b> — Jusqu'à 15 développeurs, 2 Product Managers, 1 QA, 1 Scrum Master, 1 Delivery Manager</span></div>
-          <div class="role-skills"><span class="role-skill" data-skill="api">API &amp; intégrations</span><span class="role-skill" data-skill="roadmapping">Roadmapping</span><span class="role-skill" data-skill="story-mapping">Story Mapping</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="product-ownership">Product Ownership</span><span class="role-skill" data-skill="stakeholder">Stakeholder Management</span><span class="role-skill" data-skill="agile">Agile / Scrum</span><span class="role-skill" data-skill="bdd">BDD</span><span class="role-skill" data-skill="jira">Jira</span><span class="role-skill" data-skill="miro">Miro</span><span class="role-skill" data-skill="postman">Postman</span></div>
+          <div class="role-skills"><span class="role-skill" data-skill="api">API &amp; intégrations</span><span class="role-skill" data-skill="user-stories">User Stories &amp; Backlog</span><span class="role-skill" data-skill="story-mapping">Story Mapping</span><span class="role-skill" data-skill="bdd">BDD</span><span class="role-skill" data-skill="agile">Agile / Scrum</span></div>
         </div><div class="early-toggle-wrap"><button class="early-toggle" type="button">Voir mes débuts (2011 – 2016) →</button></div>
         <div class="role-block role-early" data-company="2" data-role="3" data-skills="">
           <div class="role-top">
