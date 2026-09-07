@@ -226,6 +226,22 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   d'Antoine) : deux stages de deux jours n'apportaient rien à un profil
   senior. Le sous-titre disparaît avec la liste (masqué par `app.js`, pas par
   `:empty` : le titre est un frère de la liste).
+- **Le menu tient sur une ligne, et c'est fragile** (mesuré deux fois, sept.
+  2026) : la barre est plafonnée à `--maxw` (1 100 px), donc élargir l'écran ne
+  donne aucune place, et le `<nav>` est un flex item qui se rétrécit avant de
+  laisser le menu passer sur deux lignes. Avec huit entrées il faut 678 px pour
+  678 px disponibles : la marge est nulle. Toute entrée ajoutée, tout libellé
+  rallongé, tout bouton ajouté dans `.navactions` casse la ligne — mesurer la
+  hauteur de `header.top` (76 px = une ligne, 100 px et plus = deux) à 1 280,
+  1 100 et 1 090 px avant de conclure. Sous 1 040 px le menu passe sous le logo,
+  comme sur téléphone. Ne pas compter sur un calcul de largeurs : le `gap` de
+  `.navrow` et le rétrécissement du nav faussent le résultat.
+- **Section Formation en trois colonnes sur le site, deux à l'impression**
+  (7 sept. 2026) : depuis le retrait des formations continues, la colonne de
+  gauche n'a plus qu'une carte et laissait un grand vide. `.formation-side`
+  passe en `display:contents` pour que langues et certifications deviennent
+  deux colonnes. En print, trois colonnes cassaient les libellés sur cinq
+  lignes : le `@media print` rétablit deux colonnes et le flex.
 - **Une étude de cas peut n'avoir aucun chiffre** (7 sept. 2026) : l'entrée
   `RESULT_DETAILS` omet alors `value` et porte un champ `status` (ce que le
   chantier est devenu), affiché en bandeau en tête de l'étude et à la place du

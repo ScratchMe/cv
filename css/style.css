@@ -54,11 +54,17 @@ section[id]{scroll-margin-top:88px;}
    NAV
    ============================================================================ */
 header.top{position:sticky;top:0;z-index:20;background:rgba(245,242,251,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-.navrow{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;gap:16px;}
+.navrow{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;gap:12px;}
 .mark{font-weight:700;font-size:17px;text-decoration:none;}
 .mark span{color:var(--violet);}
-nav ul{list-style:none;display:flex;gap:18px;flex-wrap:wrap;position:relative;}
-nav a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s ease;}
+/* Huit entrées depuis « Études de cas ». La barre est plafonnée à --maxw
+   (1 100 px) : élargir l'écran ne donne aucune place, et le <nav> est un flex
+   item qui se rétrécit avant de laisser le menu wrapper. Mesuré le 7 sept.
+   2026 à 1 280 px : 712 px nécessaires pour 662 px disponibles. Les 50 px
+   manquants ont été repris sur les gouttières et les boutons d'action, pas
+   sur les libellés. Toute nouvelle entrée de menu demandera de re-mesurer. */
+nav ul{list-style:none;display:flex;gap:12px;flex-wrap:wrap;position:relative;}
+nav a{color:var(--ink-soft);text-decoration:none;font-size:13px;font-weight:500;transition:color .15s ease;}
 nav a:hover{color:var(--violet);}
 nav a.is-active{color:var(--violet);}
 .nav-indicator{display:block;position:absolute;left:0;top:0;height:2px;width:0;background:var(--violet);border-radius:2px;opacity:0;transition:transform .25s ease, top .25s ease, width .25s ease, opacity .2s ease;pointer-events:none;}
@@ -71,8 +77,8 @@ nav a.is-active{color:var(--violet);}
   vertical-align:middle;margin-left:5px;white-space:nowrap;
 }
 .ai-badge-lg{font-size:13px;padding:6px 14px;margin-left:12px;}
-.navactions{display:flex;gap:10px;flex-shrink:0;}
-.btn{font-size:13px;font-weight:600;padding:10px 18px;border-radius:100px;cursor:pointer;border:1.5px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;transition:transform .15s ease, box-shadow .15s ease;}
+.navactions{display:flex;gap:8px;flex-shrink:0;}
+.btn{font-size:13px;font-weight:600;padding:10px 15px;border-radius:100px;cursor:pointer;border:1.5px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;transition:transform .15s ease, box-shadow .15s ease;}
 .btn:hover{transform:translateY(-1px);}
 .btn.solid{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 6px 16px rgba(108,60,233,.28);}
 .btn.icon-btn{width:38px;height:38px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -84,7 +90,7 @@ nav a.is-active{color:var(--violet);}
    sur deux lignes à 1 280 px. */
 .pdf-group{display:inline-flex;align-items:center;flex-shrink:0;}
 .pdf-group .label-btn:first-child{border-top-right-radius:0;border-bottom-right-radius:0;}
-.pdf-group .pdf-short{border-top-left-radius:0;border-bottom-left-radius:0;padding:0 13px;margin-left:-1.5px;}
+.pdf-group .pdf-short{border-top-left-radius:0;border-bottom-left-radius:0;padding:0 11px;margin-left:-1.5px;}
 .pdf-group .pdf-short:hover{transform:translateY(-1px);}
 .btn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
 .link-btn{background:none;border:none;color:var(--violet);font-weight:600;font-size:13px;cursor:pointer;text-decoration:underline;margin-left:8px;}
@@ -265,7 +271,11 @@ body.early-collapsed .role-early,body.early-collapsed .company-early{display:non
    FORMATION / LANGUES / CERTIFICATIONS
    ============================================================================ */
 .formation-section{padding-bottom:90px;}
-.formation-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:24px;align-items:start;}
+/* Trois colonnes depuis le retrait des formations continues (7 sept. 2026) :
+   la colonne de gauche n'ayant plus qu'une carte, la mise en page 1,6fr / 1fr
+   laissait un grand vide sous l'éducation. `display:contents` sort langues et
+   certifications de leur conteneur pour qu'elles deviennent deux colonnes. */
+.formation-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:24px;align-items:start;}
 .formation-subtitle{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:12px;font-family:'Space Grotesk',sans-serif;}
 .formation-col .formation-subtitle:not(:first-child){margin-top:22px;}
 .formation-list{list-style:none;display:flex;flex-direction:column;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
@@ -277,7 +287,7 @@ body.early-collapsed .role-early,body.early-collapsed .company-early{display:non
 .formation-list li:last-child{border-bottom:none;}
 .formation-item-title{font-size:14.5px;font-weight:600;margin-bottom:3px;}
 .formation-item-meta{font-size:13px;color:var(--ink-soft);}
-.formation-side{display:flex;flex-direction:column;gap:20px;}
+.formation-side{display:contents;}
 .formation-card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;border-top:5px solid var(--mint);}
 .formation-card:last-child{border-top-color:var(--coral);}
 .lang-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
@@ -411,10 +421,25 @@ body.focus-mode .ai-badge{background:var(--ink);}
    ============================================================================ */
 /* Palier intermédiaire : resserre le menu avant de le masquer complètement,
    pour repousser le point où il passerait sur 2 lignes. */
-@media(max-width:1080px) and (min-width:801px){
+/* Sous 1 040 px, les huit entrées ne tiennent plus sur une ligne à côté du
+   logo et des actions : plutôt que deux lignes de liens en escalier, le menu
+   passe sous le logo, comme sur téléphone (variante validée en sept. 2026).
+   Mesuré le 7 sept. 2026 : à 1 000 px il manquait 36 px, à 900 px 136 px. */
+@media(max-width:1040px) and (min-width:801px){
+  nav{display:block;flex-basis:100%;order:3;}
+  nav ul{gap:8px 14px;}
+  nav li{white-space:nowrap;}
+  .navrow{flex-wrap:wrap;gap:8px 20px;padding:14px 22px;}
+  section[id]{scroll-margin-top:150px;} /* header + menu sur deux étages */
+  #fit-checker{scroll-margin-top:178px;}
+}
+
+/* Jusqu'à 1 099 px et non 1 080 : entre les deux, la barre suit la largeur de
+   la fenêtre alors que --maxw ne joue plus, et le menu manquait de 4 px. */
+@media(max-width:1099px) and (min-width:801px){
   .pillar-grid{grid-template-columns:repeat(2,1fr);} /* quatre cartes en 2 × 2 sur tablette */
-  nav ul{gap:16px;}
-  nav a{font-size:13px;}
+  nav ul{gap:11px;}
+  nav a{font-size:12.5px;}
   .navrow{padding:16px 20px;}
   .navactions{gap:6px;}
 }
@@ -463,6 +488,7 @@ body.focus-mode .ai-badge{background:var(--ink);}
   /* Formation sur une colonne : à 360-375 px, la carte Langues/Certifications
      faisait 190 px de large et le TOEIC passait sur quatre lignes. */
   .formation-grid{grid-template-columns:1fr;}
+  .formation-side{display:contents;}
   /* En-tête d'entreprise : « TOTAL 7 ans / 3 / mois » s'empilait en colonne ;
      le total passe sous le nom, logo et nom restent sur la même ligne. */
   .company-header{flex-wrap:wrap;gap:14px;}
@@ -724,7 +750,12 @@ body.focus-mode .pill{background:#F1F1EF;}
   .hero-grid{grid-template-columns:1fr 150px;text-align:left;}
   .photo-ring{order:0;width:130px;height:130px;}
   .pillar-grid{grid-template-columns:repeat(2,1fr);gap:12px;} /* 4 cartes en 2 × 2 : 4 colonnes seraient illisibles sur la largeur A4 */
+  /* Deux colonnes à l'impression : sur 186 mm utiles, trois colonnes cassaient
+     « Langue maternelle » et la certification en cinq lignes. Le vide qui a
+     motivé les trois colonnes sur le site n'existe pas ici, le contenu étant
+     plus dense. */
   .formation-grid{grid-template-columns:1.6fr 1fr;}
+  .formation-side{display:flex;flex-direction:column;gap:12px;}
   h1{font-size:32px;margin-bottom:4px;}
   .eyebrow{font-size:11px;padding:4px 10px;margin-bottom:10px;}
   .role{font-size:15px;margin-bottom:10px;}
