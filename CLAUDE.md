@@ -315,6 +315,19 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   les deux blocs restant dans le HTML pour les visiteurs sans JavaScript.
   Acceptable parce qu'une 404 n'est pas indexée (aucun enjeu Googlebot) ;
   ne pas s'en servir comme précédent pour les autres pages.
+- **Polices de secours calibrées contre le CLS** (13 sept. 2026, rapport
+  Lighthouse) : le seul défaut réel du site était un CLS de 0,112, causé
+  uniquement par l'arrivée de Space Grotesk et Work Sans (les autres décalages
+  mesurés valaient 0). Deux `@font-face` `'... Fallback'` en tête de
+  `style.css` reproduisent l'encombrement des vraies polices à partir d'Arial
+  (`size-adjust`, `ascent`/`descent-override`), et chaque pile de polices les
+  cite entre la vraie police et `sans-serif`. Mesuré en local avec les woff2
+  retardés de 1,2 s : 0,112 → 0,001. Si une des deux polices change, recalculer
+  (méthode dans le commentaire du fichier et piège n° 14). Les autres points du
+  rapport ne sont pas des défauts du site : erreurs console = GoatCounter bloqué
+  par l'uBlock d'Antoine, « unused JavaScript » 747 Kio = 100 % des fichiers
+  `chrome-extension://`, cache de 10 min = imposé par GitHub Pages, minification
+  CSS/JS = 12 Kio sur des fichiers écrits à la main.
 - **Objectif SEO réaliste** : premier sur le nom et ses variantes, longue
   traîne localisée ("senior growth product manager Nantes"), lisible par les
   moteurs IA. Pas de course à "product manager Nantes" (page de résultats
@@ -405,6 +418,13 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
     `canonicalLink` existait mais n'était jamais mis à jour. Toute page dont
     l'URL porte un paramètre significatif doit poser son canonical en JS
     avec ce paramètre, et la variante sans paramètre doit être en `noindex`.
+14. **`size-adjust` d'une police de secours ne se calcule pas depuis
+    `xAvgCharWidth`** (tables OS/2 des `.ttf`) : cette moyenne est pondérée sur
+    un jeu de caractères qui n'a rien à voir avec le texte du site et donnait
+    ici 129 % / 138 % au lieu des 101 % / 109 % réels — la page devenait
+    **plus haute** avec le secours « calibré » (+787 px) qu'avec Arial brut
+    (-177 px). La bonne mesure : `canvas.measureText()` sur un vrai paragraphe
+    du site, police web vs police de secours, à la même taille.
 
 ## Méthode de travail établie
 
