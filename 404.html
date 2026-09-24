@@ -13,16 +13,18 @@
      visiteur voit les deux blocs.
      SEULE DÉTECTION DE LA LANGUE DU NAVIGATEUR DU SITE (décision d'Antoine,
      sept. 2026, voir CLAUDE.md) : le script ci-dessous ne garde que le bloc
-     qui correspond à ?lang= si l'URL cassée le portait, sinon à
-     navigator.language (français → FR, tout le reste → EN). Partout ailleurs
+     qui correspond à l'URL cassée si elle en dit quelque chose (chemin sous
+     /en/, ou ancien paramètre ?lang=), sinon à navigator.language (français
+     → FR, tout le reste → EN). Partout ailleurs
      la langue vient de l'URL, jamais du navigateur (Googlebot navigue en
      anglais) ; ici une 404 n'est pas indexée, donc pas d'enjeu SEO, et
      GitHub Pages ne donne aucun autre signal de langue. Ne pas étendre. -->
 <script>
   (function () {
-    var fromUrl = /[?&]lang=(fr|en)(?:&|$)/.exec(location.search);
+    var fromParam = /[?&]lang=(fr|en)(?:&|$)/.exec(location.search);
+    var fromUrl = /^\/en(\/|$)/.test(location.pathname) ? "en" : fromParam ? fromParam[1] : null;
     var browser = String(navigator.language || "").toLowerCase();
-    var lang = fromUrl ? fromUrl[1] : (browser.indexOf("fr") === 0 ? "fr" : "en");
+    var lang = fromUrl || (browser.indexOf("fr") === 0 ? "fr" : "en");
     document.documentElement.lang = lang;
     document.documentElement.classList.add("lang-" + lang);
     if (lang === "en") document.title = "Page not found — Antoine Berthaud";
@@ -61,7 +63,7 @@
       <h1>This page doesn't exist</h1>
       <p>The address may be wrong, or the page has moved. The CV is right here.</p>
       <div class="btns">
-        <a href="/?lang=en" class="btn solid">Back to the CV</a>
+        <a href="/en/" class="btn solid">Back to the CV</a>
         <a href="/assets/cv-antoine-berthaud-en.pdf" class="btn">CV as PDF</a>
       </div>
     </section>

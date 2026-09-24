@@ -27,26 +27,33 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   SIDE_PROJECTS, PROJECT_DETAILS, EDUCATION, LANGUAGES, CERTIFICATIONS.
   `PROFILE.seo` porte le `<title>` et la meta description de l'accueil par
   langue.
-- **Pages pré-rendues** (sept. 2026) : les trois HTML portent la version
-  française rendue, entre des marqueurs `<!-- static:ID -->` …
-  `<!-- /static:ID -->` (une vingtaine de zones sur `index.html`, tout le
-  `<main>` sur `results.html` et `project-detail.html`) plus `<title>`,
-  description et titres/descriptions `og:`/`twitter:` de chaque page — c'est
-  ce que lisent les robots sans JavaScript (moteurs IA, aperçus, outils de
-  tri de candidatures ; 258 → ~1 800 mots sur l'accueil). **Tout ce qui est
-  entre deux marqueurs est GÉNÉRÉ par `scripts/generate-static.js` (CI,
-  même workflow que les PDF) : ne jamais l'éditer à la main**, ni y voir une
-  « copie à resynchroniser » — modifier `data.js`/`i18n.js`, la CI régénère
-  et recommit. Les JS re-rendent par-dessus au chargement (idempotent : même
-  HTML en FR, EN sur `?lang=en`), et avertissent en console si le rendu
-  diverge du pré-rendu, ce qui signale une page pas encore régénérée. Sur
-  `?lang=en`, un script inline du `<head>` pose `html.lang-pending` (body
-  invisible) jusqu'au premier rendu anglais, avec un délai de sécurité de
-  1,5 s. Seuls restent en dur, hors zones : la photo du hero (`#heroPhoto`),
-  les textes `data-i18n` (menu, titres de section) et le `<noscript>`.
-  `project-detail.html` (page gabarit `?slug=`) est pré-rendue avec le seul
-  side project ; le script refuse de tourner si `PROJECT_DETAILS` en compte
-  plus d'un — il faudra alors une page par projet.
+- **Pages pré-rendues, en deux langues** (sept. 2026 ; versions anglaises
+  statiques depuis la mission SEO du 24/09/2026) : les HTML portent la page
+  rendue entre des marqueurs `<!-- static:ID -->` … `<!-- /static:ID -->`
+  (une vingtaine de zones sur `index.html`, tout le `<main>` sur
+  `results.html` et `project-detail.html`) plus `<title>`, description et
+  titres/descriptions `og:`/`twitter:` — c'est ce que lisent les robots sans
+  JavaScript (moteurs IA, aperçus, outils de tri de candidatures ; 258 →
+  ~1 800 mots sur l'accueil). **Tout ce qui est entre deux marqueurs est
+  GÉNÉRÉ par `scripts/generate-static.js` (CI, même workflow que les PDF) :
+  ne jamais l'éditer à la main**, ni y voir une « copie à resynchroniser » —
+  modifier `data.js`/`i18n.js`, la CI régénère et recommit. `index.html` et
+  `results.html` sont les **gabarits** (français, racine) ; le script en tire
+  `en/index.html` et `en/results.html`, **entièrement générés** (même
+  gabarit, `lang="en"`, rendus à leur adresse `/en/…`). Il écrit aussi, dans
+  les deux langues : zones `langLinks` (canonical, hreflang, og:url,
+  og:locale), `jsonLd` (`scripts/lib/structured-data.js`), `langToggle` (le
+  lien FR/EN, un vrai `<a>`), et les textes du gabarit marqués `data-i18n`,
+  `-placeholder`, `-aria`, `-alt` (menu, titres, `<noscript>`), repris
+  d'`i18n.js`. Les JS re-rendent par-dessus au chargement (idempotent) et
+  avertissent en console (`[cv] …`) si un texte statique diverge des sources :
+  page pas encore régénérée. `project-detail.html` (page gabarit `?slug=`)
+  est pré-rendue en français avec le seul side project, traduite en JS sur
+  `?lang=en` (avec `html.lang-pending`, body invisible jusqu'au rendu
+  anglais) ; le script refuse de tourner si `PROJECT_DETAILS` en compte plus
+  d'un — il faudra alors une page par projet. `scripts/check-seo.mjs`
+  (`npm run check-seo`, serveur sur le port 8080) vérifie le tout, HTML brut
+  et rendu avec JS.
 - **Tout fichier du dépôt qui n'est pas dans la liste `exclude` de `_config.yml`
   est servi tel quel sur cv.antoine.berthaud.me** (GitHub Pages) : ce fichier
   en fait partie, comme README, scripts, supabase et .github. Ne jamais y
@@ -293,24 +300,30 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   format STAR) reste **absent** tant qu'il n'y a pas un vrai chiffre
   d'impact *en plus* de celui déjà affiché dans le hero — ne pas le
   remplir juste pour compléter le format.
-- **Français par défaut, anglais sur `?lang=en`, pas de détection de la
-  langue du navigateur** (sept. 2026, décision SEO) : Googlebot rend la page
-  avec un navigateur en anglais et indexait la version anglaise à l'URL
-  canonique. `/` = FR (canonical `/`), `/?lang=en` = EN (canonical
-  `/?lang=en`, posé par `app.js`), hreflang fr/en/x-default statiques dans
-  le `<head>` et dans `sitemap.xml`. Le bouton FR/EN retire le paramètre en
-  FR. Même règle sur `project-detail.js` et `results.js`. Ne pas remettre de
-  détection navigateur "pour les recruteurs anglophones" : on leur partage
-  le lien `?lang=en`. Les liens internes n'écrivent jamais `?lang=fr`
-  (`window.i18n.langSuffix()`), et le bouton FR/EN synchronise l'URL sur
-  les trois pages (`window.i18n.syncUrl()`). **Seule la page d'accueil a une
-  version EN indexable** : sur `results.html` et `project-detail.html`,
-  `?lang=en` est un affichage — canonical = FR, pas de hreflang, pas d'URL
-  EN dans le sitemap. C'est voulu (deux pages EN minces sans demande de
-  recherche), pas un oubli. **Seule exception à « pas de détection
-  navigateur » : `404.html`** (sept. 2026, décision d'Antoine). GitHub Pages
-  la sert pour toute URL inconnue sans aucun signal de langue ; un script
-  inline garde le bloc FR ou EN d'après `?lang=` si l'URL cassée le porte,
+- **Français à la racine, anglais sous `/en/`, pas de détection de la langue
+  du navigateur** (décision SEO de sept. 2026 ; `/en/` depuis la mission SEO
+  du 24/09/2026, qui remplace `?lang=en`) : Googlebot rend la page avec un
+  navigateur en anglais et indexait la version anglaise à l'URL canonique.
+  La langue d'une page se lit dans son chemin (`i18n.pathLang()`). `/` et
+  `/en/`, `/results.html` et `/en/results.html` sont des pages statiques
+  complètes, chacune avec son canonical et les hreflang fr/en/x-default
+  (x-default = français), dans le `<head>` et dans `sitemap.xml`. **Les
+  études de cas ont donc désormais une version anglaise indexable** (avant :
+  « seule la page d'accueil », revu par la mission SEO). Les anciennes URL `?lang=en`
+  redirigent vers `/en/…` par un script en tête du `<head>` des pages
+  françaises (`<script id="lang-redirect">`, `location.replace()`, ancre et
+  autres paramètres conservés) : GitHub Pages n'a pas de redirection serveur.
+  Le lien FR/EN emporte l'ancre courante au clic. Liens entre pages relatifs
+  (`results.html`, `./`) : ils restent dans la langue de la page sans rien
+  calculer ; assets et scripts depuis la racine (`/assets/…`, `/js/…`). Ne
+  pas remettre de détection navigateur "pour les recruteurs anglophones" :
+  on leur partage `/en/`. Jamais de `<base href>` (casserait les ancres).
+  Exception provisoire : `project-detail.html?slug=` reste piloté par
+  `?lang=en` (`langSuffix()`/`syncUrl()` n'existent plus que pour elle)
+  jusqu'à son passage en URL statique. **Seule exception à « pas de
+  détection navigateur » : `404.html`** (sept. 2026, décision d'Antoine).
+  GitHub Pages la sert pour toute URL inconnue ; un script inline garde le
+  bloc FR ou EN d'après l'URL cassée (chemin sous `/en/`, ancien `?lang=`),
   sinon d'après `navigator.language` (français → FR, tout le reste → EN),
   les deux blocs restant dans le HTML pour les visiteurs sans JavaScript.
   Acceptable parce qu'une 404 n'est pas indexée (aucun enjeu Googlebot) ;
@@ -425,6 +438,14 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
     **plus haute** avec le secours « calibré » (+787 px) qu'avec Arial brut
     (-177 px). La bonne mesure : `canvas.measureText()` sur un vrai paragraphe
     du site, police web vs police de secours, à la même taille.
+15. **Un lien relatif ou « absolu vers la racine du site » sous `/en/`**
+    (sept. 2026, passage aux pages anglaises statiques) : `generate-pdf.js`
+    résolvait les liens relatifs depuis `https://cv.antoine.berthaud.me/`,
+    donc `results.html#…` du PDF anglais menait à la page française ; et le
+    lien du site dans le contact (`PROFILE.contact.site`, adresse absolue)
+    pointait la racine française depuis `/en/`. Tout lien écrit en dur vers le
+    site doit dépendre de la langue, et `check-seo.mjs` (critère 8) compte les
+    adresses absolues du domaine comme des liens internes.
 
 ## Méthode de travail établie
 

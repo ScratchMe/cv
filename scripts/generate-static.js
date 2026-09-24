@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * scripts/generate-static.js — pré-rendu des pages (version française).
+ * scripts/generate-static.js — pré-rendu des pages, en français et en anglais.
  *
  * Le contenu du CV vit dans js/data.js et c'est js/app.js (ou results.js,
  * project-detail.js) qui construit la page dans le navigateur. Un lecteur qui
@@ -8,17 +8,30 @@
  * une partie des outils de tri de candidatures — ne voyait que le pitch, trois
  * chiffres et le pied de page (258 mots sur 1 622, mesuré le 06/09/2026).
  *
- * Ce script ouvre chaque page dans Chromium (Playwright), en français, laisse
- * le JavaScript la rendre, puis recopie le HTML rendu dans le fichier source,
- * entre des marqueurs :
+ * Ce script ouvre chaque page dans Chromium (Playwright), laisse le JavaScript
+ * la rendre, puis recopie le HTML rendu dans le fichier, entre des marqueurs :
  *
  *     <!-- static:experiencesList -->…<!-- /static:experiencesList -->
  *
  * Tout ce qui est entre deux marqueurs est GÉNÉRÉ : ne jamais l'éditer à la
- * main, la prochaine génération l'écraserait. data.js reste la seule source ;
- * app.js re-rend par-dessus au chargement (même HTML en français, version
- * anglaise sur ?lang=en), les filtres, le Fit-Checker et la bascule de langue
- * continuent d'exiger JavaScript.
+ * main, la prochaine génération l'écraserait. data.js et i18n.js restent les
+ * seules sources ; les scripts de page re-rendent par-dessus au chargement
+ * (même HTML), le Fit-Checker continue d'exiger JavaScript.
+ *
+ * Deux langues depuis septembre 2026 (mission SEO) : index.html et
+ * results.html sont les gabarits, édités à la main hors des zones, et donnent
+ * la version française à la racine. Le script en tire la version anglaise
+ * (en/index.html, en/results.html) : même gabarit, <html lang="en">, sans le
+ * script de redirection des anciennes URL ?lang=en, rendu par le navigateur
+ * à son adresse /en/… (le JavaScript y lit la langue dans le chemin). Sont
+ * écrits dans les deux langues :
+ *   - les zones rendues par le JavaScript (captées dans le navigateur) ;
+ *   - <title>, description, titres/descriptions og:/twitter: (idem) ;
+ *   - les zones calculées ici : canonical, hreflang, og:url, og:locale
+ *     (langLinks), JSON-LD (jsonLd, scripts/lib/structured-data.js), lien
+ *     FR/EN (langToggle) ;
+ *   - les textes du gabarit marqués data-i18n (et data-i18n-placeholder,
+ *     -aria, -alt), repris d'i18n.js : menu, titres de section, <noscript>.
  *
  * Usage :
  *   node scripts/generate-static.js          # écrit les fichiers modifiés
@@ -33,21 +46,28 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 const { ROOT, startServer } = require("./lib/site-server");
+const { PAGE_URLS, profilePage, jsonLdScript } = require("./lib/structured-data");
 
 const PORT = 4174; // ≠ 4173 (generate-pdf.js) : les deux scripts peuvent tourner côte à côte
 const CHECK_ONLY = process.argv.includes("--check");
+
+// Éléments du <head> posés par le JS (titre, description, og:/twitter:) :
+// remplacés un par un, sans marqueur, ils sont uniques dans chaque page.
+const META_HEAD = ["title", 'meta[name="description"]', 'meta[property="og:title"]', 'meta[property="og:description"]', 'meta[name="twitter:title"]', 'meta[name="twitter:description"]'];
 
 // Une zone = un ou plusieurs éléments, recopiés en entier (outerHTML) entre
 // les marqueurs <!-- static:ID --> et <!-- /static:ID -->. Les sélecteurs
 // suivant le premier sont facultatifs (ex. le lien sous les chiffres du hero,
 // absent si aucun chiffre n'a d'étude de cas).
-// Les éléments du <head> posés par le JS (titre, description, canonical, og:)
-// sont remplacés un par un, sans marqueur : ils sont uniques dans chaque page.
 const PAGES = [
   {
-    file: "index.html",
-    url: "/index.html",
-    head: ["title", 'meta[name="description"]', 'meta[property="og:title"]', 'meta[property="og:description"]', 'meta[name="twitter:title"]', 'meta[name="twitter:description"]'],
+    template: "index.html",
+    langs: ["fr", "en"],
+    out: { fr: "index.html", en: "en/index.html" },
+    path: { fr: "/index.html", en: "/en/index.html" },
+    urls: PAGE_URLS.home,
+    head: META_HEAD,
+    jsonLd: (lang, data) => profilePage(lang, data.profile),
     zones: [
       ["heroName", "#heroName"],
       ["heroRole", "#heroRole"],
@@ -60,7 +80,7 @@ const PAGES = [
       ["experiencesList", "#experiencesList"],
       ["caseGrid", "#caseGrid"],
       ["educationList", "#educationList"],
-      ["trainingsList", "#trainingsList"],
+      ["trainingsList", "#trainingsTitle", "#trainingsList"], // titre compris : masqué avec la liste quand elle est vide
       ["languagesList", "#languagesList"],
       ["certificationsList", "#certificationsList"],
       ["testimonialQuote", "#testimonialQuote"],
@@ -74,37 +94,46 @@ const PAGES = [
     ],
     // Sentinelles : un data.js à moitié cassé peut rendre une page « propre »
     // mais vide de sens. Ces mots doivent apparaître dans la page générée.
-    sentinels: ["Everysens", "Polytech", "Alix Paoli", "SNCF Connect"],
+    sentinels: { fr: ["Everysens", "Polytech", "Alix Paoli", "SNCF Connect", "Ce qui me définit"], en: ["Everysens", "Polytech", "Alix Paoli", "SNCF Connect", "What defines me"] },
     minWords: 1400,
   },
   {
-    file: "results.html",
-    url: "/results.html",
-    head: ["title", 'meta[name="description"]', 'meta[property="og:title"]', 'meta[property="og:description"]', 'meta[name="twitter:title"]', 'meta[name="twitter:description"]'],
+    template: "results.html",
+    langs: ["fr", "en"],
+    out: { fr: "results.html", en: "en/results.html" },
+    path: { fr: "/results.html", en: "/en/results.html" },
+    urls: PAGE_URLS.results,
+    head: META_HEAD,
     zones: [["resultsRoot", "#resultsRoot"]],
-    sentinels: ["Contexte", "Leçon", "Everysens"],
+    sentinels: { fr: ["Contexte", "Leçon", "Everysens"], en: ["Context", "Lesson", "Everysens"] },
     minWords: 700,
   },
   {
-    file: "project-detail.html",
     // Page gabarit pilotée par ?slug= : on y pré-rend LE side project (le seul
-    // aujourd'hui). Le slug est lu dans PROJECT_DETAILS, pas codé en dur.
-    url: (slug) => `/project-detail.html?slug=${encodeURIComponent(slug)}`,
-    head: [
-      "title",
-      'meta[name="description"]',
-      'link[rel="canonical"]',
-      'meta[property="og:title"]',
-      'meta[property="og:description"]',
-      'meta[property="og:url"]',
-      'meta[name="twitter:title"]',
-      'meta[name="twitter:description"]',
-    ],
+    // aujourd'hui), en français. Le slug est lu dans PROJECT_DETAILS, pas codé
+    // en dur.
+    template: "project-detail.html",
+    langs: ["fr"],
+    out: { fr: "project-detail.html" },
+    path: { fr: (slug) => `/project-detail.html?slug=${encodeURIComponent(slug)}` },
+    head: [...META_HEAD, 'link[rel="canonical"]', 'meta[property="og:url"]'],
     zones: [["projectDetailRoot", "#projectDetailRoot"]],
-    sentinels: ["Tour de Growth", "Stack"],
+    sentinels: { fr: ["Tour de Growth", "Stack"] },
     minWords: 400,
   },
 ];
+
+const OG_LOCALE = { fr: "fr_FR", en: "en_US" };
+
+// ---------------------------------------------------------------------------
+// Utilitaires HTML
+// ---------------------------------------------------------------------------
+function escapeText(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function escapeAttr(str) {
+  return escapeText(str).replace(/"/g, "&quot;");
+}
 
 // Expression qui retrouve, dans le HTML source, l'élément unique désigné par
 // un sélecteur du <head> (« title », « meta[name="description"] »…).
@@ -117,17 +146,69 @@ function headPattern(selector) {
 }
 
 // Correspondances d'une expression dans le HTML, en ignorant celles qui
-// tombent dans un commentaire <!-- … -->.
+// tombent dans un commentaire <!-- … --> ou dans une zone générée.
 function findOutsideComments(html, re) {
-  // Les commentaires sont remplacés par des espaces de même longueur : les
-  // positions trouvées dans la copie masquée valent dans l'original, et une
-  // mention de « <title> » dans un commentaire ne peut plus avaler le vrai.
-  const masked = html.replace(/<!--[\s\S]*?-->/g, (c) => " ".repeat(c.length));
+  // Commentaires et contenu des zones remplacés par des espaces de même
+  // longueur : les positions trouvées dans la copie masquée valent dans
+  // l'original, et une mention de « <title> » dans un commentaire ne peut
+  // plus avaler le vrai.
+  const masked = html
+    .replace(/<!-- static:(\w+) -->[\s\S]*?<!-- \/static:\1 -->/g, (z) => " ".repeat(z.length))
+    .replace(/<!--[\s\S]*?-->/g, (c) => " ".repeat(c.length));
   return [...masked.matchAll(new RegExp(re.source, "g"))].map((m) => ({ index: m.index, length: m[0].length }));
 }
 
 function zonePattern(id) {
   return new RegExp(`<!-- static:${id} -->[\\s\\S]*?<!-- /static:${id} -->`);
+}
+
+function replaceZone(html, file, id, content) {
+  const re = zonePattern(id);
+  const matches = html.match(new RegExp(re.source, "g")) || [];
+  if (matches.length !== 1) {
+    throw new Error(`${file} : ${matches.length} paire(s) de marqueurs pour « ${id} » (attendu 1 : <!-- static:${id} --> … <!-- /static:${id} -->)`);
+  }
+  return html.replace(re, () => `<!-- static:${id} -->\n${content.trim()}\n<!-- /static:${id} -->`);
+}
+
+// Pose (ou remplace) un attribut dans une balise ouvrante.
+function setAttr(tag, name, value) {
+  const re = new RegExp(`\\s${name}="[^"]*"`);
+  const attr = ` ${name}="${escapeAttr(value)}"`;
+  return re.test(tag) ? tag.replace(re, attr) : tag.replace(/\s*(\/?)>$/, `${attr}$1>`);
+}
+
+// Clés i18n citées par le gabarit (data-i18n, -placeholder, -aria, -alt),
+// y compris dans <noscript>, que le navigateur ne transforme pas en éléments.
+function i18nKeys(html) {
+  return [...new Set([...html.matchAll(/\sdata-i18n(?:-placeholder|-aria|-alt)?="([^"]+)"/g)].map((m) => m[1]))];
+}
+
+// Écrit dans le gabarit les textes i18n de la langue de la page. Le contenu
+// d'un élément data-i18n doit être du texte simple (c'est ce que fait app.js
+// avec textContent) : un élément qui contiendrait des balises est refusé.
+function applyI18n(html, file, dict) {
+  const expected = (html.match(/\sdata-i18n="/g) || []).length;
+  let done = 0;
+  html = html.replace(/<([a-zA-Z][\w-]*)((?:\s[^>]*?)?\sdata-i18n="([^"]+)"[^>]*)>([^<]*)<\/\1>/g, (all, tag, attrs, key) => {
+    done++;
+    if (!(key in dict)) throw new Error(`${file} : clé i18n inconnue « ${key} »`);
+    return `<${tag}${attrs}>${escapeText(dict[key])}</${tag}>`;
+  });
+  if (done !== expected) throw new Error(`${file} : ${expected - done} élément(s) data-i18n avec des balises à l'intérieur — texte simple attendu`);
+
+  const attrRules = [
+    ["data-i18n-placeholder", ["placeholder"]],
+    ["data-i18n-aria", ["aria-label", "title"]],
+    ["data-i18n-alt", ["alt"]],
+  ];
+  for (const [marker, attrs] of attrRules) {
+    html = html.replace(new RegExp(`<[a-zA-Z][\\w-]*\\s[^>]*\\b${marker}="([^"]+)"[^>]*>`, "g"), (tag, key) => {
+      if (!(key in dict)) throw new Error(`${file} : clé i18n inconnue « ${key} »`);
+      return attrs.reduce((t, a) => setAttr(t, a, dict[key]), tag);
+    });
+  }
+  return html;
 }
 
 // Nombre de mots lisibles dans un HTML sans l'exécuter (approximation : on
@@ -143,88 +224,148 @@ function wordCount(html) {
   return text.split(/\s+/).filter((w) => /[\p{L}\d]/u.test(w)).length;
 }
 
-async function renderPage(browser, page, slug) {
+// ---------------------------------------------------------------------------
+// Zones calculées ici (pas captées dans le navigateur)
+// ---------------------------------------------------------------------------
+function langLinksHtml(page, lang) {
+  const other = lang === "fr" ? "en" : "fr";
+  return [
+    `<link rel="canonical" href="${page.urls[lang]}">`,
+    `<link rel="alternate" hreflang="fr" href="${page.urls.fr}">`,
+    `<link rel="alternate" hreflang="en" href="${page.urls.en}">`,
+    `<link rel="alternate" hreflang="x-default" href="${page.urls.fr}">`,
+    `<meta property="og:url" content="${page.urls[lang]}">`,
+    `<meta property="og:locale" content="${OG_LOCALE[lang]}">`,
+    `<meta property="og:locale:alternate" content="${OG_LOCALE[other]}">`,
+  ].join("\n");
+}
+
+// Lien FR/EN : un vrai lien vers la même page dans l'autre langue, dans la
+// langue de sa cible (hreflang, lang). Le libellé accessible vient d'i18n.js.
+function langToggleHtml(page, lang, dict) {
+  const other = lang === "fr" ? "en" : "fr";
+  const href = new URL(page.urls[other]).pathname;
+  return `<a id="langToggle" class="btn" href="${href}" hreflang="${other}" lang="${other}" aria-label="${escapeAttr(dict["nav.langToggleLabel"])}">${other.toUpperCase()}</a>`;
+}
+
+// ---------------------------------------------------------------------------
+// Rendu dans le navigateur
+// ---------------------------------------------------------------------------
+// `shell` : HTML à servir à l'adresse de la page au lieu du fichier (version
+// anglaise, qui n'existe pas encore sur le disque ou n'est pas à jour).
+async function renderPage(browser, page, lang, { slug, shell, keys }) {
   const tab = await browser.newPage();
   const errors = [];
   tab.on("pageerror", (err) => errors.push(err.message));
+  const pagePath = typeof page.path[lang] === "function" ? page.path[lang](slug) : page.path[lang];
+  const pageUrl = `http://127.0.0.1:${PORT}${pagePath}`;
   // Rien d'externe pendant le rendu : le HTML généré doit être le même sur
   // n'importe quelle machine, avec ou sans réseau. Concrètement, count.js
   // (GoatCounter) marque les liens qu'il a reliés (data-goatcounter-bound) et
   // ce marqueur entrait dans les pages générées en CI, pas en local.
-  await tab.route("**/*", (route) => (route.request().url().startsWith(`http://127.0.0.1:${PORT}/`) ? route.continue() : route.abort()));
-  const url = typeof page.url === "function" ? page.url(slug) : page.url;
+  await tab.route("**/*", (route) => {
+    const url = route.request().url();
+    if (shell && url === pageUrl) return route.fulfill({ status: 200, contentType: "text/html; charset=utf-8", body: shell });
+    return url.startsWith(`http://127.0.0.1:${PORT}/`) ? route.continue() : route.abort();
+  });
   // "load" suffit : le rendu se fait dans DOMContentLoaded, qui précède load.
-  await tab.goto(`http://127.0.0.1:${PORT}${url}`, { waitUntil: "load" });
-  if (errors.length) throw new Error(`${page.file} : erreur JS au rendu — ${errors[0]}`);
+  await tab.goto(pageUrl, { waitUntil: "load" });
+  if (errors.length) throw new Error(`${page.out[lang]} : erreur JS au rendu — ${errors[0]}`);
 
-  const lang = await tab.evaluate(() => document.documentElement.lang);
-  if (lang !== "fr") throw new Error(`${page.file} : rendu en « ${lang} », attendu « fr »`);
-
-  const head = await tab.evaluate((selectors) => {
-    return selectors.map((sel) => {
-      const el = document.querySelector(sel);
-      return el ? el.outerHTML : null;
-    });
-  }, page.head);
-  page.head.forEach((sel, i) => {
-    if (!head[i]) throw new Error(`${page.file} : élément de <head> introuvable dans le rendu — ${sel}`);
-  });
-
-  const zones = await tab.evaluate((zoneList) => {
-    // Ceinture et bretelles (voir tab.route ci-dessus) : aucun attribut posé
-    // par un script tiers ne doit finir dans les pages générées.
-    document.querySelectorAll("[data-goatcounter-bound]").forEach((el) => el.removeAttribute("data-goatcounter-bound"));
-    return zoneList.map(([id, ...selectors]) => {
-      // outerHTML sérialise les attributs booléens en hidden="" : on écrit hidden.
-      const parts = selectors.map((sel) => document.querySelector(sel)).map((el) => (el ? el.outerHTML.replace(/ hidden=""/g, " hidden") : null));
-      return { id, first: parts[0], html: parts.filter(Boolean).join("\n") };
-    });
-  }, page.zones);
-  zones.forEach((z) => {
-    if (!z.first) throw new Error(`${page.file} : zone « ${z.id} » introuvable dans le rendu (${page.zones.find((x) => x[0] === z.id)[1]})`);
-    if (!z.html.trim()) throw new Error(`${page.file} : zone « ${z.id} » rendue vide`);
-    if (z.html.includes("static:")) throw new Error(`${page.file} : la zone « ${z.id} » contient un marqueur static: — marqueurs imbriqués ?`);
-  });
-
+  const rendered = await tab.evaluate(
+    ({ head, zones, keys }) => {
+      // Ceinture et bretelles (voir tab.route ci-dessus) : aucun attribut posé
+      // par un script tiers ne doit finir dans les pages générées.
+      document.querySelectorAll("[data-goatcounter-bound]").forEach((el) => el.removeAttribute("data-goatcounter-bound"));
+      return {
+        lang: document.documentElement.lang,
+        head: head.map((sel) => {
+          const el = document.querySelector(sel);
+          return el ? el.outerHTML : null;
+        }),
+        zones: zones.map(([id, ...selectors]) => {
+          // outerHTML sérialise les attributs booléens en hidden="" : on écrit hidden.
+          const parts = selectors.map((sel) => document.querySelector(sel)).map((el) => (el ? el.outerHTML.replace(/ hidden=""/g, " hidden") : null));
+          return { id, first: parts[0], html: parts.filter(Boolean).join("\n") };
+        }),
+        dict: Object.fromEntries(keys.map((k) => [k, window.i18n.t(k)])),
+        profile: typeof PROFILE !== "undefined" ? { yearsExperience: PROFILE.yearsExperience } : null,
+      };
+    },
+    { head: page.head, zones: page.zones, keys }
+  );
   await tab.close();
-  return { head, zones };
+
+  if (rendered.lang !== lang) throw new Error(`${page.out[lang]} : rendu en « ${rendered.lang} », attendu « ${lang} »`);
+  page.head.forEach((sel, i) => {
+    if (!rendered.head[i]) throw new Error(`${page.out[lang]} : élément de <head> introuvable dans le rendu — ${sel}`);
+  });
+  rendered.zones.forEach((z) => {
+    if (!z.first) throw new Error(`${page.out[lang]} : zone « ${z.id} » introuvable dans le rendu (${page.zones.find((x) => x[0] === z.id)[1]})`);
+    if (!z.html.trim()) throw new Error(`${page.out[lang]} : zone « ${z.id} » rendue vide`);
+    if (z.html.includes("static:")) throw new Error(`${page.out[lang]} : la zone « ${z.id} » contient un marqueur static: — marqueurs imbriqués ?`);
+  });
+  return rendered;
 }
 
-function applyToSource(page, rendered) {
-  const filePath = path.join(ROOT, page.file);
-  let html = fs.readFileSync(filePath, "utf8");
+// Écrit le rendu d'une langue dans le HTML (gabarit ou coquille anglaise).
+function applyRender(html, page, lang, rendered) {
+  const file = page.out[lang];
 
   page.head.forEach((sel, i) => {
     // Un commentaire du <head> peut citer « <title> » en toutes lettres : on ne
-    // remplace que l'élément réel, hors commentaires.
+    // remplace que l'élément réel, hors commentaires et hors zones.
     const found = findOutsideComments(html, headPattern(sel));
-    if (found.length !== 1) throw new Error(`${page.file} : ${found.length} correspondance(s) pour ${sel} dans la source hors commentaires (attendu 1)`);
+    if (found.length !== 1) throw new Error(`${file} : ${found.length} correspondance(s) pour ${sel} dans la source hors commentaires (attendu 1)`);
     const [m] = found;
     html = html.slice(0, m.index) + rendered.head[i] + html.slice(m.index + m.length);
   });
 
   rendered.zones.forEach((z) => {
-    const re = zonePattern(z.id);
-    const matches = html.match(new RegExp(re.source, "g")) || [];
-    if (matches.length !== 1) {
-      throw new Error(`${page.file} : ${matches.length} paire(s) de marqueurs pour « ${z.id} » (attendu 1 : <!-- static:${z.id} --> … <!-- /static:${z.id} -->)`);
-    }
-    html = html.replace(re, () => `<!-- static:${z.id} -->\n${z.html.trim()}\n<!-- /static:${z.id} -->`);
+    html = replaceZone(html, file, z.id, z.html);
   });
+
+  if (page.urls) {
+    html = replaceZone(html, file, "langLinks", langLinksHtml(page, lang));
+    html = replaceZone(html, file, "langToggle", langToggleHtml(page, lang, rendered.dict));
+  }
+  if (page.jsonLd) html = replaceZone(html, file, "jsonLd", jsonLdScript(page.jsonLd(lang, rendered)));
+  html = applyI18n(html, file, rendered.dict);
 
   // Garde-fous sur le résultat complet.
   const words = wordCount(html);
-  if (words < page.minWords) throw new Error(`${page.file} : ${words} mots sans JavaScript, attendu au moins ${page.minWords} — data.js incomplet ?`);
-  const missing = page.sentinels.filter((s) => !html.includes(s));
-  if (missing.length) throw new Error(`${page.file} : mot(s) attendu(s) absent(s) de la page générée — ${missing.join(", ")}`);
-
-  return { filePath, html, words };
+  if (words < page.minWords) throw new Error(`${file} : ${words} mots sans JavaScript, attendu au moins ${page.minWords} — data.js incomplet ?`);
+  const missing = page.sentinels[lang].filter((s) => !html.includes(s));
+  if (missing.length) throw new Error(`${file} : mot(s) attendu(s) absent(s) de la page générée — ${missing.join(", ")}`);
+  if (!new RegExp(`<html lang="${lang}">`).test(html)) throw new Error(`${file} : <html lang="${lang}"> absent`);
+  return { html, words };
 }
 
+// Coquille de la version anglaise : la page française générée, en anglais, sans
+// le script qui redirige les anciennes URL ?lang=en (il bouclerait sous /en/).
+function englishShell(frHtml, file) {
+  const redirect = /\n?<script id="lang-redirect">[\s\S]*?<\/script>/;
+  if (!redirect.test(frHtml)) throw new Error(`${file} : script id="lang-redirect" introuvable dans le gabarit`);
+  if (!/<html lang="fr">/.test(frHtml)) throw new Error(`${file} : <html lang="fr"> introuvable dans le gabarit`);
+  return frHtml.replace(redirect, "").replace('<html lang="fr">', '<html lang="en">');
+}
+
+// ---------------------------------------------------------------------------
 (async () => {
   const server = await startServer(PORT);
   const browser = await chromium.launch();
   let stale = 0;
+  const report = (file, html, words) => {
+    const filePath = path.join(ROOT, file);
+    const before = fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : null;
+    const changed = before !== html;
+    if (changed && !CHECK_ONLY) {
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      fs.writeFileSync(filePath, html);
+    }
+    if (changed) stale++;
+    console.log(`${changed ? (CHECK_ONLY ? "✗ pas à jour" : "✓ régénéré ") : "= inchangé  "} ${file} (${words} mots sans JavaScript)`);
+  };
   try {
     // Le slug du side project et son unicité : la page gabarit ne peut porter
     // qu'un seul pré-rendu. Un second side project demanderait une page par
@@ -238,13 +379,19 @@ function applyToSource(page, rendered) {
     }
 
     for (const page of PAGES) {
-      const rendered = await renderPage(browser, page, slugs[0]);
-      const { filePath, html, words } = applyToSource(page, rendered);
-      const before = fs.readFileSync(filePath, "utf8");
-      const changed = before !== html;
-      if (changed && !CHECK_ONLY) fs.writeFileSync(filePath, html);
-      if (changed) stale++;
-      console.log(`${changed ? (CHECK_ONLY ? "✗ pas à jour" : "✓ régénéré ") : "= inchangé  "} ${page.file} (${words} mots sans JavaScript)`);
+      const template = fs.readFileSync(path.join(ROOT, page.template), "utf8");
+      const keys = i18nKeys(template);
+
+      const fr = await renderPage(browser, page, "fr", { slug: slugs[0], keys });
+      const frOut = applyRender(template, page, "fr", fr);
+      report(page.out.fr, frOut.html, frOut.words);
+
+      if (page.langs.includes("en")) {
+        const shell = englishShell(frOut.html, page.template);
+        const en = await renderPage(browser, page, "en", { slug: slugs[0], shell, keys });
+        const enOut = applyRender(shell, page, "en", en);
+        report(page.out.en, enOut.html, enOut.words);
+      }
     }
   } finally {
     await browser.close();

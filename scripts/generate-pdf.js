@@ -108,7 +108,10 @@ async function generateFor(browser, { lang, format, outPath, variant }) {
   // réduit au hero, et page.pdf() sortirait un PDF vide sans se plaindre.
   const pageErrors = [];
   page.on("pageerror", (err) => pageErrors.push(err.message));
-  await page.goto(`http://127.0.0.1:${PORT}/index.html?lang=${lang}${variant === "court" ? "&pdf=court" : ""}`, { waitUntil: "networkidle" });
+  // Une page par langue depuis septembre 2026 : index.html (français) et
+  // en/index.html (anglais, générée par scripts/generate-static.js).
+  const pagePath = lang === "en" ? "/en/index.html" : "/index.html";
+  await page.goto(`http://127.0.0.1:${PORT}${pagePath}${variant === "court" ? "?pdf=court" : ""}`, { waitUntil: "networkidle" });
   // Attend que les polices web (Google Fonts) soient réellement chargées,
   // sinon le PDF peut capturer un instant la police de secours système.
   await page.evaluate(() => document.fonts.ready);
@@ -145,15 +148,17 @@ async function generateFor(browser, { lang, format, outPath, variant }) {
     throw new Error(`Polices web absentes (${lang}) — le PDF sortirait en police de secours.`);
   }
 
-  // Réécrit les liens relatifs en absolus vers le site public (voir SITE_URL).
-  // Les ancres #..., mailto:, tel: et les URLs déjà absolues restent intacts.
-  await page.evaluate((site) => {
+  // Réécrit les liens relatifs en absolus vers le site public (voir SITE_URL),
+  // résolus depuis l'adresse publique de la page : results.html#… mène à
+  // /en/results.html#… dans le PDF anglais. Les ancres #..., mailto:, tel: et
+  // les URLs déjà absolues restent intacts.
+  await page.evaluate((base) => {
     document.querySelectorAll("a[href]").forEach((a) => {
       const href = a.getAttribute("href");
       if (!href || /^(https?:|mailto:|tel:|#)/i.test(href)) return;
-      a.href = new URL(href, site).href;
+      a.href = new URL(href, base).href;
     });
-  }, SITE_URL);
+  }, new URL(lang === "en" ? "en/" : "", SITE_URL).href);
 
   await page.emulateMedia({ media: "print" });
   await page.pdf({

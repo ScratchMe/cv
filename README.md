@@ -5,7 +5,8 @@ Site CV statique en HTML/CSS/JS vanilla. Aucun build nécessaire pour le site lu
 ## Arborescence
 
 ```
-index.html               → structure de la page ; les zones entre marqueurs static: sont pré-rendues par la CI (voir section 5)
+index.html               → structure de la page (gabarit) ; les zones entre marqueurs static: sont pré-rendues par la CI (voir section 5)
+en/index.html, en/results.html → versions anglaises, ENTIÈREMENT générées depuis index.html et results.html (ne jamais éditer)
 css/style.css             → tous les styles (tokens de couleur en haut du fichier)
 js/i18n.js                  → dictionnaire des textes fixes de l'interface (FR/EN) + logique de bascule de langue
 js/data.js                 → ⭐ LE FICHIER À ÉDITER : ton contenu (profil, expériences, compétences, side projects)
@@ -14,7 +15,9 @@ js/gemini.js                → logique du Fit-Checker (appelle la fonction Supa
 results.html + js/results.js → page « Résultats » : les études de cas (format STAR) derrière les chiffres du hero (zone pré-rendue aussi)
 project-detail.html + js/project-detail.js → page gabarit des études de cas de side projects (?slug=), pré-rendue avec le seul side project
 supabase/functions/gemini-fit/index.ts  → code de la fonction serveur à déployer sur Supabase
-scripts/generate-static.js   → pré-rend les trois pages en français dans leurs zones static: (voir section 5)
+scripts/generate-static.js   → pré-rend les pages dans leurs zones static:, en français et en anglais (voir section 5)
+scripts/lib/structured-data.js → données structurées (JSON-LD) des pages, par langue
+scripts/check-seo.mjs        → vérifications SEO de bout en bout (npm run check-seo, voir section 10)
 scripts/generate-pdf.js      → génère les PDF FR/EN à partir du site (voir section 5)
 scripts/lib/site-server.js   → mini-serveur local partagé par les deux scripts
 package.json + package-lock.json → dépendances des scripts, versions figées (voir section 5)
@@ -26,7 +29,7 @@ assets/logos/               → dépose les logos des entreprises ici (WebP ou P
 robots.txt / sitemap.xml     → référencement (voir section 10)
 CNAME                        → domaine personnalisé pour GitHub Pages (cv.antoine.berthaud.me)
 _config.yml                  → exclut du site publié les fichiers de travail (README, CLAUDE.md, scripts…)
-404.html                     → page « introuvable » servie par GitHub Pages ; FR et EN dans le HTML, le bloc affiché suit la langue du navigateur (seule détection navigateur du site, voir CLAUDE.md)
+404.html                     → page « introuvable » servie par GitHub Pages ; FR et EN dans le HTML, le bloc affiché suit l'URL (/en/) ou à défaut la langue du navigateur (seule détection navigateur du site, voir CLAUDE.md)
 .github/workflows/pr-checks.yml → rejoue le pré-rendu et la génération des PDF sur chaque PR, sans commit (garde-fou avant merge)
 .github/workflows/keepalive.yml + surveiller-fit-checker.yml → continuité du Fit-Checker (voir section 12)
 supabase/migrations/         → la table keepalive lue chaque jour pour garder le projet Supabase actif
@@ -34,7 +37,7 @@ supabase/migrations/         → la table keepalive lue chaque jour pour garder 
 
 ## 0. Le site est bilingue FR/EN
 
-Un bouton **FR/EN** dans le menu bascule toute l'interface, y compris le résultat du Fit-Checker (Gemini reçoit une instruction pour répondre dans la langue affichée).
+Chaque page existe en deux fichiers : le **français à la racine** (`/`, `/results.html`) et l'**anglais sous `/en/`** (`/en/`, `/en/results.html`), générés à partir des mêmes sources (section 5). Le lien **FR/EN** du menu mène à la même page dans l'autre langue, en gardant la section où l'on se trouvait (`#experiences`…). Le Fit-Checker répond dans la langue de la page (Gemini reçoit une instruction pour ça). Les anciennes adresses `?lang=en` redirigent vers `/en/…`. Seule exception : l'étude de cas Tour de Growth (`project-detail.html?slug=…`), encore traduite en JavaScript sur `?lang=en`.
 
 - Les **textes fixes de l'interface** (menu, boutons, libellés...) sont dans `js/i18n.js`, sous forme de dictionnaire `UI_STRINGS`.
 - Le **contenu** (`js/data.js`) utilise le même principe partout : un champ traduisible s'écrit `{ fr: "...", en: "..." }`. Un champ laissé en texte simple (ex: `"AB Tasty"`, une date, un id) s'affiche à l'identique dans les deux langues — pas besoin de dupliquer les noms propres.
@@ -68,9 +71,9 @@ Ouvre **`js/data.js`** : tout ce qui est marqué `[À REMPLACER]` ou `EXEMPLE` d
 
 **Compétences** : cinq groupes de pratiques (`SKILLS` dans `data.js`, ordre d'apparition = ordre d'affichage) plus une ligne « Outils du quotidien » (`EVERYDAY_TOOLS`), en texte et non en pastilles. Les pastilles ne filtrent plus les expériences depuis le 7 septembre 2026 : la section est passée sous les expériences, où filtrer ce qu'on vient de lire n'avait plus de sens. Chaque rôle porte au plus six compétences (`skills`), affichées sur ordinateur et dans le PDF complet.
 
-**Français par défaut, anglais sur `?lang=en`** : l'URL nue (`https://cv.antoine.berthaud.me/`) affiche toujours le français ; ajoute `?lang=en` pour ouvrir directement la version anglaise — c'est ce lien qu'il faut partager à un recruteur anglophone. Le bouton FR/EN met aussi l'URL à jour quand on clique dessus (`?lang=en` en anglais, URL nue en français), donc l'URL affichée reste copiable telle quelle.
+**Français à la racine, anglais sous `/en/`** : `https://cv.antoine.berthaud.me/` affiche toujours le français, `https://cv.antoine.berthaud.me/en/` l'anglais — c'est ce lien qu'il faut partager à un recruteur anglophone. Le lien FR/EN mène d'une version à l'autre, l'URL affichée reste donc copiable telle quelle. Les anciens liens en `?lang=en` déjà partagés redirigent vers `/en/`.
 
-**Pas de détection de la langue du navigateur**, et c'est volontaire : Googlebot rend la page avec un navigateur en anglais, et indexait donc la version anglaise à l'URL canonique — à contre-sens d'un CV qui vise des requêtes françaises (voir section 10). Un anglophone qui tombe sur le lien brut voit le français, avec le bouton EN bien visible dans le menu.
+**Pas de détection de la langue du navigateur**, et c'est volontaire : Googlebot rend la page avec un navigateur en anglais, et indexait donc la version anglaise à l'URL française — à contre-sens d'un CV qui vise des requêtes françaises (voir section 10). Un anglophone qui tombe sur le lien brut voit le français, avec le lien EN bien visible dans le menu.
 
 **Menu qui suit le scroll** : le lien correspondant à la section visible à l'écran est automatiquement surligné dans le menu (soulignement animé), que ce soit en scrollant ou en cliquant sur un lien du menu. C'est géré tout seul, rien à configurer.
 
@@ -204,7 +207,9 @@ Selon l'interface de ton registrar, le champ "Nom/Host" peut attendre soit juste
 
 Le contenu vit dans `js/data.js` et c'est le JavaScript qui construit la page. Google exécute ce JavaScript, mais les robots des moteurs de réponse IA (ChatGPT, Perplexity, Claude…), les aperçus de lien et une partie des outils de tri de candidatures ne le font pas : sans pré-rendu, ils voyaient 258 mots sur 1 622 (le pitch, trois chiffres, le pied de page).
 
-`scripts/generate-static.js` ouvre les trois pages dans Chromium, en français, laisse le JavaScript les rendre, puis recopie le HTML rendu dans les fichiers sources entre des marqueurs `<!-- static:ID -->` … `<!-- /static:ID -->` (une vingtaine de zones sur `index.html` : pastilles, pitch, chiffres, piliers, compétences, expériences, formation, témoignage, side projects, pied de page ; tout le `<main>` sur `results.html` et `project-detail.html` ; plus `<title>`, description et balises `og:`/`twitter:` de chaque page). **Tout ce qui est entre deux marqueurs est généré : ne l'édite jamais à la main**, la prochaine génération l'écraserait. Tu modifies `data.js` (ou `i18n.js`), tu push, la CI régénère et recommit les pages — exactement comme les PDF, dans le même workflow. Au chargement, `app.js` re-rend par-dessus (même HTML en français, version anglaise sur `?lang=en`, où la page reste invisible le temps du rendu anglais pour éviter un flash de français). Le Fit-Checker et la bascule de langue exigent toujours JavaScript.
+`scripts/generate-static.js` ouvre les pages dans Chromium, laisse le JavaScript les rendre, puis recopie le HTML rendu dans les fichiers entre des marqueurs `<!-- static:ID -->` … `<!-- /static:ID -->` (une vingtaine de zones sur `index.html` : pastilles, pitch, chiffres, piliers, compétences, expériences, formation, témoignage, side projects, pied de page ; tout le `<main>` sur `results.html` et `project-detail.html` ; plus `<title>`, description et balises `og:`/`twitter:` de chaque page). Il écrit aussi, dans le `<head>`, le canonical, les `hreflang`, `og:url`/`og:locale` (zone `langLinks`) et le JSON-LD (zone `jsonLd`, défini dans `scripts/lib/structured-data.js`), ainsi que le lien FR/EN (zone `langToggle`) et les textes du gabarit marqués `data-i18n` (menu, titres de section, `<noscript>`), repris d'`i18n.js`.
+
+`index.html` et `results.html` sont les **gabarits** : c'est là qu'on modifie la structure à la main (hors zones). Le script en tire la version anglaise, `en/index.html` et `en/results.html` — **deux fichiers entièrement générés, à ne jamais éditer**. **Tout ce qui est entre deux marqueurs est généré aussi : ne l'édite jamais à la main**, la prochaine génération l'écraserait. Tu modifies `data.js` (ou `i18n.js`), tu push, la CI régénère et recommit les pages — exactement comme les PDF, dans le même workflow. Au chargement, les scripts de page re-rendent par-dessus (même HTML) et signalent en console (`[cv] …`) tout texte statique qui ne correspond plus aux sources : c'est le signe d'une page pas encore régénérée. Le Fit-Checker exige toujours JavaScript. Les chemins d'images et de scripts partent de la racine (`/assets/…`, `/js/…`) pour servir aussi les pages de `/en/`, et les liens entre pages restent relatifs (`results.html`, `./`) : ils restent ainsi dans la langue de la page.
 
 Garde-fous du script : erreur JavaScript, zone vide, marqueur manquant, page trop courte, mots attendus absents (Everysens, Polytech, le nom du témoignage…), et refus de tourner si `PROJECT_DETAILS` a plus d'une entrée (la page gabarit ne peut porter qu'un seul pré-rendu ; à ce moment-là il faudra décider d'une page par projet). `node scripts/generate-static.js --check` dit si les fichiers sont à jour sans rien écrire.
 
@@ -278,7 +283,9 @@ Je l'ai déjà appliqué sur tes expériences les plus récentes (AB Tasty, Ever
 
 Pas de cookies, pas de données personnelles collectées, pas de bannière de consentement nécessaire. **Gratuit indéfiniment** pour un usage personnel (contrairement à Plausible, qui n'a plus de forfait gratuit permanent depuis 2026 — je suis parti sur GoatCounter pour cette raison).
 
-Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineberthaud.goatcounter.com. Le script `count.js` est chargé dans le `<head>` des trois pages (`index.html`, `results.html`, `project-detail.html`), précédé d'un petit script inline qui **fige le chemin compté** : seuls `?slug=` et `?lang=en` sont conservés (`/`, `/?lang=en`, `/results.html`, `/project-detail.html?slug=tour-de-growth`…), jamais `ref`/`utm` ni le fragment `#…`. Sans ça, `/?lang=en` remontait tantôt avec, tantôt sans son paramètre selon la vitesse du réseau.
+Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineberthaud.goatcounter.com. Le script `count.js` est chargé dans le `<head>` des pages (`index.html`, `results.html`, leurs versions `en/`, `project-detail.html`), précédé d'un petit script inline qui **fige le chemin compté** : le chemin seul, plus `?slug=` pour la page projet (`/`, `/en/`, `/results.html`, `/en/results.html`, `/project-detail.html?slug=tour-de-growth`…), jamais `ref`/`utm` ni le fragment `#…`, pour qu'une page remonte toujours pareil quelle que soit la vitesse du réseau.
+
+**Changement d'adresse des pages anglaises (septembre 2026)** : jusqu'à la mise en ligne de `/en/`, les visites en anglais étaient comptées sous `/?lang=en` et `/results.html?lang=en` ; depuis, elles le sont sous `/en/` et `/en/results.html`. Pour comparer sur une période qui chevauche le changement, additionner les deux. Sur `project-detail.html`, `?lang=en` n'est plus compté à part (les deux langues remontent sous `/project-detail.html?slug=…`).
 
 **Événements suivis en plus des visites** (attribut `data-goatcounter-click`, ou `goatcounter.count()` dans `gemini.js`) :
 
@@ -315,13 +322,14 @@ Soyons lucides sur l'objectif : sur une requête générique comme « product ma
 3. être **lu par les moteurs IA** (ChatGPT, Perplexity, Claude…), qui citent volontiers les sites perso mais n'exécutent souvent pas le JavaScript — d'où les pages pré-rendues (section 5).
 
 Ce qui est en place dans le code :
-- **Français par défaut, anglais sur `?lang=en`**, sans détection de la langue du navigateur (voir section 0) : Googlebot navigue en anglais et indexait la version anglaise à l'URL canonique. Balises `hreflang` fr/en dans le `<head>` et dans le sitemap ; le canonical suit la langue affichée (`/` en FR, `/?lang=en` en EN). Seule exception : `404.html`, qui n'est pas indexée et n'a aucun autre signal de langue, garde le bloc FR ou EN d'après la langue du navigateur (les deux restent dans le HTML sans JavaScript).
+- **Français à la racine, anglais sous `/en/`** (`/en/`, `/en/results.html`), deux vraies pages statiques, sans détection de la langue du navigateur (voir section 0) : Googlebot navigue en anglais et indexait la version anglaise à l'URL française. Chaque page déclare son propre canonical et les `hreflang` fr/en/x-default (x-default = français), dans le `<head>` et dans le sitemap. Les anciennes URL `?lang=en` redirigent vers `/en/…` (script en tête du `<head>`, GitHub Pages n'offrant pas de redirection serveur). Seule exception à « pas de détection navigateur » : `404.html`, qui n'est pas indexée, garde le bloc FR ou EN d'après l'URL cassée si elle est sous `/en/`, sinon d'après la langue du navigateur (les deux restent dans le HTML sans JavaScript).
 - **`<title>`, `<meta description>`, Open Graph et eyebrow du hero** qui citent Nantes, le métier et le secteur — textes dans `PROFILE.seo` (`js/data.js`), posés dans le `<head>` de `index.html` par le pré-rendu (section 5), comme tout le contenu de la page. `app.js` prévient dans la console du navigateur si le pitch pré-rendu diverge de `PROFILE.pitch.fr` (page pas encore régénérée).
-- **Données structurées `ProfilePage` → `Person`** (JSON-LD dans `index.html`) : métier, lieu (Nantes), formation, sujets maîtrisés, et `sameAs` vers LinkedIn, le portfolio photo et Tour de Growth, pour que Google relie le tout à la même personne.
-- **`sitemap.xml`** avec toutes les pages indexables (accueil FR et EN, Résultats, étude de cas) et une date `lastmod` **à mettre à jour quand une page change** ; les deux PDF y figurent aussi (décision du 06/09/2026 : ils sont déjà liés depuis les pages, autant que Google les compte), avec un `lastmod` mis à jour automatiquement par `generate-pdf.yml` à chaque régénération ; `robots.txt` ; `CNAME`.
-- **Pages secondaires** : `results.html` et `project-detail.html?slug=…` ont leur propre `<title>`/description par langue. L'étude de cas déclare son propre canonical (avec le `?slug=`) et la page gabarit sans slug (« Projet introuvable ») est en `noindex`.
+- **Données structurées `ProfilePage` → `Person`** (JSON-LD de l'accueil, en français et en anglais, écrit par le pré-rendu depuis `scripts/lib/structured-data.js`) : métier, lieu (Nantes), formation, sujets maîtrisés, et `sameAs` vers LinkedIn, le portfolio photo et Tour de Growth, pour que Google relie le tout à la même personne (même `@id` dans les deux langues).
+- **`sitemap.xml`** avec toutes les pages indexables (accueil et Résultats en FR et EN avec leurs `hreflang`, étude de cas) et une date `lastmod` **à mettre à jour quand une page change** ; les deux PDF y figurent aussi (décision du 06/09/2026 : ils sont déjà liés depuis les pages, autant que Google les compte), avec un `lastmod` mis à jour automatiquement par `generate-pdf.yml` à chaque régénération ; `robots.txt` ; `CNAME`.
+- **Pages secondaires** : `results.html` / `en/results.html` et `project-detail.html?slug=…` ont leur propre `<title>`/description par langue. L'étude de cas déclare son propre canonical (avec le `?slug=`) et la page gabarit sans slug (« Projet introuvable ») est en `noindex`.
 - **PDF** avec titre, auteur, sujet, mots-clés et langue dans leurs métadonnées (écrites par `scripts/generate-pdf.js` via `pdf-lib`) — les PDF sont indexables eux aussi, autant qu'ils se présentent bien.
-- Repli `<noscript>` qui dit ce qui manque sans JavaScript (Fit-Checker, anglais) et lie les PDF.
+- Repli `<noscript>` qui dit ce qui manque sans JavaScript (le Fit-Checker) et lie les PDF.
+- **`scripts/check-seo.mjs`** (`npm run check-seo`, serveur local sur le port 8080 : `python3 -m http.server 8080`) : vérifie tout ce qui précède sur le HTML brut et sur le rendu avec JavaScript, et sort en erreur si un critère échoue. `--lot 0` pour la seule non-régression, `--shots DOSSIER` pour des captures 390 px et 1 440 px, `--fit-call` pour un vrai appel au Fit-Checker.
 
 Ce qui reste hors code, et qui pèse plus lourd que tout le reste :
 1. **Des liens depuis tes propres sites** — la seule source de backlinks qui ne dépend de personne :

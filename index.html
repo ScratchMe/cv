@@ -2,29 +2,50 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script id="lang-redirect">
+  // Anciennes URL anglaises (?lang=en, jusqu'en septembre 2026) : redirigées
+  // vers la page statique /en/…, en gardant l'ancre et les autres paramètres.
+  // En tête du <head> pour partir avant tout le reste. Pages françaises
+  // seulement : scripts/generate-static.js le retire des pages anglaises.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    if (q.get("lang") !== "en") return;
+    q.delete("lang");
+    var rest = q.toString();
+    location.replace("/en" + location.pathname.replace(/\/index\.html$/, "/") + (rest ? "?" + rest : "") + location.hash);
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <title>, description et titres/descriptions og:/twitter: : version française
-     de PROFILE.seo (js/data.js), posée ici par scripts/generate-static.js (CI) —
-     ne pas éditer à la main. app.js les remplace à l'exécution selon la langue
-     affichée ; cette copie est ce que lisent les robots sans JavaScript. -->
+<!-- <title>, description et titres/descriptions og:/twitter: : PROFILE.seo
+     (js/data.js) dans la langue de la page, posés par
+     scripts/generate-static.js (CI) — ne pas éditer à la main. C'est ce que
+     lisent les robots sans JavaScript ; app.js ne les touche plus que s'ils
+     diffèrent de data.js (page pas encore régénérée, signalée en console). -->
 <title>Antoine Berthaud — Senior Product Manager à Nantes · Growth &amp; SaaS</title>
 <meta name="description" content="CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.">
 
-<!-- URL canonique + versions linguistiques. Le français est la langue par
-     défaut, servie à l'URL nue ; l'anglais vit sur ?lang=en. app.js ajuste le
-     canonical selon la langue affichée (/ en FR, /?lang=en en EN), les
-     hreflang restent fixes. -->
+<!-- URL canonique, versions linguistiques et og:url/og:locale : le français
+     à la racine (langue par défaut, x-default), l'anglais sous /en/. Chaque
+     page se déclare elle-même et déclare l'autre. Zone générée par
+     scripts/generate-static.js — ne pas éditer à la main. -->
+<!-- static:langLinks -->
 <link rel="canonical" href="https://cv.antoine.berthaud.me/">
 <link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/">
-<link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/?lang=en">
+<link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/">
 <link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/">
+<meta property="og:url" content="https://cv.antoine.berthaud.me/">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<!-- /static:langLinks -->
 
 <!-- Données structurées (schema.org) — invisibles pour les visiteurs, lues par
      les moteurs de recherche. Type ProfilePage (format que Google reconnaît
      explicitement pour une page « profil » d'une personne) dont l'entité
      principale est la Person : qui, quel métier, où (Nantes), formation,
-     sujets maîtrisés, et les autres pages qui parlent de la même personne
-     (LinkedIn, portfolio photo, Tour de Growth) pour que Google relie le tout. -->
+     sujets maîtrisés, et les autres pages qui parlent de la même personne.
+     Zone générée par scripts/generate-static.js dans la langue de la page, à
+     partir de scripts/lib/structured-data.js — ne pas éditer à la main. -->
+<!-- static:jsonLd -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -57,7 +78,10 @@
     "hasOccupation": {
       "@type": "Occupation",
       "name": "Product Manager",
-      "occupationLocation": { "@type": "City", "name": "Nantes" },
+      "occupationLocation": {
+        "@type": "City",
+        "name": "Nantes"
+      },
       "skills": "Product Management, Product Ownership, Growth, Product-Led Growth, Onboarding & Activation, A/B testing, Self-serve monetization, APIs & integrations, Generative AI, Discovery, User Research, Roadmapping, OKR, Agile / Scrum, SQL, Metabase, Mixpanel"
     },
     "alumniOf": {
@@ -86,8 +110,16 @@
       "OKR"
     ],
     "knowsLanguage": [
-      { "@type": "Language", "name": "Français", "alternateName": "fr" },
-      { "@type": "Language", "name": "English", "alternateName": "en" }
+      {
+        "@type": "Language",
+        "name": "Français",
+        "alternateName": "fr"
+      },
+      {
+        "@type": "Language",
+        "name": "English",
+        "alternateName": "en"
+      }
     ],
     "sameAs": [
       "https://www.linkedin.com/in/antoine-berthaud-pm/",
@@ -97,16 +129,17 @@
   }
 }
 </script>
+<!-- /static:jsonLd -->
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="alternate icon" type="image/png" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
 <!-- Open Graph / Twitter Card — aperçu quand le lien est partagé (LinkedIn, Slack, X...).
-     Domaine déjà renseigné (cv.antoine.berthaud.me). Ces balises sont lues par
-     les robots des réseaux sociaux, qui n'exécutent pas le JS : elles restent
-     donc toujours en français, même si le site bascule en anglais pour un visiteur. -->
+     Lues par les robots des réseaux sociaux, qui n'exécutent pas le JS : titre
+     et description sont ceux de la page, dans sa langue (voir plus haut) ;
+     og:url et og:locale sont dans la zone langLinks. -->
 <meta property="og:type" content="profile">
 <meta property="profile:first_name" content="Antoine">
 <meta property="profile:last_name" content="Berthaud">
@@ -115,9 +148,6 @@
 <meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://cv.antoine.berthaud.me/">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:locale:alternate" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Antoine Berthaud — Senior Product Manager à Nantes · Growth &amp; SaaS">
@@ -126,43 +156,32 @@
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
      pas de données personnelles. Le chemin compté est figé ICI, avant le
-     chargement de count.js (async) : on ne garde que ?slug= et ?lang=en,
-     jamais ref/utm ni le fragment, pour que /?lang=en remonte toujours pareil
-     quelle que soit la vitesse du réseau. Compte configuré (site
+     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…)
+     plus ?slug= pour la page projet, jamais ref/utm ni le fragment, pour qu'une
+     page remonte toujours pareil quelle que soit la vitesse du réseau. Compte configuré (site
      "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
      — voir README §8 (événements, exclure ses propres visites). -->
 <script>
   window.goatcounter = { path: (function () {
-    var q = new URLSearchParams(location.search), keep = [];
-    if (q.get("slug")) keep.push("slug=" + encodeURIComponent(q.get("slug")));
-    if (q.get("lang") === "en") keep.push("lang=en");
-    return location.pathname + (keep.length ? "?" + keep.join("&") : "");
+    var slug = new URLSearchParams(location.search).get("slug");
+    return location.pathname + (slug ? "?slug=" + encodeURIComponent(slug) : "");
   })() };
 </script>
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>
-  // Sur ?lang=en, la page pré-rendue en français reste invisible jusqu'au
-  // premier rendu JavaScript en anglais (qui retire la classe) — au plus 1,5 s
-  // si le JS échoue, pour ne jamais laisser une page blanche.
-  if (/[?&]lang=en(?:&|$)/.test(location.search)) {
-    document.documentElement.classList.add("lang-pending");
-    setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 1500);
-  }
-</script>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
-      <p>Sans JavaScript, ce CV s'affiche en français, sans le Fit-Checker ni la version anglaise.</p>
-      <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
-         <a href="assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
-         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
-         <a href="assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
-      <p><a href="results.html">Études de cas</a></p>
+      <p data-i18n="noscript.fit">Sans JavaScript, le Fit-Checker n'est pas disponible.</p>
+      <p><a href="/assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="/assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
+         <a href="/assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
+         <a href="/assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
+      <p><a href="results.html" data-i18n="footer.caseStudies">Études de cas</a></p>
     </div>
   </noscript>
 
@@ -188,7 +207,11 @@
         </ul>
       </nav>
       <div class="navactions">
-        <button id="langToggle" class="btn" type="button">EN</button>
+        <!-- Lien vers la même page dans l'autre langue (app.js y ajoute l'ancre
+             courante au clic). Zone générée par scripts/generate-static.js. -->
+        <!-- static:langToggle -->
+<a id="langToggle" class="btn" href="/en/" hreflang="en" lang="en" aria-label="undefined">EN</a>
+<!-- /static:langToggle -->
         <button id="focusToggle" class="btn icon-btn" type="button" aria-pressed="false" data-i18n-aria="nav.focusToggle" aria-label="Focus lecture" title="Focus lecture">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <rect x="4" y="4" width="16" height="16" rx="2"/>
@@ -201,7 +224,7 @@
              son segment « court » (2 pages). Deux boutons séparés faisaient passer
              le menu sur deux lignes à 1 280 px. -->
         <div class="pdf-group">
-          <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger le CV (PDF, 2 pages)" data-goatcounter-click="pdf-download">
+          <button id="printBtn" class="btn label-btn solid" type="button" data-i18n-aria="nav.printBtn" title="Télécharger le CV (PDF, 2 pages)" data-goatcounter-click="pdf-download" aria-label="Télécharger le CV (PDF, 2 pages)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"/>
             <path d="M7 10l5 5 5-5"/>
@@ -218,10 +241,10 @@
   <main>
     <!-- Les blocs entre les marqueurs « static:ID » (ouvrant et fermant) sont
          GÉNÉRÉS par scripts/generate-static.js, en CI, à partir de js/data.js :
-         c'est la version française pré-rendue, lue par les robots qui
-         n'exécutent pas JavaScript. Ne pas les éditer à la main — modifier
-         js/data.js, la CI régénère. app.js re-rend par-dessus au chargement
-         (et en anglais sur ?lang=en). -->
+         c'est la page pré-rendue, lue par les robots qui n'exécutent pas
+         JavaScript. Ne pas les éditer à la main — modifier js/data.js, la CI
+         régénère. Ce fichier est aussi le gabarit de la version anglaise
+         (en/index.html, générée). app.js re-rend par-dessus au chargement. -->
     <!-- ============================= HERO / PROFIL ============================= -->
     <section id="profil" class="hero wrap">
       <div class="hero-grid">
@@ -262,10 +285,10 @@
           </div>
         </div>
         <div class="photo-ring">
-          <!-- Photo en dur (copie de PROFILE.photo et de hero.photoAlt en FR) pour
-               les robots sans JavaScript ; app.js met à jour src/alt selon la
-               langue au lieu de réécrire le bloc. -->
-          <div class="photo-box" id="heroPhoto"><img src="assets/photo/antoine.jpg" alt="Portrait d'Antoine Berthaud, Product Manager à Nantes" decoding="async"></div>
+          <!-- Photo en dur (copie de PROFILE.photo) pour les robots sans
+               JavaScript ; l'alt (hero.photoAlt) est traduit par
+               scripts/generate-static.js dans la version anglaise. -->
+          <div class="photo-box" id="heroPhoto"><img src="/assets/photo/antoine.jpg" alt="Portrait d'Antoine Berthaud, Product Manager à Nantes" data-i18n-alt="hero.photoAlt" decoding="async"></div>
         </div>
       </div>
     </section>
@@ -315,7 +338,7 @@
 <div id="experiencesList" class="experiences-list">
       <article class="company-block" data-company="0">
         <div class="company-header">
-          <img class="company-logo" src="assets/logos/ab-tasty.webp" alt="Logo AB Tasty" width="56" height="56" loading="lazy" decoding="async">
+          <img class="company-logo" src="/assets/logos/ab-tasty.webp" alt="Logo AB Tasty" width="56" height="56" loading="lazy" decoding="async">
           <div>
             <h3 class="company-name">AB Tasty</h3>
             <div class="company-meta">Nantes, France</div>
@@ -347,7 +370,7 @@
       </article>
       <article class="company-block" data-company="1">
         <div class="company-header">
-          <img class="company-logo" src="assets/logos/everysens.webp" alt="Logo Everysens" width="56" height="56" loading="lazy" decoding="async">
+          <img class="company-logo" src="/assets/logos/everysens.webp" alt="Logo Everysens" width="56" height="56" loading="lazy" decoding="async">
           <div>
             <h3 class="company-name">Everysens</h3>
             <div class="company-meta">Nantes, France</div>
@@ -369,7 +392,7 @@
       </article>
       <article class="company-block" data-company="2">
         <div class="company-header">
-          <img class="company-logo" src="assets/logos/sncf-connect-tech.webp" alt="Logo SNCF Connect &amp; Tech" width="56" height="56" loading="lazy" decoding="async">
+          <img class="company-logo" src="/assets/logos/sncf-connect-tech.webp" alt="Logo SNCF Connect &amp; Tech" width="56" height="56" loading="lazy" decoding="async">
           <div>
             <h3 class="company-name">SNCF Connect &amp; Tech</h3>
             <div class="company-meta">Nantes, France</div>
@@ -536,8 +559,8 @@
           <!-- static:educationList -->
 <ul class="formation-list" id="educationList"><li><div class="formation-item-title">Ingénieur Systèmes Informatiques, Logiciels et Réseaux</div><div class="formation-item-meta">Polytech Nantes · 2006 – 2011</div></li></ul>
 <!-- /static:educationList -->
-          <h3 class="formation-subtitle" data-i18n="formation.trainings">Formations continues</h3>
           <!-- static:trainingsList -->
+<h3 class="formation-subtitle" id="trainingsTitle" data-i18n="formation.trainings" hidden>Formations continues</h3>
 <ul class="formation-list" id="trainingsList"></ul>
 <!-- /static:trainingsList -->
         </div>
@@ -572,7 +595,7 @@
         <p>Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini.</p>
         <div class="project-links">
           <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" data-goatcounter-click="project-tour-de-growth">Voir le projet →</a>
-          <a href="project-detail.html?slug=tour-de-growth">Voir l'étude de cas →</a>
+          <a href="/project-detail.html?slug=tour-de-growth">Voir l'étude de cas →</a>
         </div>
         <div class="project-skills"><span>Product-Led Growth</span><span>User Research</span><span>Intégration LLM (API Gemini)</span><span>IA générative</span></div>
       </div></div>
@@ -628,7 +651,7 @@
                sans stocker). Copie statique de fit.privacy (i18n.js). -->
           <p class="fit-privacy" data-i18n="fit.privacy">Le texte que vous collez part vers l'API Google Gemini pour l'analyse. Google ne l'utilise pas pour améliorer ses modèles, et ce site ne l'enregistre pas.</p>
         </div>
-        <section id="fitResult" class="fit-result" tabindex="-1" data-i18n-aria="fit.resultLabel" hidden></section>
+        <section id="fitResult" class="fit-result" tabindex="-1" data-i18n-aria="fit.resultLabel" hidden aria-label="Résultat de l'analyse" title="Résultat de l'analyse"></section>
       </div>
     </section>
   </main>
@@ -646,18 +669,18 @@
 <!-- /static:footerAvailability -->
       </div>
       <!-- static:footerLinks -->
-<div class="footer-links" id="footerLinks"><a href="results.html">Études de cas</a><a href="project-detail.html?slug=tour-de-growth" data-goatcounter-click="footer-project-tour-de-growth">Tour de Growth</a><a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a><a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a><a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a></div>
+<div class="footer-links" id="footerLinks"><a href="results.html">Études de cas</a><a href="/project-detail.html?slug=tour-de-growth" data-goatcounter-click="footer-project-tour-de-growth">Tour de Growth</a><a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a><a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a><a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a></div>
 <!-- /static:footerLinks -->
       <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les quatre PDF
            (complet et court, par langue) restent atteignables même sans
            JavaScript. -->
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download-complet">version complète</a> · <a href="assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download-complet">full version</a></p>
+      <p class="footer-pdf"><a href="/assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="/assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download-complet">version complète</a> · <a href="/assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="/assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download-complet">full version</a></p>
     </div>
   </footer>
 
-  <script src="js/i18n.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/gemini.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/gemini.js"></script>
 </body>
 </html>

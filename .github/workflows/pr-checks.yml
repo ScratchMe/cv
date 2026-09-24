@@ -1,7 +1,7 @@
 name: Vérifier la PR
 
 # Rejoue sur chaque pull request les étapes de generate-pdf.yml SANS commit :
-# syntaxe des JS, pré-rendu des trois pages avec ses garde-fous (erreur JS,
+# syntaxe des JS, pré-rendu des pages (FR et EN) avec ses garde-fous (erreur JS,
 # zone vide, marqueur manquant, page trop courte, mots attendus absents),
 # génération des deux PDF avec les leurs (erreur JS, page sans expérience,
 # polices absentes, liens locaux, PDF trop court). Rien n'empêchait jusqu'ici
@@ -57,11 +57,12 @@ jobs:
       # recommittera après le merge (durées mises à jour, par exemple).
       - name: Écart entre les pages committées et le pré-rendu de la CI
         run: |
-          if git diff --quiet -- index.html results.html project-detail.html; then
+          if git diff --quiet -- index.html results.html project-detail.html en/ && [ -z "$(git ls-files --others --exclude-standard -- en/)" ]; then
             echo "Pages pré-rendues à jour : aucun écart."
           else
-            git --no-pager diff --stat -- index.html results.html project-detail.html
-            git --no-pager diff -- index.html results.html project-detail.html | head -120
+            git --no-pager diff --stat -- index.html results.html project-detail.html en/
+            git ls-files --others --exclude-standard -- en/
+            git --no-pager diff -- index.html results.html project-detail.html en/ | head -120
           fi
 
       - name: Générer les PDF FR et EN (sans les committer)
