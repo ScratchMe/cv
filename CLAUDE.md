@@ -118,7 +118,7 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   pages ; les courts sont hors sitemap, voulu), avec
   `scripts/lib/site-server.js` en commun. Le
   workflow `.github/workflows/generate-pdf.yml` enchaîne les deux et
-  recommit pages + PDF (+ `lastmod` du sitemap) ; il tourne aussi une fois
+  recommit pages, sitemap et PDF ; il tourne aussi une fois
   par mois (1er, 4h UTC) indépendamment de tout push, pour rafraîchir les
   durées d'expérience affichées (calculées jusqu'à "aujourd'hui") — et
   ouvre une issue GitHub (label `pdf-generation-failure`) s'il échoue.
@@ -356,8 +356,17 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   tenue par les job boards). Ce qui pèse le plus est hors code : liens
   depuis `antoine.berthaud.me` et `tourdegrowth.com`, LinkedIn, demandes
   d'indexation dans Search Console (propriété existante, accessible via le
-  MCP SEO Gets). Le `lastmod` des pages et des deux PDF dans `sitemap.xml`
-  est posé par `generate-pdf.yml` à chaque régénération, jamais à la main.
+  MCP SEO Gets). Dans `sitemap.xml`, les entrées des pages sont une zone
+  générée par `generate-static.js` : le `lastmod` d'une page n'avance que si
+  son HTML généré change (comparaison au fichier sur le disque), et le
+  `dateModified` de l'accueil reprend exactement cette date ; le
+  `dateCreated` vient du premier commit de `index.html`, d'où `fetch-depth: 0`
+  dans les deux workflows (le générateur refuse un clone superficiel). Le
+  `lastmod` des deux PDF est posé par `generate-pdf.yml`. Jamais à la main.
+  Avant sept. 2026, le workflow datait aussi les pages, mais seulement quand
+  la CI elle-même les modifiait : une PR arrivée avec ses pages déjà
+  régénérées laissait le `lastmod` figé (06/09 alors que la page avait changé
+  le 07/09).
   Les PDF portent des métadonnées (titre, auteur, langue) posées par
   `scripts/generate-pdf.js` via `pdf-lib`.
 - **Site considéré fonctionnellement complet** (sept. 2026) : bilingue,

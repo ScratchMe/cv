@@ -29,6 +29,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { chromium, request as playwrightRequest } from "playwright";
 import pdfLib from "pdf-lib";
 
@@ -714,6 +716,103 @@ async function lot2(browser) {
 }
 
 // ---------------------------------------------------------------------------
+// Lot 3 — données structurées
+// ---------------------------------------------------------------------------
+// Toute référence à Antoine passe par le même @id (#person) : un nœud Person
+// porte cet @id, et author / creator / mainEntity n'en citent pas d'autre.
+function personRefs(node, bad = [], where = "") {
+  if (Array.isArray(node)) node.forEach((n, i) => personRefs(n, bad, `${where}[${i}]`));
+  else if (node && typeof node === "object") {
+    if (node["@type"] === "Person" && node["@id"] !== `${SITE}/#person`) bad.push(`${where} Person @id=${node["@id"]}`);
+    for (const k of ["author", "creator", "mainEntity"]) {
+      if (node[k] && node[k]["@id"] && node[k]["@id"] !== `${SITE}/#person`) bad.push(`${where}.${k} → ${node[k]["@id"]}`);
+      if (node[k] && !node[k]["@id"]) bad.push(`${where}.${k} sans @id`);
+    }
+    Object.entries(node).forEach(([k, v]) => personRefs(v, bad, `${where}.${k}`));
+  }
+  return bad;
+}
+
+async function lot3(browser) {
+  const rawCtx = await newContext(browser, { js: false });
+  const pages = [HOME_FR, HOME_EN, RES_FR, RES_EN, PROJ_FR, PROJ_EN];
+
+  // Sitemap : lastmod de chaque page
+  const sm = await rawFetch("/sitemap.xml");
+  const lastmod = new Map([...sm.text.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]]));
+
+  // Premier commit de index.html, si le dépôt est là (vérification locale)
+  let created = null;
+  try {
+    const repo = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+    if (execFileSync("git", ["rev-parse", "--is-shallow-repository"], { cwd: repo, encoding: "utf8" }).trim() === "false") {
+      created = execFileSync("git", ["log", "--reverse", "--format=%as", "--", "index.html"], { cwd: repo, encoding: "utf8" }).split("\n")[0];
+    }
+  } catch (_e) {
+    created = null;
+  }
+
+  for (const pg of pages) {
+    const r = await rawFetch(pg.path);
+    const { page } = await openTracked(rawCtx, pg.path);
+    const info = await page.evaluate(readPage);
+    await page.close();
+    let blocks = [],
+      err = "";
+    try {
+      blocks = info.jsonld.map((x) => JSON.parse(x));
+    } catch (e) {
+      err = e.message;
+    }
+    check(3, "3.1-parse", `${pg.path} : chaque bloc JSON-LD passe JSON.parse`, !err && blocks.length > 0, err || `${blocks.length} bloc(s)`);
+    const bad = personRefs(blocks);
+    check(3, "3.1-person", `${pg.path} : toute référence à Antoine = ${SITE}/#person`, !err && !bad.length, bad.slice(0, 3).join(" ; "));
+    // Critère 3 : JSON-LD écrit par le générateur (dans sa zone), pas à la main
+    const zoned = (r.text.match(/<script type="application\/ld\+json">/g) || []).length === (r.text.match(/<!-- static:jsonLd -->\s*<script type="application\/ld\+json">/g) || []).length;
+    check(3, "3.3-zone", `${pg.path} : JSON-LD dans la zone générée (static:jsonLd)`, zoned && blocks.length > 0);
+
+    if (pg.kind === "home") {
+      const pp = blocks.find((b) => b["@type"] === "ProfilePage") || {};
+      const sameAs = (pp.mainEntity && pp.mainEntity.sameAs) || [];
+      check(3, "3.2-sameas", `${pg.path} : sameAs sans tourdegrowth.com (LinkedIn et antoine.berthaud.me gardés)`, !sameAs.some((u) => /tourdegrowth/.test(u)) && sameAs.includes("https://www.linkedin.com/in/antoine-berthaud-pm/") && sameAs.includes("https://antoine.berthaud.me/"), JSON.stringify(sameAs));
+      const iso = /^\d{4}-\d{2}-\d{2}$/;
+      check(3, "3.2-dates", `${pg.path} : dateModified = <lastmod> du sitemap (${lastmod.get(pg.url)}), dateCreated ISO`, iso.test(pp.dateModified || "") && iso.test(pp.dateCreated || "") && pp.dateModified === lastmod.get(pg.url) && pp.dateCreated <= pp.dateModified, `dateCreated=${pp.dateCreated} dateModified=${pp.dateModified}`);
+      if (created) check(3, "3.2-created", `${pg.path} : dateCreated = premier commit de index.html (${created})`, pp.dateCreated === created, pp.dateCreated);
+      else skip(3, "3.2-created", `${pg.path} : dateCreated = premier commit de index.html`, "historique Git indisponible ici");
+    }
+    if (pg.kind === "results") {
+      const graph = (blocks.find((b) => Array.isArray(b["@graph"])) || { "@graph": [] })["@graph"];
+      const cp = graph.find((n) => n["@type"] === "CollectionPage");
+      const bc = graph.find((n) => n["@type"] === "BreadcrumbList");
+      const home = pg.lang === "en" ? `${SITE}/en/` : `${SITE}/`;
+      const crumb = pg.lang === "en" ? "Case studies" : "Études de cas";
+      const ok =
+        cp && bc &&
+        cp["@id"] === `${pg.url}#page` && cp.url === pg.url && cp.name === info.title && cp.description === info.description && cp.inLanguage === pg.lang &&
+        cp.author["@id"] === `${SITE}/#person` && cp.breadcrumb["@id"] === `${pg.url}#breadcrumb` && bc["@id"] === `${pg.url}#breadcrumb` &&
+        bc.itemListElement.length === 2 && bc.itemListElement[0].name === "CV" && bc.itemListElement[0].item === home && bc.itemListElement[1].name === crumb && bc.itemListElement[1].item === pg.url;
+      check(3, "3.results", `${pg.path} : CollectionPage + BreadcrumbList (« CV » → « ${crumb} », depuis ${new URL(home).pathname})`, ok, ok ? "" : JSON.stringify(graph).slice(0, 200));
+    }
+  }
+
+  // Critère 3 : sortie stable d'une génération à l'autre (vérifiable en local)
+  const generator = path.join(path.dirname(fileURLToPath(import.meta.url)), "generate-static.js");
+  if (/^http:\/\/(localhost|127\.0\.0\.1)/.test(BASE) && fs.existsSync(generator)) {
+    let out = "",
+      code = 0;
+    try {
+      out = execFileSync("node", [generator, "--check"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+    } catch (e) {
+      code = e.status;
+      out = `${e.stdout || ""}${e.stderr || ""}`;
+    }
+    check(3, "3.3-stable", "générateur relancé : aucun fichier à réécrire (sortie stable, JSON-LD compris)", code === 0, code ? out.split("\n").filter((l) => /✗|Échec/.test(l)).join(" | ") : "");
+  } else skip(3, "3.3-stable", "générateur relancé : sortie stable", "vérifiable seulement en local, dans le dépôt");
+
+  await rawCtx.close();
+}
+
+// ---------------------------------------------------------------------------
 // Un vrai appel au Fit-Checker, depuis la page anglaise (--fit-call)
 // ---------------------------------------------------------------------------
 async function fitCall(browser) {
@@ -790,6 +889,7 @@ async function shots(browser) {
     await lot0(browser);
     if (MAX_LOT >= 1) await lot1(browser);
     if (MAX_LOT >= 2) await lot2(browser);
+    if (MAX_LOT >= 3) await lot3(browser);
     if (FIT_CALL) await fitCall(browser);
     if (SHOTS_DIR) await shots(browser);
   } finally {

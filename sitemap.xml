@@ -2,11 +2,15 @@
 <!-- Une entrée par page indexable. Chaque page existe en deux langues
      (français à la racine, anglais sous /en/), déclarées l'une à l'autre via
      les <xhtml:link hreflang>, le français servant de x-default.
-     Les <lastmod> sont mis à jour par .github/workflows/generate-pdf.yml à
-     chaque fois qu'il régénère une page pré-rendue ou un PDF (c'est ce qui
-     incite Google à revenir crawler) — ne pas les modifier à la main. -->
+     Les entrées des pages (zone static:pages) sont GÉNÉRÉES par
+     scripts/generate-static.js : il y ajoute toute page qu'il produit et date
+     son <lastmod> du jour où son HTML a changé pour la dernière fois (la même
+     date que le dateModified du JSON-LD de l'accueil). Les <lastmod> des PDF
+     sont posés par .github/workflows/generate-pdf.yml quand il les régénère.
+     Ne rien modifier à la main. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<!-- static:pages -->
   <url>
     <loc>https://cv.antoine.berthaud.me/</loc>
     <lastmod>2026-09-24</lastmod>
@@ -49,6 +53,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/projects/tour-de-growth.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/projets/tour-de-growth.html"/>
   </url>
+<!-- /static:pages -->
   <!-- Les deux PDF complets du CV (décision d'Antoine, 06/09/2026) : déjà liés
        depuis les trois pages, déclarés ici pour que Google les compte. Les
        versions courtes (-fr-court, -en-short) ne sont volontairement pas

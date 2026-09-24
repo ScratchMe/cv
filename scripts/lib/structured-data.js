@@ -20,9 +20,13 @@ const PAGE_URLS = {
 
 // Accueil : une ProfilePage (format que Google reconnaît pour la page profil
 // d'une personne) dont l'entité principale est la Person : qui, quel métier,
-// où (Nantes), formation, sujets maîtrisés, et les autres pages qui parlent de
-// la même personne. `profile` = { yearsExperience } lu dans js/data.js.
-function profilePage(lang, profile) {
+// où (Nantes), formation, sujets maîtrisés, et les autres pages qui décrivent
+// la même personne (sameAs : LinkedIn, portfolio — pas Tour de Growth, un
+// produit, relié à Antoine par WebApplication.creator sur sa page projet).
+// `profile` = { yearsExperience } lu dans js/data.js ; `dates` =
+// { created, modified } au format AAAA-MM-JJ : premier commit de index.html,
+// et <lastmod> de la page dans sitemap.xml (posés par le générateur).
+function profilePage(lang, profile, dates) {
   const years = profile.yearsExperience;
   const text = {
     fr: {
@@ -41,6 +45,8 @@ function profilePage(lang, profile) {
     url: PAGE_URLS.home[lang],
     name: text.name,
     inLanguage: lang,
+    dateCreated: dates.created,
+    dateModified: dates.modified,
     mainEntity: {
       "@type": "Person",
       "@id": PERSON_ID,
@@ -99,8 +105,38 @@ function profilePage(lang, profile) {
         { "@type": "Language", name: "Français", alternateName: "fr" },
         { "@type": "Language", name: "English", alternateName: "en" },
       ],
-      sameAs: ["https://www.linkedin.com/in/antoine-berthaud-pm/", "https://antoine.berthaud.me/", "https://www.tourdegrowth.com/"],
+      sameAs: ["https://www.linkedin.com/in/antoine-berthaud-pm/", "https://antoine.berthaud.me/"],
     },
+  };
+}
+
+// Études de cas (results.html, en/results.html) : une CollectionPage (la page
+// rassemble les études) et son fil d'Ariane depuis l'accueil de la même
+// langue. `page` = { url, name, description, crumb } : adresse, titre et
+// description de la page telle que générée, libellé du fil d'Ariane.
+function resultsPage(lang, page) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${page.url}#page`,
+        url: page.url,
+        name: page.name,
+        description: page.description,
+        inLanguage: lang,
+        author: { "@id": PERSON_ID },
+        breadcrumb: { "@id": `${page.url}#breadcrumb` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${page.url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "CV", item: PAGE_URLS.home[lang] },
+          { "@type": "ListItem", position: 2, name: page.crumb, item: page.url },
+        ],
+      },
+    ],
   };
 }
 
@@ -164,4 +200,4 @@ function jsonLdScript(data) {
   return `<script type="application/ld+json">\n${json}\n</script>`;
 }
 
-module.exports = { SITE, PERSON_ID, PAGE_URLS, profilePage, projectPage, projectUrls, jsonLdScript };
+module.exports = { SITE, PERSON_ID, PAGE_URLS, profilePage, resultsPage, projectPage, projectUrls, jsonLdScript };
