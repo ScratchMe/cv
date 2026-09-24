@@ -244,6 +244,7 @@ function langLinksHtml(page, lang) {
 // langue de sa cible (hreflang, lang). Le libellé accessible vient d'i18n.js.
 function langToggleHtml(page, lang, dict) {
   const other = lang === "fr" ? "en" : "fr";
+  if (!dict["nav.langToggleLabel"]) throw new Error(`${page.out[lang]} : libellé nav.langToggleLabel introuvable dans i18n.js`);
   const href = new URL(page.urls[other]).pathname;
   return `<a id="langToggle" class="btn" href="${href}" hreflang="${other}" lang="${other}" aria-label="${escapeAttr(dict["nav.langToggleLabel"])}">${other.toUpperCase()}</a>`;
 }
@@ -380,7 +381,8 @@ function englishShell(frHtml, file) {
 
     for (const page of PAGES) {
       const template = fs.readFileSync(path.join(ROOT, page.template), "utf8");
-      const keys = i18nKeys(template);
+      // + le libellé du lien FR/EN, que le gabarit ne cite pas (zone calculée).
+      const keys = [...i18nKeys(template), "nav.langToggleLabel"];
 
       const fr = await renderPage(browser, page, "fr", { slug: slugs[0], keys });
       const frOut = applyRender(template, page, "fr", fr);
