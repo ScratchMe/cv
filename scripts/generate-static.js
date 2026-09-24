@@ -46,7 +46,7 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 const { ROOT, startServer } = require("./lib/site-server");
-const { PAGE_URLS, profilePage, jsonLdScript } = require("./lib/structured-data");
+const { PAGE_URLS, profilePage, projectPage, projectUrls, jsonLdScript } = require("./lib/structured-data");
 
 const PORT = 4174; // ≠ 4173 (generate-pdf.js) : les deux scripts peuvent tourner côte à côte
 const CHECK_ONLY = process.argv.includes("--check");
@@ -107,21 +107,34 @@ const PAGES = [
     zones: [["resultsRoot", "#resultsRoot"]],
     sentinels: { fr: ["Contexte", "Leçon", "Everysens"], en: ["Context", "Lesson", "Everysens"] },
     minWords: 700,
-  },
-  {
-    // Page gabarit pilotée par ?slug= : on y pré-rend LE side project (le seul
-    // aujourd'hui), en français. Le slug est lu dans PROJECT_DETAILS, pas codé
-    // en dur.
-    template: "project-detail.html",
-    langs: ["fr"],
-    out: { fr: "project-detail.html" },
-    path: { fr: (slug) => `/project-detail.html?slug=${encodeURIComponent(slug)}` },
-    head: [...META_HEAD, 'link[rel="canonical"]', 'meta[property="og:url"]'],
-    zones: [["projectDetailRoot", "#projectDetailRoot"]],
-    sentinels: { fr: ["Tour de Growth", "Stack"] },
-    minWords: 400,
-  },
+  }
 ];
+
+// Pages des side projects : une page française et une anglaise par entrée de
+// PROJECT_DETAILS (js/data.js), à partir de scripts/templates/project.html —
+// aucun code à ajouter pour un nouveau projet. Le slug est posé sur <body
+// data-slug> : c'est là que js/project-detail.js le lit.
+const PROJECT_TEMPLATE = "scripts/templates/project.html";
+function projectPageConfig(slug) {
+  return {
+    template: PROJECT_TEMPLATE,
+    slug,
+    langs: ["fr", "en"],
+    out: { fr: `projets/${slug}.html`, en: `en/projects/${slug}.html` },
+    path: { fr: `/projets/${slug}.html`, en: `/en/projects/${slug}.html` },
+    urls: projectUrls(slug),
+    head: META_HEAD,
+    jsonLd: (lang, rendered, page) => projectPage(lang, { url: page.urls[lang], name: rendered.title, description: rendered.description }, rendered.project),
+    zones: [["projectDetailRoot", "#projectDetailRoot"]],
+    sentinels: { fr: ["Le problème", "Stack technique"], en: ["The problem", "Tech stack"] },
+    minWords: 300,
+  };
+}
+
+// Ancienne adresse project-detail.html?slug= : page de redirection vers les
+// pages statiques ci-dessus. Deux zones calculées ici (aucun rendu) : la
+// table des slugs du script de redirection, et les liens du <noscript>.
+const LEGACY_PROJECT_PAGE = "project-detail.html";
 
 const OG_LOCALE = { fr: "fr_FR", en: "en_US" };
 
@@ -211,6 +224,15 @@ function applyI18n(html, file, dict) {
   return html;
 }
 
+// Liens vers la page d'un side project (data-project-href="<slug>") : adresse
+// dans la langue de la page, comme i18n.projectUrl() côté navigateur.
+function applyProjectHrefs(html, file, lang, slugs) {
+  return html.replace(/<a\s[^>]*\bdata-project-href="([^"]+)"[^>]*>/g, (tag, slug) => {
+    if (!slugs.includes(slug)) throw new Error(`${file} : data-project-href="${slug}" ne correspond à aucune entrée de PROJECT_DETAILS`);
+    return setAttr(tag, "href", new URL(projectUrls(slug)[lang]).pathname);
+  });
+}
+
 // Nombre de mots lisibles dans un HTML sans l'exécuter (approximation : on
 // retire scripts, styles, commentaires et balises).
 function wordCount(html) {
@@ -254,11 +276,11 @@ function langToggleHtml(page, lang, dict) {
 // ---------------------------------------------------------------------------
 // `shell` : HTML à servir à l'adresse de la page au lieu du fichier (version
 // anglaise, qui n'existe pas encore sur le disque ou n'est pas à jour).
-async function renderPage(browser, page, lang, { slug, shell, keys }) {
+async function renderPage(browser, page, lang, { shell, keys }) {
   const tab = await browser.newPage();
   const errors = [];
   tab.on("pageerror", (err) => errors.push(err.message));
-  const pagePath = typeof page.path[lang] === "function" ? page.path[lang](slug) : page.path[lang];
+  const pagePath = page.path[lang];
   const pageUrl = `http://127.0.0.1:${PORT}${pagePath}`;
   // Rien d'externe pendant le rendu : le HTML généré doit être le même sur
   // n'importe quelle machine, avec ou sans réseau. Concrètement, count.js
@@ -290,7 +312,14 @@ async function renderPage(browser, page, lang, { slug, shell, keys }) {
           return { id, first: parts[0], html: parts.filter(Boolean).join("\n") };
         }),
         dict: Object.fromEntries(keys.map((k) => [k, window.i18n.t(k)])),
+        title: document.title,
+        description: (document.querySelector('meta[name="description"]') || {}).content || "",
         profile: typeof PROFILE !== "undefined" ? { yearsExperience: PROFILE.yearsExperience } : null,
+        // Page de side project : ce que le JSON-LD décrit de l'application.
+        project: (() => {
+          const p = document.body.dataset.slug && PROJECT_DETAILS[document.body.dataset.slug];
+          return p ? { title: p.title, liveUrl: p.liveUrl, summary: window.i18n.tc(p.tagline), applicationCategory: p.applicationCategory } : null;
+        })(),
       };
     },
     { head: page.head, zones: page.zones, keys }
@@ -310,7 +339,7 @@ async function renderPage(browser, page, lang, { slug, shell, keys }) {
 }
 
 // Écrit le rendu d'une langue dans le HTML (gabarit ou coquille anglaise).
-function applyRender(html, page, lang, rendered) {
+function applyRender(html, page, lang, rendered, slugs) {
   const file = page.out[lang];
 
   page.head.forEach((sel, i) => {
@@ -330,8 +359,9 @@ function applyRender(html, page, lang, rendered) {
     html = replaceZone(html, file, "langLinks", langLinksHtml(page, lang));
     html = replaceZone(html, file, "langToggle", langToggleHtml(page, lang, rendered.dict));
   }
-  if (page.jsonLd) html = replaceZone(html, file, "jsonLd", jsonLdScript(page.jsonLd(lang, rendered)));
+  if (page.jsonLd) html = replaceZone(html, file, "jsonLd", jsonLdScript(page.jsonLd(lang, rendered, page)));
   html = applyI18n(html, file, rendered.dict);
+  html = applyProjectHrefs(html, file, lang, slugs);
 
   // Garde-fous sur le résultat complet.
   const words = wordCount(html);
@@ -342,11 +372,34 @@ function applyRender(html, page, lang, rendered) {
   return { html, words };
 }
 
+// Ancienne adresse project-detail.html : le script de redirection reçoit la
+// table slug → pages (hasOwnProperty : un slug comme « constructor » ne doit
+// rien trouver), le <noscript> un lien par projet.
+function legacyProjectPage(html, projects, dict, slugs) {
+  const file = LEGACY_PROJECT_PAGE;
+  const table = Object.fromEntries(projects.map(({ slug }) => [slug, { fr: new URL(projectUrls(slug).fr).pathname, en: new URL(projectUrls(slug).en).pathname }]));
+  const script = `<script id="project-redirect">
+  (function () {
+    var pages = ${JSON.stringify(table)};
+    var q = new URLSearchParams(location.search), slug = q.get("slug");
+    if (slug && Object.prototype.hasOwnProperty.call(pages, slug)) {
+      location.replace(pages[slug][q.get("lang") === "en" ? "en" : "fr"] + location.hash);
+    }
+  })();
+</script>`;
+  html = replaceZone(html, file, "projectRedirect", script);
+  const links = projects.map((p) => `<p><a href="${new URL(projectUrls(p.slug).fr).pathname}">${escapeText(p.title)}</a></p>`).join("\n");
+  html = replaceZone(html, file, "projectLinks", links);
+  html = applyI18n(html, file, dict);
+  return applyProjectHrefs(html, file, "fr", slugs);
+}
+
 // Coquille de la version anglaise : la page française générée, en anglais, sans
 // le script qui redirige les anciennes URL ?lang=en (il bouclerait sous /en/).
-function englishShell(frHtml, file) {
+function englishShell(frHtml, file, { redirect: hasRedirect = true } = {}) {
   const redirect = /\n?<script id="lang-redirect">[\s\S]*?<\/script>/;
-  if (!redirect.test(frHtml)) throw new Error(`${file} : script id="lang-redirect" introuvable dans le gabarit`);
+  if (hasRedirect && !redirect.test(frHtml)) throw new Error(`${file} : script id="lang-redirect" introuvable dans le gabarit`);
+  if (!hasRedirect && redirect.test(frHtml)) throw new Error(`${file} : script id="lang-redirect" inattendu`);
   if (!/<html lang="fr">/.test(frHtml)) throw new Error(`${file} : <html lang="fr"> introuvable dans le gabarit`);
   return frHtml.replace(redirect, "").replace('<html lang="fr">', '<html lang="en">');
 }
@@ -368,31 +421,55 @@ function englishShell(frHtml, file) {
     console.log(`${changed ? (CHECK_ONLY ? "✗ pas à jour" : "✓ régénéré ") : "= inchangé  "} ${file} (${words} mots sans JavaScript)`);
   };
   try {
-    // Le slug du side project et son unicité : la page gabarit ne peut porter
-    // qu'un seul pré-rendu. Un second side project demanderait une page par
-    // projet (ou un pré-rendu du seul « principal ») — à décider à ce moment-là.
+    // Side projects et textes de la page de redirection, lus dans les sources
+    // par le site lui-même.
     const probe = await browser.newPage();
     await probe.goto(`http://127.0.0.1:${PORT}/index.html`, { waitUntil: "load" });
-    const slugs = await probe.evaluate(() => Object.keys(PROJECT_DETAILS));
+    const projects = await probe.evaluate(() => Object.entries(PROJECT_DETAILS).map(([slug, p]) => ({ slug, title: p.title })));
+    const legacyTemplate = fs.readFileSync(path.join(ROOT, LEGACY_PROJECT_PAGE), "utf8");
+    const legacyDict = await probe.evaluate((keys) => Object.fromEntries(keys.map((k) => [k, window.i18n.t(k)])), i18nKeys(legacyTemplate));
     await probe.close();
-    if (slugs.length !== 1) {
-      throw new Error(`PROJECT_DETAILS contient ${slugs.length} entrée(s) ; ce script pré-rend exactement un side project dans project-detail.html.`);
-    }
+    const slugs = projects.map((p) => p.slug);
+    if (!slugs.length) throw new Error("PROJECT_DETAILS est vide : aucune page projet à générer.");
+    slugs.forEach((slug) => {
+      if (!/^[a-z0-9-]+$/.test(slug)) throw new Error(`Slug « ${slug} » : minuscules, chiffres et tirets seulement (il devient un nom de fichier).`);
+    });
 
-    for (const page of PAGES) {
+    for (const page of [...PAGES, ...slugs.map(projectPageConfig)]) {
       const template = fs.readFileSync(path.join(ROOT, page.template), "utf8");
       // + le libellé du lien FR/EN, que le gabarit ne cite pas (zone calculée).
       const keys = [...i18nKeys(template), "nav.langToggleLabel"];
+      // Page projet : la page française n'est pas le gabarit lui-même, c'est
+      // le gabarit portant son slug, servi depuis la mémoire.
+      const frSource = page.slug ? template.replace(/<body\b[^>]*>/, (tag) => setAttr(tag, "data-slug", page.slug)) : template;
 
-      const fr = await renderPage(browser, page, "fr", { slug: slugs[0], keys });
-      const frOut = applyRender(template, page, "fr", fr);
+      const fr = await renderPage(browser, page, "fr", { keys, shell: page.slug ? frSource : null });
+      const frOut = applyRender(frSource, page, "fr", fr, slugs);
       report(page.out.fr, frOut.html, frOut.words);
 
       if (page.langs.includes("en")) {
-        const shell = englishShell(frOut.html, page.template);
-        const en = await renderPage(browser, page, "en", { slug: slugs[0], shell, keys });
-        const enOut = applyRender(shell, page, "en", en);
+        const shell = englishShell(frOut.html, page.template, { redirect: !page.slug });
+        const en = await renderPage(browser, page, "en", { shell, keys });
+        const enOut = applyRender(shell, page, "en", en, slugs);
         report(page.out.en, enOut.html, enOut.words);
+      }
+    }
+
+    // Ancienne adresse project-detail.html?slug= : table de redirection et
+    // liens du <noscript>, sans rendu.
+    const legacy = legacyProjectPage(legacyTemplate, projects, legacyDict, slugs);
+    report(LEGACY_PROJECT_PAGE, legacy, wordCount(legacy));
+
+    // Pages d'un projet retiré de PROJECT_DETAILS : fichiers générés devenus
+    // orphelins, supprimés (signalés en mode --check).
+    for (const dir of ["projets", "en/projects"]) {
+      const abs = path.join(ROOT, dir);
+      if (!fs.existsSync(abs)) continue;
+      for (const f of fs.readdirSync(abs).filter((n) => n.endsWith(".html"))) {
+        if (slugs.includes(f.replace(/\.html$/, ""))) continue;
+        stale++;
+        if (!CHECK_ONLY) fs.unlinkSync(path.join(abs, f));
+        console.log(`${CHECK_ONLY ? "✗ orphelin   " : "✓ supprimé  "} ${dir}/${f} (plus dans PROJECT_DETAILS)`);
       }
     }
   } finally {

@@ -13,7 +13,8 @@ js/data.js                 → ⭐ LE FICHIER À ÉDITER : ton contenu (profil, 
 js/app.js                  → génère le HTML à partir de data.js, gère les durées, focus mode, impression, langue, rail chronologique (desktop)
 js/gemini.js                → logique du Fit-Checker (appelle la fonction Supabase, jamais Gemini directement)
 results.html + js/results.js → page « Résultats » : les études de cas (format STAR) derrière les chiffres du hero (zone pré-rendue aussi)
-project-detail.html + js/project-detail.js → page gabarit des études de cas de side projects (?slug=), pré-rendue avec le seul side project
+projets/<slug>.html, en/projects/<slug>.html → pages des side projects, ENTIÈREMENT générées (une par entrée de PROJECT_DETAILS) depuis scripts/templates/project.html ; rendu : js/project-detail.js
+project-detail.html          → ancienne adresse (?slug=) : redirige vers la page statique, « Projet introuvable » sinon
 supabase/functions/gemini-fit/index.ts  → code de la fonction serveur à déployer sur Supabase
 scripts/generate-static.js   → pré-rend les pages dans leurs zones static:, en français et en anglais (voir section 5)
 scripts/lib/structured-data.js → données structurées (JSON-LD) des pages, par langue
@@ -37,7 +38,7 @@ supabase/migrations/         → la table keepalive lue chaque jour pour garder 
 
 ## 0. Le site est bilingue FR/EN
 
-Chaque page existe en deux fichiers : le **français à la racine** (`/`, `/results.html`) et l'**anglais sous `/en/`** (`/en/`, `/en/results.html`), générés à partir des mêmes sources (section 5). Le lien **FR/EN** du menu mène à la même page dans l'autre langue, en gardant la section où l'on se trouvait (`#experiences`…). Le Fit-Checker répond dans la langue de la page (Gemini reçoit une instruction pour ça). Les anciennes adresses `?lang=en` redirigent vers `/en/…`. Seule exception : l'étude de cas Tour de Growth (`project-detail.html?slug=…`), encore traduite en JavaScript sur `?lang=en`.
+Chaque page existe en deux fichiers : le **français à la racine** (`/`, `/results.html`) et l'**anglais sous `/en/`** (`/en/`, `/en/results.html`), générés à partir des mêmes sources (section 5). Le lien **FR/EN** du menu mène à la même page dans l'autre langue, en gardant la section où l'on se trouvait (`#experiences`…). Le Fit-Checker répond dans la langue de la page (Gemini reçoit une instruction pour ça). Les anciennes adresses `?lang=en` redirigent vers `/en/…`. Les études de cas des side projects suivent la même règle : `/projets/tour-de-growth.html` et `/en/projects/tour-de-growth.html` (l'ancienne adresse `project-detail.html?slug=…` y redirige).
 
 - Les **textes fixes de l'interface** (menu, boutons, libellés...) sont dans `js/i18n.js`, sous forme de dictionnaire `UI_STRINGS`.
 - Le **contenu** (`js/data.js`) utilise le même principe partout : un champ traduisible s'écrit `{ fr: "...", en: "..." }`. Un champ laissé en texte simple (ex: `"AB Tasty"`, une date, un id) s'affiche à l'identique dans les deux langues — pas besoin de dupliquer les noms propres.
@@ -211,7 +212,9 @@ Le contenu vit dans `js/data.js` et c'est le JavaScript qui construit la page. G
 
 `index.html` et `results.html` sont les **gabarits** : c'est là qu'on modifie la structure à la main (hors zones). Le script en tire la version anglaise, `en/index.html` et `en/results.html` — **deux fichiers entièrement générés, à ne jamais éditer**. **Tout ce qui est entre deux marqueurs est généré aussi : ne l'édite jamais à la main**, la prochaine génération l'écraserait. Tu modifies `data.js` (ou `i18n.js`), tu push, la CI régénère et recommit les pages — exactement comme les PDF, dans le même workflow. Au chargement, les scripts de page re-rendent par-dessus (même HTML) et signalent en console (`[cv] …`) tout texte statique qui ne correspond plus aux sources : c'est le signe d'une page pas encore régénérée. Le Fit-Checker exige toujours JavaScript. Les chemins d'images et de scripts partent de la racine (`/assets/…`, `/js/…`) pour servir aussi les pages de `/en/`, et les liens entre pages restent relatifs (`results.html`, `./`) : ils restent ainsi dans la langue de la page.
 
-Garde-fous du script : erreur JavaScript, zone vide, marqueur manquant, page trop courte, mots attendus absents (Everysens, Polytech, le nom du témoignage…), et refus de tourner si `PROJECT_DETAILS` a plus d'une entrée (la page gabarit ne peut porter qu'un seul pré-rendu ; à ce moment-là il faudra décider d'une page par projet). `node scripts/generate-static.js --check` dit si les fichiers sont à jour sans rien écrire.
+**Side projects** : pour chaque entrée de `PROJECT_DETAILS`, le script produit `projets/<slug>.html` et `en/projects/<slug>.html` à partir de `scripts/templates/project.html` (gabarit, seul fichier à modifier pour leur structure), avec leur JSON-LD (`WebPage`, fil d'Ariane, `WebApplication` créée par la même personne que le CV). Il met à jour la table de redirection de `project-detail.html` et supprime les pages d'un projet retiré de `data.js`.
+
+Garde-fous du script : erreur JavaScript, zone vide, marqueur manquant, page trop courte, mots attendus absents (Everysens, Polytech, le nom du témoignage…), slug qui ne ferait pas un nom de fichier propre, lien `data-project-href` vers un projet inconnu. `node scripts/generate-static.js --check` dit si les fichiers sont à jour sans rien écrire.
 
 ### PDF téléchargeable
 
@@ -283,9 +286,11 @@ Je l'ai déjà appliqué sur tes expériences les plus récentes (AB Tasty, Ever
 
 Pas de cookies, pas de données personnelles collectées, pas de bannière de consentement nécessaire. **Gratuit indéfiniment** pour un usage personnel (contrairement à Plausible, qui n'a plus de forfait gratuit permanent depuis 2026 — je suis parti sur GoatCounter pour cette raison).
 
-Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineberthaud.goatcounter.com. Le script `count.js` est chargé dans le `<head>` des pages (`index.html`, `results.html`, leurs versions `en/`, `project-detail.html`), précédé d'un petit script inline qui **fige le chemin compté** : le chemin seul, plus `?slug=` pour la page projet (`/`, `/en/`, `/results.html`, `/en/results.html`, `/project-detail.html?slug=tour-de-growth`…), jamais `ref`/`utm` ni le fragment `#…`, pour qu'une page remonte toujours pareil quelle que soit la vitesse du réseau.
+Compte configuré : site `antoineberthaud`, tableau de bord sur https://antoineberthaud.goatcounter.com. Le script `count.js` est chargé dans le `<head>` des pages (accueil, études de cas et pages projet, dans les deux langues ; pas sur l'ancienne adresse `project-detail.html`, qui ne fait que rediriger), précédé d'un petit script inline qui **fige le chemin compté** : le chemin seul (`/`, `/en/`, `/results.html`, `/en/results.html`, `/projets/tour-de-growth.html`…), jamais `ref`/`utm` ni le fragment `#…`, pour qu'une page remonte toujours pareil quelle que soit la vitesse du réseau.
 
-**Changement d'adresse des pages anglaises (septembre 2026)** : jusqu'à la mise en ligne de `/en/`, les visites en anglais étaient comptées sous `/?lang=en` et `/results.html?lang=en` ; depuis, elles le sont sous `/en/` et `/en/results.html`. Pour comparer sur une période qui chevauche le changement, additionner les deux. Sur `project-detail.html`, `?lang=en` n'est plus compté à part (les deux langues remontent sous `/project-detail.html?slug=…`).
+**Changements d'adresse (septembre 2026)** — pour comparer sur une période qui chevauche un changement, additionner l'ancien et le nouveau chemin :
+- **24 septembre 2026** (mise en ligne de `/en/`) : les visites en anglais, comptées jusque-là sous `/?lang=en` et `/results.html?lang=en`, le sont sous `/en/` et `/en/results.html`.
+- **24 septembre 2026** (mise en ligne des pages projet statiques) : l'étude de cas Tour de Growth, comptée jusque-là sous `/project-detail.html?slug=tour-de-growth` (les deux langues), l'est sous `/projets/tour-de-growth.html` et `/en/projects/tour-de-growth.html`. L'ancienne adresse redirige et n'est plus comptée.
 
 **Événements suivis en plus des visites** (attribut `data-goatcounter-click`, ou `goatcounter.count()` dans `gemini.js`) :
 
@@ -326,7 +331,7 @@ Ce qui est en place dans le code :
 - **`<title>`, `<meta description>`, Open Graph et eyebrow du hero** qui citent Nantes, le métier et le secteur — textes dans `PROFILE.seo` (`js/data.js`), posés dans le `<head>` de `index.html` par le pré-rendu (section 5), comme tout le contenu de la page. `app.js` prévient dans la console du navigateur si le pitch pré-rendu diverge de `PROFILE.pitch.fr` (page pas encore régénérée).
 - **Données structurées `ProfilePage` → `Person`** (JSON-LD de l'accueil, en français et en anglais, écrit par le pré-rendu depuis `scripts/lib/structured-data.js`) : métier, lieu (Nantes), formation, sujets maîtrisés, et `sameAs` vers LinkedIn, le portfolio photo et Tour de Growth, pour que Google relie le tout à la même personne (même `@id` dans les deux langues).
 - **`sitemap.xml`** avec toutes les pages indexables (accueil et Résultats en FR et EN avec leurs `hreflang`, étude de cas) et une date `lastmod` **à mettre à jour quand une page change** ; les deux PDF y figurent aussi (décision du 06/09/2026 : ils sont déjà liés depuis les pages, autant que Google les compte), avec un `lastmod` mis à jour automatiquement par `generate-pdf.yml` à chaque régénération ; `robots.txt` ; `CNAME`.
-- **Pages secondaires** : `results.html` / `en/results.html` et `project-detail.html?slug=…` ont leur propre `<title>`/description par langue. L'étude de cas déclare son propre canonical (avec le `?slug=`) et la page gabarit sans slug (« Projet introuvable ») est en `noindex`.
+- **Pages secondaires** : `results.html` / `en/results.html` et les pages projet (`/projets/…`, `/en/projects/…`) ont leur propre `<title>`/description par langue, canonical et hreflang. L'ancienne adresse `project-detail.html?slug=…` redirige vers la page statique ; pour un slug inconnu elle affiche « Projet introuvable » en `noindex` (posé par JavaScript, jamais dans le HTML brut, pour que Google suive la redirection). Historique : l'étude de cas déclarait son propre canonical (avec le `?slug=`) et la page gabarit sans slug (« Projet introuvable ») est en `noindex`.
 - **PDF** avec titre, auteur, sujet, mots-clés et langue dans leurs métadonnées (écrites par `scripts/generate-pdf.js` via `pdf-lib`) — les PDF sont indexables eux aussi, autant qu'ils se présentent bien.
 - Repli `<noscript>` qui dit ce qui manque sans JavaScript (le Fit-Checker) et lie les PDF.
 - **`scripts/check-seo.mjs`** (`npm run check-seo`, serveur local sur le port 8080 : `python3 -m http.server 8080`) : vérifie tout ce qui précède sur le HTML brut et sur le rendu avec JavaScript, et sort en erreur si un critère échoue. `--lot 0` pour la seule non-régression, `--shots DOSSIER` pour des captures 390 px et 1 440 px, `--fit-call` pour un vrai appel au Fit-Checker.
@@ -345,8 +350,8 @@ en plus de sa carte sur la page d'accueil, une **page de détail dédiée**
 façon mini-étude de cas — problème identifié, mécanismes de croissance mis
 en place, démarche produit, chiffres d'usage. Le tout pensé comme un
 gabarit réutilisable : ajouter un nouveau side project avec sa page de
-détail ne demande de toucher qu'à `data.js`, jamais à `project-detail.html`
-ni à `project-detail.js`.
+détail ne demande de toucher qu'à `data.js`, jamais à
+`scripts/templates/project.html` ni à `project-detail.js`.
 
 **Pour ajouter un nouveau side project avec sa page de détail :**
 
@@ -355,16 +360,18 @@ ni à `project-detail.js`.
 2. Ajoute une clé correspondante dans `PROJECT_DETAILS` (juste après
    `SIDE_PROJECTS` dans `data.js`) : le plus simple est de **copier l'entrée
    `tour-de-growth` et de remplacer les textes**. Champs : `title`,
-   `tagline`, `liveUrl`, `problem`, `whatItIs` (+ `whatItIsPoints` et
+   `tagline`, `metaDescription` (`{fr, en}`, 160 caractères au plus : ce
+   que Google affiche), `liveUrl`, `problem`, `whatItIs` (+ `whatItIsPoints` et
    `whatItIsClosing` optionnels), `teachingMoment` (optionnel, `{title,
    body}`), `process`, `metrics` (laisse `[]` tant que tu n'as pas de vrais
    chiffres significatifs — `metricsFallback` s'affiche à la place),
    `techStack`.
 3. Relie les deux en renseignant `detailSlug` sur l'entrée `SIDE_PROJECTS`
    avec la même clé que dans `PROJECT_DETAILS`.
-4. C'est tout — `project-detail.html?slug=ta-clé` fonctionne
-   immédiatement, dans les deux langues, avec le lien retour vers le CV
-   qui préserve la langue courante.
+4. Push : la CI génère `projets/ta-clé.html` et `en/projects/ta-clé.html`
+   (en local : `node scripts/generate-static.js`), les ajoute à la
+   redirection de `project-detail.html`, et les liens du site y mènent dans
+   la bonne langue. Pense à ajouter les deux URL au `sitemap.xml`.
 
 **Pourquoi une page séparée plutôt qu'une section de plus sur la page
 d'accueil :** ça permet de documenter un side project en profondeur (la

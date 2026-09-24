@@ -840,10 +840,12 @@ const SIDE_PROJECTS = [
 
 // ---------------------------------------------------------------------------
 // 5bis. PROJECT_DETAILS — contenu des pages de détail ("étude de cas") des
-//    side projects, affichées via project-detail.html?slug=<clé>. Structure
-//    pensée pour être dupliquée telle quelle à chaque nouveau projet :
-//    ajoute une nouvelle clé ici, référence-la via `detailSlug` ci-dessus,
-//    c'est tout — aucune autre modification de code nécessaire.
+//    side projects. Chaque clé donne deux pages statiques, générées par
+//    scripts/generate-static.js : /projets/<clé>.html (français) et
+//    /en/projects/<clé>.html (anglais). Structure pensée pour être dupliquée
+//    telle quelle à chaque nouveau projet : ajoute une nouvelle clé ici,
+//    référence-la via `detailSlug` ci-dessus, relance le générateur (la CI le
+//    fait au push), c'est tout — aucune autre modification de code nécessaire.
 //
 //    `metrics`: laisse le tableau vide ([]) tant qu'il n'y a pas assez de
 //    recul pour des chiffres significatifs — `metricsFallback` s'affiche
@@ -856,6 +858,12 @@ const PROJECT_DETAILS = {
     tagline: {
       fr: "Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.",
       en: "A quick mirror to see where your growth strategy really stands — explained in plain words, not jargon.",
+    },
+    // <meta name="description"> de la page (160 caractères au plus) : ce que
+    // Google affiche sous le titre. Dit de qui est le projet et ce qu'il fait.
+    metaDescription: {
+      fr: "Tour de Growth, side project d'Antoine Berthaud : un check-up qui situe sa stratégie growth sur les 5 piliers AARRR, sans jargon. Démarche produit et stack.",
+      en: "Tour de Growth, a side project by Antoine Berthaud: a check-up that maps your growth strategy onto the 5 AARRR pillars, no jargon. Product approach and stack.",
     },
     liveUrl: "https://www.tourdegrowth.com",
 

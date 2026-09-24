@@ -31,7 +31,7 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   statiques depuis la mission SEO du 24/09/2026) : les HTML portent la page
   rendue entre des marqueurs `<!-- static:ID -->` … `<!-- /static:ID -->`
   (une vingtaine de zones sur `index.html`, tout le `<main>` sur
-  `results.html` et `project-detail.html`) plus `<title>`, description et
+  `results.html` et les pages projet) plus `<title>`, description et
   titres/descriptions `og:`/`twitter:` — c'est ce que lisent les robots sans
   JavaScript (moteurs IA, aperçus, outils de tri de candidatures ; 258 →
   ~1 800 mots sur l'accueil). **Tout ce qui est entre deux marqueurs est
@@ -47,11 +47,14 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   `-placeholder`, `-aria`, `-alt` (menu, titres, `<noscript>`), repris
   d'`i18n.js`. Les JS re-rendent par-dessus au chargement (idempotent) et
   avertissent en console (`[cv] …`) si un texte statique diverge des sources :
-  page pas encore régénérée. `project-detail.html` (page gabarit `?slug=`)
-  est pré-rendue en français avec le seul side project, traduite en JS sur
-  `?lang=en` (avec `html.lang-pending`, body invisible jusqu'au rendu
-  anglais) ; le script refuse de tourner si `PROJECT_DETAILS` en compte plus
-  d'un — il faudra alors une page par projet. `scripts/check-seo.mjs`
+  page pas encore régénérée. **Side projects** : une page par langue et par
+  entrée de `PROJECT_DETAILS`, `projets/<slug>.html` et
+  `en/projects/<slug>.html`, entièrement générées depuis
+  `scripts/templates/project.html` (le gabarit, `<body data-slug>` posé par
+  le générateur) ; un projet retiré de `data.js` voit ses pages supprimées.
+  Les liens vers un projet s'écrivent `data-project-href="<slug>"` dans les
+  gabarits (le générateur pose l'adresse de la langue) ou
+  `i18n.projectUrl(slug)` en JS. `scripts/check-seo.mjs`
   (`npm run check-seo`, serveur sur le port 8080) vérifie le tout, HTML brut
   et rendu avec JS.
 - **Tout fichier du dépôt qui n'est pas dans la liste `exclude` de `_config.yml`
@@ -80,11 +83,17 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   une seule annonce passe par `#fitAnnounce` (`role=status`) au départ et à
   l'arrivée, `#fitError` est un `role=alert`, et le focus est posé sur
   `#fitResult` (`tabindex=-1`) après le rendu.
-- `js/project-detail.js` + `project-detail.html` : gabarit réutilisable
-  pour les pages de détail ("étude de cas") des side projects, piloté par
-  `?slug=`. Ajouter un nouveau side project avec sa page de détail ne
-  touche que `data.js` (nouvelle entrée `SIDE_PROJECTS` + `PROJECT_DETAILS`
-  liées par `detailSlug`) — jamais ces deux fichiers.
+- `js/project-detail.js` + `scripts/templates/project.html` : rendu et
+  gabarit des pages de détail ("étude de cas") des side projects,
+  `/projets/<slug>.html` et `/en/projects/<slug>.html` (depuis la mission SEO
+  de sept. 2026 ; slug lu dans `<body data-slug>`, langue dans le chemin).
+  Ajouter un nouveau side project avec sa page de détail ne touche que
+  `data.js` (nouvelle entrée `SIDE_PROJECTS` + `PROJECT_DETAILS` liées par
+  `detailSlug`, avec `metaDescription`) et `sitemap.xml` — jamais ces deux
+  fichiers. `project-detail.html` n'est plus que l'ancienne adresse
+  (`?slug=`, `?lang=en`) : un script en tête du `<head>` redirige les slugs
+  connus (table générée), sinon « Projet introuvable » en noindex posé par
+  JS ; ni canonical, ni noindex, ni GoatCounter dans son HTML.
 - `js/results.js` + `results.html` : page "Résultats", le détail (format
   STAR : Contexte/Défi/Action/Résultat optionnel/Leçon) derrière les
   chiffres cliquables du hero. Contrairement à `project-detail.js` (une
@@ -318,9 +327,9 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   calculer ; assets et scripts depuis la racine (`/assets/…`, `/js/…`). Ne
   pas remettre de détection navigateur "pour les recruteurs anglophones" :
   on leur partage `/en/`. Jamais de `<base href>` (casserait les ancres).
-  Exception provisoire : `project-detail.html?slug=` reste piloté par
-  `?lang=en` (`langSuffix()`/`syncUrl()` n'existent plus que pour elle)
-  jusqu'à son passage en URL statique. **Seule exception à « pas de
+  Les pages projet suivent la même règle (`/projets/…` ↔ `/en/projects/…`,
+  liens `../` relatifs) ; `langSuffix()`, `syncUrl()` et `lang-pending` ont
+  disparu avec leur passage en URL statique. **Seule exception à « pas de
   détection navigateur » : `404.html`** (sept. 2026, décision d'Antoine).
   GitHub Pages la sert pour toute URL inconnue ; un script inline garde le
   bloc FR ou EN d'après l'URL cassée (chemin sous `/en/`, ancien `?lang=`),
@@ -425,7 +434,8 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
     restée en français (vérifié en rendu Playwright avec `locale: "en-US"`).
     Sur un site rendu en JS, la langue par défaut doit être décidée par l'URL,
     jamais par le navigateur.
-13. **Un `<link rel="canonical">` statique sur une page gabarit pilotée par
+13. **(Historique : les pages projet sont statiques depuis la mission SEO de
+    sept. 2026, le principe reste.)** **Un `<link rel="canonical">` statique sur une page gabarit pilotée par
     `?slug=`** (`project-detail.html`) pointait la page nue "Projet
     introuvable" comme version de référence de l'étude de cas — l'`id`
     `canonicalLink` existait mais n'était jamais mis à jour. Toute page dont

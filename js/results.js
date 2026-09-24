@@ -198,11 +198,6 @@ ${
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       setIfDifferent(el.dataset.i18n, el.textContent, t(el.dataset.i18n), (v) => (el.textContent = v));
     });
-    // Page projet : encore pilotée par ?lang=en (jusqu'à son passage en URL
-    // statique), d'où ce suffixe ajouté en anglais.
-    document.querySelectorAll("a[data-footer-project]").forEach((a) => {
-      a.href = `/project-detail.html?slug=${a.dataset.footerProject}${window.i18n.langSuffix("&")}`;
-    });
     // Clics comptés (data-goatcounter-click) sur les liens recréés par ce rendu.
     if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();
 

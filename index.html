@@ -156,16 +156,13 @@
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
      pas de données personnelles. Le chemin compté est figé ICI, avant le
-     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…)
-     plus ?slug= pour la page projet, jamais ref/utm ni le fragment, pour qu'une
-     page remonte toujours pareil quelle que soit la vitesse du réseau. Compte configuré (site
+     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…),
+     jamais ref/utm ni le fragment, pour qu'une page remonte toujours pareil
+     quelle que soit la vitesse du réseau. Compte configuré (site
      "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
      — voir README §8 (événements, exclure ses propres visites). -->
 <script>
-  window.goatcounter = { path: (function () {
-    var slug = new URLSearchParams(location.search).get("slug");
-    return location.pathname + (slug ? "?slug=" + encodeURIComponent(slug) : "");
-  })() };
+  window.goatcounter = { path: location.pathname };
 </script>
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -595,7 +592,7 @@
         <p>Un outil gratuit de growth check-up (framework AARRR), conçu et lancé pour situer une stratégie growth en trois minutes. En mots clairs plutôt qu'en jargon, on voit où elle tient déjà la route et où elle ne tient pas encore. Le mode approfondi s'appuie sur l'API Gemini.</p>
         <div class="project-links">
           <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" data-goatcounter-click="project-tour-de-growth">Voir le projet →</a>
-          <a href="/project-detail.html?slug=tour-de-growth">Voir l'étude de cas →</a>
+          <a href="/projets/tour-de-growth.html">Voir l'étude de cas →</a>
         </div>
         <div class="project-skills"><span>Product-Led Growth</span><span>User Research</span><span>Intégration LLM (API Gemini)</span><span>IA générative</span></div>
       </div></div>
@@ -669,7 +666,7 @@
 <!-- /static:footerAvailability -->
       </div>
       <!-- static:footerLinks -->
-<div class="footer-links" id="footerLinks"><a href="results.html">Études de cas</a><a href="/project-detail.html?slug=tour-de-growth" data-goatcounter-click="footer-project-tour-de-growth">Tour de Growth</a><a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a><a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a><a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a></div>
+<div class="footer-links" id="footerLinks"><a href="results.html">Études de cas</a><a href="/projets/tour-de-growth.html" data-goatcounter-click="footer-project-tour-de-growth">Tour de Growth</a><a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a><a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a><a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a></div>
 <!-- /static:footerLinks -->
       <!-- Ligne statique (hors #footerLinks, qu'app.js vide) : les quatre PDF
            (complet et court, par langue) restent atteignables même sans

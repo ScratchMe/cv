@@ -165,7 +165,7 @@
     // project-detail.html nulle part (constat F07 de l'audit).
     if (CONFIG.showSideProjects) {
       SIDE_PROJECTS.filter((p) => p.detailSlug).forEach((p) => {
-        footerLinks.innerHTML += `<a href="/project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}" data-goatcounter-click="footer-project-${p.detailSlug}">${p.title}</a>`;
+        footerLinks.innerHTML += `<a href="${window.i18n.projectUrl(p.detailSlug)}" data-goatcounter-click="footer-project-${p.detailSlug}">${p.title}</a>`;
       });
     }
     // data-goatcounter-click : clics comptés comme événements GoatCounter
@@ -497,7 +497,7 @@
         <p>${tc(p.description)}</p>
         <div class="project-links">
           ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" data-goatcounter-click="project-${p.detailSlug || "link"}">${t("projects.viewLink")}</a>` : ""}
-          ${p.detailSlug ? `<a href="/project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}">${t("projects.viewCaseStudy")}</a>` : ""}
+          ${p.detailSlug ? `<a href="${window.i18n.projectUrl(p.detailSlug)}">${t("projects.viewCaseStudy")}</a>` : ""}
         </div>
         <div class="project-skills">${p.skills.map((s) => `<span>${skillLabel(s)}</span>`).join("")}</div>
       </div>`

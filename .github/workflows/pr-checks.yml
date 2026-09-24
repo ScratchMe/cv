@@ -57,12 +57,12 @@ jobs:
       # recommittera après le merge (durées mises à jour, par exemple).
       - name: Écart entre les pages committées et le pré-rendu de la CI
         run: |
-          if git diff --quiet -- index.html results.html project-detail.html en/ && [ -z "$(git ls-files --others --exclude-standard -- en/)" ]; then
+          if git diff --quiet -- index.html results.html project-detail.html en/ projets/ && [ -z "$(git ls-files --others --exclude-standard -- en/ projets/)" ]; then
             echo "Pages pré-rendues à jour : aucun écart."
           else
-            git --no-pager diff --stat -- index.html results.html project-detail.html en/
-            git ls-files --others --exclude-standard -- en/
-            git --no-pager diff -- index.html results.html project-detail.html en/ | head -120
+            git --no-pager diff --stat -- index.html results.html project-detail.html en/ projets/
+            git ls-files --others --exclude-standard -- en/ projets/
+            git --no-pager diff -- index.html results.html project-detail.html en/ projets/ | head -120
           fi
 
       - name: Générer les PDF FR et EN (sans les committer)
