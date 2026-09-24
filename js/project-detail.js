@@ -50,6 +50,16 @@
   // indexable ET servait de canonical à l'étude de cas (le <link canonical>
   // statique n'était jamais complété avec le ?slug=), ce qui revenait à dire
   // à Google que l'étude de cas était une copie d'une page vide.
+  // L'accueil et les études de cas existent en deux fichiers statiques
+  // (racine en français, /en/ en anglais) : les liens vont droit à la bonne
+  // version, sans passer par l'ancienne URL ?lang=en.
+  function homeUrl() {
+    return window.i18n.lang === "en" ? "/en/" : "/";
+  }
+  function resultsUrl() {
+    return window.i18n.lang === "en" ? "/en/results.html" : "/results.html";
+  }
+
   function setNoIndex(on) {
     let meta = document.querySelector('meta[name="robots"]');
     if (on && !meta) {
@@ -68,7 +78,7 @@
     root.innerHTML = `
       <div class="project-detail-notfound">
         <p>${t("projectDetail.notFound")}</p>
-        <a href="./${window.i18n.langSuffix()}" class="btn solid">${t("projectDetail.backToCv")}</a>
+        <a href="${homeUrl()}" class="btn solid">${t("projectDetail.backToCv")}</a>
       </div>`;
   }
 
@@ -144,8 +154,8 @@
       </section>
       <div class="page-cta">
         <a class="btn solid" href="mailto:${PROFILE.contact.email}?subject=${encodeURIComponent(t("pageCta.mailSubject"))}" data-goatcounter-click="contact-email">${t("pageCta.contact")}</a>
-        <a class="btn" href="./${window.i18n.langSuffix()}#fit-checker">${t("pageCta.fit")}</a>
-        <a class="btn" href="./${window.i18n.langSuffix()}">${t("projectDetail.backToCv")}</a>
+        <a class="btn" href="${homeUrl()}#fit-checker">${t("pageCta.fit")}</a>
+        <a class="btn" href="${homeUrl()}">${t("projectDetail.backToCv")}</a>
       </div>
     `;
 
@@ -190,13 +200,13 @@
     }
 
     document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");
-    document.getElementById("backToCvLink").href = `./${window.i18n.langSuffix()}`;
-    document.getElementById("logoLink").href = `./${window.i18n.langSuffix()}`;
-    document.getElementById("footerCvLink").href = `./${window.i18n.langSuffix()}`;
+    document.getElementById("backToCvLink").href = homeUrl();
+    document.getElementById("logoLink").href = homeUrl();
+    document.getElementById("footerCvLink").href = homeUrl();
     const footerResults = document.getElementById("footerResultsLink");
     if (footerResults) {
       footerResults.textContent = t("footer.caseStudies");
-      footerResults.href = `results.html${window.i18n.langSuffix()}`;
+      footerResults.href = resultsUrl();
     }
     document.querySelectorAll("a[data-footer-project]").forEach((a) => {
       a.href = `project-detail.html?slug=${a.dataset.footerProject}${window.i18n.langSuffix("&")}`;

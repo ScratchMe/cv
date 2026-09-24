@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Une entrée par page indexable. La page d'accueil existe en deux langues
-     (français à l'URL nue, anglais sur ?lang=en), déclarées l'une à l'autre
-     via les <xhtml:link hreflang>. Les <lastmod> sont mis à jour par
-     .github/workflows/generate-pdf.yml à chaque fois qu'il régénère une page
-     pré-rendue ou un PDF (c'est ce qui incite Google à revenir crawler) —
-     ne pas les modifier à la main. -->
+<!-- Une entrée par page indexable. L'accueil et les études de cas existent en
+     deux langues (français à la racine, anglais sous /en/), déclarées l'une à
+     l'autre via les <xhtml:link hreflang>, le français servant de x-default.
+     Les <lastmod> sont mis à jour par .github/workflows/generate-pdf.yml à
+     chaque fois qu'il régénère une page pré-rendue ou un PDF (c'est ce qui
+     incite Google à revenir crawler) — ne pas les modifier à la main. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://cv.antoine.berthaud.me/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-24</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/"/>
   </url>
   <url>
-    <loc>https://cv.antoine.berthaud.me/?lang=en</loc>
-    <lastmod>2026-09-06</lastmod>
+    <loc>https://cv.antoine.berthaud.me/en/</loc>
+    <lastmod>2026-09-24</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/"/>
   </url>
   <url>
     <loc>https://cv.antoine.berthaud.me/results.html</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/results.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/results.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/results.html"/>
+  </url>
+  <url>
+    <loc>https://cv.antoine.berthaud.me/en/results.html</loc>
+    <lastmod>2026-09-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/results.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/results.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/results.html"/>
   </url>
   <url>
     <loc>https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth</loc>

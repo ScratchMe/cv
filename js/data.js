@@ -55,7 +55,10 @@ const PROFILE = {
     fr: "Ouvert aux opportunités Senior / Lead PM · SaaS B2B · Nantes, hybride ou remote",
     en: "Open to Senior / Lead PM roles · B2B SaaS · Nantes, hybrid or remote",
   },
-  photo: "assets/photo/antoine.jpg", // recadrée en carré, légers ajustements de contraste/netteté
+  // Recadrée en carré, légers ajustements de contraste/netteté. Tous les
+  // chemins d'images de ce fichier partent de la racine (/assets/…) : les
+  // mêmes données servent aussi les pages anglaises, sous /en/.
+  photo: "/assets/photo/antoine.jpg",
   // ⚠️ Le pitch FR est aussi recopié en dur dans index.html (#heroPitch) pour
   // les robots qui n'exécutent pas JavaScript (moteurs IA, aperçus...). Si tu
   // le modifies ici, reporte la modification là-bas : app.js signale l'écart
@@ -139,7 +142,7 @@ const RESULT_DETAILS = {
       en: "User interviews, external benchmark, a qualification engine at sign-up, then a personalized onboarding for each profile.",
     },
     company: "AB Tasty",
-    companyLogo: "assets/logos/ab-tasty.webp",
+    companyLogo: "/assets/logos/ab-tasty.webp",
     role: "Product Manager",
     period: "2023 – 2025",
     value: "+15%",
@@ -184,7 +187,7 @@ const RESULT_DETAILS = {
   // l'accueil comme en tête de l'étude. Ne jamais inventer un résultat ici.
   "ab-tasty-hybride": {
     company: "AB Tasty",
-    companyLogo: "assets/logos/ab-tasty.webp",
+    companyLogo: "/assets/logos/ab-tasty.webp",
     role: "Senior Growth Product Manager",
     period: { fr: "2025 – aujourd'hui", en: "2025 – present" },
     status: {
@@ -258,7 +261,7 @@ const RESULT_DETAILS = {
       en: "User research, a migration plan carried to leadership, incremental rework, MVP in under 2 months.",
     },
     company: "Everysens",
-    companyLogo: "assets/logos/everysens.webp",
+    companyLogo: "/assets/logos/everysens.webp",
     role: "Product Manager",
     period: "2022 – 2023",
     value: "-50%",
@@ -309,7 +312,7 @@ const RESULT_DETAILS = {
       en: "Daily extraction of Twitter feedback via Zapier, a second retrieval method added.",
     },
     company: "SNCF Connect & Tech",
-    companyLogo: "assets/logos/sncf-connect-tech.webp",
+    companyLogo: "/assets/logos/sncf-connect-tech.webp",
     role: "Product Manager",
     period: "2021 – 2022",
     value: "+100%",
@@ -518,7 +521,7 @@ const EXPERIENCES = [
       fr: "1 000+ organisations clientes · 5 000 utilisateurs actifs mensuels · 50 M€ d'ARR",
       en: "1,000+ client organizations · 5,000 monthly active users · €50M ARR",
     },
-    logo: "assets/logos/ab-tasty.webp",
+    logo: "/assets/logos/ab-tasty.webp",
     roles: [
       {
         title: "Senior Growth Product Manager",
@@ -587,7 +590,7 @@ const EXPERIENCES = [
   {
     company: "Everysens",
     location: "Nantes, France",
-    logo: "assets/logos/everysens.webp",
+    logo: "/assets/logos/everysens.webp",
     roles: [
       {
         title: "Product Manager",
@@ -620,7 +623,7 @@ const EXPERIENCES = [
   {
     company: "SNCF Connect & Tech",
     location: "Nantes, France",
-    logo: "assets/logos/sncf-connect-tech.webp",
+    logo: "/assets/logos/sncf-connect-tech.webp",
     roles: [
       // Les deux postes 2020-2022 (boutiques en ligne, puis Prêt à Voyager en
       // parallèle d'octobre 2021 à avril 2022) tenaient deux blocs et faisaient
@@ -774,8 +777,9 @@ const TESTIMONIALS = [
     role: { fr: "CX Designer chez Decathlon", en: "CX Designer at Decathlon" },
     context: { fr: "Ancienne collègue chez AB Tasty", en: "Former colleague at AB Tasty" },
     // [À COMPLÉTER] si tu obtiens son accord explicite pour utiliser sa photo,
-    // dépose-la dans assets/photo/ et renseigne le chemin ici. Vide = avatar
-    // à initiales généré automatiquement (recommandé par défaut).
+    // dépose-la dans assets/photo/ et renseigne le chemin ici, depuis la
+    // racine ("/assets/photo/…"). Vide = avatar à initiales généré
+    // automatiquement (recommandé par défaut).
     photo: "",
   },
 ];

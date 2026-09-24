@@ -30,23 +30,21 @@
 <meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="alternate icon" type="image/png" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
      pas de données personnelles. Le chemin compté est figé ICI, avant le
-     chargement de count.js (async) : on ne garde que ?slug= et ?lang=en,
-     jamais ref/utm ni le fragment, pour que /?lang=en remonte toujours pareil
-     quelle que soit la vitesse du réseau. Compte configuré (site
+     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…)
+     plus ?slug= pour la page projet, jamais ref/utm ni le fragment, pour qu'une
+     page remonte toujours pareil quelle que soit la vitesse du réseau. Compte configuré (site
      "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
      — voir README §8 (événements, exclure ses propres visites). -->
 <script>
   window.goatcounter = { path: (function () {
-    var q = new URLSearchParams(location.search), keep = [];
-    if (q.get("slug")) keep.push("slug=" + encodeURIComponent(q.get("slug")));
-    if (q.get("lang") === "en") keep.push("lang=en");
-    return location.pathname + (keep.length ? "?" + keep.join("&") : "");
+    var slug = new URLSearchParams(location.search).get("slug");
+    return location.pathname + (slug ? "?slug=" + encodeURIComponent(slug) : "");
   })() };
 </script>
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -62,24 +60,24 @@
     setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 1500);
   }
 </script>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
       <p>Sans JavaScript, cette page s'affiche en français, sans la version anglaise.</p>
-      <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
-         <a href="assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
-         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
-         <a href="assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
+      <p><a href="/assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="/assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
+         <a href="/assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
+         <a href="/assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
       <p><a href="./">← Retour au CV</a></p>
     </div>
   </noscript>
   <header class="top">
     <div class="navrow wrap">
-      <a href="index.html" class="mark" id="logoLink">Antoine<span>.</span></a>
+      <a href="./" class="mark" id="logoLink">Antoine<span>.</span></a>
       <div class="navactions">
-        <a href="index.html" class="btn" id="backToCvLink" data-i18n="projectDetail.backToCv">← Retour au CV</a>
+        <a href="./" class="btn" id="backToCvLink" data-i18n="projectDetail.backToCv">← Retour au CV</a>
         <button id="langToggle" class="btn" type="button">EN</button>
       </div>
     </div>
@@ -156,8 +154,8 @@
       </section>
       <div class="page-cta">
         <a class="btn solid" href="mailto:antoine.berthaud@gmail.com?subject=%C3%80%20propos%20d'un%20poste" data-goatcounter-click="contact-email">Me contacter</a>
-        <a class="btn" href="./#fit-checker">Tester votre poste avec le Fit-Checker →</a>
-        <a class="btn" href="./">← Retour au CV</a>
+        <a class="btn" href="/#fit-checker">Tester votre poste avec le Fit-Checker →</a>
+        <a class="btn" href="/">← Retour au CV</a>
       </div>
     </main>
 <!-- /static:projectDetailRoot -->
@@ -169,19 +167,19 @@
         <p>Product Manager — Nantes, France</p>
       </div>
       <div class="footer-links">
-        <a href="index.html" id="footerCvLink">CV</a>
+        <a href="./" id="footerCvLink">CV</a>
         <a href="results.html" id="footerResultsLink">Études de cas</a>
         <a href="project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
         <a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a>
         <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>
         <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a>
       </div>
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
+      <p class="footer-pdf"><a href="/assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="/assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="/assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="/assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
     </div>
   </footer>
 
-  <script src="js/i18n.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/project-detail.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/project-detail.js"></script>
 </body>
 </html>

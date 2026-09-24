@@ -67,8 +67,9 @@
   // main ; un filtre actif les déplie aussi, sans toucher à ce choix.
   let earlyExpanded = false;
 
-  // Pitch FR pré-rendu dans index.html (#heroPitch), capturé au premier rendu
-  // pour vérifier qu'il ne dérive pas de data.js (page pas régénérée).
+  // Pitch pré-rendu dans la page (#heroPitch, index.html ou en/index.html),
+  // capturé au premier rendu pour vérifier qu'il ne dérive pas de data.js
+  // (page pas régénérée).
   let staticPitchHtml = null;
   let staticI18nChecked = false;
 
@@ -79,15 +80,16 @@
     document.getElementById("heroName").textContent = `${PROFILE.firstName} ${PROFILE.lastName}`;
     document.getElementById("heroRole").textContent = tc(PROFILE.role);
 
-    // index.html porte le pitch FR pré-rendu (zone static:heroPitch, générée
-    // en CI par scripts/generate-static.js). Au premier rendu on garde cette
-    // copie, et on prévient dans la console si elle diverge de PROFILE.pitch.fr :
-    // ça signale une page pas encore régénérée après un changement de data.js.
+    // La page porte le pitch pré-rendu dans sa langue (zone static:heroPitch,
+    // générée en CI par scripts/generate-static.js). Au premier rendu on garde
+    // cette copie, et on prévient dans la console si elle diverge de
+    // PROFILE.pitch : ça signale une page pas encore régénérée après un
+    // changement de data.js.
     const pitchEl = document.getElementById("heroPitch");
     if (staticPitchHtml === null) staticPitchHtml = pitchEl.innerHTML.trim();
     pitchEl.innerHTML = richText(PROFILE.pitch);
-    if (window.i18n.lang === "fr" && staticPitchHtml && staticPitchHtml !== pitchEl.innerHTML) {
-      console.warn("[cv] Le pitch statique de index.html (#heroPitch) diffère de PROFILE.pitch.fr (js/data.js) — pense à le resynchroniser.");
+    if (staticPitchHtml && staticPitchHtml !== pitchEl.innerHTML) {
+      console.warn(`[cv] Le pitch statique de la page (#heroPitch) diffère de PROFILE.pitch.${window.i18n.lang} (js/data.js) — page à régénérer : node scripts/generate-static.js`);
     }
 
     const statsEl = document.getElementById("heroStats");
@@ -99,7 +101,7 @@
           <div class="hero-stat-value">${s.value}</div>
           <div class="hero-stat-label">${tc(s.label)}</div>`;
         return s.resultId
-          ? `<a class="hero-stat is-linked" href="results.html${window.i18n.langSuffix()}#${s.resultId}" data-goatcounter-click="hero-stat-${s.resultId}">${inner}</a>`
+          ? `<a class="hero-stat is-linked" href="results.html#${s.resultId}" data-goatcounter-click="hero-stat-${s.resultId}">${inner}</a>`
           : `<div class="hero-stat">${inner}</div>`;
       }).join("");
 
@@ -115,7 +117,7 @@
       if (linkedCount > 0) {
         statsEl.insertAdjacentHTML(
           "afterend",
-          `<a class="hero-stats-link" id="heroStatsLink" href="results.html${window.i18n.langSuffix()}" data-goatcounter-click="hero-stats-link">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
+          `<a class="hero-stats-link" id="heroStatsLink" href="results.html" data-goatcounter-click="hero-stats-link">${t("hero.seeCaseStudies").replace("{n}", linkedCount)}</a>`
         );
       }
     }
@@ -158,12 +160,12 @@
     // Footer
     const footerLinks = document.getElementById("footerLinks");
     footerLinks.innerHTML = "";
-    footerLinks.innerHTML += `<a href="results.html${window.i18n.langSuffix()}">${t("footer.caseStudies")}</a>`;
+    footerLinks.innerHTML += `<a href="results.html">${t("footer.caseStudies")}</a>`;
     // Étude de cas de chaque side project : results.html ne renvoyait vers
     // project-detail.html nulle part (constat F07 de l'audit).
     if (CONFIG.showSideProjects) {
       SIDE_PROJECTS.filter((p) => p.detailSlug).forEach((p) => {
-        footerLinks.innerHTML += `<a href="project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}" data-goatcounter-click="footer-project-${p.detailSlug}">${p.title}</a>`;
+        footerLinks.innerHTML += `<a href="/project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}" data-goatcounter-click="footer-project-${p.detailSlug}">${p.title}</a>`;
       });
     }
     // data-goatcounter-click : clics comptés comme événements GoatCounter
@@ -192,7 +194,12 @@
       const parts = [];
       if (PROFILE.contact.email) parts.push(`<a href="mailto:${PROFILE.contact.email}">${PROFILE.contact.email}</a>`);
       if (PROFILE.contact.linkedin) parts.push(`<a href="${PROFILE.contact.linkedin}">${PROFILE.contact.linkedin.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</a>`);
-      if (PROFILE.contact.site) parts.push(`<a href="${PROFILE.contact.site}">${PROFILE.contact.site.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>`);
+      // Même adresse affichée dans les deux langues ; le lien mène à la
+      // version de la page (le PDF anglais renvoie vers /en/).
+      if (PROFILE.contact.site) {
+        const siteHref = window.i18n.lang === "en" ? new URL("en/", PROFILE.contact.site).href : PROFILE.contact.site;
+        parts.push(`<a href="${siteHref}">${PROFILE.contact.site.replace(/^https?:\/\//, "").replace(/\/$/, "")}</a>`);
+      }
       printContact.innerHTML = parts.join(" · ");
     }
   }
@@ -274,7 +281,7 @@
         const d = RESULT_DETAILS[id];
         const stat = HERO_STATS.find((s) => s.resultId === id);
         return `
-      <a class="case-card" href="results.html${window.i18n.langSuffix()}#${id}" data-goatcounter-click="case-card-${id}">
+      <a class="case-card" href="results.html#${id}" data-goatcounter-click="case-card-${id}">
         <span class="case-company">${d.company}</span>
         <h3 class="case-title">${tc(d.cardTitle)}</h3>
         <p class="case-line"><b>${t("cases.problem")}</b> ${tc(d.problem)}</p>
@@ -422,12 +429,13 @@
     ).join("");
 
     // Liste vide : la liste ET son sous-titre disparaissent (CSS :empty ne
-    // peut pas cacher le titre, qui est un frère).
+    // peut pas cacher le titre, qui est un frère). Le titre est dans la zone
+    // générée, avec la liste : sans JavaScript aussi, il est masqué.
     const trainings = document.getElementById("trainingsList");
     trainings.innerHTML = TRAININGS.map(
       (tItem) => `<li><div class="formation-item-title">${tc(tItem.title)}</div><div class="formation-item-meta">${tItem.institution} · ${tc(tItem.period)}</div></li>`
     ).join("");
-    const trainingsTitle = document.querySelector('[data-i18n="formation.trainings"]');
+    const trainingsTitle = document.getElementById("trainingsTitle");
     if (trainingsTitle) trainingsTitle.hidden = TRAININGS.length === 0;
 
     document.getElementById("languagesList").innerHTML = LANGUAGES.map(
@@ -489,7 +497,7 @@
         <p>${tc(p.description)}</p>
         <div class="project-links">
           ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" data-goatcounter-click="project-${p.detailSlug || "link"}">${t("projects.viewLink")}</a>` : ""}
-          ${p.detailSlug ? `<a href="project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}">${t("projects.viewCaseStudy")}</a>` : ""}
+          ${p.detailSlug ? `<a href="/project-detail.html?slug=${p.detailSlug}${window.i18n.langSuffix("&")}">${t("projects.viewCaseStudy")}</a>` : ""}
         </div>
         <div class="project-skills">${p.skills.map((s) => `<span>${skillLabel(s)}</span>`).join("")}</div>
       </div>`
@@ -497,64 +505,53 @@
   }
 
   // --------------------------------------------------------------------
-  // 7. TRADUCTIONS STATIQUES (attributs data-i18n dans index.html)
+  // 7. TEXTES STATIQUES (attributs data-i18n du gabarit index.html)
   // --------------------------------------------------------------------
+  // index.html et en/index.html portent déjà leurs textes, <title> et
+  // balises og:/twitter: dans leur langue (scripts/generate-static.js) : on
+  // ne réécrit que ce qui diffère des sources, en le signalant en console —
+  // une page pas encore régénérée après un changement de data.js ou i18n.js.
+  // Canonical, hreflang et lien de langue sont statiques : jamais touchés ici.
+  function setIfDifferent(label, current, expected, apply) {
+    if ((current || "").trim() === (expected || "").trim()) return;
+    if (!staticI18nChecked) {
+      console.warn(`[cv] Texte statique différent des sources pour « ${label} » : « ${String(current || "").trim().slice(0, 60)} » ≠ « ${String(expected || "").slice(0, 60)} » — page à régénérer : node scripts/generate-static.js`);
+    }
+    apply(expected);
+  }
+
   function applyStaticTranslations() {
     document.documentElement.lang = window.i18n.lang;
 
-    // <title> et <meta name="description"> par langue (PROFILE.seo dans
-    // data.js) : c'est ce que Google affiche dans ses résultats.
-    document.title = tc(PROFILE.seo.title);
-    const descEl = document.querySelector('meta[name="description"]');
-    if (descEl) descEl.setAttribute("content", tc(PROFILE.seo.description));
-    // Aperçus de partage : même titre et même description que la page. Les
-    // valeurs françaises sont pré-rendues dans index.html par
-    // scripts/generate-static.js à partir de ce même rendu.
+    // <title> et <meta name="description"> (PROFILE.seo dans data.js) : c'est
+    // ce que Google affiche dans ses résultats. Aperçus de partage : même
+    // titre et même description que la page.
+    setIfDifferent("<title>", document.title, tc(PROFILE.seo.title), (v) => (document.title = v));
     [
+      ['meta[name="description"]', tc(PROFILE.seo.description)],
       ['meta[property="og:title"]', tc(PROFILE.seo.title)],
       ['meta[name="twitter:title"]', tc(PROFILE.seo.title)],
       ['meta[property="og:description"]', tc(PROFILE.seo.description)],
       ['meta[name="twitter:description"]', tc(PROFILE.seo.description)],
     ].forEach(([sel, content]) => {
       const el = document.querySelector(sel);
-      if (el) el.setAttribute("content", content);
+      if (el) setIfDifferent(sel, el.getAttribute("content"), content, (v) => el.setAttribute("content", v));
     });
 
-    // Canonical par langue : l'URL nue pour le français (langue par défaut),
-    // ?lang=en pour l'anglais — chaque version se déclare elle-même, en
-    // cohérence avec les balises hreflang statiques du <head>.
-    const canonicalEl = document.querySelector('link[rel="canonical"]');
-    if (canonicalEl) {
-      const base = canonicalEl.href.split("?")[0];
-      canonicalEl.href = window.i18n.lang === "en" ? `${base}?lang=en` : base;
-    }
+    // Textes écrits dans le gabarit (menu, titres de section : hors zones
+    // générées), traduits dans en/index.html par le générateur.
     document.querySelectorAll("[data-i18n]").forEach((el) => {
-      // Les textes écrits en dur dans index.html (menu, titres de section :
-      // hors zones générées) sont ce que lisent les robots sans JavaScript :
-      // au premier rendu, on signale en console ceux qui ne correspondent
-      // plus à la version française d'i18n.js.
-      if (!staticI18nChecked && window.i18n.lang === "fr" && el.textContent.trim() !== t(el.dataset.i18n).trim()) {
-        console.warn(`[cv] Texte statique de index.html différent d'i18n.js pour « ${el.dataset.i18n} » : « ${el.textContent.trim().slice(0, 60)} » ≠ « ${t(el.dataset.i18n).slice(0, 60)} »`);
-      }
-      el.textContent = t(el.dataset.i18n);
+      setIfDifferent(el.dataset.i18n, el.textContent, t(el.dataset.i18n), (v) => (el.textContent = v));
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-      if (!staticI18nChecked && window.i18n.lang === "fr" && el.placeholder.trim() !== t(el.dataset.i18nPlaceholder).trim()) {
-        console.warn(`[cv] Placeholder statique de index.html différent d'i18n.js pour « ${el.dataset.i18nPlaceholder} »`);
-      }
-      el.placeholder = t(el.dataset.i18nPlaceholder);
+      setIfDifferent(el.dataset.i18nPlaceholder, el.placeholder, t(el.dataset.i18nPlaceholder), (v) => (el.placeholder = v));
     });
-    staticI18nChecked = true;
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
       const label = t(el.dataset.i18nAria);
-      el.setAttribute("aria-label", label);
-      el.setAttribute("title", label);
+      setIfDifferent(el.dataset.i18nAria, el.getAttribute("aria-label"), label, (v) => el.setAttribute("aria-label", v));
+      setIfDifferent(`${el.dataset.i18nAria} (title)`, el.getAttribute("title"), label, (v) => el.setAttribute("title", v));
     });
-    const langBtn = document.getElementById("langToggle");
-    if (langBtn) {
-      langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
-      langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
-    }
+    staticI18nChecked = true;
   }
 
   // --------------------------------------------------------------------
@@ -659,17 +656,15 @@
   }
 
   // --------------------------------------------------------------------
-  // 9. LANGUE — ?lang=en dans l'URL affiche l'anglais ; tout le reste (pas
-  //    de paramètre, ?lang=fr, valeur inconnue) affiche le français.
-  //    Volontairement PAS de détection de la langue du navigateur : Googlebot
-  //    rend la page avec un navigateur en anglais (en-US), et indexait donc
-  //    la version anglaise à l'URL canonique — à contre-sens d'un CV qui vise
-  //    des requêtes françaises ("product manager Nantes"). L'URL décide :
-  //    un recruteur anglophone reçoit un lien avec ?lang=en.
+  // 9. LANGUE — le chemin décide : /en/ = anglais (en/index.html), la
+  //    racine = français. Volontairement PAS de détection de la langue du
+  //    navigateur : Googlebot rend la page avec un navigateur en anglais
+  //    (en-US), et indexait la version anglaise à l'URL française. Un
+  //    recruteur anglophone reçoit le lien /en/.
   // --------------------------------------------------------------------
   function initLangFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    window.i18n.setLang(params.get("lang") === "en" ? "en" : "fr");
+    window.i18n.setLang(window.i18n.pathLang());
     // ?pdf=court : mode d'impression « CV court » (2 pages), utilisé par
     // scripts/generate-pdf.js — voir body.cv-court dans le @media print.
     // Sans effet à l'écran.
@@ -678,7 +673,7 @@
 
 
   // --------------------------------------------------------------------
-  // 10. RENDU COMPLET (appelé au chargement + à chaque changement de langue)
+  // 10. RENDU COMPLET (appelé une fois, au chargement)
   // --------------------------------------------------------------------
   function renderAll() {
     applyStaticTranslations();
@@ -697,9 +692,6 @@
     moveIndicatorTo(current || navLinksEls[0]);
     bindAnalytics();
     renderExperienceRail(); // libellé « Aujourd'hui » et positions (sans effet avant setupExperienceRail)
-    // Sur ?lang=en, index.html masque la page pré-rendue en français jusqu'ici
-    // (script inline du <head>) : le rendu anglais est en place, on affiche.
-    document.documentElement.classList.remove("lang-pending");
   }
 
   // Relie les clics à compter (data-goatcounter-click) aux éléments qui
@@ -730,10 +722,10 @@
       // Le bouton principal sert le CV court (2 pages) depuis le 7 sept. 2026 :
       // c'est le document qu'un recruteur ouvre. Le segment sert le complet.
       printBtn: {
-        file: (lang) => `assets/cv-antoine-berthaud-${lang}-${lang === "fr" ? "court" : "short"}.pdf`,
+        file: (lang) => `/assets/cv-antoine-berthaud-${lang}-${lang === "fr" ? "court" : "short"}.pdf`,
         name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}-${lang === "fr" ? "court" : "short"}.pdf`,
       },
-      printShortBtn: { file: (lang) => `assets/cv-antoine-berthaud-${lang}.pdf`, name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}.pdf` },
+      printShortBtn: { file: (lang) => `/assets/cv-antoine-berthaud-${lang}.pdf`, name: (lang) => `Antoine-Berthaud-CV-${lang.toUpperCase()}.pdf` },
     };
     Object.entries(pdfVariants).forEach(([id, variant]) => {
       const btn = document.getElementById(id);
@@ -759,10 +751,11 @@
       });
     });
 
-    document.getElementById("langToggle").addEventListener("click", () => {
-      window.i18n.setLang(window.i18n.lang === "fr" ? "en" : "fr");
-      window.i18n.syncUrl();
-      renderAll();
+    // Lien FR/EN : un vrai lien vers l'autre version (écrit par le
+    // générateur) ; au clic, il emporte l'ancre courante (#experiences…).
+    const langLink = document.getElementById("langToggle");
+    langLink.addEventListener("click", () => {
+      langLink.href = langLink.getAttribute("href").split("#")[0] + window.location.hash;
     });
 
     setupEarlyToggle();

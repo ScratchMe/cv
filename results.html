@@ -2,18 +2,41 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script id="lang-redirect">
+  // Anciennes URL anglaises (?lang=en, jusqu'en septembre 2026) : redirigées
+  // vers la page statique /en/…, en gardant l'ancre et les autres paramètres.
+  // En tête du <head> pour partir avant tout le reste. Pages françaises
+  // seulement : scripts/generate-static.js le retire des pages anglaises.
+  (function () {
+    var q = new URLSearchParams(location.search);
+    if (q.get("lang") !== "en") return;
+    q.delete("lang");
+    var rest = q.toString();
+    location.replace("/en" + location.pathname.replace(/\/index\.html$/, "/") + (rest ? "?" + rest : "") + location.hash);
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <title>, description et titres/descriptions og:/twitter: : version française
-     de results.metaTitle / results.metaDescription (js/i18n.js), posée ici par
-     scripts/generate-static.js (CI) — ne pas éditer à la main. results.js les
-     remplace selon la langue affichée ; cette copie est ce que lisent les
-     robots sans JavaScript et les aperçus de partage (LinkedIn, Slack…). -->
+<!-- <title>, description et titres/descriptions og:/twitter: :
+     results.metaTitle / results.metaDescription (js/i18n.js) dans la langue de
+     la page, posés par scripts/generate-static.js (CI) — ne pas éditer à la
+     main. C'est ce que lisent les robots sans JavaScript et les aperçus de
+     partage (LinkedIn, Slack…) ; results.js ne les touche plus que s'ils
+     diffèrent d'i18n.js (page pas encore régénérée, signalée en console). -->
 <title id="pageTitle">Études de cas Product Manager — Antoine Berthaud, Nantes</title>
 <meta name="description" id="pageDescription" content="Les études de cas produit d'Antoine Berthaud, Product Manager à Nantes : contexte, hypothèse, options écartées, action et résultat (AB Tasty, Everysens, SNCF Connect &amp; Tech).">
 
-<!-- Canonical unique : le français est la version de référence, ?lang=en
-     n'est qu'une variante d'affichage (pas de hreflang ici, voir CLAUDE.md). -->
+<!-- URL canonique, versions linguistiques et og:url/og:locale : le français
+     à la racine (x-default), l'anglais sous /en/. Zone générée par
+     scripts/generate-static.js — ne pas éditer à la main. -->
+<!-- static:langLinks -->
 <link rel="canonical" href="https://cv.antoine.berthaud.me/results.html">
+<link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/results.html">
+<link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/results.html">
+<link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/results.html">
+<meta property="og:url" content="https://cv.antoine.berthaud.me/results.html">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<!-- /static:langLinks -->
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="Études de cas Product Manager — Antoine Berthaud, Nantes">
@@ -21,9 +44,6 @@
 <meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://cv.antoine.berthaud.me/results.html">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:locale:alternate" content="en_US">
 <meta property="article:author" content="https://www.linkedin.com/in/antoine-berthaud-pm/">
 
 <meta name="twitter:card" content="summary_large_image">
@@ -32,57 +52,49 @@
 <meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="alternate icon" type="image/png" href="assets/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="alternate icon" type="image/png" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
      pas de données personnelles. Le chemin compté est figé ICI, avant le
-     chargement de count.js (async) : on ne garde que ?slug= et ?lang=en,
-     jamais ref/utm ni le fragment, pour que /?lang=en remonte toujours pareil
-     quelle que soit la vitesse du réseau. Compte configuré (site
+     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…)
+     plus ?slug= pour la page projet, jamais ref/utm ni le fragment, pour qu'une
+     page remonte toujours pareil quelle que soit la vitesse du réseau. Compte configuré (site
      "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
      — voir README §8 (événements, exclure ses propres visites). -->
 <script>
   window.goatcounter = { path: (function () {
-    var q = new URLSearchParams(location.search), keep = [];
-    if (q.get("slug")) keep.push("slug=" + encodeURIComponent(q.get("slug")));
-    if (q.get("lang") === "en") keep.push("lang=en");
-    return location.pathname + (keep.length ? "?" + keep.join("&") : "");
+    var slug = new URLSearchParams(location.search).get("slug");
+    return location.pathname + (slug ? "?slug=" + encodeURIComponent(slug) : "");
   })() };
 </script>
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>
-  // Sur ?lang=en, la page pré-rendue en français reste invisible jusqu'au
-  // premier rendu JavaScript en anglais (qui retire la classe) — au plus 1,5 s
-  // si le JS échoue, pour ne jamais laisser une page blanche.
-  if (/[?&]lang=en(?:&|$)/.test(location.search)) {
-    document.documentElement.classList.add("lang-pending");
-    setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 1500);
-  }
-</script>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
-      <p>Sans JavaScript, cette page s'affiche en français, sans la version anglaise.</p>
-      <p><a href="assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
-         <a href="assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
-         <a href="assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
-         <a href="assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
-      <p><a href="./">← Retour au CV</a></p>
+      <p><a href="/assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="/assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
+         <a href="/assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
+         <a href="/assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
+      <p><a href="./" data-i18n="projectDetail.backToCv">← Retour au CV</a></p>
     </div>
   </noscript>
   <header class="top">
     <div class="navrow wrap">
-      <a href="index.html" class="mark" id="logoLink">Antoine<span>.</span></a>
+      <a href="./" class="mark" id="logoLink">Antoine<span>.</span></a>
       <div class="navactions">
-        <a href="index.html" class="btn" id="backToCvLink" data-i18n="projectDetail.backToCv">← Retour au CV</a>
-        <button id="langToggle" class="btn" type="button">EN</button>
+        <a href="./" class="btn" id="backToCvLink" data-i18n="projectDetail.backToCv">← Retour au CV</a>
+        <!-- Lien vers la même page dans l'autre langue (results.js y ajoute
+             l'ancre courante au clic). Zone générée par scripts/generate-static.js. -->
+        <!-- static:langToggle -->
+<a id="langToggle" class="btn" href="/en/results.html" hreflang="en" lang="en" aria-label="undefined">EN</a>
+<!-- /static:langToggle -->
       </div>
     </div>
   </header>
@@ -97,7 +109,7 @@
       <div class="results-list">
       <article class="result-block" id="ab-tasty-activation">
         <div class="result-badge">
-          <img src="assets/logos/ab-tasty.webp" alt="AB Tasty" class="result-logo">
+          <img src="/assets/logos/ab-tasty.webp" alt="AB Tasty" class="result-logo">
           <div>
             <h2 class="result-company">AB Tasty</h2>
             <div class="result-role">Product Manager · 2023 – 2025</div>
@@ -144,7 +156,7 @@
       </article>
       <article class="result-block" id="everysens-entry-time">
         <div class="result-badge">
-          <img src="assets/logos/everysens.webp" alt="Everysens" class="result-logo">
+          <img src="/assets/logos/everysens.webp" alt="Everysens" class="result-logo">
           <div>
             <h2 class="result-company">Everysens</h2>
             <div class="result-role">Product Manager · 2022 – 2023</div>
@@ -191,7 +203,7 @@
       </article>
       <article class="result-block" id="sncf-ticket-retrieval">
         <div class="result-badge">
-          <img src="assets/logos/sncf-connect-tech.webp" alt="SNCF Connect &amp; Tech" class="result-logo">
+          <img src="/assets/logos/sncf-connect-tech.webp" alt="SNCF Connect &amp; Tech" class="result-logo">
           <div>
             <h2 class="result-company">SNCF Connect &amp; Tech</h2>
             <div class="result-role">Product Manager · 2021 – 2022</div>
@@ -234,7 +246,7 @@
       </article>
       <article class="result-block" id="ab-tasty-hybride">
         <div class="result-badge">
-          <img src="assets/logos/ab-tasty.webp" alt="AB Tasty" class="result-logo">
+          <img src="/assets/logos/ab-tasty.webp" alt="AB Tasty" class="result-logo">
           <div>
             <h2 class="result-company">AB Tasty</h2>
             <div class="result-role">Senior Growth Product Manager · 2025 – aujourd'hui</div>
@@ -291,19 +303,19 @@
         <p>Product Manager — Nantes, France</p>
       </div>
       <div class="footer-links">
-        <a href="index.html" id="footerCvLink">CV</a>
-        <a href="results.html" id="footerResultsLink">Études de cas</a>
-        <a href="project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
+        <a href="./" id="footerCvLink">CV</a>
+        <a href="results.html" id="footerResultsLink" data-i18n="footer.caseStudies">Études de cas</a>
+        <a href="/project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
         <a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a>
         <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>
         <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a>
       </div>
-      <p class="footer-pdf"><a href="assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
+      <p class="footer-pdf"><a href="/assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="/assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="/assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="/assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
     </div>
   </footer>
 
-  <script src="js/i18n.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/results.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/results.js"></script>
 </body>
 </html>

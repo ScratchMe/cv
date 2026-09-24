@@ -1,8 +1,9 @@
 name: Pré-rendre les pages et générer les PDF
 
 # Deux produits dérivés de js/data.js, régénérés et recommittés ici :
-# 1. les zones pré-rendues (version française) des trois pages HTML, lues par
-#    les robots qui n'exécutent pas JavaScript (scripts/generate-static.js) ;
+# 1. les pages pré-rendues, lues par les robots qui n'exécutent pas
+#    JavaScript (scripts/generate-static.js) : zones des trois pages HTML en
+#    français, et les versions anglaises en/index.html et en/results.html ;
 # 2. les deux PDF (scripts/generate-pdf.js).
 # Se déclenche quand le contenu/style du CV change (pas sur le README ou
 # d'autres fichiers sans rapport), ET une fois par mois indépendamment de
@@ -63,7 +64,7 @@ jobs:
       # Avant les PDF : les pages HTML que Chromium imprime ensuite sont
       # celles qui viennent d'être pré-rendues (même rendu, aucune différence
       # attendue, mais c'est l'ordre logique).
-      - name: Pré-rendre les pages (zones générées des trois HTML, en français)
+      - name: Pré-rendre les pages (zones générées, en français et en anglais)
         run: npm run generate-static
 
       - name: Générer les PDF FR et EN (complets et courts)
@@ -73,7 +74,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html results.html project-detail.html assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf assets/cv-antoine-berthaud-fr-court.pdf assets/cv-antoine-berthaud-en-short.pdf
+          git add index.html results.html project-detail.html en/index.html en/results.html assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf assets/cv-antoine-berthaud-fr-court.pdf assets/cv-antoine-berthaud-en-short.pdf
           if git diff --cached --quiet; then
             echo "Aucun changement dans les pages ni les PDF, rien à committer."
           else
@@ -84,8 +85,10 @@ jobs:
           today, changed = sys.argv[1], set(sys.argv[2:])
           # Fichier du dépôt → URL(s) du sitemap qu'il porte.
           urls = {
-              "index.html": ["https://cv.antoine.berthaud.me/", "https://cv.antoine.berthaud.me/?lang=en"],
+              "index.html": ["https://cv.antoine.berthaud.me/"],
+              "en/index.html": ["https://cv.antoine.berthaud.me/en/"],
               "results.html": ["https://cv.antoine.berthaud.me/results.html"],
+              "en/results.html": ["https://cv.antoine.berthaud.me/en/results.html"],
               "project-detail.html": ["https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth"],
               "assets/cv-antoine-berthaud-fr.pdf": ["https://cv.antoine.berthaud.me/assets/cv-antoine-berthaud-fr.pdf"],
               "assets/cv-antoine-berthaud-en.pdf": ["https://cv.antoine.berthaud.me/assets/cv-antoine-berthaud-en.pdf"],

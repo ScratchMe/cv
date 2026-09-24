@@ -42,6 +42,9 @@
     "testimonial.eyebrow": { fr: "Recommandation LinkedIn", en: "LinkedIn recommendation" },
 
     "footer.photos": { fr: "Photos", en: "Photos" },
+    // <noscript> de l'accueil : le CV entier est dans le HTML, seul le
+    // Fit-Checker a besoin de JavaScript.
+    "noscript.fit": { fr: "Sans JavaScript, le Fit-Checker n'est pas disponible.", en: "Without JavaScript, the Fit-Checker isn't available." },
     "footer.caseStudies": { fr: "Études de cas", en: "Case studies" },
     "hero.seeCaseStudies": { fr: "Voir les {n} études de cas →", en: "See the {n} case studies →" },
 
@@ -226,17 +229,26 @@
     return field;
   }
 
-  // Suffixe à ajouter aux liens internes : le français est la langue par
-  // défaut, servie à l'URL nue (c'est l'URL canonique), donc on n'écrit
-  // ?lang=fr nulle part ; l'anglais porte ?lang=en. `sep` vaut "?" ou "&"
-  // selon que l'URL a déjà un paramètre.
+  // Langue d'une page, lue dans son chemin : /en/… = anglais, tout le reste
+  // = français (langue par défaut, à la racine). Jamais le navigateur :
+  // Googlebot navigue en anglais (voir CLAUDE.md). Depuis septembre 2026,
+  // l'accueil et les études de cas existent en deux fichiers statiques
+  // (index.html et en/index.html, results.html et en/results.html).
+  function pathLang() {
+    return /^\/en(\/|$)/.test(window.location.pathname) ? "en" : "fr";
+  }
+
+  // Suffixe ?lang=en des liens vers project-detail.html, la seule page encore
+  // pilotée par ce paramètre (jusqu'à son passage en URL statique). Le
+  // français n'en porte pas. `sep` vaut "?" ou "&" selon que l'URL a déjà un
+  // paramètre.
   function langSuffix(sep = "?") {
     return currentLang === "en" ? `${sep}lang=en` : "";
   }
 
   // Reflète la langue courante dans l'URL de la page (sans recharger) :
   // ?lang=en en anglais, URL nue en français. Utilisé par le bouton FR/EN
-  // des trois pages, pour qu'une URL copiée partage la bonne langue.
+  // de project-detail.html, pour qu'une URL copiée partage la bonne langue.
   function syncUrl() {
     const url = new URL(window.location.href);
     if (currentLang === "en") url.searchParams.set("lang", "en");
@@ -256,6 +268,7 @@
     },
     t,
     tc,
+    pathLang,
     langSuffix,
     syncUrl,
     months: () => MONTHS[currentLang],

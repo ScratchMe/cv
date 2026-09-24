@@ -30,7 +30,9 @@ function startServer(port) {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
       const urlPath = decodeURIComponent(req.url.split("?")[0]);
-      const filePath = path.join(ROOT, urlPath === "/" ? "/index.html" : urlPath);
+      // Un chemin qui finit par « / » sert son index.html, comme GitHub Pages
+      // (/ → index.html, /en/ → en/index.html).
+      const filePath = path.join(ROOT, urlPath.endsWith("/") ? `${urlPath}index.html` : urlPath);
       if (!filePath.startsWith(ROOT)) {
         res.writeHead(403);
         res.end();

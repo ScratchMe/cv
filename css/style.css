@@ -110,6 +110,11 @@ nav a.is-active{color:var(--violet);}
 .navactions{display:flex;gap:8px;flex-shrink:0;}
 .btn{font-size:13px;font-weight:600;padding:10px 15px;border-radius:100px;cursor:pointer;border:1.5px solid var(--ink);background:transparent;color:var(--ink);text-decoration:none;transition:transform .15s ease, box-shadow .15s ease;}
 .btn:hover{transform:translateY(-1px);}
+/* Lien FR/EN : un <a> depuis septembre 2026 (vrai lien vers l'autre version),
+   même rendu que l'ancien <button> : hauteur de ligne « normal » (un lien
+   hérite de celle du texte) et libellé centré quand la pastille est étirée
+   par la barre (43 px sur les études de cas ; un bouton centre tout seul). */
+#langToggle{line-height:normal;display:inline-flex;align-items:center;justify-content:center;}
 .btn.solid{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 6px 16px rgba(108,60,233,.28);}
 .btn.icon-btn{width:38px;height:38px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 .btn.icon-btn svg{width:18px;height:18px;}
@@ -140,9 +145,10 @@ h1{font-size:48px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-h
 .pitch strong,.role-context strong,.role-achievements strong{color:var(--ink);font-weight:700;}
 
 .hero-stats{display:flex;gap:22px 26px;margin-bottom:28px;flex-wrap:wrap;} /* quatre chiffres depuis sept. 2026 : deux par ligne dans la colonne texte du hero */
-/* Sur ?lang=en, le <head> pose html.lang-pending le temps que le JavaScript
-   remplace la page pré-rendue en français par le rendu anglais (retirée
-   après le premier rendu, ou au bout de 1,5 s si le JS échoue). */
+/* project-detail.html?…&lang=en seulement (l'accueil et les études de cas ont
+   leur page anglaise statique) : le <head> pose html.lang-pending le temps que
+   le JavaScript remplace la page pré-rendue en français par le rendu anglais
+   (retirée après le premier rendu, ou au bout de 1,5 s si le JS échoue). */
 html.lang-pending body{visibility:hidden;}
 .hero-stat{padding-left:20px;border-left:2px solid var(--line);}
 .hero-stat:first-child{padding-left:0;border-left:none;}

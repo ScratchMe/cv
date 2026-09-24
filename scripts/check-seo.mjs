@@ -61,6 +61,11 @@ const RES_FR = { path: "/results.html", lang: "fr", url: `${SITE}/results.html`,
 const RES_EN = { path: "/en/results.html", lang: "en", url: `${SITE}/en/results.html`, fr: `${SITE}/results.html`, en: `${SITE}/en/results.html`, kind: "results" };
 const LOT1_PAGES = [HOME_FR, HOME_EN, RES_FR, RES_EN];
 
+// Lot 1 : les liens vers la page Tour de Growth gardent leur fonctionnement
+// d'avant (project-detail.html?slug=…, plus &lang=en depuis une page anglaise)
+// jusqu'au lot 2. Les critères 3 et 8 les tolèrent tant que ce drapeau est vrai.
+const TDG_LINKS_EXCEPTION = true;
+
 // Captures : les cinq URL de l'état des lieux (lot 0). Après le lot 1,
 // /?lang=en et /results.html?lang=en redirigent vers /en/… : la capture montre
 // alors la page anglaise, à comparer à la référence prise avant.
@@ -107,7 +112,9 @@ async function openTracked(ctx, pathOrUrl, { waitUntil = "load" } = {}) {
   const page = await ctx.newPage();
   const issues = [];
   page.on("console", (m) => {
-    if (m.type() === "error") issues.push(`console : ${m.text()}`);
+    // Les avertissements « [cv] » du site signalent une page pas régénérée
+    // (texte statique différent de data.js / i18n.js) : comptés aussi.
+    if (m.type() === "error" || (m.type() === "warning" && m.text().startsWith("[cv]"))) issues.push(`console : ${m.text()}`);
   });
   page.on("pageerror", (e) => issues.push(`exception JS : ${e.message}`));
   page.on("response", (r) => {
@@ -351,7 +358,8 @@ async function lot1(browser) {
 
   // Critère 3 — plus aucun « lang=en » dans le HTML généré, hors script de redirection
   for (const pg of LOT1_PAGES) {
-    const text = (raw[pg.path].text || "").replace(/<script id="lang-redirect">[\s\S]*?<\/script>/, "");
+    let text = (raw[pg.path].text || "").replace(/<script id="lang-redirect">[\s\S]*?<\/script>/, "");
+    if (TDG_LINKS_EXCEPTION) text = text.replace(/project-detail\.html\?slug=[\w-]+(&amp;|&)lang=en/g, "");
     const n = (text.match(/lang=en/g) || []).length;
     check(1, "1.3", `${pg.path} : aucun « lang=en » hors script de redirection`, raw[pg.path].status === 200 && n === 0, `${n} occurrence(s)`);
   }
@@ -427,11 +435,13 @@ async function lot1(browser) {
     const links = await page.evaluate(() => [...document.querySelectorAll("a[href]")].map((a) => ({ id: a.id, href: a.href, raw: a.getAttribute("href") })));
     await page.close();
     const pageUrl = new URL(BASE + pg.path);
-    const internal = links.filter((l) => l.href.startsWith(ORIGIN));
+    // Internes : ceux du serveur vérifié, et les adresses absolues du site en
+    // production (contact du PDF, par exemple).
+    const internal = links.filter((l) => l.href.startsWith(ORIGIN) || l.href.startsWith(`${SITE}/`));
     const bad = internal.filter((l) => {
       const u = new URL(l.href);
       if (/^\/assets\/|\.pdf$/.test(u.pathname)) return false; // PDF et assets : partagés
-      if (MAX_LOT < 2 && u.pathname === "/project-detail.html") return false; // exception du lot 1
+      if (TDG_LINKS_EXCEPTION && u.pathname === "/project-detail.html") return false; // exception du lot 1
       if (u.pathname === pageUrl.pathname && u.search === "" && u.hash) return false; // ancre de la page
       if (l.id === "langToggle") return false;
       return pg.lang === "en" ? !u.pathname.startsWith("/en/") : u.pathname.startsWith("/en/");
@@ -534,8 +544,38 @@ async function lot1(browser) {
 // Un vrai appel au Fit-Checker, depuis la page anglaise (--fit-call)
 // ---------------------------------------------------------------------------
 async function fitCall(browser) {
-  const ctx = await newContext(browser, { js: true, realFit: true });
-  const { page } = await openTracked(ctx, "/en/");
+  // La fonction Supabase n'accepte que l'origine du site en ligne (CORS) :
+  // depuis http://localhost, le navigateur bloque sa réponse. La page est
+  // donc ouverte à son adresse de production, mais chaque fichier du site y
+  // est servi depuis le serveur vérifié : c'est bien le code local qui fait
+  // l'appel, avec la bonne origine.
+  // Derrière un proxy d'entreprise (variable HTTPS_PROXY), Chromium ne la lit
+  // pas tout seul : on la lui passe pour cet appel.
+  const proxy = process.env.HTTPS_PROXY || process.env.https_proxy;
+  const fitBrowser = proxy ? await chromium.launch({ proxy: { server: proxy } }) : browser;
+  const ctx = await fitBrowser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
+  await ctx.route("**/*", async (route) => {
+    const url = route.request().url();
+    const host = new URL(url).host;
+    if (url.startsWith(`${SITE}/`)) {
+      const r = await fetch(BASE + url.slice(SITE.length));
+      return route.fulfill({ status: r.status, headers: Object.fromEntries(r.headers), body: Buffer.from(await r.arrayBuffer()) });
+    }
+    // L'appel réel part de Node (route.fetch, avec le proxy éventuel) et sa
+    // réponse est rendue telle quelle à la page : même résultat, et ça marche
+    // aussi quand le Chromium de la machine ne connaît pas le certificat du
+    // proxy (cas des environnements d'exécution de Claude Code).
+    if (host.endsWith(".supabase.co")) {
+      const response = await route.fetch();
+      fitStatus = response.status();
+      return route.fulfill({ response });
+    }
+    stubbedHosts.add(host);
+    return route.fulfill({ status: 200, contentType: TYPES[path.extname(new URL(url).pathname)] || "text/plain", body: "" });
+  });
+  let fitStatus = null;
+  const page = await ctx.newPage();
+  await page.goto(`${SITE}/en/`, { waitUntil: "load" });
   await page.fill("#jobPosting", "Senior Product Manager, Growth. B2B SaaS company in Nantes, France. You will own onboarding, activation and self-serve monetization, run A/B tests and work with data (SQL, Mixpanel). 5+ years of product management experience required.");
   await page.click("#analyzeBtn");
   const outcome = await Promise.race([
@@ -544,7 +584,8 @@ async function fitCall(browser) {
   ]).catch(() => "timeout");
   const text = await page.evaluate((o) => (o === "result" ? document.getElementById("fitResult").innerText : (document.getElementById("fitError") || {}).textContent || ""), outcome);
   await ctx.close();
-  check(1, "1.9-fitcall", "/en/ : un vrai appel au Fit-Checker renvoie une analyse en anglais", outcome === "result" && /strength|watch|question|score/i.test(text), `${outcome} : « ${short(text.replace(/\s+/g, " "), 120)} »`);
+  if (fitBrowser !== browser) await fitBrowser.close();
+  check(1, "1.9-fitcall", "/en/ : un vrai appel au Fit-Checker renvoie une analyse en anglais", outcome === "result" && /strength|watch|question|score/i.test(text) && !/Points forts|Points de vigilance/.test(text), `${outcome}, HTTP ${fitStatus} : « ${short(text.replace(/\s+/g, " "), 160)} »`);
 }
 
 // ---------------------------------------------------------------------------
