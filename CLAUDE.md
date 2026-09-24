@@ -5,13 +5,16 @@ Lu automatiquement par Claude Code au démarrage d'une session dans ce dossier.
 
 ## Ce que c'est
 
-**Dernier grand chantier** : la quatrième revue externe (7 sept. 2026), livrée
-en huit PR — expériences rééquilibrées, hero à quatre chiffres, compétences
-réduites et sans filtres, ordre des sections revu avec une section « Études de
-cas », PDF court par défaut, quatrième étude sans chiffre. Chaque arbitrage est
-dans « Décisions déjà prises » ci-dessous ; le plan de travail a été retiré une
-fois terminé. `docs/` reste exclu du domaine dans `_config.yml` pour le
-prochain document de travail.
+**Dernier grand chantier** : la mission SEO du 24 sept. 2026 (audit de la
+production), livrée en cinq PR (#71 à #75, dont un correctif du lien FR/EN) :
+pages anglaises statiques sous `/en/`, pages projet statiques
+sous `/projets/` et `/en/projects/`, données structurées complètes par page et
+par langue, `lastmod` et `dateModified` tenus par le générateur, titres et
+descriptions raccourcis, `favicon.ico`. `scripts/check-seo.mjs` vérifie le
+tout et sert de test de non-régression ; les arbitrages sont dans « Décisions
+déjà prises » ci-dessous. Avant elle, la quatrième revue externe (7 sept.
+2026). `docs/` reste exclu du domaine dans `_config.yml` pour le prochain
+document de travail.
 
 Site CV statique bilingue (FR/EN), HTML/CSS/JS vanilla, hébergé sur GitHub
 Pages avec domaine personnalisé `cv.antoine.berthaud.me`. Piloté par la
@@ -368,7 +371,10 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   régénérées laissait le `lastmod` figé (06/09 alors que la page avait changé
   le 07/09).
   Les PDF portent des métadonnées (titre, auteur, langue) posées par
-  `scripts/generate-pdf.js` via `pdf-lib`.
+  `scripts/generate-pdf.js` via `pdf-lib`. Titres ≤ 60 caractères,
+  descriptions ≤ 160 (Google coupe au-delà ; textes de la mission SEO du
+  24/09/2026 dans `PROFILE.seo` et `results.metaDescription`) ; `favicon.ico`
+  multi-tailles à la racine, rendu depuis `assets/favicon.svg`.
 - **Site considéré fonctionnellement complet** (sept. 2026) : bilingue,
   PDF, Fit-Checker IA, hero cliquable + études de cas STAR, side project
   avec étude de cas, CI de génération/surveillance des PDF. Ne pas
