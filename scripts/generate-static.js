@@ -46,7 +46,8 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 const { ROOT, startServer } = require("./lib/site-server");
-const { PAGE_URLS, profilePage, projectPage, projectUrls, jsonLdScript } = require("./lib/structured-data");
+const { execFileSync } = require("child_process");
+const { PAGE_URLS, profilePage, resultsPage, projectPage, projectUrls, jsonLdScript } = require("./lib/structured-data");
 
 const PORT = 4174; // ≠ 4173 (generate-pdf.js) : les deux scripts peuvent tourner côte à côte
 const CHECK_ONLY = process.argv.includes("--check");
@@ -67,7 +68,9 @@ const PAGES = [
     path: { fr: "/index.html", en: "/en/index.html" },
     urls: PAGE_URLS.home,
     head: META_HEAD,
-    jsonLd: (lang, data) => profilePage(lang, data.profile),
+    // dateModified = <lastmod> de la page, dateCreated = premier commit de
+    // index.html (voir pageDates plus bas).
+    jsonLd: (lang, rendered, page, dates) => profilePage(lang, rendered.profile, dates),
     zones: [
       ["heroName", "#heroName"],
       ["heroRole", "#heroRole"],
@@ -104,6 +107,8 @@ const PAGES = [
     path: { fr: "/results.html", en: "/en/results.html" },
     urls: PAGE_URLS.results,
     head: META_HEAD,
+    extraKeys: ["nav.cases"], // libellé du fil d'Ariane (JSON-LD)
+    jsonLd: (lang, rendered, page) => resultsPage(lang, { url: page.urls[lang], name: rendered.title, description: rendered.description, crumb: rendered.dict["nav.cases"] }),
     zones: [["resultsRoot", "#resultsRoot"]],
     sentinels: { fr: ["Contexte", "Leçon", "Everysens"], en: ["Context", "Lesson", "Everysens"] },
     minWords: 700,
@@ -181,7 +186,8 @@ function replaceZone(html, file, id, content) {
   if (matches.length !== 1) {
     throw new Error(`${file} : ${matches.length} paire(s) de marqueurs pour « ${id} » (attendu 1 : <!-- static:${id} --> … <!-- /static:${id} -->)`);
   }
-  return html.replace(re, () => `<!-- static:${id} -->\n${content.trim()}\n<!-- /static:${id} -->`);
+  // Sauts de ligne retirés aux deux bouts, pas l'indentation (sitemap).
+  return html.replace(re, () => `<!-- static:${id} -->\n${content.replace(/^\s*\n|\s+$/g, "")}\n<!-- /static:${id} -->`);
 }
 
 // Pose (ou remplace) un attribut dans une balise ouvrante.
@@ -339,7 +345,7 @@ async function renderPage(browser, page, lang, { shell, keys }) {
 }
 
 // Écrit le rendu d'une langue dans le HTML (gabarit ou coquille anglaise).
-function applyRender(html, page, lang, rendered, slugs) {
+function applyRender(html, page, lang, rendered, slugs, dates) {
   const file = page.out[lang];
 
   page.head.forEach((sel, i) => {
@@ -359,7 +365,7 @@ function applyRender(html, page, lang, rendered, slugs) {
     html = replaceZone(html, file, "langLinks", langLinksHtml(page, lang));
     html = replaceZone(html, file, "langToggle", langToggleHtml(page, lang, rendered.dict));
   }
-  if (page.jsonLd) html = replaceZone(html, file, "jsonLd", jsonLdScript(page.jsonLd(lang, rendered, page)));
+  if (page.jsonLd) html = replaceZone(html, file, "jsonLd", jsonLdScript(page.jsonLd(lang, rendered, page, dates)));
   html = applyI18n(html, file, rendered.dict);
   html = applyProjectHrefs(html, file, lang, slugs);
 
@@ -392,6 +398,75 @@ function legacyProjectPage(html, projects, dict, slugs) {
   html = replaceZone(html, file, "projectLinks", links);
   html = applyI18n(html, file, dict);
   return applyProjectHrefs(html, file, "fr", slugs);
+}
+
+// ---------------------------------------------------------------------------
+// Dates : <lastmod> du sitemap et dateModified / dateCreated du JSON-LD
+// ---------------------------------------------------------------------------
+// Le <lastmod> d'une page (et le dateModified de l'accueil, qui le reprend)
+// n'avance que quand le HTML généré de cette page change : le script compare
+// au fichier sur le disque. Une page régénérée dans une PR y porte déjà sa
+// nouvelle date, la CI de main la retrouve à l'identique et ne touche à rien ;
+// une page que seule la CI régénère (data.js modifié sans relancer le script,
+// durées mensuelles) prend la date du jour. Jour en UTC, comme la CI.
+const SITEMAP = "sitemap.xml";
+const TODAY = new Date().toISOString().slice(0, 10);
+const sitemapSource = fs.readFileSync(path.join(ROOT, SITEMAP), "utf8");
+const previousLastmod = new Map([...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)].map((m) => [m[1], m[2]]));
+const newLastmod = new Map(); // URL → date retenue pendant ce passage
+
+// Premier commit de index.html : date de création de la page profil. Un
+// clone superficiel (CI sans fetch-depth: 0) n'a pas l'historique : on
+// s'arrête plutôt que d'écrire une date fausse.
+function firstCommitDate(file) {
+  const git = (args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim();
+  if (git(["rev-parse", "--is-shallow-repository"]) === "true") {
+    throw new Error("Clone Git superficiel : impossible de dater la création de la page (dateCreated). En CI, actions/checkout doit avoir fetch-depth: 0.");
+  }
+  const first = git(["log", "--reverse", "--format=%as", "--", file]).split("\n")[0];
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(first)) throw new Error(`Aucun commit trouvé pour ${file} (dateCreated)`);
+  return first;
+}
+const DATE_CREATED = firstCommitDate("index.html");
+
+// Construit la page avec la date de sa dernière modification connue ; si le
+// résultat diffère du fichier existant, la page a changé : on la reconstruit
+// datée d'aujourd'hui. Deux passages de suite donnent donc le même résultat.
+function withLastmod(page, lang, build) {
+  const url = page.urls[lang];
+  const filePath = path.join(ROOT, page.out[lang]);
+  const before = fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : null;
+  const known = previousLastmod.get(url);
+  let date = known || TODAY;
+  let out = build({ created: DATE_CREATED, modified: date });
+  if (out.html !== before && date !== TODAY) {
+    date = TODAY;
+    out = build({ created: DATE_CREATED, modified: date });
+  }
+  // La date retenue est celle de la dernière construction : inchangée, la
+  // page garde la sienne ; reconstruite, elle porte celle du jour.
+  newLastmod.set(url, date);
+  return out;
+}
+
+// Entrées « pages » du sitemap (zone <!-- static:pages -->) : une par page
+// générée, avec ses hreflang et son lastmod. Les PDF, hors zone, restent
+// datés par le workflow.
+function sitemapPages(pages) {
+  const entries = pages.flatMap((page) =>
+    page.langs.map((lang) =>
+      [
+        "  <url>",
+        `    <loc>${page.urls[lang]}</loc>`,
+        `    <lastmod>${newLastmod.get(page.urls[lang])}</lastmod>`,
+        `    <xhtml:link rel="alternate" hreflang="fr" href="${page.urls.fr}"/>`,
+        `    <xhtml:link rel="alternate" hreflang="en" href="${page.urls.en}"/>`,
+        `    <xhtml:link rel="alternate" hreflang="x-default" href="${page.urls.fr}"/>`,
+        "  </url>",
+      ].join("\n")
+    )
+  );
+  return replaceZone(sitemapSource, SITEMAP, "pages", entries.join("\n"));
 }
 
 // Coquille de la version anglaise : la page française générée, en anglais, sans
@@ -435,22 +510,23 @@ function englishShell(frHtml, file, { redirect: hasRedirect = true } = {}) {
       if (!/^[a-z0-9-]+$/.test(slug)) throw new Error(`Slug « ${slug} » : minuscules, chiffres et tirets seulement (il devient un nom de fichier).`);
     });
 
-    for (const page of [...PAGES, ...slugs.map(projectPageConfig)]) {
+    const allPages = [...PAGES, ...slugs.map(projectPageConfig)];
+    for (const page of allPages) {
       const template = fs.readFileSync(path.join(ROOT, page.template), "utf8");
       // + le libellé du lien FR/EN, que le gabarit ne cite pas (zone calculée).
-      const keys = [...i18nKeys(template), "nav.langToggleLabel"];
+      const keys = [...i18nKeys(template), "nav.langToggleLabel", ...(page.extraKeys || [])];
       // Page projet : la page française n'est pas le gabarit lui-même, c'est
       // le gabarit portant son slug, servi depuis la mémoire.
       const frSource = page.slug ? template.replace(/<body\b[^>]*>/, (tag) => setAttr(tag, "data-slug", page.slug)) : template;
 
       const fr = await renderPage(browser, page, "fr", { keys, shell: page.slug ? frSource : null });
-      const frOut = applyRender(frSource, page, "fr", fr, slugs);
+      const frOut = withLastmod(page, "fr", (dates) => applyRender(frSource, page, "fr", fr, slugs, dates));
       report(page.out.fr, frOut.html, frOut.words);
 
       if (page.langs.includes("en")) {
         const shell = englishShell(frOut.html, page.template, { redirect: !page.slug });
         const en = await renderPage(browser, page, "en", { shell, keys });
-        const enOut = applyRender(shell, page, "en", en, slugs);
+        const enOut = withLastmod(page, "en", (dates) => applyRender(shell, page, "en", en, slugs, dates));
         report(page.out.en, enOut.html, enOut.words);
       }
     }
@@ -459,6 +535,12 @@ function englishShell(frHtml, file, { redirect: hasRedirect = true } = {}) {
     // liens du <noscript>, sans rendu.
     const legacy = legacyProjectPage(legacyTemplate, projects, legacyDict, slugs);
     report(LEGACY_PROJECT_PAGE, legacy, wordCount(legacy));
+
+    const sitemap = sitemapPages(allPages);
+    const sitemapChanged = sitemap !== sitemapSource;
+    if (sitemapChanged && !CHECK_ONLY) fs.writeFileSync(path.join(ROOT, SITEMAP), sitemap);
+    if (sitemapChanged) stale++;
+    console.log(`${sitemapChanged ? (CHECK_ONLY ? "✗ pas à jour" : "✓ régénéré ") : "= inchangé  "} ${SITEMAP} (${allPages.length * 2} pages, créées le ${DATE_CREATED})`);
 
     // Pages d'un projet retiré de PROJECT_DETAILS : fichiers générés devenus
     // orphelins, supprimés (signalés en mode --check).

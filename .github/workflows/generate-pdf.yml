@@ -41,6 +41,10 @@ jobs:
     steps:
       - name: Checkout du dépôt
         uses: actions/checkout@v5
+        with:
+          # Historique complet : le pré-rendu date la création de la page profil
+          # (JSON-LD dateCreated) d'après le premier commit de index.html.
+          fetch-depth: 0
 
       - name: Installer Node.js
         uses: actions/setup-node@v5
@@ -75,18 +79,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A -- index.html results.html project-detail.html en projets assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf assets/cv-antoine-berthaud-fr-court.pdf assets/cv-antoine-berthaud-en-short.pdf
+          # sitemap.xml : le pré-rendu y tient à jour les <lastmod> des pages
+          # (zone static:pages) ; ceux des PDF sont posés ci-dessous.
+          git add -A -- index.html results.html project-detail.html en projets sitemap.xml assets/cv-antoine-berthaud-fr.pdf assets/cv-antoine-berthaud-en.pdf assets/cv-antoine-berthaud-fr-court.pdf assets/cv-antoine-berthaud-en-short.pdf
           if git diff --cached --quiet; then
             echo "Aucun changement dans les pages ni les PDF, rien à committer."
           else
-            # Pages et PDF sont déclarés dans sitemap.xml : on reporte la date de
-            # régénération (UTC) sur le <lastmod> de chaque fichier qui a changé.
-            python3 - "$(date -u +%Y-%m-%d)" $(git diff --cached --name-only) <<'EOF'
+            # Les PDF sont déclarés dans sitemap.xml : on reporte la date de
+            # régénération (UTC) sur le <lastmod> de chaque PDF qui a changé.
+            python3 - "$(date -u +%Y-%m-%d)" $(git diff --cached --name-only -- '*.pdf') <<'EOF'
           import re, sys, pathlib
           today, changed = sys.argv[1], set(sys.argv[2:])
-          # Fichier du dépôt → URL du sitemap qu'il porte (index.html → dossier).
+          # Fichier du dépôt → URL du sitemap qu'il porte.
           def url(f):
-              return "https://cv.antoine.berthaud.me/" + (f[: -len("index.html")] if f.endswith("index.html") else f)
+              return "https://cv.antoine.berthaud.me/" + f
           p = pathlib.Path("sitemap.xml")
           s = p.read_text()
           total = 0
