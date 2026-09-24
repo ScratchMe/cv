@@ -5,7 +5,8 @@
   "scripts": {
     "generate-static": "node scripts/generate-static.js",
     "generate-pdf": "node scripts/generate-pdf.js",
-    "generate": "npm run generate-static && npm run generate-pdf"
+    "generate": "npm run generate-static && npm run generate-pdf",
+    "check-seo": "node scripts/check-seo.mjs"
   },
   "devDependencies": {
     "pdf-lib": "^1.17.1",
