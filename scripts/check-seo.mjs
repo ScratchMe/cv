@@ -29,7 +29,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { chromium } from "playwright";
+import { chromium, request as playwrightRequest } from "playwright";
 import pdfLib from "pdf-lib";
 
 const { PDFDocument, PDFName } = pdfLib;
@@ -48,6 +48,15 @@ const SHOTS_DIR = argValue("--shots");
 const FIT_CALL = argv.includes("--fit-call");
 const ORIGIN = new URL(BASE).origin;
 
+// Derrière un proxy HTTPS (variable HTTPS_PROXY) : Node le suit via Playwright,
+// Chromium non. Pour vérifier le site en ligne, les requêtes du navigateur vers
+// le site passent alors par Node (route.fetch), qui connaît le certificat du
+// proxy — cas des environnements d'exécution de Claude Code. Sans proxy, ou sur
+// un serveur local, rien ne change.
+const PROXY = process.env.HTTPS_PROXY || process.env.https_proxy || "";
+const VIA_NODE = Boolean(PROXY) && BASE.startsWith("https://");
+let api; // requêtes HTTP hors navigateur (HTML brut, PDF), initialisé au lancement
+
 // Domaine de production : c'est lui qu'écrivent canonical, hreflang, og:url,
 // JSON-LD et sitemap, quel que soit le serveur vérifié.
 const SITE = "https://cv.antoine.berthaud.me";
@@ -61,15 +70,20 @@ const RES_FR = { path: "/results.html", lang: "fr", url: `${SITE}/results.html`,
 const RES_EN = { path: "/en/results.html", lang: "en", url: `${SITE}/en/results.html`, fr: `${SITE}/results.html`, en: `${SITE}/en/results.html`, kind: "results" };
 const LOT1_PAGES = [HOME_FR, HOME_EN, RES_FR, RES_EN];
 
-// Lot 1 : les liens vers la page Tour de Growth gardent leur fonctionnement
-// d'avant (project-detail.html?slug=…, plus &lang=en depuis une page anglaise)
-// jusqu'au lot 2. Les critères 3 et 8 les tolèrent tant que ce drapeau est vrai.
-const TDG_LINKS_EXCEPTION = true;
+// Lot 1 : les liens vers la page Tour de Growth gardaient leur fonctionnement
+// d'avant (project-detail.html?slug=…&lang=en) jusqu'au lot 2, qui les a passés
+// en URL statique. Drapeau conservé à faux : plus aucune tolérance.
+const TDG_LINKS_EXCEPTION = false;
+
+// Lot 2 : pages statiques des side projects (une par entrée de PROJECT_DETAILS).
+const PROJ_SLUG = "tour-de-growth";
+const PROJ_FR = { path: `/projets/${PROJ_SLUG}.html`, lang: "fr", url: `${SITE}/projets/${PROJ_SLUG}.html`, fr: `${SITE}/projets/${PROJ_SLUG}.html`, en: `${SITE}/en/projects/${PROJ_SLUG}.html`, kind: "project" };
+const PROJ_EN = { ...PROJ_FR, path: `/en/projects/${PROJ_SLUG}.html`, lang: "en", url: `${SITE}/en/projects/${PROJ_SLUG}.html` };
 
 // Captures : les cinq URL de l'état des lieux (lot 0). Après le lot 1,
 // /?lang=en et /results.html?lang=en redirigent vers /en/… : la capture montre
 // alors la page anglaise, à comparer à la référence prise avant.
-const SHOT_PATHS = ["/", "/?lang=en", "/results.html", "/results.html?lang=en", "/project-detail.html?slug=tour-de-growth"];
+const SHOT_PATHS = ["/", "/?lang=en", "/results.html", "/results.html?lang=en", "/project-detail.html?slug=tour-de-growth", "/en/projects/tour-de-growth.html"];
 
 // ---------------------------------------------------------------------------
 // Résultats
@@ -94,9 +108,10 @@ const stubbedHosts = new Set();
 
 async function newContext(browser, { js = true, width = 1440, height = 900, realFit = false } = {}) {
   const ctx = await browser.newContext({ javaScriptEnabled: js, viewport: { width, height }, reducedMotion: "reduce", locale: "en-US" });
-  await ctx.route("**/*", (route) => {
+  await ctx.route("**/*", async (route) => {
     const url = route.request().url();
-    if (url.startsWith(ORIGIN) || url.startsWith("data:")) return route.continue();
+    if (url.startsWith("data:")) return route.continue();
+    if (url.startsWith(ORIGIN)) return VIA_NODE ? route.fulfill({ response: await route.fetch() }) : route.continue();
     const host = new URL(url).host;
     if (realFit && host.endsWith(".supabase.co")) return route.continue();
     stubbedHosts.add(host);
@@ -168,8 +183,8 @@ function readPage() {
 }
 
 async function rawFetch(p) {
-  const res = await fetch(BASE + p, { redirect: "manual" });
-  return { status: res.status, text: await res.text(), location: res.headers.get("location") };
+  const res = await api.get(BASE + p, { maxRedirects: 0 });
+  return { status: res.status(), text: await res.text(), location: res.headers().location || null };
 }
 
 // Texte visible d'une page, sans ce qui n'existe qu'avec JavaScript (rail,
@@ -222,7 +237,9 @@ async function lot0(browser) {
   const jsCtx = await newContext(browser, { js: true });
   const mobCtx = await newContext(browser, { js: true, width: 390, height: 844 });
 
-  const pages = ["/", "/results.html", "/project-detail.html?slug=tour-de-growth"];
+  // La page projet vit à son adresse statique depuis le lot 2 (l'ancienne,
+  // project-detail.html?slug=, n'est plus qu'une redirection).
+  const pages = ["/", "/results.html", "/projets/tour-de-growth.html"];
   for (const p of pages) {
     const { page } = await openTracked(rawCtx, p);
     const info = await page.evaluate(readPage);
@@ -275,11 +292,11 @@ async function lot0(browser) {
 
   // Métadonnées des PDF (titre, auteur, langue)
   for (const f of ["cv-antoine-berthaud-fr.pdf", "cv-antoine-berthaud-en.pdf", "cv-antoine-berthaud-fr-court.pdf", "cv-antoine-berthaud-en-short.pdf"]) {
-    const res = await fetch(`${BASE}/assets/${f}`);
+    const res = await api.get(`${BASE}/assets/${f}`);
     let ok = false,
-      detail = `statut ${res.status}`;
-    if (res.ok) {
-      const doc = await PDFDocument.load(new Uint8Array(await res.arrayBuffer()), { updateMetadata: false });
+      detail = `statut ${res.status()}`;
+    if (res.ok()) {
+      const doc = await PDFDocument.load(new Uint8Array(await res.body()), { updateMetadata: false });
       const langObj = doc.catalog.get(PDFName.of("Lang"));
       const lang = langObj ? String(langObj.decodeText ? langObj.decodeText() : langObj).replace(/[()]/g, "") : "";
       ok = Boolean(doc.getTitle() && doc.getAuthor() && lang);
@@ -543,6 +560,160 @@ async function lot1(browser) {
 }
 
 // ---------------------------------------------------------------------------
+// Lot 2 — pages statiques des side projects
+// ---------------------------------------------------------------------------
+async function lot2(browser) {
+  const rawCtx = await newContext(browser, { js: false });
+  const jsCtx = await newContext(browser, { js: true });
+
+  // Valeurs attendues, lues dans data.js / i18n.js par le site lui-même
+  const { page: probe } = await openTracked(jsCtx, "/");
+  const exp = await probe.evaluate((slug) => {
+    const out = {};
+    for (const lang of ["fr", "en"]) {
+      window.i18n.setLang(lang);
+      const p = PROJECT_DETAILS[slug];
+      out[lang] = {
+        title: `${p.title} — ${window.i18n.t("projectDetail.metaTitleSuffix")}`,
+        description: window.i18n.tc(p.metaDescription),
+        heading: window.i18n.t("projectDetail.theProblem"),
+        app: new URL(p.liveUrl).href,
+        name: p.title,
+      };
+    }
+    window.i18n.setLang("fr");
+    return out;
+  }, PROJ_SLUG);
+  await probe.close();
+
+  for (const pg of [PROJ_FR, PROJ_EN]) {
+    const r = await rawFetch(pg.path);
+    check(2, "2.1-status", `${pg.path} : statut 200`, r.status === 200, `statut ${r.status}`);
+    if (r.status !== 200) continue;
+    const { page } = await openTracked(rawCtx, pg.path);
+    const info = await page.evaluate(readPage);
+    const noJs = await page.evaluate(visibleText);
+    await page.close();
+    const e = exp[pg.lang];
+    check(2, "2.1-lang", `${pg.path} : <html lang="${pg.lang}">`, info.lang === pg.lang, `lang=${info.lang}`);
+    check(2, "2.1-canonical", `${pg.path} : canonical sur soi, hreflang fr/en/x-default croisés`, info.canonical === pg.url && eq(info.hreflang, { fr: pg.fr, en: pg.en, "x-default": pg.fr }), `canonical=${info.canonical} ${JSON.stringify(info.hreflang)}`);
+    check(2, "2.1-meta", `${pg.path} : titre et description de la mission (PROJECT_DETAILS.metaDescription)`, info.title === e.title && info.description === e.description && info.og["og:description"] === e.description && info.twitter["twitter:description"] === e.description, `« ${short(info.description, 70)} »`);
+    check(2, "2.1-og", `${pg.path} : og:url sur soi, og:locale ${pg.lang === "en" ? "en_US" : "fr_FR"}`, info.ogUrl === pg.url && info.ogLocale === (pg.lang === "en" ? "en_US" : "fr_FR"), `og:url=${info.ogUrl}`);
+
+    // JSON-LD : WebPage + BreadcrumbList + WebApplication, reliés à #person
+    let graph = null,
+      err = "";
+    try {
+      graph = info.jsonld.map((x) => JSON.parse(x)).find((j) => Array.isArray(j["@graph"]));
+    } catch (x) {
+      err = x.message;
+    }
+    const nodes = graph ? Object.fromEntries(graph["@graph"].map((n) => [n["@type"], n])) : {};
+    const wp = nodes.WebPage,
+      bc = nodes.BreadcrumbList,
+      app = nodes.WebApplication;
+    const home = pg.lang === "en" ? `${SITE}/en/` : `${SITE}/`;
+    const okLd =
+      wp && bc && app &&
+      wp["@id"] === `${pg.url}#page` && wp.url === pg.url && wp.inLanguage === pg.lang && wp.name === e.title && wp.description === e.description &&
+      wp.author["@id"] === `${SITE}/#person` && wp.about["@id"] === `${e.app}#app` && wp.breadcrumb["@id"] === `${pg.url}#breadcrumb` &&
+      bc["@id"] === `${pg.url}#breadcrumb` && bc.itemListElement.length === 2 && bc.itemListElement[0].item === home && bc.itemListElement[1].item === pg.url &&
+      app["@id"] === `${e.app}#app` && app.url === e.app && app.name === e.name && app.creator["@id"] === `${SITE}/#person` && app.applicationCategory && app.operatingSystem === "Web" && app.description;
+    check(2, "2.1-jsonld", `${pg.path} : JSON-LD valide (WebPage, BreadcrumbList depuis ${new URL(home).pathname}, WebApplication créée par #person)`, okLd, err || (okLd ? "" : JSON.stringify(Object.keys(nodes))));
+
+    // Contenu complet sans JavaScript : même texte visible qu'avec
+    const { page: pj } = await openTracked(jsCtx, pg.path);
+    const withJs = await pj.evaluate(visibleText);
+    const js = await pj.evaluate(readPage);
+    await pj.close();
+    const d = firstDiff(noJs, withJs);
+    check(2, "2.1-content", `${pg.path} : contenu complet sans JavaScript (même texte visible qu'avec)`, info.words >= 400 && info.bodyText.includes(e.heading) && !d, d || `${info.words} mots`);
+    // Critère 4 du lot 1
+    const diff = ["canonical", "lang", "title", "description"].filter((k) => js[k] !== info[k]);
+    check(2, "2.6-4", `${pg.path} : canonical, lang, titre, description identiques avec et sans JS`, !diff.length, diff.join(", "));
+    // Critère 9 du lot 1
+    const { page: pe, issues } = await openTracked(jsCtx, pg.path, { waitUntil: "networkidle" });
+    const gc = await pe.evaluate(() => window.goatcounter && window.goatcounter.path);
+    const links = await pe.evaluate(() => [...document.querySelectorAll("a[href]")].map((a) => ({ id: a.id, href: a.href, raw: a.getAttribute("href") })));
+    await pe.close();
+    check(2, "2.6-9", `${pg.path} : aucune requête en erreur, aucune erreur console`, !issues.length, issues.slice(0, 4).join(" | "));
+    check(2, "2.6-gc", `${pg.path} : window.goatcounter.path = « ${pg.path} » (sans ?slug=)`, gc === pg.path, `« ${gc} »`);
+    // Liens internes dans la langue de la page (critère 8 du lot 1)
+    const bad = links
+      .filter((l) => l.href.startsWith(ORIGIN) || l.href.startsWith(`${SITE}/`))
+      .filter((l) => {
+        const u = new URL(l.href);
+        if (/^\/assets\/|\.pdf$/.test(u.pathname) || l.id === "langToggle") return false;
+        return pg.lang === "en" ? !u.pathname.startsWith("/en/") : u.pathname.startsWith("/en/");
+      });
+    check(2, "2.6-8", `${pg.path} : liens internes dans la langue de la page`, !bad.length, bad.map((l) => l.raw).slice(0, 5).join(", "));
+  }
+
+  // Critère 2 — l'ancienne adresse redirige ; slug inconnu : introuvable + noindex
+  for (const [from, to] of [
+    [`/project-detail.html?slug=${PROJ_SLUG}`, PROJ_FR.path],
+    [`/project-detail.html?slug=${PROJ_SLUG}&lang=en`, PROJ_EN.path],
+  ]) {
+    const { page } = await openTracked(jsCtx, from);
+    await page.waitForURL((u) => u.pathname === to, { timeout: 3000 }).catch(() => {});
+    const u = new URL(page.url());
+    await page.close();
+    check(2, "2.2", `${from} → ${to}`, u.pathname + u.search === to, `arrivée : ${u.pathname + u.search}`);
+  }
+  {
+    const { page } = await openTracked(jsCtx, "/project-detail.html?slug=inconnu");
+    await page.waitForTimeout(300);
+    const r = await page.evaluate(() => ({ path: location.pathname + location.search, robots: (document.querySelector('meta[name="robots"]') || {}).content || null, text: document.body.innerText }));
+    await page.close();
+    check(2, "2.2-unknown", "/project-detail.html?slug=inconnu : pas de redirection, « Projet introuvable », noindex", r.path === "/project-detail.html?slug=inconnu" && /Projet introuvable/.test(r.text) && r.robots === "noindex", `${r.path} robots=${r.robots}`);
+    const raw = await rawFetch("/project-detail.html");
+    const bare = raw.text.replace(/<!--[\s\S]*?-->/g, "");
+    check(2, "2.2-raw", "project-detail.html : ni canonical, ni noindex, ni GoatCounter dans le HTML brut", !/rel="canonical"/.test(bare) && !/name="robots"/.test(bare) && !/goatcounter/i.test(bare));
+  }
+
+  // Critère 3 — plus aucun lien interne vers project-detail.html
+  for (const p of [...LOT1_PAGES.map((x) => x.path), PROJ_FR.path, PROJ_EN.path]) {
+    const r = await rawFetch(p);
+    const n = (r.text.match(/href="[^"]*project-detail\.html/g) || []).length;
+    check(2, "2.3", `${p} : aucun lien vers project-detail.html (HTML brut)`, r.status === 200 && n === 0, `${n} lien(s)`);
+  }
+
+  // Critère 5 — lien de langue entre les deux pages projet, dans les deux sens
+  for (const [from, to, other] of [
+    [PROJ_FR.path, PROJ_EN.path, "en"],
+    [PROJ_EN.path, PROJ_FR.path, "fr"],
+  ]) {
+    const { page } = await openTracked(jsCtx, from);
+    const link = await page.evaluate(() => {
+      const a = document.getElementById("langToggle");
+      return a ? { tag: a.tagName, hreflang: a.getAttribute("hreflang"), lang: a.getAttribute("lang"), label: a.getAttribute("aria-label") } : null;
+    });
+    let arrived = "";
+    if (link && link.tag === "A") {
+      await Promise.all([page.waitForNavigation({ waitUntil: "load" }), page.click("#langToggle")]);
+      arrived = new URL(page.url()).pathname;
+    }
+    await page.close();
+    const label = other === "en" ? "Switch to English" : "Passer en français";
+    check(2, "2.5", `lien de langue ${from} → ${to}`, link && link.tag === "A" && link.hreflang === other && link.lang === other && link.label === label && arrived === to, link ? `hreflang=${link.hreflang} aria-label="${link.label}" → ${arrived}` : "pas de #langToggle");
+  }
+
+  // Critère 12 du lot 1 — même structure FR / EN
+  {
+    const prints = [];
+    for (const pg of [PROJ_FR, PROJ_EN]) {
+      const { page } = await openTracked(jsCtx, pg.path);
+      prints.push(await page.evaluate(() => ({ sections: [...document.querySelectorAll("main section, main h2")].length, blocks: [".project-detail-section", ".project-stack-group", ".detail-list li", ".btn"].map((s) => document.querySelectorAll(s).length) })));
+      await page.close();
+    }
+    check(2, "2.6-12", `${PROJ_FR.path} et ${PROJ_EN.path} : mêmes sections et mêmes blocs`, prints.length === 2 && eq(prints[0], prints[1]), JSON.stringify(prints));
+  }
+
+  await rawCtx.close();
+  await jsCtx.close();
+}
+
+// ---------------------------------------------------------------------------
 // Un vrai appel au Fit-Checker, depuis la page anglaise (--fit-call)
 // ---------------------------------------------------------------------------
 async function fitCall(browser) {
@@ -551,17 +722,16 @@ async function fitCall(browser) {
   // donc ouverte à son adresse de production, mais chaque fichier du site y
   // est servi depuis le serveur vérifié : c'est bien le code local qui fait
   // l'appel, avec la bonne origine.
-  // Derrière un proxy d'entreprise (variable HTTPS_PROXY), Chromium ne la lit
-  // pas tout seul : on la lui passe pour cet appel.
-  const proxy = process.env.HTTPS_PROXY || process.env.https_proxy;
-  const fitBrowser = proxy ? await chromium.launch({ proxy: { server: proxy } }) : browser;
+  // Derrière un proxy (HTTPS_PROXY), Chromium ne le lit pas tout seul : on le
+  // lui passe pour cet appel (le navigateur principal l'a déjà en ligne).
+  const fitBrowser = PROXY && !VIA_NODE ? await chromium.launch({ proxy: { server: PROXY } }) : browser;
   const ctx = await fitBrowser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
   await ctx.route("**/*", async (route) => {
     const url = route.request().url();
     const host = new URL(url).host;
     if (url.startsWith(`${SITE}/`)) {
-      const r = await fetch(BASE + url.slice(SITE.length));
-      return route.fulfill({ status: r.status, headers: Object.fromEntries(r.headers), body: Buffer.from(await r.arrayBuffer()) });
+      const r = await api.get(BASE + url.slice(SITE.length));
+      return route.fulfill({ status: r.status(), headers: r.headers(), body: await r.body() });
     }
     // L'appel réel part de Node (route.fetch, avec le proxy éventuel) et sa
     // réponse est rendue telle quelle à la page : même résultat, et ça marche
@@ -614,14 +784,17 @@ async function shots(browser) {
 
 // ---------------------------------------------------------------------------
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(VIA_NODE ? { proxy: { server: PROXY } } : {});
+  api = await playwrightRequest.newContext(VIA_NODE ? { proxy: { server: PROXY } } : {});
   try {
     await lot0(browser);
     if (MAX_LOT >= 1) await lot1(browser);
+    if (MAX_LOT >= 2) await lot2(browser);
     if (FIT_CALL) await fitCall(browser);
     if (SHOTS_DIR) await shots(browser);
   } finally {
     await browser.close();
+    await api.dispose();
   }
 
   console.log(`check-seo — ${BASE}${Number.isFinite(MAX_LOT) ? ` (lots ≤ ${MAX_LOT})` : ""}\n`);

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GABARIT des pages de side project : scripts/generate-static.js en tire,
+     pour chaque entrée de PROJECT_DETAILS (js/data.js), projets/<slug>.html
+     (français) et en/projects/<slug>.html (anglais). Les pages produites sont
+     entièrement générées : on ne modifie que ce gabarit (structure) et
+     data.js / i18n.js (textes). Titre, description et og:/twitter: sont posés
+     par le générateur dans la langue de la page. -->
+<title>Tour de Growth — étude de cas · Antoine Berthaud, Product Manager</title>
+<meta name="description" content="Tour de Growth, side project d'Antoine Berthaud : un check-up qui situe sa stratégie growth sur les 5 piliers AARRR, sans jargon. Démarche produit et stack.">
+
+<!-- URL canonique, versions linguistiques, og:url, og:locale : zone générée. -->
+<!-- static:langLinks -->
+<link rel="canonical" href="https://cv.antoine.berthaud.me/projets/tour-de-growth.html">
+<link rel="alternate" hreflang="fr" href="https://cv.antoine.berthaud.me/projets/tour-de-growth.html">
+<link rel="alternate" hreflang="en" href="https://cv.antoine.berthaud.me/en/projects/tour-de-growth.html">
+<link rel="alternate" hreflang="x-default" href="https://cv.antoine.berthaud.me/projets/tour-de-growth.html">
+<meta property="og:url" content="https://cv.antoine.berthaud.me/projets/tour-de-growth.html">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<!-- /static:langLinks -->
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tour de Growth — étude de cas · Antoine Berthaud, Product Manager">
+<meta property="og:description" content="Tour de Growth, side project d'Antoine Berthaud : un check-up qui situe sa stratégie growth sur les 5 piliers AARRR, sans jargon. Démarche produit et stack.">
+<meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:author" content="https://www.linkedin.com/in/antoine-berthaud-pm/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tour de Growth — étude de cas · Antoine Berthaud, Product Manager">
+<meta name="twitter:description" content="Tour de Growth, side project d'Antoine Berthaud : un check-up qui situe sa stratégie growth sur les 5 piliers AARRR, sans jargon. Démarche produit et stack.">
+<meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+
+<!-- Données structurées (schema.org) : la page, son fil d'Ariane et
+     l'application décrite, créée par la même personne que le CV (#person).
+     Zone générée à partir de scripts/lib/structured-data.js. -->
+<!-- static:jsonLd -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://cv.antoine.berthaud.me/projets/tour-de-growth.html#page",
+      "url": "https://cv.antoine.berthaud.me/projets/tour-de-growth.html",
+      "name": "Tour de Growth — étude de cas · Antoine Berthaud, Product Manager",
+      "description": "Tour de Growth, side project d'Antoine Berthaud : un check-up qui situe sa stratégie growth sur les 5 piliers AARRR, sans jargon. Démarche produit et stack.",
+      "inLanguage": "fr",
+      "author": {
+        "@id": "https://cv.antoine.berthaud.me/#person"
+      },
+      "about": {
+        "@id": "https://www.tourdegrowth.com/#app"
+      },
+      "breadcrumb": {
+        "@id": "https://cv.antoine.berthaud.me/projets/tour-de-growth.html#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://cv.antoine.berthaud.me/projets/tour-de-growth.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "CV",
+          "item": "https://cv.antoine.berthaud.me/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tour de Growth",
+          "item": "https://cv.antoine.berthaud.me/projets/tour-de-growth.html"
+        }
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://www.tourdegrowth.com/#app",
+      "name": "Tour de Growth",
+      "url": "https://www.tourdegrowth.com/",
+      "description": "Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "creator": {
+        "@id": "https://cv.antoine.berthaud.me/#person"
+      }
+    }
+  ]
+}
+</script>
+<!-- /static:jsonLd -->
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="alternate icon" type="image/png" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
+     pas de données personnelles. Le chemin compté est figé ICI, avant le
+     chargement de count.js (async) : le chemin seul, jamais ref/utm ni le
+     fragment. Tableau de bord : https://antoineberthaud.goatcounter.com —
+     voir README §8. -->
+<script>
+  window.goatcounter = { path: location.pathname };
+</script>
+<script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-slug="tour-de-growth">
+  <noscript>
+    <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
+      <p><a href="/assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
+         <a href="/assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
+         <a href="/assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
+         <a href="/assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
+      <p><a href="../" data-i18n="projectDetail.backToCv">← Retour au CV</a></p>
+    </div>
+  </noscript>
+  <!-- Liens relatifs : ../ mène à l'accueil de la même langue (/ ou /en/). -->
+  <header class="top">
+    <div class="navrow wrap">
+      <a href="../" class="mark" id="logoLink">Antoine<span>.</span></a>
+      <div class="navactions">
+        <a href="../" class="btn" id="backToCvLink" data-i18n="projectDetail.backToCv">← Retour au CV</a>
+        <!-- static:langToggle -->
+<a id="langToggle" class="btn" href="/en/projects/tour-de-growth.html" hreflang="en" lang="en" aria-label="Switch to English">EN</a>
+<!-- /static:langToggle -->
+      </div>
+    </div>
+  </header>
+
+  <!-- static:projectDetailRoot -->
+<main class="wrap project-detail" id="projectDetailRoot">
+      <div class="project-detail-hero">
+        <p class="project-detail-eyebrow">Side projects</p>
+        <h1>Tour de Growth</h1>
+        <p class="project-detail-tagline">Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.</p>
+        <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" class="btn solid" data-goatcounter-click="project-tour-de-growth">Essayer l'outil →</a>
+      </div>
+
+      <section class="project-detail-section">
+        <h2>Le problème</h2>
+        <p>Beaucoup de gens qui pilotent un produit savent qu'ils devraient "faire de la croissance", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle "growth" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ?</p><p>Tour de Growth part de cette question toute simple : <strong>quinze questions</strong>, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.</p>
+      </section>
+
+      <section class="project-detail-section">
+        <h2>Ce que c'est</h2>
+        <p><strong>Quinze questions</strong>, réparties sur cinq zones classiques de la croissance :</p>
+        <ul class="detail-list"><li>Comment les gens vous trouvent.</li><li>Comment ils comprennent ce que vous apportez.</li><li>S'ils reviennent.</li><li>S'ils vous recommandent.</li><li>Comment vous gagnez de l'argent.</li></ul>
+        <p>Trois minutes, un score par zone, et surtout une explication de ce que ça veut dire concrètement — pas juste un chiffre jeté là. Un mode plus poussé permet ensuite de préciser son contexte et d'obtenir des pistes plus concrètes à explorer.</p>
+      </section>
+
+      <section class="project-detail-section project-teaching-moment">
+        <h2>Un exemple qu'on préfère montrer qu'expliquer : la boucle de croissance</h2>
+        <p>La plupart des produits pensent leur croissance comme un entonnoir : on fait de la pub, des gens arrivent, certains restent, fin de l'histoire. Une <strong>boucle de croissance</strong> (growth loop) fonctionne autrement — l'usage du produit crée lui-même de nouveaux utilisateurs, sans qu'il faille remettre de l'argent ou de l'énergie à chaque tour.</p><p>Un exemple concret vaut mieux qu'une définition : sur Tour de Growth, chaque personne qui partage son score amène potentiellement de nouvelles personnes, qui font le test à leur tour, qui repartagent. Si ce mécanisme fonctionne vraiment, ça se mesure — c'est ce qu'on appelle le <strong>coefficient viral</strong>, le nombre moyen de nouvelles visites qu'apporte chaque partage. En dessous de 1, la boucle s'essouffle toute seule ; au-dessus, elle s'auto-alimente. C'est exactement le genre de chose que Tour de Growth essaie de vous aider à repérer sur votre propre produit.</p>
+      </section>
+
+      <section class="project-detail-section">
+        <h2>Démarche produit</h2>
+        <p>Construit en grande partie avec l'aide de <strong>Claude Code et Claude Design</strong> — pour cadrer le produit, pour les maquettes, pour la partie technique. Ça m'a semblé la façon la plus honnête de vérifier, en pratique et pas seulement sur un CV, si je sais vraiment structurer un problème growth de bout en bout : poser la bonne question, choisir ce qui compte, et rester honnête sur ce qu'un score rapide peut dire et ce qu'il ne peut pas dire.</p>
+      </section>
+
+      <section class="project-detail-section">
+        <h2>Chiffres d'usage</h2>
+        <p class="project-metrics-fallback">Encore tôt après le lancement — les premiers chiffres d'usage (visites, taux de partage, coefficient viral) seront ajoutés ici dès qu'il y aura assez de recul pour les rendre significatifs.</p>
+      </section>
+
+      <section class="project-detail-section">
+        <h2>Stack technique</h2>
+        <div class="project-stack-groups">
+        <div class="project-stack-group">
+          <h3>Frontend</h3>
+          <div class="project-stack-tags"><span>Next.js 16</span><span>TypeScript</span><span>React 19</span><span>Vercel</span><span>CSS Modules</span><span>i18n maison</span></div>
+        </div>
+        <div class="project-stack-group">
+          <h3>Backend / données</h3>
+          <div class="project-stack-tags"><span>Firebase</span><span>Firestore</span><span>Gemini API</span><span>Route Handlers Next.js</span></div>
+        </div>
+        <div class="project-stack-group">
+          <h3>Analytics / tracking</h3>
+          <div class="project-stack-tags"><span>GoatCounter</span><span>Dashboard interne</span></div>
+        </div>
+        <div class="project-stack-group">
+          <h3>Tests / qualité</h3>
+          <div class="project-stack-tags"><span>Vitest</span><span>Playwright</span></div>
+        </div>
+        <div class="project-stack-group">
+          <h3>SEO</h3>
+          <div class="project-stack-tags"><span>SEO natif Next.js</span><span>JSON-LD</span><span>next/og</span></div>
+        </div>
+        <div class="project-stack-group">
+          <h3>Ops</h3>
+          <div class="project-stack-tags"><span>GitHub</span><span>Déploiement continu Vercel</span><span>Google Search Console</span></div>
+        </div></div>
+      </section>
+      <div class="page-cta">
+        <a class="btn solid" href="mailto:antoine.berthaud@gmail.com?subject=%C3%80%20propos%20d'un%20poste" data-goatcounter-click="contact-email">Me contacter</a>
+        <a class="btn" href="/#fit-checker">Tester votre poste avec le Fit-Checker →</a>
+        <a class="btn" href="/">← Retour au CV</a>
+      </div>
+    </main>
+<!-- /static:projectDetailRoot -->
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <div class="mark">Antoine<span>.</span></div>
+        <p>Product Manager — Nantes, France</p>
+      </div>
+      <div class="footer-links">
+        <a href="../" id="footerCvLink">CV</a>
+        <a href="../results.html" id="footerResultsLink" data-i18n="footer.caseStudies">Études de cas</a>
+        <a href="/projets/tour-de-growth.html" data-project-href="tour-de-growth">Tour de Growth</a>
+        <a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a>
+        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>
+        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a>
+      </div>
+      <p class="footer-pdf"><a href="/assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="/assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="/assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="/assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
+    </div>
+  </footer>
+
+  <script src="/js/i18n.js"></script>
+  <script src="/js/data.js"></script>
+  <script src="/js/project-detail.js"></script>
+</body>
+</html>

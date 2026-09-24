@@ -58,16 +58,13 @@
 
 <!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
      pas de données personnelles. Le chemin compté est figé ICI, avant le
-     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…)
-     plus ?slug= pour la page projet, jamais ref/utm ni le fragment, pour qu'une
-     page remonte toujours pareil quelle que soit la vitesse du réseau. Compte configuré (site
+     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…),
+     jamais ref/utm ni le fragment, pour qu'une page remonte toujours pareil
+     quelle que soit la vitesse du réseau. Compte configuré (site
      "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
      — voir README §8 (événements, exclure ses propres visites). -->
 <script>
-  window.goatcounter = { path: (function () {
-    var slug = new URLSearchParams(location.search).get("slug");
-    return location.pathname + (slug ? "?slug=" + encodeURIComponent(slug) : "");
-  })() };
+  window.goatcounter = { path: location.pathname };
 </script>
 <script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -305,7 +302,7 @@
       <div class="footer-links">
         <a href="./" id="footerCvLink">CV</a>
         <a href="results.html" id="footerResultsLink" data-i18n="footer.caseStudies">Études de cas</a>
-        <a href="/project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
+        <a href="/projets/tour-de-growth.html" data-project-href="tour-de-growth">Tour de Growth</a>
         <a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a>
         <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>
         <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a>

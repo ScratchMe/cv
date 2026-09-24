@@ -145,11 +145,6 @@ h1{font-size:48px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;line-h
 .pitch strong,.role-context strong,.role-achievements strong{color:var(--ink);font-weight:700;}
 
 .hero-stats{display:flex;gap:22px 26px;margin-bottom:28px;flex-wrap:wrap;} /* quatre chiffres depuis sept. 2026 : deux par ligne dans la colonne texte du hero */
-/* project-detail.html?…&lang=en seulement (l'accueil et les études de cas ont
-   leur page anglaise statique) : le <head> pose html.lang-pending le temps que
-   le JavaScript remplace la page pré-rendue en français par le rendu anglais
-   (retirée après le premier rendu, ou au bout de 1,5 s si le JS échoue). */
-html.lang-pending body{visibility:hidden;}
 .hero-stat{padding-left:20px;border-left:2px solid var(--line);}
 .hero-stat:first-child{padding-left:0;border-left:none;}
 .hero-stat-value{

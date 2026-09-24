@@ -104,6 +104,58 @@ function profilePage(lang, profile) {
   };
 }
 
+// Page d'un side project (PROJECT_DETAILS) : la page elle-même (WebPage),
+// son fil d'Ariane depuis l'accueil de la même langue, et l'application
+// qu'elle décrit (WebApplication), créée par la même personne que le CV. C'est
+// ce lien « creator » qui rattache désormais Antoine à l'outil (plutôt qu'un
+// sameAs sur la Person, réservé aux pages qui le décrivent lui).
+// `page` = { url, name, description } : adresse, titre et description de la
+// page telle que générée ; `project` = l'entrée de PROJECT_DETAILS, avec
+// `summary` (une phrase dans la langue de la page).
+function projectPage(lang, page, project) {
+  const appUrl = new URL(project.liveUrl).href;
+  const appId = `${appUrl}#app`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${page.url}#page`,
+        url: page.url,
+        name: page.name,
+        description: page.description,
+        inLanguage: lang,
+        author: { "@id": PERSON_ID },
+        about: { "@id": appId },
+        breadcrumb: { "@id": `${page.url}#breadcrumb` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${page.url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "CV", item: PAGE_URLS.home[lang] },
+          { "@type": "ListItem", position: 2, name: project.title, item: page.url },
+        ],
+      },
+      {
+        "@type": "WebApplication",
+        "@id": appId,
+        name: project.title,
+        url: appUrl,
+        description: project.summary,
+        applicationCategory: project.applicationCategory || "BusinessApplication",
+        operatingSystem: "Web",
+        creator: { "@id": PERSON_ID },
+      },
+    ],
+  };
+}
+
+// Adresse publique des pages d'un side project, par langue.
+function projectUrls(slug) {
+  return { fr: `${SITE}/projets/${slug}.html`, en: `${SITE}/en/projects/${slug}.html` };
+}
+
 // Bloc <script> prêt à écrire dans la page. JSON indenté comme avant (lisible
 // dans le source) ; « < » échappé pour qu'aucun texte ne puisse fermer le
 // <script>.
@@ -112,4 +164,4 @@ function jsonLdScript(data) {
   return `<script type="application/ld+json">\n${json}\n</script>`;
 }
 
-module.exports = { SITE, PERSON_ID, PAGE_URLS, profilePage, jsonLdScript };
+module.exports = { SITE, PERSON_ID, PAGE_URLS, profilePage, projectPage, projectUrls, jsonLdScript };

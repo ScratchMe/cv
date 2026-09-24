@@ -2,75 +2,49 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<!-- ANCIENNE ADRESSE des études de cas de side projects (project-detail.html
+     ?slug=…, jusqu'en septembre 2026). Chaque projet a désormais sa page
+     statique : /projets/<slug>.html et /en/projects/<slug>.html. Le script
+     ci-dessous, en tête du <head>, y redirige les slugs connus (en anglais si
+     l'ancien paramètre lang vaut en) ; la liste des slugs est une zone
+     générée par scripts/generate-static.js. Slug inconnu ou absent : la page
+     reste, js/project-detail.js y affiche « Projet introuvable » et pose un
+     noindex. Volontairement ni canonical, ni noindex dans ce HTML (Google doit
+     pouvoir suivre la redirection), ni GoatCounter (la visite est comptée sur
+     la page d'arrivée). -->
+<!-- static:projectRedirect -->
+<script id="project-redirect">
+  (function () {
+    var pages = {"tour-de-growth":{"fr":"/projets/tour-de-growth.html","en":"/en/projects/tour-de-growth.html"}};
+    var q = new URLSearchParams(location.search), slug = q.get("slug");
+    if (slug && Object.prototype.hasOwnProperty.call(pages, slug)) {
+      location.replace(pages[slug][q.get("lang") === "en" ? "en" : "fr"] + location.hash);
+    }
+  })();
+</script>
+<!-- /static:projectRedirect -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Page gabarit pilotée par ?slug=. Titre, description, canonical et balises
-     og:/twitter: portent ici les valeurs du seul side project, posées par
-     scripts/generate-static.js (CI) — ne pas éditer à la main ; un nouveau side
-     project ne touche que data.js. js/project-detail.js les remplace par celles
-     du projet affiché, y compris og:url avec le slug. -->
-<title id="pageTitle">Tour de Growth — étude de cas · Antoine Berthaud, Product Manager</title>
-<meta name="description" id="pageDescription" content="Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.">
-
-<link rel="canonical" id="canonicalLink" href="https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth">
-
-<meta property="og:type" content="article">
-<meta property="og:title" content="Tour de Growth — étude de cas · Antoine Berthaud, Product Manager">
-<meta property="og:description" content="Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.">
-<meta property="og:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://cv.antoine.berthaud.me/project-detail.html?slug=tour-de-growth">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:locale:alternate" content="en_US">
-<meta property="article:author" content="https://www.linkedin.com/in/antoine-berthaud-pm/">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Tour de Growth — étude de cas · Antoine Berthaud, Product Manager">
-<meta name="twitter:description" content="Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.">
-<meta name="twitter:image" content="https://cv.antoine.berthaud.me/assets/og-image.png">
+<title>Side projects — Antoine Berthaud</title>
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
 <link rel="alternate icon" type="image/png" href="/assets/favicon-32.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
-<!-- Analytics respectueux de la vie privée (GoatCounter) — pas de cookies,
-     pas de données personnelles. Le chemin compté est figé ICI, avant le
-     chargement de count.js (async) : le chemin seul (/, /en/, /results.html…)
-     plus ?slug= pour la page projet, jamais ref/utm ni le fragment, pour qu'une
-     page remonte toujours pareil quelle que soit la vitesse du réseau. Compte configuré (site
-     "antoineberthaud"), tableau de bord : https://antoineberthaud.goatcounter.com
-     — voir README §8 (événements, exclure ses propres visites). -->
-<script>
-  window.goatcounter = { path: (function () {
-    var slug = new URLSearchParams(location.search).get("slug");
-    return location.pathname + (slug ? "?slug=" + encodeURIComponent(slug) : "");
-  })() };
-</script>
-<script data-goatcounter="https://antoineberthaud.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>
-  // Sur ?lang=en, la page pré-rendue en français reste invisible jusqu'au
-  // premier rendu JavaScript en anglais (qui retire la classe) — au plus 1,5 s
-  // si le JS échoue, pour ne jamais laisser une page blanche.
-  if (/[?&]lang=en(?:&|$)/.test(location.search)) {
-    document.documentElement.classList.add("lang-pending");
-    setTimeout(function () { document.documentElement.classList.remove("lang-pending"); }, 1500);
-  }
-</script>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <!-- Sans JavaScript, pas de redirection : un lien vers chaque page projet
+       (zone générée). -->
   <noscript>
     <div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;">
-      <p>Sans JavaScript, cette page s'affiche en français, sans la version anglaise.</p>
-      <p><a href="/assets/cv-antoine-berthaud-fr.pdf">Télécharger le CV en PDF (français)</a> ·
-         <a href="/assets/cv-antoine-berthaud-fr-court.pdf">version courte, 2 pages</a><br>
-         <a href="/assets/cv-antoine-berthaud-en.pdf">Download the CV as PDF (English)</a> ·
-         <a href="/assets/cv-antoine-berthaud-en-short.pdf">short version, 2 pages</a></p>
-      <p><a href="./">← Retour au CV</a></p>
+      <!-- static:projectLinks -->
+<p><a href="/projets/tour-de-growth.html">Tour de Growth</a></p>
+<!-- /static:projectLinks -->
+      <p><a href="./" data-i18n="projectDetail.backToCv">← Retour au CV</a></p>
     </div>
   </noscript>
   <header class="top">
@@ -78,87 +52,12 @@
       <a href="./" class="mark" id="logoLink">Antoine<span>.</span></a>
       <div class="navactions">
         <a href="./" class="btn" id="backToCvLink" data-i18n="projectDetail.backToCv">← Retour au CV</a>
-        <button id="langToggle" class="btn" type="button">EN</button>
       </div>
     </div>
   </header>
 
-  <!-- Bloc GÉNÉRÉ par scripts/generate-static.js (en CI, à partir de
-       PROJECT_DETAILS dans js/data.js) : l'étude de cas du side project
-       pré-rendue en français, lue par les robots qui n'exécutent pas
-       JavaScript. Ne pas l'éditer à la main. project-detail.js re-rend
-       par-dessus au chargement selon ?slug= (et en anglais sur ?lang=en). -->
-  <!-- static:projectDetailRoot -->
-<main class="wrap project-detail" id="projectDetailRoot">
-      <div class="project-detail-hero">
-        <p class="project-detail-eyebrow">Side projects</p>
-        <h1>Tour de Growth</h1>
-        <p class="project-detail-tagline">Un miroir rapide pour situer sa stratégie growth — expliqué avec des mots simples, pas du jargon.</p>
-        <a href="https://www.tourdegrowth.com" target="_blank" rel="noopener" class="btn solid" data-goatcounter-click="project-tour-de-growth">Essayer l'outil →</a>
-      </div>
-
-      <section class="project-detail-section">
-        <h2>Le problème</h2>
-        <p>Beaucoup de gens qui pilotent un produit savent qu'ils devraient "faire de la croissance", sans trop savoir dire où ils en sont vraiment. Le vrai trou, c'est l'acquisition ou plutôt la rétention ? Ce qu'on appelle "growth" chez nous ressemble à ce que font les autres, ou est-ce qu'on a inventé sa propre définition au fur et à mesure ?</p><p>Tour de Growth part de cette question toute simple : <strong>quinze questions</strong>, en mots clairs plutôt qu'en jargon, pour voir où une stratégie growth tient déjà la route et où elle ne tient pas encore.</p>
-      </section>
-
-      <section class="project-detail-section">
-        <h2>Ce que c'est</h2>
-        <p><strong>Quinze questions</strong>, réparties sur cinq zones classiques de la croissance :</p>
-        <ul class="detail-list"><li>Comment les gens vous trouvent.</li><li>Comment ils comprennent ce que vous apportez.</li><li>S'ils reviennent.</li><li>S'ils vous recommandent.</li><li>Comment vous gagnez de l'argent.</li></ul>
-        <p>Trois minutes, un score par zone, et surtout une explication de ce que ça veut dire concrètement — pas juste un chiffre jeté là. Un mode plus poussé permet ensuite de préciser son contexte et d'obtenir des pistes plus concrètes à explorer.</p>
-      </section>
-
-      <section class="project-detail-section project-teaching-moment">
-        <h2>Un exemple qu'on préfère montrer qu'expliquer : la boucle de croissance</h2>
-        <p>La plupart des produits pensent leur croissance comme un entonnoir : on fait de la pub, des gens arrivent, certains restent, fin de l'histoire. Une <strong>boucle de croissance</strong> (growth loop) fonctionne autrement — l'usage du produit crée lui-même de nouveaux utilisateurs, sans qu'il faille remettre de l'argent ou de l'énergie à chaque tour.</p><p>Un exemple concret vaut mieux qu'une définition : sur Tour de Growth, chaque personne qui partage son score amène potentiellement de nouvelles personnes, qui font le test à leur tour, qui repartagent. Si ce mécanisme fonctionne vraiment, ça se mesure — c'est ce qu'on appelle le <strong>coefficient viral</strong>, le nombre moyen de nouvelles visites qu'apporte chaque partage. En dessous de 1, la boucle s'essouffle toute seule ; au-dessus, elle s'auto-alimente. C'est exactement le genre de chose que Tour de Growth essaie de vous aider à repérer sur votre propre produit.</p>
-      </section>
-
-      <section class="project-detail-section">
-        <h2>Démarche produit</h2>
-        <p>Construit en grande partie avec l'aide de <strong>Claude Code et Claude Design</strong> — pour cadrer le produit, pour les maquettes, pour la partie technique. Ça m'a semblé la façon la plus honnête de vérifier, en pratique et pas seulement sur un CV, si je sais vraiment structurer un problème growth de bout en bout : poser la bonne question, choisir ce qui compte, et rester honnête sur ce qu'un score rapide peut dire et ce qu'il ne peut pas dire.</p>
-      </section>
-
-      <section class="project-detail-section">
-        <h2>Chiffres d'usage</h2>
-        <p class="project-metrics-fallback">Encore tôt après le lancement — les premiers chiffres d'usage (visites, taux de partage, coefficient viral) seront ajoutés ici dès qu'il y aura assez de recul pour les rendre significatifs.</p>
-      </section>
-
-      <section class="project-detail-section">
-        <h2>Stack technique</h2>
-        <div class="project-stack-groups">
-        <div class="project-stack-group">
-          <h3>Frontend</h3>
-          <div class="project-stack-tags"><span>Next.js 16</span><span>TypeScript</span><span>React 19</span><span>Vercel</span><span>CSS Modules</span><span>i18n maison</span></div>
-        </div>
-        <div class="project-stack-group">
-          <h3>Backend / données</h3>
-          <div class="project-stack-tags"><span>Firebase</span><span>Firestore</span><span>Gemini API</span><span>Route Handlers Next.js</span></div>
-        </div>
-        <div class="project-stack-group">
-          <h3>Analytics / tracking</h3>
-          <div class="project-stack-tags"><span>GoatCounter</span><span>Dashboard interne</span></div>
-        </div>
-        <div class="project-stack-group">
-          <h3>Tests / qualité</h3>
-          <div class="project-stack-tags"><span>Vitest</span><span>Playwright</span></div>
-        </div>
-        <div class="project-stack-group">
-          <h3>SEO</h3>
-          <div class="project-stack-tags"><span>SEO natif Next.js</span><span>JSON-LD</span><span>next/og</span></div>
-        </div>
-        <div class="project-stack-group">
-          <h3>Ops</h3>
-          <div class="project-stack-tags"><span>GitHub</span><span>Déploiement continu Vercel</span><span>Google Search Console</span></div>
-        </div></div>
-      </section>
-      <div class="page-cta">
-        <a class="btn solid" href="mailto:antoine.berthaud@gmail.com?subject=%C3%80%20propos%20d'un%20poste" data-goatcounter-click="contact-email">Me contacter</a>
-        <a class="btn" href="/#fit-checker">Tester votre poste avec le Fit-Checker →</a>
-        <a class="btn" href="/">← Retour au CV</a>
-      </div>
-    </main>
-<!-- /static:projectDetailRoot -->
+  <!-- Rempli par js/project-detail.js : « Projet introuvable ». -->
+  <main class="wrap project-detail" id="projectDetailRoot"></main>
 
   <footer class="site-footer">
     <div class="wrap footer-grid">
@@ -168,13 +67,13 @@
       </div>
       <div class="footer-links">
         <a href="./" id="footerCvLink">CV</a>
-        <a href="results.html" id="footerResultsLink">Études de cas</a>
-        <a href="project-detail.html?slug=tour-de-growth" data-footer-project="tour-de-growth">Tour de Growth</a>
-        <a href="mailto:antoine.berthaud@gmail.com" data-goatcounter-click="contact-email">antoine.berthaud@gmail.com</a>
-        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener" data-goatcounter-click="contact-linkedin">LinkedIn</a>
-        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener" data-goatcounter-click="link-photos">Photos</a>
+        <a href="results.html" id="footerResultsLink" data-i18n="footer.caseStudies">Études de cas</a>
+        <a href="/projets/tour-de-growth.html" data-project-href="tour-de-growth">Tour de Growth</a>
+        <a href="mailto:antoine.berthaud@gmail.com">antoine.berthaud@gmail.com</a>
+        <a href="https://www.linkedin.com/in/antoine-berthaud-pm/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://antoine.berthaud.me/" target="_blank" rel="noopener">Photos</a>
       </div>
-      <p class="footer-pdf"><a href="/assets/cv-antoine-berthaud-fr.pdf" data-goatcounter-click="pdf-download">CV en PDF (français)</a> · <a href="/assets/cv-antoine-berthaud-fr-court.pdf" data-goatcounter-click="pdf-download-court">version courte</a> · <a href="/assets/cv-antoine-berthaud-en.pdf" data-goatcounter-click="pdf-download">CV as PDF (English)</a> · <a href="/assets/cv-antoine-berthaud-en-short.pdf" data-goatcounter-click="pdf-download-court">short version</a></p>
+      <p class="footer-pdf"><a href="/assets/cv-antoine-berthaud-fr.pdf">CV en PDF (français)</a> · <a href="/assets/cv-antoine-berthaud-fr-court.pdf">version courte</a> · <a href="/assets/cv-antoine-berthaud-en.pdf">CV as PDF (English)</a> · <a href="/assets/cv-antoine-berthaud-en-short.pdf">short version</a></p>
     </div>
   </footer>
 

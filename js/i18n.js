@@ -232,28 +232,18 @@
   // Langue d'une page, lue dans son chemin : /en/… = anglais, tout le reste
   // = français (langue par défaut, à la racine). Jamais le navigateur :
   // Googlebot navigue en anglais (voir CLAUDE.md). Depuis septembre 2026,
-  // l'accueil et les études de cas existent en deux fichiers statiques
-  // (index.html et en/index.html, results.html et en/results.html).
+  // chaque page existe en deux fichiers statiques : index.html et
+  // en/index.html, results.html et en/results.html, projets/<slug>.html et
+  // en/projects/<slug>.html.
   function pathLang() {
     return /^\/en(\/|$)/.test(window.location.pathname) ? "en" : "fr";
   }
 
-  // Suffixe ?lang=en des liens vers project-detail.html, la seule page encore
-  // pilotée par ce paramètre (jusqu'à son passage en URL statique). Le
-  // français n'en porte pas. `sep` vaut "?" ou "&" selon que l'URL a déjà un
-  // paramètre.
-  function langSuffix(sep = "?") {
-    return currentLang === "en" ? `${sep}lang=en` : "";
-  }
-
-  // Reflète la langue courante dans l'URL de la page (sans recharger) :
-  // ?lang=en en anglais, URL nue en français. Utilisé par le bouton FR/EN
-  // de project-detail.html, pour qu'une URL copiée partage la bonne langue.
-  function syncUrl() {
-    const url = new URL(window.location.href);
-    if (currentLang === "en") url.searchParams.set("lang", "en");
-    else url.searchParams.delete("lang");
-    window.history.replaceState(null, "", url);
+  // Adresse de la page d'un side project (PROJECT_DETAILS dans data.js), dans
+  // la langue demandée — par défaut celle de la page. Pages statiques
+  // générées par scripts/generate-static.js.
+  function projectUrl(slug, lang = currentLang) {
+    return lang === "en" ? `/en/projects/${slug}.html` : `/projets/${slug}.html`;
   }
 
   window.i18n = {
@@ -269,8 +259,7 @@
     t,
     tc,
     pathLang,
-    langSuffix,
-    syncUrl,
+    projectUrl,
     months: () => MONTHS[currentLang],
   };
 })();

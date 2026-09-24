@@ -1,11 +1,21 @@
 /**
- * project-detail.js — lit ?slug= dans l'URL, cherche l'entrée correspondante
- * dans PROJECT_DETAILS (js/data.js), et génère la page.
+ * project-detail.js — rend la page d'un side project (étude de cas) à partir
+ * de PROJECT_DETAILS (js/data.js).
+ *
+ * Pages statiques depuis septembre 2026 : /projets/<slug>.html (français) et
+ * /en/projects/<slug>.html (anglais), générées par scripts/generate-static.js
+ * à partir de scripts/templates/project.html. Le slug est lu sur la page
+ * elle-même (<body data-slug="…">, posé par le générateur), la langue dans le
+ * chemin. Le script re-rend par-dessus le pré-rendu (même HTML).
+ *
+ * project-detail.html n'est plus qu'une ancienne adresse : son <head> redirige
+ * les slugs connus vers la page statique ; sans slug connu (pas de
+ * data-slug), ce script y affiche « Projet introuvable » en noindex.
  *
  * Pour ajouter un nouveau side project avec sa page de détail :
  *   1. Ajoute une entrée dans PROJECT_DETAILS (js/data.js)
  *   2. Référence-la via `detailSlug` dans l'entrée SIDE_PROJECTS correspondante
- *   3. C'est tout — ce fichier n'a rien à changer.
+ *   3. Relance le générateur (la CI le fait au push) — ce fichier n'a rien à changer.
  */
 (function () {
   "use strict";
@@ -36,30 +46,24 @@
     return `<ul class="detail-list">${items.map((item) => `<li>${richText(item)}</li>`).join("")}</ul>`;
   }
 
-  // Même règle que sur la page d'accueil (voir app.js) : ?lang=en affiche
-  // l'anglais, tout le reste affiche le français. Pas de détection de la
-  // langue du navigateur — Googlebot navigue en anglais et indexerait sinon
-  // la version anglaise à l'URL canonique.
+  // Pages projet : le chemin décide (/en/projects/… = anglais). Ancienne
+  // adresse project-detail.html (slug inconnu) : l'ancien paramètre ?lang=en
+  // choisit encore la langue du message « introuvable ». Jamais le navigateur.
+  const pageSlug = document.body.dataset.slug || null;
   function initLang() {
-    const urlLang = new URLSearchParams(window.location.search).get("lang");
-    window.i18n.setLang(urlLang === "en" ? "en" : "fr");
+    const legacyEn = !pageSlug && new URLSearchParams(window.location.search).get("lang") === "en";
+    window.i18n.setLang(legacyEn ? "en" : window.i18n.pathLang());
   }
 
-  // Sans slug valide, la page affiche "Projet introuvable" : on demande aux
-  // moteurs de ne pas l'indexer. Avant ça, project-detail.html nu était
-  // indexable ET servait de canonical à l'étude de cas (le <link canonical>
-  // statique n'était jamais complété avec le ?slug=), ce qui revenait à dire
-  // à Google que l'étude de cas était une copie d'une page vide.
-  // L'accueil et les études de cas existent en deux fichiers statiques
-  // (racine en français, /en/ en anglais) : les liens vont droit à la bonne
-  // version, sans passer par l'ancienne URL ?lang=en.
+  // Accueil et études de cas dans la langue de la page.
   function homeUrl() {
     return window.i18n.lang === "en" ? "/en/" : "/";
   }
-  function resultsUrl() {
-    return window.i18n.lang === "en" ? "/en/results.html" : "/results.html";
-  }
 
+  // Sans slug valide, la page affiche "Projet introuvable" : on demande aux
+  // moteurs de ne pas l'indexer (posé ici, jamais dans le HTML brut de
+  // project-detail.html, qui doit rester lisible pour que Google suive la
+  // redirection des slugs connus).
   function setNoIndex(on) {
     let meta = document.querySelector('meta[name="robots"]');
     if (on && !meta) {
@@ -72,14 +76,27 @@
     }
   }
 
+  // Titre, description et aperçus de partage sont écrits dans la page, dans
+  // sa langue, par le générateur : on ne réécrit que ce qui diffère des
+  // sources (page pas encore régénérée), en le signalant en console.
+  function setIfDifferent(label, current, expected, apply) {
+    if ((current || "").trim() === (expected || "").trim()) return;
+    console.warn(`[cv] Texte statique de la page différent pour « ${label} » : « ${String(current || "").trim().slice(0, 60)} » ≠ « ${String(expected || "").slice(0, 60)} » — page à régénérer : node scripts/generate-static.js`);
+    apply(expected);
+  }
+
   function renderNotFound(root) {
     setNoIndex(true);
-    document.getElementById("pageTitle").textContent = `${t("projectDetail.notFound")} — Antoine Berthaud`;
+    document.title = `${t("projectDetail.notFound")} — Antoine Berthaud`;
     root.innerHTML = `
       <div class="project-detail-notfound">
         <p>${t("projectDetail.notFound")}</p>
         <a href="${homeUrl()}" class="btn solid">${t("projectDetail.backToCv")}</a>
       </div>`;
+    // Ancienne adresse en anglais : textes fixes de la coquille traduits
+    // (pas un défaut de génération, pas d'avertissement).
+    document.querySelectorAll("[data-i18n]").forEach((el) => (el.textContent = t(el.dataset.i18n)));
+    document.querySelectorAll("#backToCvLink, #logoLink, #footerCvLink").forEach((a) => (a.href = homeUrl()));
   }
 
   function renderProject(root, project, slug) {
@@ -160,63 +177,28 @@
     `;
 
     const pageTitle = `${project.title} — ${t("projectDetail.metaTitleSuffix")}`;
-    document.getElementById("pageTitle").textContent = pageTitle;
-    document.getElementById("pageDescription").setAttribute("content", tc(project.tagline));
-    // Canonical = l'URL de CETTE étude de cas (avec son ?slug=), pas la page
-    // gabarit nue. La langue n'y figure pas : le français est la version de
-    // référence, ?lang=en n'est qu'une variante d'affichage.
-    const canonical = document.getElementById("canonicalLink");
-    if (canonical) canonical.href = `${canonical.href.split("?")[0]}?slug=${encodeURIComponent(slug)}`;
-    // Aperçus de partage : on aligne les balises og:/twitter: sur le projet
-    // affiché. Les robots des réseaux sociaux n'exécutent pas ce JS : ils
-    // voient les valeurs pré-rendues dans le HTML (celles du seul side
-    // project, posées par scripts/generate-static.js).
-    setMeta('meta[property="og:title"]', pageTitle);
-    setMeta('meta[name="twitter:title"]', pageTitle);
-    setMeta('meta[property="og:description"]', tc(project.tagline));
-    setMeta('meta[name="twitter:description"]', tc(project.tagline));
-    if (canonical) setMeta('meta[property="og:url"]', canonical.href);
-  }
-
-  function setMeta(selector, content) {
-    const el = document.querySelector(selector);
-    if (el) el.setAttribute("content", content);
-  }
-
-  // Rendu (ré-appelé à chaque changement de langue) — ne touche jamais à la
-  // langue elle-même, seulement au DOM. `initLang()` ne doit tourner qu'une
-  // fois au chargement : sinon, comme elle relit `?lang=` dans l'URL (qui ne
-  // change pas quand on clique sur le bouton), le clic sur langToggle serait
-  // aussitôt annulé par le prochain appel à `render()`.
-  function render() {
-    const slug = new URLSearchParams(window.location.search).get("slug");
-    const root = document.getElementById("projectDetailRoot");
-    const project = slug && typeof PROJECT_DETAILS !== "undefined" ? PROJECT_DETAILS[slug] : null;
-
-    if (!project) {
-      renderNotFound(root);
-    } else {
-      renderProject(root, project, slug);
-    }
-
-    document.getElementById("backToCvLink").textContent = t("projectDetail.backToCv");
-    document.getElementById("backToCvLink").href = homeUrl();
-    document.getElementById("logoLink").href = homeUrl();
-    document.getElementById("footerCvLink").href = homeUrl();
-    const footerResults = document.getElementById("footerResultsLink");
-    if (footerResults) {
-      footerResults.textContent = t("footer.caseStudies");
-      footerResults.href = resultsUrl();
-    }
-    document.querySelectorAll("a[data-footer-project]").forEach((a) => {
-      a.href = `project-detail.html?slug=${a.dataset.footerProject}${window.i18n.langSuffix("&")}`;
+    const description = tc(project.metaDescription || project.tagline);
+    setIfDifferent("<title>", document.title, pageTitle, (v) => (document.title = v));
+    [
+      ['meta[name="description"]', description],
+      ['meta[property="og:title"]', pageTitle],
+      ['meta[name="twitter:title"]', pageTitle],
+      ['meta[property="og:description"]', description],
+      ['meta[name="twitter:description"]', description],
+    ].forEach(([sel, content]) => {
+      const el = document.querySelector(sel);
+      if (el) setIfDifferent(sel, el.getAttribute("content"), content, (v) => el.setAttribute("content", v));
     });
-    const langBtn = document.getElementById("langToggle");
-    langBtn.textContent = window.i18n.lang === "fr" ? "EN" : "FR";
-    langBtn.setAttribute("aria-label", t("nav.langToggleLabel"));
-    // Sur ?lang=en, project-detail.html masque la page pré-rendue en français
-    // jusqu'ici (script inline du <head>) : le rendu anglais est en place.
-    document.documentElement.classList.remove("lang-pending");
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      setIfDifferent(el.dataset.i18n, el.textContent, t(el.dataset.i18n), (v) => (el.textContent = v));
+    });
+  }
+
+  function render() {
+    const root = document.getElementById("projectDetailRoot");
+    const project = pageSlug && typeof PROJECT_DETAILS !== "undefined" ? PROJECT_DETAILS[pageSlug] : null;
+    if (project) renderProject(root, project, pageSlug);
+    else renderNotFound(root);
     // Clics comptés (data-goatcounter-click) sur les liens que ce rendu
     // vient de recréer — même logique que bindAnalytics() dans app.js.
     if (window.goatcounter && typeof window.goatcounter.bind_events === "function") window.goatcounter.bind_events();
@@ -224,11 +206,14 @@
 
   function init() {
     initLang();
-    document.getElementById("langToggle").addEventListener("click", () => {
-      window.i18n.setLang(window.i18n.lang === "fr" ? "en" : "fr");
-      window.i18n.syncUrl();
-      render();
-    });
+    // Lien FR/EN (pages projet) : un vrai lien vers l'autre version, écrit
+    // par le générateur ; au clic, il emporte l'ancre courante.
+    const langLink = document.getElementById("langToggle");
+    if (langLink) {
+      langLink.addEventListener("click", () => {
+        langLink.href = langLink.getAttribute("href").split("#")[0] + window.location.hash;
+      });
+    }
     render();
   }
 
