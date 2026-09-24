@@ -413,7 +413,7 @@ async function lot1(browser) {
     const { page } = await openTracked(jsCtx, from + hash);
     const link = await page.evaluate(() => {
       const a = document.getElementById("langToggle");
-      return a ? { tag: a.tagName, hreflang: a.getAttribute("hreflang"), lang: a.getAttribute("lang"), href: a.getAttribute("href") } : null;
+      return a ? { tag: a.tagName, hreflang: a.getAttribute("hreflang"), lang: a.getAttribute("lang"), href: a.getAttribute("href"), label: a.getAttribute("aria-label") } : null;
     });
     let arrived = "";
     if (link && link.tag === "A") {
@@ -423,7 +423,9 @@ async function lot1(browser) {
     }
     await page.close();
     const other = from.startsWith("/en/") ? "fr" : "en";
-    check(1, "1.7", `lien de langue ${from + hash} → ${to} (<a hreflang="${other}" lang="${other}">)`, link && link.tag === "A" && link.hreflang === other && link.lang === other && arrived === to, link ? `<${link.tag.toLowerCase()} href="${link.href}" hreflang=${link.hreflang} lang=${link.lang}> → ${arrived}` : "pas de #langToggle");
+    // Libellé accessible dans la langue de la cible (nav.langToggleLabel).
+    const label = other === "en" ? "Switch to English" : "Passer en français";
+    check(1, "1.7", `lien de langue ${from + hash} → ${to} (<a hreflang="${other}" lang="${other}" aria-label="${label}">)`, link && link.tag === "A" && link.hreflang === other && link.lang === other && link.label === label && arrived === to, link ? `<${link.tag.toLowerCase()} href="${link.href}" hreflang=${link.hreflang} lang=${link.lang} aria-label="${link.label}"> → ${arrived}` : "pas de #langToggle");
   }
 
   // Critère 8 — liens internes dans la langue de la page (rendu avec JS).
