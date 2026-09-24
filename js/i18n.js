@@ -187,9 +187,10 @@
     "results.eyebrow": { fr: "Études de cas · Product Manager", en: "Case studies · Product Manager" },
     // <title> et <meta name="description"> de results.html, par langue.
     "results.metaTitle": { fr: "Études de cas Product Manager — Antoine Berthaud, Nantes", en: "Product Manager case studies — Antoine Berthaud, Nantes" },
+    // 160 caractères au plus : Google coupe au-delà (mission SEO, sept. 2026).
     "results.metaDescription": {
-      fr: "Les études de cas produit d'Antoine Berthaud, Product Manager à Nantes : contexte, hypothèse, options écartées, action et résultat (AB Tasty, Everysens, SNCF Connect & Tech).",
-      en: "Antoine Berthaud's product case studies, Product Manager in Nantes, France: context, hypothesis, options ruled out, action and result (AB Tasty, Everysens, SNCF Connect & Tech).",
+      fr: "Études de cas produit d'Antoine Berthaud, Product Manager à Nantes : contexte, hypothèse, options écartées, action, résultat (AB Tasty, Everysens, SNCF).",
+      en: "Product case studies by Antoine Berthaud, Product Manager in Nantes: context, hypothesis, options ruled out, action, result (AB Tasty, Everysens, SNCF).",
     },
     "results.title": { fr: "Le détail derrière les chiffres", en: "The story behind the numbers" },
     "results.intro": {

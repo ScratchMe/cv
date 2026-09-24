@@ -70,13 +70,14 @@ const PROFILE = {
   // Balises <title> et <meta name="description"> de la page d'accueil, par
   // langue. C'est ce que Google affiche dans ses résultats : le lieu (Nantes)
   // et le métier y figurent explicitement pour les requêtes du type
-  // "product manager Nantes". La version FR est aussi recopiée en dur dans
-  // le <head> de index.html (pour les robots sans JavaScript) : garder les
-  // deux synchronisées.
+  // "product manager Nantes". Écrites dans le <head> de index.html et de
+  // en/index.html (titre, description, og:, twitter:) par
+  // scripts/generate-static.js : rien à recopier à la main.
   seo: {
+    // 60 caractères au plus : Google coupe au-delà (mission SEO, sept. 2026).
     title: {
-      fr: "Antoine Berthaud — Senior Product Manager à Nantes · Growth & SaaS",
-      en: "Antoine Berthaud — Senior Growth Product Manager · Nantes, France",
+      fr: "Antoine Berthaud · Senior Product Manager Growth à Nantes",
+      en: "Antoine Berthaud · Senior Growth Product Manager, Nantes",
     },
     description: {
       fr: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.",

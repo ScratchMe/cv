@@ -276,11 +276,10 @@ Je l'ai déjà appliqué sur tes expériences les plus récentes (AB Tasty, Ever
 
 ## 7. Favicon et aperçu de partage (Open Graph)
 
-- **Favicon** : icône violette avec tes initiales "AB", déjà en place (`assets/favicon.svg` + fallbacks PNG pour les navigateurs/appareils plus anciens). Rien à faire.
+- **Favicon** : icône violette avec tes initiales "AB", déjà en place (`assets/favicon.svg` + fallbacks PNG pour les navigateurs/appareils plus anciens). `/favicon.ico` à la racine (16, 32 et 48 px, rendu depuis le SVG) répond aux navigateurs et robots qui le demandent directement, sans lire les balises `<link rel="icon">` — il renvoyait une 404 jusqu'en septembre 2026. Rien à faire.
 - **Image de partage** (ce qui s'affiche quand tu partages le lien du CV sur LinkedIn, Slack, etc.) : déjà générée dans `assets/og-image.png` à partir de ta photo et de tes infos actuelles.
-- **⚠️ À faire une fois déployé** : dans `index.html`, remplace les deux occurrences de `https://REMPLACE-PAR-TON-DOMAINE.example` (balises `og:image`, `og:url`, `twitter:image`) par ta vraie URL, ex. `https://tonpseudo.github.io/cv`. Sans ça, l'aperçu ne s'affichera pas correctement quand tu partageras le lien.
 - Si tu changes significativement ton nom/rôle/photo plus tard, dis-le-moi et je régénère `og-image.png` en conséquence (c'est une image statique, pas générée dynamiquement).
-- Ces balises restent toujours en français : les robots des réseaux sociaux n'exécutent pas le JavaScript, donc ils ne voient jamais la bascule EN. C'est normal et sans conséquence pour le site lui-même.
+- Titres et descriptions des aperçus sont ceux de la page, dans sa langue : partager `/en/` donne un aperçu en anglais (après passage dans le Post Inspector de LinkedIn, qui garde longtemps l'ancien aperçu en cache). Longueurs : 60 caractères au plus pour un titre, 160 pour une description (Google coupe au-delà) ; `check-seo.mjs` le vérifie.
 
 ## 8. Analytics respectueux de la vie privée (GoatCounter)
 

@@ -813,6 +813,70 @@ async function lot3(browser) {
 }
 
 // ---------------------------------------------------------------------------
+// Lot 4 — finitions : titres, descriptions, favicon.ico
+// ---------------------------------------------------------------------------
+// Textes fixés par la mission (repris tels quels dans data.js et i18n.js).
+const LOT4_TEXTS = {
+  homeTitle: { fr: "Antoine Berthaud · Senior Product Manager Growth à Nantes", en: "Antoine Berthaud · Senior Growth Product Manager, Nantes" },
+  resultsDescription: {
+    fr: "Études de cas produit d'Antoine Berthaud, Product Manager à Nantes : contexte, hypothèse, options écartées, action, résultat (AB Tasty, Everysens, SNCF).",
+    en: "Product case studies by Antoine Berthaud, Product Manager in Nantes: context, hypothesis, options ruled out, action, result (AB Tasty, Everysens, SNCF).",
+  },
+};
+const MAX_TITLE = 60;
+const MAX_DESCRIPTION = 160;
+
+async function lot4(browser) {
+  const rawCtx = await newContext(browser, { js: false });
+  for (const pg of [HOME_FR, HOME_EN, RES_FR, RES_EN, PROJ_FR, PROJ_EN]) {
+    const { page } = await openTracked(rawCtx, pg.path);
+    const info = await page.evaluate(readPage);
+    await page.close();
+    const same = (v) => [info.og["og:title"], info.twitter["twitter:title"]].every((x) => x === v);
+    const sameDesc = (v) => [info.og["og:description"], info.twitter["twitter:description"]].every((x) => x === v);
+    if (pg.kind === "home") {
+      const t = LOT4_TEXTS.homeTitle[pg.lang];
+      check(4, "4.1-title", `${pg.path} : titre de la mission dans <title>, og:title, twitter:title`, info.title === t && same(t), `« ${info.title} »`);
+    }
+    if (pg.kind === "results") {
+      const d = LOT4_TEXTS.resultsDescription[pg.lang];
+      let ld = null;
+      try {
+        ld = info.jsonld.map((x) => JSON.parse(x)).find((b) => Array.isArray(b["@graph"]));
+      } catch (_e) {
+        ld = null;
+      }
+      const cp = ld && ld["@graph"].find((n) => n["@type"] === "CollectionPage");
+      check(4, "4.1-description", `${pg.path} : description de la mission dans la meta, og:, twitter: et le JSON-LD`, info.description === d && sameDesc(d) && cp && cp.description === d && cp.name === info.title, `${(info.description || "").length} car.`);
+    }
+    // Longueurs. Les textes que la mission a fixés doivent tenir ; ceux
+    // qu'elle ne fournit pas (titre des pages projet, description de
+    // l'accueil) sont signalés sans faire échouer, en attendant une décision.
+    const fixedTitle = pg.kind === "home" || pg.kind === "results";
+    const fixedDesc = pg.kind === "results" || pg.kind === "project";
+    const tl = info.title.length,
+      dl = (info.description || "").length;
+    if (tl <= MAX_TITLE || fixedTitle) check(4, "4.1-len-title", `${pg.path} : titre ≤ ${MAX_TITLE} caractères`, tl <= MAX_TITLE, `${tl} car.`);
+    else skip(4, "4.1-len-title", `${pg.path} : titre ≤ ${MAX_TITLE} caractères`, `⚠ ${tl} car. — texte hors mission, à décider (voir le rapport)`);
+    if (dl <= MAX_DESCRIPTION || fixedDesc) check(4, "4.1-len-desc", `${pg.path} : description ≤ ${MAX_DESCRIPTION} caractères`, dl <= MAX_DESCRIPTION, `${dl} car.`);
+    else skip(4, "4.1-len-desc", `${pg.path} : description ≤ ${MAX_DESCRIPTION} caractères`, `⚠ ${dl} car. — texte hors mission, à décider (voir le rapport)`);
+  }
+  await rawCtx.close();
+
+  // favicon.ico : 200 et trois tailles (16, 32, 48)
+  const res = await api.get(`${BASE}/favicon.ico`);
+  let sizes = [];
+  if (res.ok()) {
+    const buf = await res.body();
+    if (buf.readUInt16LE(0) === 0 && buf.readUInt16LE(2) === 1) {
+      const n = buf.readUInt16LE(4);
+      for (let i = 0; i < n; i++) sizes.push(buf[6 + i * 16] || 256);
+    }
+  }
+  check(4, "4.2-favicon", "/favicon.ico : 200, icône en 16, 32 et 48 px", res.status() === 200 && eq([...sizes].sort((a, b) => a - b), [16, 32, 48]), `statut ${res.status()}, tailles ${sizes.join("/") || "aucune"}`);
+}
+
+// ---------------------------------------------------------------------------
 // Un vrai appel au Fit-Checker, depuis la page anglaise (--fit-call)
 // ---------------------------------------------------------------------------
 async function fitCall(browser) {
@@ -890,6 +954,7 @@ async function shots(browser) {
     if (MAX_LOT >= 1) await lot1(browser);
     if (MAX_LOT >= 2) await lot2(browser);
     if (MAX_LOT >= 3) await lot3(browser);
+    if (MAX_LOT >= 4) await lot4(browser);
     if (FIT_CALL) await fitCall(browser);
     if (SHOTS_DIR) await shots(browser);
   } finally {
