@@ -181,8 +181,9 @@
     "projectDetail.stack.seo": { fr: "SEO", en: "SEO" },
     "projectDetail.stack.ops": { fr: "Ops", en: "Ops" },
     "projectDetail.notFound": { fr: "Projet introuvable.", en: "Project not found." },
-    // Suffixe du <title> d'une page d'étude de cas : "Tour de Growth — étude de cas · Antoine Berthaud, Product Manager"
-    "projectDetail.metaTitleSuffix": { fr: "étude de cas · Antoine Berthaud, Product Manager", en: "case study · Antoine Berthaud, Product Manager" },
+    // Suffixe du <title> d'une page d'étude de cas : "Tour de Growth — étude de cas · Antoine Berthaud"
+    // (60 caractères au plus avec le nom du projet ; check-seo.mjs le vérifie).
+    "projectDetail.metaTitleSuffix": { fr: "étude de cas · Antoine Berthaud", en: "case study · Antoine Berthaud" },
 
     "results.eyebrow": { fr: "Études de cas · Product Manager", en: "Case studies · Product Manager" },
     // <title> et <meta name="description"> de results.html, par langue.

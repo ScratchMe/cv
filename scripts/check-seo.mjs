@@ -849,17 +849,11 @@ async function lot4(browser) {
       const cp = ld && ld["@graph"].find((n) => n["@type"] === "CollectionPage");
       check(4, "4.1-description", `${pg.path} : description de la mission dans la meta, og:, twitter: et le JSON-LD`, info.description === d && sameDesc(d) && cp && cp.description === d && cp.name === info.title, `${(info.description || "").length} car.`);
     }
-    // Longueurs. Les textes que la mission a fixés doivent tenir ; ceux
-    // qu'elle ne fournit pas (titre des pages projet, description de
-    // l'accueil) sont signalés sans faire échouer, en attendant une décision.
-    const fixedTitle = pg.kind === "home" || pg.kind === "results";
-    const fixedDesc = pg.kind === "results" || pg.kind === "project";
+    // Longueurs : tous les titres et descriptions doivent tenir.
     const tl = info.title.length,
       dl = (info.description || "").length;
-    if (tl <= MAX_TITLE || fixedTitle) check(4, "4.1-len-title", `${pg.path} : titre ≤ ${MAX_TITLE} caractères`, tl <= MAX_TITLE, `${tl} car.`);
-    else skip(4, "4.1-len-title", `${pg.path} : titre ≤ ${MAX_TITLE} caractères`, `⚠ ${tl} car. — texte hors mission, à décider (voir le rapport)`);
-    if (dl <= MAX_DESCRIPTION || fixedDesc) check(4, "4.1-len-desc", `${pg.path} : description ≤ ${MAX_DESCRIPTION} caractères`, dl <= MAX_DESCRIPTION, `${dl} car.`);
-    else skip(4, "4.1-len-desc", `${pg.path} : description ≤ ${MAX_DESCRIPTION} caractères`, `⚠ ${dl} car. — texte hors mission, à décider (voir le rapport)`);
+    check(4, "4.1-len-title", `${pg.path} : titre ≤ ${MAX_TITLE} caractères`, tl <= MAX_TITLE, `${tl} car.`);
+    check(4, "4.1-len-desc", `${pg.path} : description ≤ ${MAX_DESCRIPTION} caractères`, dl <= MAX_DESCRIPTION, `${dl} car.`);
   }
   await rawCtx.close();
 

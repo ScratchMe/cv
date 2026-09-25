@@ -74,13 +74,14 @@ const PROFILE = {
   // en/index.html (titre, description, og:, twitter:) par
   // scripts/generate-static.js : rien à recopier à la main.
   seo: {
-    // 60 caractères au plus : Google coupe au-delà (mission SEO, sept. 2026).
+    // Titre : 60 caractères au plus, description : 160 (Google coupe au-delà ;
+    // mission SEO, sept. 2026). check-seo.mjs le vérifie.
     title: {
       fr: "Antoine Berthaud · Senior Product Manager Growth à Nantes",
       en: "Antoine Berthaud · Senior Growth Product Manager, Nantes",
     },
     description: {
-      fr: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.",
+      fr: "CV d'Antoine Berthaud, Senior Product Manager à Nantes : 10 ans de produit en SaaS B2B et grands comptes (AB Tasty, Everysens, SNCF). Growth, PLG, discovery.",
       en: "Antoine Berthaud's CV, Senior Product Manager in Nantes: 10 years in B2B SaaS and enterprise product (AB Tasty, Everysens, SNCF). Growth, PLG, discovery, data.",
     },
   },

@@ -373,7 +373,9 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   Les PDF portent des métadonnées (titre, auteur, langue) posées par
   `scripts/generate-pdf.js` via `pdf-lib`. Titres ≤ 60 caractères,
   descriptions ≤ 160 (Google coupe au-delà ; textes de la mission SEO du
-  24/09/2026 dans `PROFILE.seo` et `results.metaDescription`) ; `favicon.ico`
+  24/09/2026 dans `PROFILE.seo` et `results.metaDescription`, suffixe des
+  pages projet et description FR de l'accueil raccourcis le 25/09 avec
+  l'accord d'Antoine), vérifiés sans exception par `check-seo.mjs` ; `favicon.ico`
   multi-tailles à la racine, rendu depuis `assets/favicon.svg`.
 - **Site considéré fonctionnellement complet** (sept. 2026) : bilingue,
   PDF, Fit-Checker IA, hero cliquable + études de cas STAR, side project
