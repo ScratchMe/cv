@@ -361,7 +361,9 @@ détail ne demande de toucher qu'à `data.js`, jamais à
    le projet en ligne) comme d'habitude.
 2. Ajoute une clé correspondante dans `PROJECT_DETAILS` (juste après
    `SIDE_PROJECTS` dans `data.js`) : le plus simple est de **copier l'entrée
-   `tour-de-growth` et de remplacer les textes**. Champs : `title`,
+   `tour-de-growth` et de remplacer les textes**. Champs : `title` (le titre
+   de l'onglet devient « <title> — étude de cas · Antoine Berthaud », 60
+   caractères au plus : un nom de projet de plus de 26 caractères dépasse),
    `tagline`, `metaDescription` (`{fr, en}`, 160 caractères au plus : ce
    que Google affiche), `liveUrl`, `problem`, `whatItIs` (+ `whatItIsPoints` et
    `whatItIsClosing` optionnels), `teachingMoment` (optionnel, `{title,
