@@ -408,12 +408,21 @@ function legacyProjectPage(html, projects, dict, slugs) {
 // au fichier sur le disque. Une page régénérée dans une PR y porte déjà sa
 // nouvelle date, la CI de main la retrouve à l'identique et ne touche à rien ;
 // une page que seule la CI régénère (data.js modifié sans relancer le script,
-// durées mensuelles) prend la date du jour. Jour en UTC, comme la CI.
+// durées mensuelles) prend l'heure du passage. Date ET heure, avec fuseau
+// (UTC, à la seconde) : c'est le type DateTime que Google attend pour
+// dateModified et dateCreated ; une date seule est signalée dans la Search
+// Console (« Valeur de date et heure incorrecte », 26/09/2026).
 const SITEMAP = "sitemap.xml";
-const TODAY = new Date().toISOString().slice(0, 10);
+const NOW = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 const sitemapSource = fs.readFileSync(path.join(ROOT, SITEMAP), "utf8");
-const previousLastmod = new Map([...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)].map((m) => [m[1], m[2]]));
+const previousLastmod = new Map([...sitemapSource.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2}(?:T[^<]+)?)<\/lastmod>/g)].map((m) => [m[1], m[2]]));
 const newLastmod = new Map(); // URL → date retenue pendant ce passage
+
+// Les <lastmod> écrits avant le 26/09/2026 n'ont pas d'heure. Pour la
+// comparaison, on les lit comme minuit UTC : une page qui affiche la date (le
+// JSON-LD de l'accueil) diffère alors du fichier et prend l'heure du passage ;
+// une page qui ne l'affiche pas est identique et garde sa date telle quelle.
+const asDateTime = (d) => (d.includes("T") ? d : `${d}T00:00:00Z`);
 
 // Premier commit de index.html : date de création de la page profil. Un
 // clone superficiel (CI sans fetch-depth: 0) n'a pas l'historique : on
@@ -423,30 +432,29 @@ function firstCommitDate(file) {
   if (git(["rev-parse", "--is-shallow-repository"]) === "true") {
     throw new Error("Clone Git superficiel : impossible de dater la création de la page (dateCreated). En CI, actions/checkout doit avoir fetch-depth: 0.");
   }
-  const first = git(["log", "--reverse", "--format=%as", "--", file]).split("\n")[0];
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(first)) throw new Error(`Aucun commit trouvé pour ${file} (dateCreated)`);
+  const first = git(["log", "--reverse", "--format=%aI", "--", file]).split("\n")[0];
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(first)) throw new Error(`Aucun commit trouvé pour ${file} (dateCreated)`);
   return first;
 }
 const DATE_CREATED = firstCommitDate("index.html");
 
 // Construit la page avec la date de sa dernière modification connue ; si le
 // résultat diffère du fichier existant, la page a changé : on la reconstruit
-// datée d'aujourd'hui. Deux passages de suite donnent donc le même résultat.
+// datée de maintenant. Deux passages de suite donnent donc le même résultat.
 function withLastmod(page, lang, build) {
   const url = page.urls[lang];
   const filePath = path.join(ROOT, page.out[lang]);
   const before = fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : null;
   const known = previousLastmod.get(url);
-  let date = known || TODAY;
-  let out = build({ created: DATE_CREATED, modified: date });
-  if (out.html !== before && date !== TODAY) {
-    date = TODAY;
-    out = build({ created: DATE_CREATED, modified: date });
+  if (known) {
+    const out = build({ created: DATE_CREATED, modified: asDateTime(known) });
+    if (out.html === before) {
+      newLastmod.set(url, known);
+      return out;
+    }
   }
-  // La date retenue est celle de la dernière construction : inchangée, la
-  // page garde la sienne ; reconstruite, elle porte celle du jour.
-  newLastmod.set(url, date);
-  return out;
+  newLastmod.set(url, NOW);
+  return build({ created: DATE_CREATED, modified: NOW });
 }
 
 // Entrées « pages » du sitemap (zone <!-- static:pages -->) : une par page
