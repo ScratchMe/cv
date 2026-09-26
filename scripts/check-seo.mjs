@@ -746,7 +746,7 @@ async function lot3(browser) {
   try {
     const repo = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
     if (execFileSync("git", ["rev-parse", "--is-shallow-repository"], { cwd: repo, encoding: "utf8" }).trim() === "false") {
-      created = execFileSync("git", ["log", "--reverse", "--format=%as", "--", "index.html"], { cwd: repo, encoding: "utf8" }).split("\n")[0];
+      created = execFileSync("git", ["log", "--reverse", "--format=%aI", "--", "index.html"], { cwd: repo, encoding: "utf8" }).split("\n")[0];
     }
   } catch (_e) {
     created = null;
@@ -775,8 +775,11 @@ async function lot3(browser) {
       const pp = blocks.find((b) => b["@type"] === "ProfilePage") || {};
       const sameAs = (pp.mainEntity && pp.mainEntity.sameAs) || [];
       check(3, "3.2-sameas", `${pg.path} : sameAs sans tourdegrowth.com (LinkedIn et antoine.berthaud.me gardés)`, !sameAs.some((u) => /tourdegrowth/.test(u)) && sameAs.includes("https://www.linkedin.com/in/antoine-berthaud-pm/") && sameAs.includes("https://antoine.berthaud.me/"), JSON.stringify(sameAs));
-      const iso = /^\d{4}-\d{2}-\d{2}$/;
-      check(3, "3.2-dates", `${pg.path} : dateModified = <lastmod> du sitemap (${lastmod.get(pg.url)}), dateCreated ISO`, iso.test(pp.dateModified || "") && iso.test(pp.dateCreated || "") && pp.dateModified === lastmod.get(pg.url) && pp.dateCreated <= pp.dateModified, `dateCreated=${pp.dateCreated} dateModified=${pp.dateModified}`);
+      // Google attend une date ET une heure, avec fuseau (type DateTime de
+      // ProfilePage) : une date seule est signalée dans la Search Console
+      // (« Valeur de date et heure incorrecte », 26/09/2026).
+      const dateTime = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2})$/;
+      check(3, "3.2-dates", `${pg.path} : dateModified = <lastmod> du sitemap (${lastmod.get(pg.url)}), dates et heures ISO 8601 avec fuseau`, dateTime.test(pp.dateModified || "") && dateTime.test(pp.dateCreated || "") && pp.dateModified === lastmod.get(pg.url) && Date.parse(pp.dateCreated) <= Date.parse(pp.dateModified), `dateCreated=${pp.dateCreated} dateModified=${pp.dateModified}`);
       if (created) check(3, "3.2-created", `${pg.path} : dateCreated = premier commit de index.html (${created})`, pp.dateCreated === created, pp.dateCreated);
       else skip(3, "3.2-created", `${pg.path} : dateCreated = premier commit de index.html`, "historique Git indisponible ici");
     }

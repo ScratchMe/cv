@@ -364,7 +364,10 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   son HTML généré change (comparaison au fichier sur le disque), et le
   `dateModified` de l'accueil reprend exactement cette date ; le
   `dateCreated` vient du premier commit de `index.html`, d'où `fetch-depth: 0`
-  dans les deux workflows (le générateur refuse un clone superficiel). Le
+  dans les deux workflows (le générateur refuse un clone superficiel). Les
+  deux sont une date **et une heure** avec fuseau (piège n° 16), comme le
+  `lastmod` des pages depuis le 26/09/2026 ; les pages inchangées depuis
+  gardent leur ancien `lastmod` sans heure, valide dans un sitemap. Le
   `lastmod` des deux PDF est posé par `generate-pdf.yml`. Jamais à la main.
   Avant sept. 2026, le workflow datait aussi les pages, mais seulement quand
   la CI elle-même les modifiait : une PR arrivée avec ses pages déjà
@@ -473,6 +476,14 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
     pointait la racine française depuis `/en/`. Tout lien écrit en dur vers le
     site doit dépendre de la langue, et `check-seo.mjs` (critère 8) compte les
     adresses absolues du domaine comme des liens internes.
+16. **`dateCreated` / `dateModified` d'une `ProfilePage` en date seule**
+    (26 sept. 2026, signalé par la Search Console : « Valeur de date et heure
+    incorrecte ») : Google attend le type DateTime, date et heure avec fuseau
+    (`2026-09-26T08:40:35Z`), alors que schema.org accepte une date seule et
+    que le validateur schema.org ne dit rien. `profilePage()` refuse
+    désormais une date sans heure et `check-seo.mjs` (3.2) vérifie le
+    format. Vérifier le type attendu dans la documentation Google de chaque
+    donnée structurée, pas seulement dans schema.org.
 
 ## Méthode de travail établie
 

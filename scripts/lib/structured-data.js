@@ -24,9 +24,16 @@ const PAGE_URLS = {
 // la même personne (sameAs : LinkedIn, portfolio — pas Tour de Growth, un
 // produit, relié à Antoine par WebApplication.creator sur sa page projet).
 // `profile` = { yearsExperience } lu dans js/data.js ; `dates` =
-// { created, modified } au format AAAA-MM-JJ : premier commit de index.html,
-// et <lastmod> de la page dans sitemap.xml (posés par le générateur).
+// { created, modified } : premier commit de index.html, et <lastmod> de la
+// page dans sitemap.xml (posés par le générateur). Date ET heure ISO 8601
+// avec fuseau (2026-09-26T09:15:00Z) : Google attend un DateTime, une date
+// seule est signalée dans la Search Console.
+const DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2})$/;
+
 function profilePage(lang, profile, dates) {
+  for (const key of ["created", "modified"]) {
+    if (!DATE_TIME.test(dates[key] || "")) throw new Error(`profilePage : ${key} doit être une date et heure ISO 8601 avec fuseau (reçu « ${dates[key]} »)`);
+  }
   const years = profile.yearsExperience;
   const text = {
     fr: {
