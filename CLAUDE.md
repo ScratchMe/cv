@@ -167,7 +167,10 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
 - **Repli multi-modèles Gemini** partout où l'IA est appelée :
   `gemini-3.7-flash → 3.6 → 3.5 → gemini-flash-latest` (ce dernier est un
   alias maintenu par Google, toujours à jour — le filet de sécurité qui ne
-  casse jamais). Jamais un seul modèle codé en dur.
+  casse jamais). Jamais un seul modèle codé en dur. Jamais de
+  `temperature`/`topP`/`topK` ni de `thinkingBudget` dans la requête (avis
+  Google d'oct. 2026 : erreur 400 sur les prochains modèles) ;
+  `thinkingLevel` reste omis pour garder le défaut de chaque modèle.
 - **Contenu jamais "IA-sonnant"** : pas de superposition de noms abstraits
   ("Coordination transverse de X avec délégation de Y"), pas de
   construction répétitive "X n'est pas Y, c'est Z". Antoine relit chaque

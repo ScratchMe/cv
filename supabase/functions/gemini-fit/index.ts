@@ -137,8 +137,12 @@ async function callGeminiWithFallback(prompt: string): Promise<{ data: any; mode
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
+            // Ni temperature/topP/topK ni thinkingBudget (avis Google d'oct.
+            // 2026) : sans effet depuis Gemini 3.6, ils renverront une erreur
+            // 400 sur les prochains modèles, que gemini-flash-latest finira
+            // par servir. thinkingLevel est omis aussi : les niveaux acceptés
+            // varient selon le modèle, et un 400 arrête toute la liste de repli.
             generationConfig: {
-              temperature: 0.3,
               responseMimeType: "application/json",
               // Schéma imposé à Gemini : la forme de la réponse est garantie
               // structurellement, plus seulement par la consigne du prompt
