@@ -21,15 +21,15 @@ const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
 
 // Liste de modèles essayés dans l'ordre — si un modèle est surchargé,
 // indisponible, ou n'existe plus (déprécié), on passe automatiquement au
-// suivant. Vérifiée au 21 août 2026 :
-// - gemini-3.7-flash / 3.6 / 3.5 : versions figées, comportement prévisible.
+// suivant. Vérifiée au 7 oct. 2026 :
+// - gemini-3.8-flash / 3.7 / 3.6 / 3.5 : versions figées, comportement prévisible.
 // - gemini-flash-latest : alias officiel maintenu par Google, "hot-swappé"
 //   automatiquement vers le modèle Flash recommandé du moment (voir
 //   https://ai.google.dev/gemini-api/docs/models). Sert de filet de sécurité
-//   ultime : même si les 3 noms fixes ci-dessus deviennent tous obsolètes un
+//   ultime : même si les 4 noms fixes ci-dessus deviennent tous obsolètes un
 //   jour, cette dernière entrée continuera de fonctionner sans qu'on ait à
 //   toucher au code.
-const GEMINI_MODEL_CANDIDATES = ["gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-flash-latest"];
+const GEMINI_MODEL_CANDIDATES = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-flash-latest"];
 
 // Autorise uniquement ton site à appeler cette fonction (CORS).
 const ALLOWED_ORIGIN = "https://cv.antoine.berthaud.me";
@@ -92,17 +92,17 @@ ${cvContext}
 ${jobPosting}`;
 }
 
-// Forme attendue de la réponse (format OpenAPI simplifié de l'API Gemini).
+// Forme attendue de la réponse (JSON Schema, format de l'API Interactions).
 // À garder alignée avec le schéma décrit dans buildPrompt() et avec ce que
 // js/gemini.js affiche.
 const RESPONSE_SCHEMA = {
-  type: "OBJECT",
+  type: "object",
   properties: {
-    score: { type: "INTEGER" },
-    explanation: { type: "STRING" },
-    strengths: { type: "ARRAY", items: { type: "STRING" } },
-    gaps: { type: "ARRAY", items: { type: "STRING" } },
-    interviewQuestion: { type: "STRING" },
+    score: { type: "integer" },
+    explanation: { type: "string" },
+    strengths: { type: "array", items: { type: "string" } },
+    gaps: { type: "array", items: { type: "string" } },
+    interviewQuestion: { type: "string" },
   },
   required: ["score", "explanation", "strengths", "gaps", "interviewQuestion"],
 };
@@ -130,30 +130,31 @@ async function callGeminiWithFallback(prompt: string): Promise<{ data: any; mode
 
   for (const model of GEMINI_MODEL_CANDIDATES) {
     try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            // Ni temperature/topP/topK ni thinkingBudget (avis Google d'oct.
-            // 2026) : sans effet depuis Gemini 3.6, ils renverront une erreur
-            // 400 sur les prochains modèles, que gemini-flash-latest finira
-            // par servir. thinkingLevel est omis aussi : les niveaux acceptés
-            // varient selon le modèle, et un 400 arrête toute la liste de repli.
-            generationConfig: {
-              responseMimeType: "application/json",
-              // Schéma imposé à Gemini : la forme de la réponse est garantie
-              // structurellement, plus seulement par la consigne du prompt
-              // (on a vu des listes renvoyées en chaîne). Le front vérifie
-              // encore le contenu avant affichage, mais ne devrait plus
-              // jamais recevoir une forme inattendue.
-              responseSchema: RESPONSE_SCHEMA,
-            },
-          }),
-        }
-      );
+      // API Interactions (GA depuis 2026, generateContent est l'API legacy).
+      // La clé passe dans un en-tête, plus dans l'URL.
+      const res = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY! },
+        body: JSON.stringify({
+          model,
+          input: prompt,
+          // Par défaut Google conserve chaque échange (55 jours en payant)
+          // pour enchaîner les conversations. Une analyse est sans suite, et
+          // l'offre collée par le recruteur n'a pas à rester chez Google.
+          store: false,
+          // Schéma imposé à Gemini : la forme de la réponse est garantie
+          // structurellement, plus seulement par la consigne du prompt
+          // (on a vu des listes renvoyées en chaîne). Le front vérifie
+          // encore le contenu avant affichage, mais ne devrait plus
+          // jamais recevoir une forme inattendue.
+          response_format: { type: "text", mime_type: "application/json", schema: RESPONSE_SCHEMA },
+          // Pas de generation_config : ni temperature/top_p/top_k ni
+          // thinking_budget (avis Google d'oct. 2026, erreur 400 sur les
+          // prochains modèles), et thinking_level est omis pour garder le
+          // défaut de chaque modèle — les niveaux acceptés varient, et un 400
+          // arrête toute la liste de repli.
+        }),
+      });
 
       if (res.ok) {
         const data = await res.json();
@@ -217,18 +218,22 @@ Deno.serve(async (req: Request) => {
 
     const prompt = buildPrompt(cvContext, jobPosting, lang === "en" ? "en" : "fr");
 
-    const { data: geminiData } = await callGeminiWithFallback(prompt);
-    const rawText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
+    const { data: interaction } = await callGeminiWithFallback(prompt);
+    // Le texte est dans les étapes "model_output" de l'interaction (les
+    // étapes de réflexion du modèle sont d'un autre type et ignorées).
+    const rawText = (interaction.steps ?? [])
+      .filter((step: any) => step.type === "model_output")
+      .flatMap((step: any) => step.content ?? [])
+      .filter((part: any) => part.type === "text")
+      .map((part: any) => part.text)
+      .join("");
     if (!rawText) {
       // Réponse sans texte (filtre de sécurité, sortie tronquée...) : on
       // renvoie une vraie erreur plutôt qu'un "{}" que le site affichait
       // comme un score 0/100. Le détail va dans les logs de la fonction.
       console.error(
         "gemini-fit: réponse Gemini vide",
-        JSON.stringify({
-          finishReason: geminiData.candidates?.[0]?.finishReason,
-          promptFeedback: geminiData.promptFeedback,
-        })
+        JSON.stringify({ status: interaction.status, errors: interaction.errors })
       );
       throw new Error("Réponse Gemini vide");
     }

@@ -165,12 +165,19 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
 ## Décisions déjà prises (ne pas rouvrir sans raison)
 
 - **Repli multi-modèles Gemini** partout où l'IA est appelée :
-  `gemini-3.7-flash → 3.6 → 3.5 → gemini-flash-latest` (ce dernier est un
-  alias maintenu par Google, toujours à jour — le filet de sécurité qui ne
-  casse jamais). Jamais un seul modèle codé en dur. Jamais de
-  `temperature`/`topP`/`topK` ni de `thinkingBudget` dans la requête (avis
-  Google d'oct. 2026 : erreur 400 sur les prochains modèles) ;
-  `thinkingLevel` reste omis pour garder le défaut de chaque modèle.
+  `gemini-3.8-flash → 3.7 → 3.6 → 3.5 → gemini-flash-latest` (ce dernier est
+  un alias maintenu par Google, toujours à jour — le filet de sécurité qui ne
+  casse jamais). Jamais un seul modèle codé en dur. Appel par l'**API
+  Interactions** (`/v1beta/interactions`, depuis le 7 oct. 2026 ;
+  `generateContent` est l'API legacy), avec `store: false` (sinon Google garde
+  l'offre collée par le recruteur 55 jours) ; le texte est dans les étapes
+  `model_output` de `steps`, pas de champ `output_text` en REST (il n'existe
+  que dans les SDK). Jamais de `temperature`/`top_p`/`top_k` ni de
+  `thinking_budget` (avis Google d'oct. 2026 : erreur 400 sur les prochains
+  modèles) ; `thinking_level` reste omis pour garder le défaut de chaque
+  modèle. Les cinq modèles de la liste ont été testés un par un avec ce format
+  de requête : un modèle qui le refuserait renverrait un 400, qui arrête toute
+  la liste de repli.
 - **Contenu jamais "IA-sonnant"** : pas de superposition de noms abstraits
   ("Coordination transverse de X avec délégation de Y"), pas de
   construction répétitive "X n'est pas Y, c'est Z". Antoine relit chaque
