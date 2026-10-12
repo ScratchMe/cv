@@ -21,15 +21,17 @@ const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
 
 // Liste de modèles essayés dans l'ordre — si un modèle est surchargé,
 // indisponible, ou n'existe plus (déprécié), on passe automatiquement au
-// suivant. Vérifiée au 7 oct. 2026 :
-// - gemini-3.8-flash / 3.7 / 3.6 / 3.5 : versions figées, comportement prévisible.
+// suivant. Vérifiée au 12 oct. 2026 :
+// - gemini-3.8-flash / 3.6 : versions figées, comportement prévisible.
+//   3.7 et 3.5 sont décommissionnés (oct. 2026) : Google redirige leurs
+//   appels vers 3.8 et 3.6 mais demande de ne plus les appeler.
 // - gemini-flash-latest : alias officiel maintenu par Google, "hot-swappé"
 //   automatiquement vers le modèle Flash recommandé du moment (voir
 //   https://ai.google.dev/gemini-api/docs/models). Sert de filet de sécurité
-//   ultime : même si les 4 noms fixes ci-dessus deviennent tous obsolètes un
-//   jour, cette dernière entrée continuera de fonctionner sans qu'on ait à
+//   ultime : même si les 2 noms fixes ci-dessus deviennent tous deux obsolètes
+//   un jour, cette dernière entrée continuera de fonctionner sans qu'on ait à
 //   toucher au code.
-const GEMINI_MODEL_CANDIDATES = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-flash-latest"];
+const GEMINI_MODEL_CANDIDATES = ["gemini-3.8-flash", "gemini-3.6-flash", "gemini-flash-latest"];
 
 // Autorise uniquement ton site à appeler cette fonction (CORS).
 const ALLOWED_ORIGIN = "https://cv.antoine.berthaud.me";
