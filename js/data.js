@@ -188,6 +188,10 @@ const RESULT_DETAILS = {
   // chiffre d'impact — `status` prend la place du chiffre, sur la carte de
   // l'accueil comme en tête de l'étude. Ne jamais inventer un résultat ici.
   "ab-tasty-hybride": {
+    // `featured` : affichée en tête des études de cas (cartes de l'accueil et
+    // results.html), avant celles reliées à un chiffre du hero. Choix
+    // d'Antoine du 10 nov. 2026 : c'est l'étude la plus growth du CV.
+    featured: true,
     company: "AB Tasty",
     companyLogo: "/assets/logos/ab-tasty.webp",
     role: "Senior Growth Product Manager",

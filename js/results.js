@@ -50,9 +50,13 @@
   function orderedResultIds() {
     // Dédupliqué : deux chiffres du hero peuvent pointer la même étude
     // (AB Tasty porte le +14 % d'activation et le -20 % de Time-to-Value).
-    const fromHero = [...new Set(HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]))];
+    // Une étude marquée `featured` passe devant toutes les autres.
+    const featured = Object.keys(RESULT_DETAILS).filter((id) => RESULT_DETAILS[id].featured);
+    const fromHero = [...new Set(HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]))].filter(
+      (id) => !featured.includes(id)
+    );
     // Puis les études sans chiffre du hero, dans l'ordre de RESULT_DETAILS.
-    return [...fromHero, ...Object.keys(RESULT_DETAILS).filter((id) => !fromHero.includes(id))];
+    return [...featured, ...fromHero, ...Object.keys(RESULT_DETAILS).filter((id) => !featured.includes(id) && !fromHero.includes(id))];
   }
 
   function renderBlock(id) {
