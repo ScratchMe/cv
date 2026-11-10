@@ -288,7 +288,10 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   d'acquisition en vente accompagnée ne l'est pas : Antoine l'a donné pour
   expliquer le raisonnement de l'étude « modèle hybride », pas pour le
   publier. L'étude dit « plus d'un an » sans le chiffre exact. Même réflexe
-  pour toute donnée business obtenue en conversation.
+  pour toute donnée business obtenue en conversation. Le taux d'activation,
+  lui, est publié avec son accord (10 nov. 2026) : **de 22 à 25 %, mesuré en
+  avant/après, stable sur 3 mois, soit +14 % en relatif**. Le CV affichait
+  +15 % jusque-là, arrondi trop généreux : ne pas le remettre.
 - **Pas de ligne de scope pour Everysens** (7 sept. 2026, réponse d'Antoine) :
   trop de clients et de cas d'usage différents sur une faible volumétrie, un
   ordre de grandeur n'y aurait aucun sens. Ne pas reposer la question.
