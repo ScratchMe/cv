@@ -295,7 +295,7 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
 - **Pas de ligne de scope pour Everysens** (7 sept. 2026, réponse d'Antoine) :
   trop de clients et de cas d'usage différents sur une faible volumétrie, un
   ordre de grandeur n'y aurait aucun sens. Ne pas reposer la question.
-- **Compétences sans filtres, trente pratiques** (7 sept. 2026, quatrième
+- **Compétences sans filtres, vingt-neuf pratiques** (7 sept. 2026, quatrième
   revue, choix d'Antoine : les filtres étaient « plus gadget qu'autre chose »
   et n'ont plus de sens une fois la section passée sous les expériences) : les
   pastilles sont des `<span>`, `applyFilters` et le statut de filtre ont
@@ -306,7 +306,11 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   Priorisation, Rétention, Product Analytics. Jamais de mot-clé sans un rôle
   qui le décrit (ni « Technical Discovery », ni « Opportunity Assessment »).
   Chaque rôle porte au plus six compétences, affichées sur ordinateur et dans
-  le PDF complet, masquées sur téléphone et dans le court.
+  le PDF complet, masquées sur téléphone et dans le court. « A/B testing &
+  expérimentation » est sorti le 10 nov. 2026 : aucun test A/B mené chez AB
+  Tasty (5 000 MAU, pas assez de volume), raison donnée dans l'étude de cas
+  activation, qui explique la mesure avant/après. Ne pas le remettre sans un
+  test réellement mené.
 - **Page plus courte sur téléphone** (sept. 2026, validé par Antoine) : les
   rôles terminés au plus tard à `CONFIG.collapseRolesEndingBefore`
   (`"2016-08"` : QA et ESN) sont repliés derrière « Voir mes débuts
