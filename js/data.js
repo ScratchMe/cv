@@ -108,7 +108,7 @@ const PROFILE = {
 // RESULT_DETAILS ci-dessous (page results.html) — le chiffre devient alors
 // cliquable. Un chiffre sans `resultId` reste un simple texte, non cliquable.
 const HERO_STATS = [
-  { value: "+15%", label: { fr: "Taux d'activation (AB Tasty)", en: "Activation rate (AB Tasty)" }, resultId: "ab-tasty-activation" },
+  { value: "+14%", label: { fr: "Taux d'activation (AB Tasty)", en: "Activation rate (AB Tasty)" }, resultId: "ab-tasty-activation" },
   // Deuxième chiffre de la même étude de cas (elle en porte deux) : le lien
   // « Voir les N études de cas » compte les études distinctes, pas les chiffres.
   { value: "-20%", label: { fr: "Time-to-Value (AB Tasty)", en: "Time-to-Value (AB Tasty)" }, resultId: "ab-tasty-activation" },
@@ -147,7 +147,7 @@ const RESULT_DETAILS = {
     companyLogo: "/assets/logos/ab-tasty.webp",
     role: "Product Manager",
     period: "2023 – 2025",
-    value: "+15%",
+    value: "+14%",
     label: { fr: "Taux d'activation", en: "Activation rate" },
     context: {
       fr: "AB Tasty, plateforme SaaS d'**Experience Optimization** (A/B Testing, Personnalisation). PM responsable de la « Product eXperience », au sein d'une équipe de 3 développeurs, 1 tech lead, 1 QA et 1 Product Designer.",
@@ -174,8 +174,8 @@ const RESULT_DETAILS = {
       { fr: "Alimenter la segmentation utilisateur pour d'autres besoins produit.", en: "Feed user segmentation for other product needs." },
     ],
     result: {
-      fr: "En plus des +15% d'activation déjà affichés : **-20% de Time-to-Value** (délai avant qu'un utilisateur tire une première valeur concrète du produit).",
-      en: "On top of the +15% activation already shown above: **-20% Time-to-Value** (the delay before a user gets first real value from the product).",
+      fr: "**De 22 à 25 % de taux d'activation** (+14 %), mesuré en avant/après et stable sur 3 mois. Et **-20% de Time-to-Value** (délai avant qu'un utilisateur tire une première valeur concrète du produit).",
+      en: "**Activation rate from 22% to 25%** (+14%), measured before/after and held over 3 months. Plus **-20% Time-to-Value** (the delay before a user gets first real value from the product).",
     },
     lesson: {
       fr: "Le moteur de qualification était une évidence a posteriori. Ce que je ferais plus tôt la prochaine fois : **cartographier dès le départ les cohortes/segmentations disponibles** (et celles qui manquent) — plus ce découpage arrive tôt, plus l'amélioration continue du produit devient facile ensuite.",
@@ -517,7 +517,7 @@ const EXPERIENCES = [
     company: "AB Tasty",
     location: "Nantes, France",
     // Ordre de grandeur du produit (chiffres publics, donnés par Antoine le
-    // 7 sept. 2026) : sans lui, un « +15 % d'activation » ne se situe pas.
+    // 7 sept. 2026) : sans lui, un « +14 % d'activation » ne se situe pas.
     // Champ optionnel : une entreprise sans `scope` n'affiche pas la ligne.
     scope: {
       fr: "1 000+ organisations clientes · 5 000 utilisateurs actifs mensuels · 50 M€ d'ARR",
@@ -564,8 +564,8 @@ const EXPERIENCES = [
         },
         achievements: [
           {
-            fr: "**+15 % de taux d'activation, -20 % de Time-to-Value** : un moteur de qualification à l'inscription, puis un **onboarding personnalisé** par profil utilisateur.",
-            en: "**+15% activation rate, -20% Time-to-Value**: a qualification engine at sign-up, then a **personalized onboarding** for each user profile.",
+            fr: "**+14 % de taux d'activation** (de 22 à 25 %, mesuré en avant/après, stable sur 3 mois) **et -20 % de Time-to-Value** : un moteur de qualification à l'inscription, puis un **onboarding personnalisé** par profil utilisateur.",
+            en: "**+14% activation rate** (from 22% to 25%, before/after, held over 3 months) **and -20% Time-to-Value**: a qualification engine at sign-up, then a **personalized onboarding** for each user profile.",
           },
           {
             fr: "**2FA obligatoire déployée sur 100 % de la base utilisateur** par vagues successives, calées sur la capacité des Customer Success Managers à accompagner leurs clients : aucune perte d'activité, impact support quasi nul.",

@@ -49,7 +49,7 @@
   // ici corresponde toujours à l'ordre des chiffres dans le hero.
   function orderedResultIds() {
     // Dédupliqué : deux chiffres du hero peuvent pointer la même étude
-    // (AB Tasty porte le +15 % d'activation et le -20 % de Time-to-Value).
+    // (AB Tasty porte le +14 % d'activation et le -20 % de Time-to-Value).
     const fromHero = [...new Set(HERO_STATS.map((s) => s.resultId).filter((id) => id && RESULT_DETAILS[id]))];
     // Puis les études sans chiffre du hero, dans l'ordre de RESULT_DETAILS.
     return [...fromHero, ...Object.keys(RESULT_DETAILS).filter((id) => !fromHero.includes(id))];
