@@ -772,8 +772,8 @@ const EXPERIENCES = [
 const TESTIMONIALS = [
   {
     quote: {
-      fr: "Antoine est un product manager humain, impliqué et exigeant, porté par beaucoup d'enthousiasme. Il sait structurer intelligemment les temps de partage de son équipe et aime valoriser les talents de chacun. Je ne peux que le recommander pour renforcer une équipe ambitieuse et collaborative.",
-      en: "Antoine is a caring, committed and demanding product manager, driven by real enthusiasm. He knows how to structure his team's collaboration time intelligently and loves bringing out the best in each person. I can only recommend him to strengthen an ambitious, collaborative team.",
+      fr: "J'ai collaboré dans le même scope qu'Antoine, en particulier sur l'évolution de la plateforme AB Tasty vers une approche PLG (Product-Led Growth). Antoine est un product manager humain, impliqué et exigeant, porté par beaucoup d'enthousiasme. Il aime impliquer chaque membre dans ses réflexions et valoriser les talents de chacun. Je ne peux que recommander Antoine pour renforcer une équipe ambitieuse et collaborative.",
+      en: "I worked in the same scope as Antoine, in particular on moving the AB Tasty platform towards a PLG (Product-Led Growth) approach. Antoine is a caring, committed and demanding product manager, driven by real enthusiasm. He likes to involve every team member in his thinking and to bring out each person's talents. I can only recommend Antoine to strengthen an ambitious, collaborative team.",
     },
     name: "Alix Paoli",
     role: { fr: "CX Designer chez Decathlon", en: "CX Designer at Decathlon" },
