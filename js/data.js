@@ -162,8 +162,8 @@ const RESULT_DETAILS = {
       en: "An **activation** problem rather than a product-fit one. Checked before investing, by comparing our numbers to the **Userpilot** benchmark: clearly below par.",
     },
     discarded: {
-      fr: "**Attaquer le churn dans son ensemble** (ICP à revoir, accessibilité des outils...) : j'ai préféré le trou en tout début de funnel, là où le gain potentiel était le plus important.\n\n**Un simple correctif d'onboarding** : il aurait traité le symptôme sans rien laisser derrière lui pour la suite.",
-      en: "**Tackling churn as a whole** (ICP to revisit, tool accessibility...): I went for the gap right at the start of the funnel instead, where the potential gain was highest.\n\n**A quick onboarding fix**: it would have treated the symptom and left nothing behind for what came next.",
+      fr: "**Attaquer le churn dans son ensemble** (ICP à revoir, accessibilité des outils...) : j'ai préféré le trou en tout début de funnel, là où le gain potentiel était le plus important.\n\n**Un simple correctif d'onboarding** : il aurait traité le symptôme sans rien laisser derrière lui pour la suite.\n\n**Un test A/B** : avec 5 000 utilisateurs actifs par mois, pas assez de volume pour un résultat significatif. D'où une mesure avant/après, suivie sur 3 mois.",
+      en: "**Tackling churn as a whole** (ICP to revisit, tool accessibility...): I went for the gap right at the start of the funnel instead, where the potential gain was highest.\n\n**A quick onboarding fix**: it would have treated the symptom and left nothing behind for what came next.\n\n**An A/B test**: with 5,000 monthly active users, not enough volume for a significant result. Hence a before/after measurement, tracked over 3 months.",
     },
     action: {
       fr: "J'ai mené des entretiens avec des utilisateurs fraîchement arrivés : la peur de se lancer malgré l'accompagnement CSM, et une installation trop longue, revenaient systématiquement. En creusant, j'ai remarqué que nos utilisateurs recouvraient des profils très différents (développeurs, marketing, analystes, product), avec des compétences et des attentes différentes.\n\nJ'ai donc conçu un **moteur de qualification à l'inscription** (rôle, niveau en A/B testing, compétences techniques, objectif principal), présenté comme un service rendu à l'utilisateur plutôt qu'un simple formulaire pour maximiser les réponses — avec un double usage :",
@@ -463,7 +463,6 @@ const SKILLS = [
   { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "growth" },
   { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "growth" },
   { id: "retention", label: { fr: "Rétention", en: "Retention" }, category: "growth" },
-  { id: "ab-testing", label: { fr: "A/B testing & expérimentation", en: "A/B testing & experimentation" }, category: "growth" },
   { id: "product-strategy", label: { fr: "Stratégie produit", en: "Product Strategy" }, category: "growth" },
   { id: "okr", label: "OKR", category: "growth" },
   { id: "roadmapping", label: "Roadmapping", category: "growth" },
@@ -585,7 +584,7 @@ const EXPERIENCES = [
           fr: "3 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "3 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["activation", "retention", "ab-testing", "product-analytics", "discovery", "feature-flagging"],
+        skills: ["activation", "retention", "product-analytics", "discovery", "feature-flagging"],
       },
     ],
   },
