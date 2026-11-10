@@ -192,7 +192,7 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .pillar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;} /* quatre cartes depuis la carte Leadership (sept. 2026) */
 .pillar{background:var(--surface);border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow);border-top:5px solid var(--violet);}
 .pillar[data-id="data-informed"]{border-top-color:var(--mint);}
-.pillar[data-id="iterative"]{border-top-color:var(--coral);}
+.pillar[data-id="growth"]{border-top-color:var(--coral);}
 /* Carte Leadership (sept. 2026) : pas de 4e couleur dans la palette, la barre
    reprend le dégradé signature violet → corail des boutons et du titre du hero.
    Bordure transparente + fond en deux couches (surface sur la boîte de padding,
@@ -202,12 +202,12 @@ body.focus-mode .fit-teaser-inner{background:#F1F1EF;}
 .pillar h3{font-size:18px;font-weight:700;margin-bottom:6px;}
 .pillar .sub{font-size:13.5px;color:var(--violet);font-weight:600;margin-bottom:16px;}
 .pillar[data-id="data-informed"] .sub{color:var(--mint-text);}
-.pillar[data-id="iterative"] .sub{color:var(--coral-text);}
+.pillar[data-id="growth"] .sub{color:var(--coral-text);}
 .pillar ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
 .pillar li{font-size:14px;color:var(--ink-soft);padding-left:16px;position:relative;line-height:1.5;}
 .pillar li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--violet);}
 .pillar[data-id="data-informed"] li::before{background:var(--mint);}
-.pillar[data-id="iterative"] li::before{background:var(--coral);}
+.pillar[data-id="growth"] li::before{background:var(--coral);}
 
 /* ============================================================================
    ÉTUDES DE CAS
