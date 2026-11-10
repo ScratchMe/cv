@@ -101,7 +101,8 @@ donnée : tout le contenu vit dans `js/data.js`, le rendu dans `js/app.js`.
   STAR : Contexte/Défi/Action/Résultat optionnel/Leçon) derrière les
   chiffres cliquables du hero. Contrairement à `project-detail.js` (une
   entrée = une page via `?slug=`), affiche TOUTES les entrées de
-  `RESULT_DETAILS` à la suite, dans l'ordre de `HERO_STATS`. Un chiffre du
+  `RESULT_DETAILS` à la suite (étude `featured` d'abord, puis l'ordre de
+  `HERO_STATS`). Un chiffre du
   hero devient cliquable dès qu'on lui ajoute `resultId` (référence une
   clé de `RESULT_DETAILS`) ; sans `resultId` il reste un texte simple.
   Un clic amène directement au bon bloc via une ancre (`#resultId`).
@@ -280,8 +281,10 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   chiffre sur la carte de l'accueil. C'est le cas du passage Sales-Led →
   hybride chez AB Tasty : livré derrière un feature flag, lancement suspendu
   après la fusion avec VWO. Ne jamais combler ce vide par un chiffre inventé.
-  L'ordre d'affichage met les études reliées à un chiffre du hero d'abord,
-  puis les autres dans l'ordre de `RESULT_DETAILS`.
+  L'ordre d'affichage met les études marquées `featured: true` en tête
+  (l'étude hybride, choix d'Antoine du 10 nov. 2026 : la plus growth du CV),
+  puis celles reliées à un chiffre du hero, puis les autres dans l'ordre de
+  `RESULT_DETAILS` ; même ordre sur l'accueil et sur `results.html`.
 - **Chiffres internes d'AB Tasty : demander avant de publier** (7 sept. 2026).
   L'ARR, le nombre d'organisations clientes et d'utilisateurs actifs sont
   publics (ligne de scope du bloc AB Tasty). Le délai d'amortissement du coût
