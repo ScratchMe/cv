@@ -968,7 +968,10 @@ body.focus-mode .pill{background:#F1F1EF;}
      de remplissage, la CI (autre Chromium, polices woff2) faisait déborder
      le court sur une troisième page alors qu'il tenait en local. */
   body.cv-court .role-achievements-label{display:none !important;}
-  body.cv-court .role-block:not(:first-child) .role-achievements li:nth-child(n+3),
+  /* `.role-block ~ .role-block` et non `.role-block:not(:first-child)` : le
+     premier enfant d'un bloc est `.company-header`, ce qui faisait perdre
+     sa troisième puce au poste actuel. */
+  body.cv-court .role-block ~ .role-block .role-achievements li:nth-child(n+3),
   body.cv-court .company-block:not(:first-child) .role-achievements li:nth-child(n+3){display:none !important;}
   body.cv-court .company-logo,body.cv-court .company-logo-fallback{width:32px;height:32px;}
   body.cv-court .company-name{font-size:15px;}
