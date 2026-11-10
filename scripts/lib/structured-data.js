@@ -81,7 +81,7 @@ function profilePage(lang, profile, dates) {
         name: "Product Manager",
         occupationLocation: { "@type": "City", name: "Nantes" },
         skills:
-          "Product Management, Product Ownership, Growth, Product-Led Growth, Onboarding & Activation, Self-serve monetization, APIs & integrations, Generative AI, Discovery, User Research, Roadmapping, OKR, Agile / Scrum, SQL, Metabase, Mixpanel",
+          "Product Management, Product Ownership, Growth, Product-Led Growth, Onboarding & Activation, Self-serve monetization & freemium, Pricing & packaging, PQL, APIs & integrations, Generative AI, Discovery, User Research, Roadmapping, OKR, Agile / Scrum, SQL, Metabase, Mixpanel",
       },
       alumniOf: {
         "@type": "CollegeOrUniversity",

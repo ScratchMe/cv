@@ -460,7 +460,9 @@ const PILLARS = [
 // ---------------------------------------------------------------------------
 const SKILLS = [
   { id: "plg", label: "Product-Led Growth", category: "growth" },
-  { id: "monetization", label: { fr: "Monétisation self-serve", en: "Self-serve monetization" }, category: "growth" },
+  { id: "monetization", label: { fr: "Monétisation self-serve & freemium", en: "Self-serve monetization & freemium" }, category: "growth" },
+  { id: "pricing-packaging", label: "Pricing & packaging", category: "growth" },
+  { id: "pql", label: "PQL (Product-Qualified Leads)", category: "growth" },
   { id: "activation", label: { fr: "Onboarding & activation", en: "Onboarding & activation" }, category: "growth" },
   { id: "retention", label: { fr: "Rétention", en: "Retention" }, category: "growth" },
   { id: "product-strategy", label: { fr: "Stratégie produit", en: "Product Strategy" }, category: "growth" },
@@ -551,7 +553,7 @@ const EXPERIENCES = [
           fr: "4 développeurs, 1 tech lead, 1 QA, 1 Product Designer",
           en: "4 developers, 1 tech lead, 1 QA, 1 Product Designer",
         },
-        skills: ["plg", "monetization", "product-strategy", "roadmapping", "stakeholder", "cross-functional-leadership"],
+        skills: ["plg", "monetization", "pricing-packaging", "pql", "product-strategy", "cross-functional-leadership"],
       },
       {
         title: "Product Manager",
