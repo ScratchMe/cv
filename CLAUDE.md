@@ -203,7 +203,12 @@ plein ont tous les deux été essayés et jugés trop nets avant ça.
   4 colonnes au-delà de 1 080 px, 2 × 2 sur tablette et dans le PDF
   complet, où les cartes sont un cran plus denses que le reste pour que
   les deux rangées tiennent en page 1 sous le hero (PDF complets toujours
-  à 5 pages, courts à 2 — le court n'affiche pas les cartes).
+  à 5 pages, courts à 2 — le court n'affiche pas les cartes). Depuis le
+  10 nov. 2026 (choix d'Antoine) : ordre Leadership, Growth, « Le problème
+  d'abord », « Les données tranchent ». La carte **Growth** (`id: "growth"`,
+  couleur corail reprise de l'ancienne carte) remplace « Petit d'abord, grand
+  ensuite », jugée générique ; elle ne cite que des faits du site (modèle
+  hybride, activation 22 → 25 %).
 - **Puces des rôles au format RAC** (Result, Action, Contexte ; sept. 2026,
   principe nommé par Antoine) : chaque puce ouvre sur ce qui a été obtenu
   (chiffre ou livrable, en gras), puis l'action ; la ligne de contexte de

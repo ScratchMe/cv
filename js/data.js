@@ -360,10 +360,58 @@ const RESULT_DETAILS = {
   },
 };
 
-// Les 3 piliers qui définissent ton approche produit.
-// Les titres (User First / Data Informed / Iterative) restent en anglais
-// dans les deux langues : ce sont des noms de principe, pas du contenu à traduire.
+// Les quatre cartes « Ce qui me définit », dans l'ordre d'affichage :
+// Leadership et Growth d'abord (10 nov. 2026), puis deux pratiques. La couleur
+// de chaque carte tient à son `id` (style.css), pas à sa position.
 const PILLARS = [
+  {
+    // Carte Leadership (sept. 2026, second retour d'expert) : ces faits
+    // existaient tous dans les puces des rôles, mais aucun n'était visible au
+    // niveau où un recruteur scanne. Uniquement des faits déjà sur le site.
+    id: "leadership",
+    title: { fr: "Leadership", en: "Leadership" },
+    subtitle: {
+      fr: "Des PM et des équipes à faire avancer, un cap tenu avec la direction.",
+      en: "PMs and teams to move forward, a course held with leadership.",
+    },
+    points: [
+      {
+        fr: "Deux PM animés sur le chantier self-serve d'AB Tasty : répartition du plan, arbitrages de périmètre.",
+        en: "Two PMs led on AB Tasty's self-serve workstream: splitting the plan, scoping trade-offs.",
+      },
+      {
+        fr: "Élu responsable de la communauté de pratiques PM de SNCF, plus de 100 personnes, reconduit pour un second mandat ; mentorat de 2 à 3 personnes.",
+        en: "Elected lead of SNCF's 100+ people Product Management community, re-elected for a second term; mentoring 2 to 3 people.",
+      },
+      {
+        fr: "Business case et roadmap portés auprès de la direction ; squads jusqu'à 15 développeurs.",
+        en: "Business case and roadmap carried to leadership; squads of up to 15 developers.",
+      },
+    ],
+  },
+  {
+    // Carte Growth (10 nov. 2026, choix d'Antoine) : remplace « Petit
+    // d'abord, grand ensuite », un principe que tout PM signerait. Uniquement
+    // des faits déjà sur le site (étude « modèle hybride », étude activation).
+    // Les faits de l'ancienne carte (déploiement par vagues) restent dans les
+    // puces des rôles.
+    id: "growth",
+    title: { fr: "Growth : chercher où ça bloque", en: "Growth: find where it stalls" },
+    subtitle: {
+      fr: "Acquisition, activation ou coût de servir : je commence par le point qui freine la croissance.",
+      en: "Acquisition, activation or cost to serve: I start with whatever is holding growth back.",
+    },
+    points: [
+      {
+        fr: "Modèle hybride chez AB Tasty : self-serve et freemium pour les petites structures, vente accompagnée pour les grands comptes.",
+        en: "Hybrid model at AB Tasty: self-serve and freemium for small companies, sales-led for enterprise accounts.",
+      },
+      {
+        fr: "Activation passée de 22 à 25 % avec un onboarding personnalisé par profil.",
+        en: "Activation up from 22% to 25% with an onboarding personalized for each profile.",
+      },
+    ],
+  },
   {
     id: "user-first",
     title: { fr: "Le problème d'abord", en: "Problem first" },
@@ -400,49 +448,7 @@ const PILLARS = [
       },
     ],
   },
-  {
-    id: "iterative",
-    title: { fr: "Petit d'abord, grand ensuite", en: "Small first, then big" },
-    subtitle: {
-      fr: "L'apprentissage continu vers le Product-Market Fit.",
-      en: "Continuous learning on the way to Product-Market Fit.",
-    },
-    points: [
-      {
-        fr: "Culture du « Fail Fast » et cycles de livraison courts.",
-        en: "A \"Fail Fast\" culture with short delivery cycles.",
-      },
-      {
-        fr: "Livraison par étapes plutôt qu'un big bang, et déploiement progressif quand le risque est élevé.",
-        en: "Delivery in steps rather than a big bang, and progressive rollout when the risk is high.",
-      },
-    ],
-  },
-  {
-    // Carte Leadership (sept. 2026, second retour d'expert) : ces faits
-    // existaient tous dans les puces des rôles, mais aucun n'était visible au
-    // niveau où un recruteur scanne. Uniquement des faits déjà sur le site.
-    id: "leadership",
-    title: { fr: "Leadership", en: "Leadership" },
-    subtitle: {
-      fr: "Des PM et des équipes à faire avancer, un cap tenu avec la direction.",
-      en: "PMs and teams to move forward, a course held with leadership.",
-    },
-    points: [
-      {
-        fr: "Deux PM animés sur le chantier self-serve d'AB Tasty : répartition du plan, arbitrages de périmètre.",
-        en: "Two PMs led on AB Tasty's self-serve workstream: splitting the plan, scoping trade-offs.",
-      },
-      {
-        fr: "Élu responsable de la communauté de pratiques PM de SNCF, plus de 100 personnes, reconduit pour un second mandat ; mentorat de 2 à 3 personnes.",
-        en: "Elected lead of SNCF's 100+ people Product Management community, re-elected for a second term; mentoring 2 to 3 people.",
-      },
-      {
-        fr: "Business case et roadmap portés auprès de la direction ; squads jusqu'à 15 développeurs.",
-        en: "Business case and roadmap carried to leadership; squads of up to 15 developers.",
-      },
-    ],
-  },
+
 ];
 
 // ---------------------------------------------------------------------------
