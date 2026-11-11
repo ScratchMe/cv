@@ -778,8 +778,13 @@ body.focus-mode .pill{background:#F1F1EF;}
      "mobile" (≤800px) : on force donc ici les mises en page desktop
      (colonnes), sans quoi tout s'empile inutilement et le CV gonfle en
      nombre de pages. */
-  .hero-grid{grid-template-columns:1fr 150px;text-align:left;}
-  .photo-ring{order:0;width:130px;height:130px;}
+  /* Photo à 100 px (130 jusqu'au 11 nov. 2026) : la colonne texte gagne
+     40 px, le pitch et la pastille « Ouvert aux opportunités » prennent une
+     ligne de moins en français, ce qui fait tenir les deux rangées de cartes
+     « Ce qui me définit » en page 1 (vœu d'Antoine : la page 1 doit donner un
+     aperçu complet du profil). Le court a ses propres tailles (body.cv-court). */
+  .hero-grid{grid-template-columns:1fr 110px;text-align:left;}
+  .photo-ring{order:0;width:100px;height:100px;}
   .pillar-grid{grid-template-columns:repeat(2,1fr);gap:12px;} /* 4 cartes en 2 × 2 : 4 colonnes seraient illisibles sur la largeur A4 */
   /* Deux colonnes à l'impression : sur 186 mm utiles, trois colonnes cassaient
      « Langue maternelle » et la certification en cinq lignes. Le vide qui a
@@ -807,7 +812,11 @@ body.focus-mode .pill{background:#F1F1EF;}
   /* Testé le 7 sept. 2026 et écarté : rendre les sections de fin insécables
      (`break-inside:avoid` sur .formation-section et suivantes) pour éviter un
      titre seul en bas de page ramenait le complet à 6 pages. Un titre de
-     section en bas de page coûte moins cher qu'une page à 40 % blanche. */
+     section en bas de page coûte moins cher qu'une page à 40 % blanche.
+     Exception mesurée le 11 nov. 2026 : la section side projects seule (une
+     carte, quelques lignes) ; son titre restait seul en bas de la page 4 du
+     complet anglais alors que la page 5 avait la place. */
+  .projects-section{break-inside:avoid;}
 
   /* Le scorecard (flex + wrap sur le site) est ici forcé en grille 3
      colonnes fixes : la colonne texte du hero est plus étroite en print,
@@ -869,7 +878,7 @@ body.focus-mode .pill{background:#F1F1EF;}
   .pillar{padding:12px 12px;}
   .pillar h3{font-size:16px;margin-bottom:4px;}
   .pillar .sub{margin-bottom:10px;}
-  .pillar .sub,.pillar li{font-size:12px;line-height:1.4;}
+  .pillar .sub,.pillar li{font-size:11.5px;line-height:1.4;}
   .pillar ul{gap:5px;}
   .sectitle{margin-bottom:10px;}
   .hero-grid{gap:24px;}
